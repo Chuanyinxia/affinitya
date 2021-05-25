@@ -1,0 +1,100 @@
+.item {
+  width: 90%;
+  margin: 18px auto;
+  background: #fff;
+  border-radius: 10px;
+  height: 100px;
+  border: 1px solid #e5e5e5;
+  padding: 8px;
+}
+
+.item.active {
+  border-style: dashed;
+}
+
+#col-STATUS_GENERATED .item {
+  background: rgba(208, 181, 248, 0.86);
+  color: #ffffff;
+}
+
+#col-STATUS_TEST .item {
+  background: #7121EA;
+  color: #ffffff;
+}
+
+#col-STATUS_WINNER .item {
+  background: #00AB79;
+  color: #ffffff;
+}
+
+#col-STATUS_ARCHIVE .item {
+  background: rgba(40, 40, 40, 0.09);
+}
+
+.item-header {
+  font-size: 24px;
+  padding: 3px 5px;
+  font-weight: 500;
+}
+
+.item-main {
+  padding: 5px;
+  font-size: 14px;
+
+  height: 36px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.item-header-point {
+  background: #ccc;
+  float: right;
+  padding: 0 4px;
+  min-width: 10px;
+  text-align: center;
+  color: #fff;
+  border-radius: 50%;
+}
+
+.col {
+  flex-grow: 1;
+  width: 180px;
+  height: 100%;
+  margin: 0 16px;
+  display: flex;
+  flex-direction: column;
+  background: #FFFFFF;
+  box-shadow: -3px 16px 37px 0px rgba(239, 239, 239, 0.5);
+  border-radius: 4px;
+}
+
+.col-header {
+  padding: 16px;
+}
+
+.col-header-title {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.col-main {
+  overflow: auto;
+  flex-grow: 1;
+}
+
+.col-main.active {
+  background: #00ad23;
+  opacity: 0.1;
+}
+
+.task-wrapper {
+  display: flex;
+  height: 600px;
+  width: 100%;
+}
+.padding16{
+  padding: 16px;
+}
