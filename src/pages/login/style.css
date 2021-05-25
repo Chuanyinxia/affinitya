@@ -1,0 +1,43 @@
+.login-content{
+  width: 1280px;
+  margin: 0 auto ;
+  padding-top: 200px;
+
+}
+.paddingL36{
+  padding-left: 80px;
+}
+.paddingR36{
+  padding-right: 80px;
+}
+.borderB {
+  border-bottom: 2px solid #eeeeee!important;
+}
+.borderB:-internal-autofill-selected {
+  background-color: transparent !important;
+  background-image: none !important;
+
+}
+.ant-form-item-has-error .borderB,
+.ant-form-item-has-error .borderB:focus,
+.ant-form-item-has-error .borderB:focus{
+  border-bottom: 2px solid #f77e90!important;
+  border-top:none;
+  border-left: none;
+  border-right: none;
+  outline: 0;
+  box-shadow: 0 0 0 0;
+}
+.login-title{
+
+  height: 36px;
+  font-size: 30px;
+  font-family: Futura_Medium, Futura_Book_BT;
+  font-weight: 500;
+  color: #1F1F1F;
+  line-height: 36px;
+  margin-bottom: 60px;
+}
+.marginT40{
+  margin-top: 40px;
+}

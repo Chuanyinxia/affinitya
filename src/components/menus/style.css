@@ -1,0 +1,6 @@
+.muenu .icon-font{
+  font-size: 14px;
+}
+.ant-menu-inline-collapsed .ant-menu-submenu .ant-menu-submenu-title span:nth-child(2){
+display: none;
+}

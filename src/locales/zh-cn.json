@@ -1,0 +1,18 @@
+{
+  "yes":"是",
+  "no":"否",
+  "submit":"提交",
+  "confirm":"确认",
+  "edit":"编辑",
+  "delete":"删除",
+  "add":"新增",
+  "preview":"预览",
+  "close":"关闭",
+  "save":"保存",
+  "required":"必须",
+  "choose":"选择",
+  "image":"图片",
+  "video": "视频",
+  "status":"状态",
+  "login":"登录"
+}
