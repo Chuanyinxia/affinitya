@@ -27,7 +27,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
   const [audienceID, setAudienceID] = useState('');
   const [loading, setLoading] = useState(false);
   const [audienceIdItem, setAudienceIdItem] = useState([]);
-  const [activeKey, setActiveKey]=useState(type||1);
+  const [activeKey, setActiveKey]=useState(type??1);
   const [showJobInfo, setShowJobInfo]=useState(false);
   const [isPayUser, setIsPayUser] =useState(false);
   const [freeSearchData, setFreeSearchData] =useState(null);
@@ -359,7 +359,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
           <p className="marginTop90 search-content">
             Audience generation job has been created in
             <Link
-              to={`/dashboard/jobManager?type=${(isPayUser===true)?activeKey:3}`}
+              to={`/dashboard/jobManager?type=${activeKey}`}
               className="target"
               onClick={() => {
                 store.dispatch(setMenusData('jobManager', 'dashboard'));

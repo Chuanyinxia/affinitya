@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {httpLoading} from '@/store/actions';
 import './style.css';
-import {Tabs, Card, Space, Button, Modal, Input, message} from 'antd';
+import {Tabs, Card, Space, Button, Modal, Input, message, Empty} from 'antd';
 import ResultTable from '@/components/Table/ResultTable';
 import {post} from '@/utils/request';
 import {EXPORTCVS, SAVESEARCHMESSAGE} from '@/api';
@@ -43,7 +43,7 @@ const KeyWordSearchDetails = ({userInfo, searchData}) => {
       <h2 className="search-content">
         From your custom audiences, Affinity Analyst extends high correlation audiences, organized in high relation
         groups for optimal audience sets and ranked per affinity data.</h2>
-      <div className="text-right">
+      <div className="text-right marginB16">
         <Space>
           <Button onClick={()=>setSaveModal(true)}>Save Audience</Button>
           <Button
@@ -52,12 +52,13 @@ const KeyWordSearchDetails = ({userInfo, searchData}) => {
         </Space>
       </div>
       <Card>
-        <Tabs defaultActiveKey={searchData[0]?searchData[0].id:''}>
+        {searchData[0]?(<Tabs defaultActiveKey={searchData[0].id}>
           {searchData.map((item)=>(
             <TabPane tab={`group${item.groupId}`} key={item.id} >
               <ResultTable TableData={tableData(item.searchDetails??[])}/>
             </TabPane>))}
-        </Tabs>
+        </Tabs>):(<Empty />)
+        }
       </Card>
       <Modal
         title="Save Audience"

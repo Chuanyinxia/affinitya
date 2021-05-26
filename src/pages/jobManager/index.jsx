@@ -89,7 +89,7 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
     getJobList({
       pageNum: 1,
       pageSize: 10,
-      type: jobType,
+      type: jobType===false?'':jobType,
     });
   }, []);
   return (
