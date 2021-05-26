@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {Button, Col, Form, Input, Layout, Row, Card, message, Space} from 'antd';
+import {Button, Col, Form, Input, Layout, Row, Card, message, Space, Divider} from 'antd';
 import {httpLoading} from '@/store/actions';
 import {Link} from 'react-router-dom';
 import './style.css';
@@ -13,12 +13,37 @@ import info3 from '@/assets/home/info3.png';
 import {get} from '@/utils/request';
 import {ISEXISTED} from '@/api';
 import {useHistory} from 'react-router-dom';
-
+import {GETPAYMENTLIST} from '@/api/index';
 const {Header, Content, Footer} = Layout;
 
 
-const Home = ({httpLoading, setHttpLoading}) => {
+const Home = ({userInfo, httpLoading, setHttpLoading}) => {
   const history = useHistory();
+  const [paymentList, setPaymentList] = useState([]);
+  const getPaymentList = ()=>{
+    setHttpLoading(true);
+    get(GETPAYMENTLIST, userInfo.token).then((res) => {
+      const data = res.data.items.map((item) => {
+        item.checked = false;
+        return item;
+      });
+      console.log(data);
+      setPaymentList(data);
+    }).catch((error) => {
+      message.error({
+        content: error.toString(), key: 'netError', duration: 2,
+      });
+    }).finally(()=>{
+      setHttpLoading(false);
+    });
+  };
+  const selectPayment = (index)=>{
+    const data = [...paymentList];
+    data.forEach((item)=>item.checked=false);
+    data[index].checked = true;
+    setPaymentList(data);
+    history.push('/login');
+  };
   const Finish = (value) => {
     console.log(value);
 
@@ -57,9 +82,10 @@ const Home = ({httpLoading, setHttpLoading}) => {
               <Link to='/dashboard/audienceGenerator'
                 className="navs">Dashboard</Link>
 
-              <a href="#Plans" className="navs">Plans &
+              <a href="#Plans" className="navs" onClick={(e)=>{
+                getPaymentList();
+              }}>Plans &
                   Pricing</a>
-
               <Link to='/login' className="navs">Login</Link>
             </Space>
           </Col>
@@ -148,21 +174,37 @@ const Home = ({httpLoading, setHttpLoading}) => {
       <Content className="bg-price " id="Plans">
         <div className="content">
           <Row gutter={[46]} >
-            <Col span={8} className="plans" >
-              <Card title={null} bordered={false}>
-                Card content
-              </Card>
-            </Col>
-            <Col span={8} className="plans">
-              <Card title={null} bordered={false}>
-                Card content
-              </Card>
-            </Col>
-            <Col span={8} className="plans">
-              <Card title={null} bordered={false}>
-                Card content
-              </Card>
-            </Col>
+            {paymentList.map((payment, idx) => (
+              <Col
+                span={7}
+                offset={idx===0?0:1}
+                className={payment.checked?'plans checked':'plans'}
+                key={payment.name}
+                onClick={()=>{
+                  selectPayment(idx);
+                }}
+              >
+                <Card title={null} bordered={false} className="priceCard">
+                  <div className="cardContent">
+                    <div className="paymentName">{payment.name}</div>
+                    <div className="paymentPrice">
+                      <span className="priceTag">$</span>
+                      {payment.price}
+                    </div>
+                    <div className="paymentDesc">{payment.desc}</div>
+                    <div className="paymentValid">{
+                      idx===0?'Valid for 3 months':'Valid for 6 months'
+                    }</div>
+                    <Divider style={{marginTop: 100}}/>
+                    <div className="paymentFun">
+                      {payment.functionList.map((fun, index)=>(
+                        <div key={`fun_${index}`} style={{height: 40}}>{fun}</div>
+                      ))}
+                    </div>
+                  </div>
+                </Card>
+              </Col>
+            ))}
           </Row>
         </div>
       </Content>
@@ -181,6 +223,7 @@ const Home = ({httpLoading, setHttpLoading}) => {
 const mapStateToProps = (state) => {
   return {
     httpLoading: state.toggleHttpLoading.loading,
+    userInfo: state.getUserInfo.info,
   };
 };
 
@@ -195,6 +238,7 @@ const mapDispatchToProps = (dispatch) => {
 Home.propTypes = {
   httpLoading: PropTypes.bool.isRequired,
   setHttpLoading: PropTypes.func.isRequired,
+  userInfo: PropTypes.object.isRequired,
 };
 
 export default connect(
