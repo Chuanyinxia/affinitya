@@ -31,7 +31,7 @@ const STATUS_CODE = {
 };
 
 
-const TaskCol=({status, children, canDragIn, dragTo, userInfo})=>{
+const TaskCol=({status, children, canDragIn, dragTo, userInfo, onSearch})=>{
   const [In, setIn]=useState(false);
 
   const handleDragEnter = (e) => {
@@ -63,9 +63,14 @@ const TaskCol=({status, children, canDragIn, dragTo, userInfo})=>{
     >
       <header className="col-header">
         <Row>
-          <Col span={14} className="col-header-title">{STATUS_CODE[status].title}</Col>
-          <Col span={10} className="text-right">
-            {STATUS_CODE[status].search&&<Input size="small" addonAfter={<SearchOutlined />}/>}
+          <Col span={16} className="col-header-title">{STATUS_CODE[status].title}</Col>
+          <Col span={8} className="text-right">
+            {STATUS_CODE[status].search&&(<Input
+              style={{borderRadius: 26}}
+              size="small"
+              onChange={onSearch}
+              suffix={<SearchOutlined />}
+            />)}
             {STATUS_CODE[status].icon&&<DeleteOutlined style={{fontSize: 20}}/>}
           </Col>
           <Col span={24}>{STATUS_CODE[status].info}</Col>
@@ -84,5 +89,6 @@ TaskCol.propTypes = {
   canDragIn: PropTypes.bool.isRequired,
   dragTo: PropTypes.func.isRequired,
   userInfo: PropTypes.object.isRequired,
+  onSearch: PropTypes.func.isRequired,
 };
 export default TaskCol;

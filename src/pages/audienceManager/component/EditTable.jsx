@@ -11,10 +11,13 @@ import {
   RedoOutlined,
   SaveOutlined,
   SyncOutlined,
+  FolderViewOutlined,
 } from '@ant-design/icons';
 import {post} from '@/utils/request';
-import {SAVESEARCHRESULT, GETEXTENDBYAUDI, RESTARTJOB} from '@/api/index';
+import {SAVESEARCHRESULT, GETEXTENDBYAUDI, RESTARTJOB, EXPORTDETAIL} from '@/api/index';
 import ResultTable from '@/components/Table/ResultTable';
+
+
 const EditableCell = ({
   // eslint-disable-next-line react/prop-types
   editing, dataIndex, title, inputType, value, record, index, children,
@@ -52,6 +55,8 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
   const [data, setData] = useState([]);
   const [viewDetails, setViewDetails] = useState([]);
   const [viewModal, setViewModal]= useState(false);
+  const [lookID, setLookID]=useState(null);
+  const [lookType, setLookType]=useState(null);
   const isEditing = (record) => record.id === editingKey;
 
 
@@ -224,6 +229,16 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
                 <FormOutlined style={{fontSize: 16}}/>
               </a>
             </Tooltip>
+            <Tooltip title="View Details">
+              <a type="link" onClick={()=>{
+                setViewModal(true);
+                setLookID(record.id);
+                setLookType(1);
+                setViewDetails(record.searchDetails??[]);
+              }}>
+                <FileSearchOutlined style={{fontSize: 16}}/>
+              </a>
+            </Tooltip>
             {record.status===0&&(<Tooltip title="Extend">
               <a type="link" onClick={()=>extend(record.id)}>
                 <AppstoreAddOutlined style={{fontSize: 16}}/>
@@ -232,12 +247,14 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
             {record.status===1&&(<Tooltip title="Running">
               <RedoOutlined spin style={{fontSize: 16}}/>
             </Tooltip>)}
-            {record.status===2&&(<Tooltip title="View Details">
+            {record.status===2&&(<Tooltip title="Extend Keyword">
               <a type="link" onClick={()=>{
                 setViewModal(true);
-                setViewDetails(record);
+                setLookID(record.id);
+                setLookType(2);
+                setViewDetails(record.extendDetail??[]);
               }}>
-                <FileSearchOutlined style={{fontSize: 16}}/>
+                <FolderViewOutlined style={{fontSize: 16}}/>
               </a>
             </Tooltip>)}
             {/* <Tooltip title="Restart the job">
@@ -273,31 +290,35 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
   });
 
   const addIndex=(data)=>{
-    return data;
+    const tableData=data.map((item, index)=>{
+      return {...item, index: index+1};
+    })??[];
+    return tableData;
   };
 
   return (
-    <div>
+    <div >
       <Modal
-        title="Basic Modal"
+        title=""
+        width={1200}
         visible={viewModal}
         footer={null}
         onOk={()=>{
-          setViewDetails(null);
+          setViewDetails([]);
           setViewModal(false);
         }}
         onCancel={()=>{
-          setViewDetails(null);
+          setViewDetails([]);
           setViewModal(false);
         }}>
-        <div className="text-right">
+        <div className="text-right marginB16 marginT16">
           <Space>
             <Button
               download
-              href={''}>Export to CSV</Button>
+              href={`${EXPORTDETAIL}${lookID}/${lookType}/${userInfo.token}`}>Export to CSV</Button>
           </Space>
         </div>
-        <ResultTable TableData={addIndex(viewDetails.searchDetails)}/>
+        {<ResultTable TableData={addIndex(viewDetails)}/>}
       </Modal>
       <Form form={form} component={false} onValuesChange={valuesChange}>
         <Table

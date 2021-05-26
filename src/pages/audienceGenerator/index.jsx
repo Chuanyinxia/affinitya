@@ -27,7 +27,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
   const [audienceID, setAudienceID] = useState('');
   const [loading, setLoading] = useState(false);
   const [audienceIdItem, setAudienceIdItem] = useState([]);
-  const [activeKey, setActiveKey]=useState(type);
+  const [activeKey, setActiveKey]=useState(type||1);
   const [showJobInfo, setShowJobInfo]=useState(false);
   const [isPayUser, setIsPayUser] =useState(false);
   const [freeSearchData, setFreeSearchData] =useState(null);
@@ -97,7 +97,9 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
         } else {
           setFreeSearchData(res.data);
         }
-        setShowJobInfo(false);
+        if (!res.data) {
+          setShowJobInfo(false);
+        }
       }).catch((error) => {
         message.error({
           content: error.toString(), key: 'netError', duration: 2,
@@ -161,7 +163,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
         <Form form={baseSearchForm} className="SearchItem" {...layout}>
           <Row gutter={[30, 0]}>
             <Col span={8}>
-              <Form.Item name="country" labelAlign="right" label="Country" initialValue={['worldwide']}>
+              <Form.Item name="country" labelAlign="right" label="Country" initialValue={['US']}>
                 <Select
                   mode="multiple"
                   maxTagCount={1}
@@ -184,7 +186,10 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
             </Col>
             <Col span={8}>
               <Form.Item name="platform" labelAlign="right" label="Device Platform" initialValue={'mobile'}>
-                <Input maxLength={50}/>
+                <Select>
+                  <Select.Option value="mobile">Mobile</Select.Option>
+                  <Select.Option value="desktop">Desktop</Select.Option>
+                </Select>
               </Form.Item>
             </Col>
             <Col span={8}>
@@ -212,8 +217,8 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
               <Form.Item name="os" label="User OS" labelAlign="right" initialValue={['na']}>
                 <Select mode="multiple">
                   <Select.Option value="na">All</Select.Option>
-                  <Select.Option value="1">Male</Select.Option>
-                  <Select.Option value="2">Female</Select.Option>
+                  <Select.Option value="iOS">iOS</Select.Option>
+                  <Select.Option value="Android">Android</Select.Option>
                 </Select>
               </Form.Item>
             </Col>
@@ -221,8 +226,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
               <Form.Item name="language" label="Language" labelAlign="right">
                 <Select>
                   <Select.Option value="en_US">en_US</Select.Option>
-                  <Select.Option value="1">Male</Select.Option>
-                  <Select.Option value="2">Female</Select.Option>
+                  <Select.Option value="zh_CN">zh_CN</Select.Option>
                 </Select>
               </Form.Item>
             </Col>
@@ -283,9 +287,17 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
               <Form.Item name="myAppSecret" rules={[{required: true, message: 'Please input APP secret!'}]}>
                 <Input placeholder="APP Secret" maxLength={100} className="width50P"/>
               </Form.Item>
-              <Form.Item name="accessToken" rules={[{required: true, message: 'Please input access token!'}]}>
-                <Input placeholder="Access Token" maxLength={255} className="width50P"/>
-              </Form.Item>
+              <Row>
+                <Col span={10} noStyle>
+                  <Form.Item name="accessToken" rules={[{required: true, message: 'Please input access token!'}]}>
+                    <Input placeholder="Access Token" maxLength={255} className="width50P"/>
+                  </Form.Item>
+                </Col>
+                <Col span={14}>
+                  <a>How to retrive your token?</a>
+                </Col>
+              </Row>
+
               <Form.Item
                 name="adAccountId"
                 rules={[{required: true, message: 'Please input Facebook Ad account!'}]}>
@@ -346,7 +358,8 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
         <div className={showJobInfo?'show':'hide'}>
           <p className="marginTop90 search-content">
             Audience generation job has been created in
-            <Link to={'/dashboard/jobManager?type='+isPayUser?activeKey:3}
+            <Link
+              to={`/dashboard/jobManager?type=${(isPayUser===true)?activeKey:3}`}
               className="target"
               onClick={() => {
                 store.dispatch(setMenusData('jobManager', 'dashboard'));

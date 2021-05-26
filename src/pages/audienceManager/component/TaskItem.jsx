@@ -14,10 +14,10 @@ const TaskItem=({info, active, onDragEnd, onDragStart, onClicks, userInfo})=>{
       className={'item' + (active ? ' active' : '')}
       draggable="true"
     >
-      <Row onClick={onClicks} style={{}}>
+      <Row onClick={onClicks} className="item-link">
         <Col span={24} className="item-header" >{info.campaignName}</Col>
-        <Col span={12} className="item-main">{info.type}</Col>
-        <Col span={12} className="text-right item-main">{info.createTime}</Col>
+        <Col span={8} className="item-main">{info.type}</Col>
+        <Col span={16} className="text-right item-time">{info.createTime}</Col>
       </Row>
     </div>
   );
