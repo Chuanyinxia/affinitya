@@ -5,6 +5,8 @@ import JobManger from '@/pages/jobManager';
 import AudienceManger from '@/pages/audienceManager';
 import Roles from '../pages/roles';
 import Users from '../pages/users';
+import PlansAndPrices from '../pages/plansAndPrices';
+import ResultPage from '../pages/resultPage';
 import ErrorPage from '../pages/ErrorPage';
 
 const Router = () => {
@@ -16,6 +18,8 @@ const Router = () => {
       <Route path="/dashboard/audienceManager" component={AudienceManger} />
       <Route path="/access/users" component={Users} />
       <Route path="/access/roles" component={Roles} />
+      <Route path="/plansAndPrices" component={PlansAndPrices} />
+      <Route path="/result" component={ResultPage} />
       <Route component={ErrorPage} />
     </Switch>
   );

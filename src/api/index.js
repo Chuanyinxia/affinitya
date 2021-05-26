@@ -18,4 +18,6 @@ export const GETSEARCHDETAIL='/api/getSearchDetail/';
 export const UPDATESEARCHRESULT='/api/updateSearchResult';
 export const SAVESEARCHRESULT='/api/saveSearchResult';
 export const GETEXTENDBYAUDI='/api/getExtendByAudi/';
+export const GETPAYMENTLIST='/api/paymentPackageList';
+export const PAY='/api/paypal/pay';
 export const EXPORTDETAIL='http://124.71.9.188:8881/api/exportDetail/';

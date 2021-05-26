@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {Link, withRouter} from 'react-router-dom';
@@ -15,6 +15,7 @@ import store from '../store';
 const Customlayout = ({history, sider, toggleSider, logged, setLogged}) => {
   const {Header, Content, Sider} = Layout;
   const [userInfo] = useState(storage.getData('userInfo') ?? null);
+  const [headerFooterShow, setHeaderFooterShow] = useState(true);
   const handleLogoutButton = () => {
     setLogged(false);
     storage.clearData('local', 'userInfo');
@@ -30,10 +31,14 @@ const Customlayout = ({history, sider, toggleSider, logged, setLogged}) => {
       </Menu.Item>
     </Menu>
   );
+  useEffect(() => {
+    console.log(window.location.pathname);
+    setHeaderFooterShow(!window.location.pathname.includes('result'));
+  }, []);
   return (
     <div>
       <Layout style={{minHeight: '100vh'}}>
-        <Sider
+        {headerFooterShow?<Sider
           breakpoint="lg"
           trigger={null}
           style={{width: 270}}
@@ -42,9 +47,9 @@ const Customlayout = ({history, sider, toggleSider, logged, setLogged}) => {
             <img src={logo} width={168}/>
           </div>
           <Menus/>
-        </Sider>
+        </Sider>:null}
         <Layout>
-          <Header className="login-header">
+          {headerFooterShow?<Header className="login-header">
 
             <div className="text-right">
               <Space size="large">
@@ -62,7 +67,7 @@ const Customlayout = ({history, sider, toggleSider, logged, setLogged}) => {
                 <Button type="primary" onClick={handleLogoutButton}>Upgrade</Button>
               </Space>
             </div>
-          </Header>
+          </Header>:null}
           <Content>
             <div className="site-layout-background" style={{minHeight: 'calc(100vh - 89px)'}}>
               <Router/>
