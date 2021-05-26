@@ -23,15 +23,15 @@
   box-shadow: 0px 2px 8px 0px rgba(230, 230, 230, 0.5);
 }
 .ant-layout-sider{
-  background-color:#01203A;
+  background-color:#02203a;
   font-family: FuturaBT-Medium Futura_Medium  Futura;
 
 }
 .ant-menu-submenu-open{
-  background-color: #01203A!important;
+  background-color: #02203a!important;
 }
 .ant-menu-submenu-open>*{
-  background-color: #01203A!important;
+  background-color: #02203a!important;
 }
 .ant-menu-item-selected{
   background-color: #9C9CD0!important;
