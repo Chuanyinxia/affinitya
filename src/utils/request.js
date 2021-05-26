@@ -16,6 +16,8 @@ axios.interceptors.response.use((response) => {
       storage.clearData();
       window.location.reload();
       return Promise.reject(new Error('Token 过期或失效，请重新登录!'));
+    case 314:
+      return Promise.reject(response.data.msg);
     default:
       return Promise.reject(new Error(response.data.msg ??
         '服务器错误!'));

@@ -52,8 +52,8 @@ const Menus = ({history, activeKey, openKeys}) => {
             </Link>
           </Menu.Item>
         </SubMenu>
-        <Menu.Item key="plans" >
-          <Link to="/plans">
+        <Menu.Item key="plansAndPrices" >
+          <Link to="/plansAndPrices">
             Plans & Pricing
           </Link>
         </Menu.Item>

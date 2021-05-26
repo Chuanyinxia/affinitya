@@ -18,3 +18,5 @@ export const GETSEARCHDETAIL='/api/getSearchDetail/';
 export const UPDATESEARCHRESULT='/api/updateSearchResult';
 export const SAVESEARCHRESULT='/api/saveSearchResult';
 export const GETEXTENDBYAUDI='/api/getExtendByAudi/';
+export const GETPAYMENTLIST='/api/paymentPackageList';
+export const PAY='/api/paypal/pay';

@@ -130,14 +130,14 @@
   padding:23px 20px 18px;
   border-radius: 2px;
 }
-.plans:hover{
+/* .plans:hover{
   background:#7121EA ;
   padding:0;
 }
 .plans:hover .ant-card{
   background:#7121EA ;
   color:#FFFFFF;
-}
+} */
 .home-footer{
   background: #272727;
   font-size: 14px;
