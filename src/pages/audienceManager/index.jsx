@@ -5,7 +5,7 @@ import {httpLoading} from '@/store/actions';
 import './style.css';
 import {GETAUDIENCEMANAGER, GETSEARCHDETAIL, UPDATESEARCHRESULT} from '@/api/index';
 import {get, post} from '@/utils/request';
-import {Button, Card, message} from 'antd';
+import {Card, message} from 'antd';
 import TaskItem from '@/pages/audienceManager/component/TaskItem';
 import TaskCol from '@/pages/audienceManager/component/TaskCol';
 import EditTable from '@/pages/audienceManager/component/EditTable';
@@ -26,22 +26,20 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
   const [activeId, setActiveId] = useState(null);
   const [details, setDetails] = useState(null);
   const [editId, setEditId]=useState(null);
+  const [searchWord, setSearchWord] =useState('');
   const getAudienceManager = () => {
     post(GETAUDIENCEMANAGER, {pageNum: 1, pageSize: 10000}, {
       // eslint-disable-next-line no-tabs
       'Content-Type': 'application/x-www-form-urlencoded',
       'token': userInfo.token,
     }).then((res) => {
-      console.log(res);
       setTasks(res.data.map((item) => {
         return {
           ...item,
           status: item.status === 1 ? STATUS_GENERATED :
             item.status === 2 ? STATUS_TEST :
               item.status === 3 ? STATUS_WINNER : STATUS_ARCHIVE,
-          type: item.type === 1 ? 'Generated' :
-            item.type === 2 ? 'Test' :
-              item.type === 3 ? 'Winner' : 'Archive',
+          type: item.type === 1 ? 'Keyword' :'Lookalike',
         };
       }));
     }).catch((error) => {
@@ -107,25 +105,34 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
     });
   };
 
+  const onSearch=(e)=>{
+    console.log(e.target.value);
+    setSearchWord(e.target.value??'');
+  };
   return (
-    <div>
+    <div className="paddingB16">
       <div className="task-wrapper">
         {
           Object.keys(STATUS_CODE).map((status) =>
             <TaskCol
               status={status}
               key={status}
+              onSearch={onSearch}
               dragTo={() => dragTo(status)}
               canDragIn={activeId !== null && tasks[activeId].status !== status}>
-              {tasks && tasks.filter((t) => t.status === status).map((t, index) =>
-                <TaskItem
+              {tasks && tasks.filter((t) => t.status === status).map((t, index) => {
+                if (status==='STATUS_GENERATED'&&t.campaignName.indexOf(searchWord)===-1) {
+                  return null;
+                }
+                return (<TaskItem
                   key={t.id}
                   active={index === activeId}
                   info={t}
                   onClicks={() => getDetails(t.id)}
                   onDragStart={() => onDragStart(index, t)}
                   onDragEnd={() => cancelSelect(index)}
-                />)
+                />);
+              })
               }
             </TaskCol>,
           )
@@ -139,7 +146,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
             <p>Click &ldquo;Extend&ldquo; to expand custom keywords from 50 to 300.</p>
           </div>
           <Card>
-            <div className="text-right"><Button>Save All</Button></div>
+            {/* <div className="text-right"><Button>Save All</Button></div>*/}
             <EditTable details={details} id={editId} saveFunc={getDetails}/>
           </Card>
         </div>

@@ -5,7 +5,7 @@ import {httpLoading, setMenusData} from '@/store/actions';
 import './style.css';
 import {GETJOBMANAGER, CANCELJOB, RESTARTJOB} from '@/api';
 import {/* get,*/post} from '@/utils/request';
-import {Table, Space, Tag, Tooltip, message, Card} from 'antd';
+import {Table, Space, Tag, Tooltip, message, Card, Tabs} from 'antd';
 import {EyeOutlined, RedoOutlined, CloseOutlined} from '@ant-design/icons';
 import {useHistory} from 'react-router-dom';
 import store from '@/store';
@@ -15,20 +15,21 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
   const history = useHistory();
   const [jobList, setJobList]=useState([]);
   const [loading, setLoading]= useState(true);
+  const [jobType, setJobType]=useState(type()??0);
   const [pagination, setPagination]=useState({
     current: 1,
     pageSize: 10,
     total: 0,
-    type: type(),
+    type: jobType,
   });
   const getJobList=(page)=>{
     setLoading(true);
+    const data={...page};
+    if (parseInt(data.type)===0) {
+      data.type='';
+    }
     post( GETJOBMANAGER,
-        {
-          pageNum: page.current,
-          pageSize: page.pageSize,
-          type: pagination.type,
-        }, {
+        data, {
           // eslint-disable-next-line no-tabs
           'Content-Type':	'application/x-www-form-urlencoded',
           'token': userInfo.token,
@@ -85,10 +86,30 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
   };
 
   useEffect(()=>{
-    getJobList(pagination);
+    getJobList({
+      pageNum: 1,
+      pageSize: 10,
+      type: jobType,
+    });
   }, []);
   return (
     <Card>
+      <Tabs
+        defaultActiveKey={jobType}
+        onChange={(key)=>{
+          setJobType(key);
+          getJobList({
+            pageNum: 1,
+            pageSize: 10,
+            type: key,
+          });
+        }}
+      >
+        <Tabs.TabPane tab="All" key={0} />
+        <Tabs.TabPane tab="Keyword" key={1} />
+        <Tabs.TabPane tab="Lookalike Audience" key={2} />
+        <Tabs.TabPane tab="Extend" key={3} />
+      </Tabs>
       <Table
         loading={loading}
         dataSource={jobList}

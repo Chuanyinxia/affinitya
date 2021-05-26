@@ -14,7 +14,7 @@ const {TabPane} = Tabs;
 const KeyWordSearchDetails = ({userInfo, searchData}) => {
   const [saveModal, setSaveModal]=useState(false);
   const [audienceName, setAudienceName]=useState('');
-  const [id]=useState(searchData[0].searchId??'');
+  const [id]=useState(searchData[0]?searchData[0].searchId:'');
   const tableData=(tableData)=>{
     const data=tableData.map((item, index)=>{
       return {...item, index: index+1};
@@ -22,7 +22,7 @@ const KeyWordSearchDetails = ({userInfo, searchData}) => {
     return data;
   };
   const saveAudience=()=>{
-    console.log(id);
+    // console.log(id);
     post(SAVESEARCHMESSAGE, {searchId: id, audienceName: audienceName}, {
       // eslint-disable-next-line no-tabs
       'Content-Type':	'application/x-www-form-urlencoded',
@@ -52,10 +52,10 @@ const KeyWordSearchDetails = ({userInfo, searchData}) => {
         </Space>
       </div>
       <Card>
-        <Tabs defaultActiveKey={searchData[0].id}>
+        <Tabs defaultActiveKey={searchData[0]?searchData[0].id:''}>
           {searchData.map((item)=>(
             <TabPane tab={`group${item.groupId}`} key={item.id} >
-              <ResultTable TableData={tableData(item.searchDetails)}/>
+              <ResultTable TableData={tableData(item.searchDetails??[])}/>
             </TabPane>))}
         </Tabs>
       </Card>

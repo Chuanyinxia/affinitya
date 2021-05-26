@@ -13,15 +13,12 @@ export const isEmail=()=>{
   return false;
 };
 export const type=()=>{
-  const search = window.location.search.substring(1).split('&');
-  const arr={};
+  const search = window.location.search.substring(1).split('&').toString().split('=');
   if (search.length>1) {
-    search.forEach((item)=>{
-      arr[item.split('=')[0]]=item.split('=')[1];
-    });
-    return arr.type;
+    console.log(search[1]);
+    return (search[1]);
   }
-  return '';
+  return false;
 };
 export const search=()=>{
   const search = window.location.search.substring(1).split('&');
