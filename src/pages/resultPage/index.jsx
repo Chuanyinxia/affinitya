@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {Button, Result} from 'antd';
@@ -14,8 +14,23 @@ import {} from '@/api/index';
 const ResultPage = ({userInfo, httpLoading, setHttpLoading}) => {
   const history = useHistory();
   const [payStatus, setPayStatus] = useState(false);
+  const timer = useRef();
+  const [counter, setCounter] = useState(10);
+  let t = 10;
   useEffect(() => {
-    setPayStatus(true);
+    const status = window.location.search;
+    setPayStatus(status.includes('success'));
+    timer.current = setInterval(()=>{
+      if (t===1) {
+        history.push('./');
+      } else {
+        t--;
+        setCounter(t);
+      }
+    }, 1000);
+    return ()=>{
+      clearInterval(timer.current);
+    };
   }, []);
   return (
     <div>
@@ -23,25 +38,24 @@ const ResultPage = ({userInfo, httpLoading, setHttpLoading}) => {
         <Result
           status="success"
           title="Pay Success"
-          subTitle="Order number: 2017182818828182881 Cloud server configuration takes 1-5 minutes, please wait."
           extra={[
+            <p key="text">{`After ${counter}s back to Affinity Analyst page automatically.`}</p>,
             <Button type="primary" key="back" onClick={()=>{
               history.push('/');
             }}>
-              Back to Affinity Analyst
+              Back manually
             </Button>,
           ]}
         />):(<Result
           status="error"
           title="Pay Failed"
-          subTitle="Please check and modify the following information before resubmitting."
           extra={[
+            <p key="text">{`After ${counter}s back to Affinity Analyst page automatically.`}</p>,
             <Button type="primary" key="back" onClick={()=>{
               history.push('/');
             }}>
-              Back to Affinity Analyst
+              Back manually
             </Button>,
-            <Button key="buy">Buy Again</Button>,
           ]}
         />)}
     </div>
