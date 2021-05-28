@@ -24,3 +24,5 @@ export const EXPORTDETAIL='http://124.71.9.188:8881/api/exportDetail/';
 export const GETAUDIENCEID='/api/getAudienceId';
 export const UPDATEPASSWORD ='/api/updatePassword';
 export const IMPROVEPROFILE='/api/member/improveProfile';
+export const CONTACTUS='/api/saveContactUs';
+export const GETTRANSACTION='/api/transactionList';

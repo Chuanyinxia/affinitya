@@ -6,6 +6,7 @@ import AudienceManger from '@/pages/audienceManager';
 import Roles from '../pages/roles';
 import Users from '../pages/users';
 import PlansAndPrices from '../pages/plansAndPrices';
+import Transactions from '../pages/transactions';
 import ResultPage from '../pages/resultPage';
 import ErrorPage from '../pages/ErrorPage';
 import ChangePassword from '@/pages/changePassword';
@@ -20,6 +21,7 @@ const Router = () => {
       <Route path="/access/users" component={Users} />
       <Route path="/access/roles" component={Roles} />
       <Route path="/plansAndPrices" component={PlansAndPrices} />
+      <Route path="/transactions" component={Transactions} />
       <Route path="/result" component={ResultPage} />
       <Route path="/changePassword" component={ChangePassword} />
       <Route path="/profile" component={Profile} />

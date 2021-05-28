@@ -206,3 +206,29 @@
   height: 134px;
   padding-top: 60px;
 }
+.input-Wrapper{
+  box-shadow: 0 2px 0 rgb(0 0 0 / 2%);
+  border: 1px solid #000;
+  padding: 8px;
+}
+.form-wrapper{
+  border: 1px solid #000;
+  box-shadow: 0 2px 0 rgb(0 0 0 / 2%);
+}
+.input-Wrapper>.ant-row>.ant-col>.ant-form-item-control-input>.ant-form-item-control-input-content>.ant-input {
+background: none;
+}
+.contact-us input{
+  appearance: none !important;
+  -moz-appearance: none !important;
+  outline: none !important;
+  -moz-outline: none !important;
+  box-shadow: none !important;
+  -moz-box-shadow: none !important;
+}
+.contact-us .ant-btn{
+  border-color: #01203A;
+  background: #01203A;
+  color:#fff;
+  float: right;
+}
