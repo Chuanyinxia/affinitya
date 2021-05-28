@@ -73,7 +73,7 @@ const Home = ({userInfo, httpLoading, setHttpLoading}) => {
               <Link to='/' className="navs">Home</Link>
               <Link to='/dashboard/audienceGenerator'
                 className="navs">Dashboard</Link>
-
+              <a href="#Plans" className="navs">Contact Us</a>
               <a href="#Plans" className="navs">Plans & Pricing</a>
               <Link to='/login' className="navs">Login</Link>
             </Space>
@@ -168,18 +168,21 @@ const Home = ({userInfo, httpLoading, setHttpLoading}) => {
       </Content>
       <Content >
         <Row className="content" >
+          <Col span={24} >
+            <h2 className="text-center developers-title">Trusted by leading Developers & Studios.</h2>
+          </Col>
           <Col span={6} className="text-center">
-            <img src={logo1} style={{width: '80%'}} alt="logo"/>
+            <img src={logo1} style={{width: '90%'}} alt="logo"/>
           </Col>
           <Col span={6} className="text-center">
 
-            <img src={logo2} style={{width: '80%'}} alt="logo"/>
+            <img src={logo2} style={{width: '90%'}} alt="logo"/>
           </Col>
           <Col span={6} className="text-center">
-            <img src={logo3} style={{width: '80%'}} alt="logo"/>
+            <img src={logo3} style={{width: '90%'}} alt="logo"/>
           </Col>
           <Col span={6} className="text-center">
-            <img src={logo4} style={{width: '80%'}} alt="logo"/>
+            <img src={logo4} style={{width: '90%'}} alt="logo"/>
           </Col>
         </Row>
       </Content>

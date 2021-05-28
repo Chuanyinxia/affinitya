@@ -6,10 +6,11 @@ import {Button, Card, Col, Divider, Form, Input, InputNumber, message, Row, Sele
 import './style.css';
 import {Link} from 'react-router-dom';
 import {Countrys} from '@/components/plugin/Country';
-import {GETJOBDETAIL, SEARCHAUID, SEARCHKW, ISPAID} from '@/api/index';
+import {GETJOBDETAIL, SEARCHAUID, SEARCHKW, ISPAID, GETAUDIENCEID} from '@/api/index';
 import {get, post} from '@/utils/request';
 import KeyWordSearchDetails from '@/components/Table/KeyWordSearchDetails';
 import {PlusOutlined} from '@ant-design/icons';
+import moment from 'moment';
 import store from '@/store';
 // eslint-disable-next-line no-unused-vars
 import {search, type} from '@/components/plugin/Searchdata';
@@ -23,18 +24,21 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
   const [baseSearchForm] = Form.useForm();
   const [audienceIdSearchForm]= Form.useForm();
   const [keywordsForm] =Form.useForm();
-  const [searchData, setSearchData] = useState(null);
+  const [searchDataKW, setSearchDataKW] = useState([]);
+  const [searchDataLA, setSearchDataLA] = useState([]);
+  const [saveNameKW, setSaveNameKW]=useState('');
+  const [saveNameLA, setSaveNameLA]=useState('');
   const [audienceID, setAudienceID] = useState('');
   const [loading, setLoading] = useState(false);
   const [audienceIdItem, setAudienceIdItem] = useState([]);
-  const [activeKey, setActiveKey]=useState(type??1);
+  const [activeKey, setActiveKey]=useState(type()?type():1);
   const [showJobInfo, setShowJobInfo]=useState(false);
   const [isPayUser, setIsPayUser] =useState(false);
   const [freeSearchData, setFreeSearchData] =useState(null);
+  // const [keyWords, setKeyWords]=useState(null);
   const addItem = () => {
     if (audienceID) {
       audienceIdItem.push({audienceId: audienceID});
-      console.log(audienceIdItem);
       setAudienceIdItem(audienceIdItem);
       setAudienceID(null);
     }
@@ -55,13 +59,13 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
       myAppSecret: values.myAppSecret.trim(),
       audienceId: values.audienceId,
     };
-    console.log(data);
     post(SEARCHAUID, data, {
       // eslint-disable-next-line no-tabs
       'Content-Type': 'application/x-www-form-urlencoded',
       'token': userInfo.token,
     }).then((res) => {
-      setSearchData(res.data);
+      setSearchDataLA(res.data);
+      setSaveNameLA(values.audienceId+moment().format('YYYYMMDDhhmmss'));
     }).catch((error) => {
       message.error({
         content: error.toString(), key: 'netError', duration: 2,
@@ -92,12 +96,16 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
         'Content-Type': 'application/x-www-form-urlencoded',
         'token': userInfo.token,
       }).then((res) => {
+        console.log(isPayUser, activeKey);
         if (isPayUser) {
-          setSearchData(res.data);
+          console.log(isPayUser, activeKey, res.data);
+          setSearchDataKW(res.data||[]);
+          console.log(searchDataKW);
         } else {
-          setFreeSearchData(res.data);
+          setFreeSearchData(res.data||[]);
         }
-        if (!res.data) {
+        setSaveNameKW(values.keyWord[0]+moment().format('YYYYMMDDhhmmss'));
+        if (res.data) {
           setShowJobInfo(false);
         }
       }).catch((error) => {
@@ -114,10 +122,12 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
       console.log(res);
       const baseData=res.data.baseSearchRequest;
       const AIDData= res.data.audienceIdSearchRequest;
-      if (activeKey===1) {
+      if (parseInt(activeKey)===1) {
         keywordsForm.setFieldsValue({
-          keywords: res.data.keywords,
+          keyWord: res.data.keywords,
         });
+        // setKeyWords(res.data.keywords);
+        // console.log(res.data.keywords);
       } else {
         audienceIdSearchForm.setFieldsValue({
           ...AIDData,
@@ -129,7 +139,11 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
         minAge: baseData.age.split(',')[0],
         maxAge: baseData.age.split(',')[1],
       });
-      setSearchData(res.data.kwResultVoList);
+      if (activeKey===1) {
+        setSearchDataKW(res.data.kwResultVoList||[]);
+      } else {
+        setSearchDataLA(res.data.audienceIdSearchRequest||[]);
+      }
     }).catch((error) => {
       message.error({
         content: error.toString(), key: 'netError', duration: 2,
@@ -149,6 +163,39 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
     });
   };
 
+  const JobType=isPayUser?activeKey:0;
+
+  const onLKSearchChange=(changedValues, allValues)=>{
+    console.log(changedValues, allValues);
+    const adAccountId=allValues.adAccountId;
+    const accessToken=allValues.accessToken;
+    const myAppId=allValues.myAppId;
+    const myAppSecret = allValues.myAppSecret;
+    if (Object.keys(changedValues)!=='audienceId'&&
+      adAccountId&&
+      myAppSecret&&
+      myAppId&&
+      myAppSecret
+    ) {
+      const data={
+        adAccountId: adAccountId,
+        accessToken: accessToken,
+        myAppId: myAppId,
+        myAppSecret: myAppSecret,
+      };
+      console.log(data);
+      post(GETAUDIENCEID, data, {
+        'token': userInfo.token,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      }).then((res) => {
+        setAudienceIdItem(res.data);
+      }).catch((error) => {
+        message.error({
+          content: error.toString(), key: 'netError', duration: 2,
+        });
+      });
+    }
+  };
   useEffect(() => {
     isPay();
     const data=search();
@@ -157,6 +204,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
     }
   },
   []);
+
   return (
     <Spin spinning={loading}>
       <Card className="SearchBox" hoverable>
@@ -194,7 +242,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
             </Col>
             <Col span={8}>
               <Form.Item name="age" labelAlign="right" label="Age" initialValue="1,2">
-                <Form.Item name="minAge" noStyle initialValue={18}>
+                <Form.Item name="minAge" noStyle initialValue={13}>
                   <InputNumber
                     min={0}
                     max={120}
@@ -204,7 +252,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
                 <span className="text-center width50">
                   —
                 </span>
-                <Form.Item name="maxAge" noStyle initialValue={28}>
+                <Form.Item name="maxAge" noStyle initialValue={65}>
                   <InputNumber
                     min={0}
                     max={120}
@@ -223,7 +271,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item name="language" label="Language" labelAlign="right">
+              <Form.Item name="language" label="Language" labelAlign="right" initialValue={['en_US']}>
                 <Select>
                   <Select.Option value="en_US">en_US</Select.Option>
                   <Select.Option value="zh_CN">zh_CN</Select.Option>
@@ -239,25 +287,29 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
         </Form>
       </Card>
       <div className="card-container marginT16">
-        <Tabs type="card" defaultActiveKey={activeKey} onChange={(key)=>setActiveKey(key)}>
+        <Tabs type="card" defaultActiveKey={activeKey} onChange={(key)=> {
+          setActiveKey(key);
+          setShowJobInfo(false);
+        }}>
           <Tabs.TabPane tab="Keyword Search" key="1">
             <h1 className="search-title">
               Access to 40 keywords is free. Need access to all 300 of your custom keyword audience?
-              {!isPayUser&&(<Link to="/upgrade" className="target" onClick={() => {
-                store.dispatch(setMenusData('plans', 'dashboard'));
+              {!isPayUser&&(<Link to="/plansAndPrices" className="target" onClick={() => {
+                store.dispatch(setMenusData('plansAndPrices', 'dashboard'));
               }}> Upgrade now!</Link>)}
             </h1>
             <Form onFinish={onSearch} name="search" layout="horizontal" form={keywordsForm}>
               <Form.Item
                 name="keyWord"
-                initialValue={['Games12', 'book23']}
                 rules={[{required: true, message: 'Please input keyword!'}]}
+                // initialValue={keyWords}
               >
                 <Select
-                  placeholder="Keyword"
+                  placeholder="One word only for free user, premium users are able add up to 10 keywords in one search."
                   className="width60P"
                   mode="tags"
                   size="large"
+                  open={false}
                   tokenSeparators={[',']}/>
               </Form.Item>
               <Form.Item>
@@ -276,11 +328,11 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
           <Tabs.TabPane tab="Lookalike Audience Search" key="2">
             <h1 className="search-title">
               Generate 300 affinity based keyword audiences from your custom audiences.
-              {!isPayUser&&(<Link to="/plans" className="target" onClick={() => {
-                store.dispatch(setMenusData('plans', 'dashboard'));
+              {!isPayUser&&(<Link to="/plansAndPrices" className="target" onClick={() => {
+                store.dispatch(setMenusData('plansAndPrices', 'dashboard'));
               }}> Upgrade now!</Link>)}
             </h1>
-            <Form onFinish={LookalikeSearch} form={audienceIdSearchForm}>
+            <Form onFinish={LookalikeSearch} form={audienceIdSearchForm} onValuesChange={onLKSearchChange}>
               <Form.Item name="myAppId" rules={[{required: true, message: 'Please input APP ID!'}]}>
                 <Input placeholder="APP ID" maxLength={100} className="width50P"/>
               </Form.Item>
@@ -337,10 +389,10 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
                   Generate Audience
                 </Button>):(
                     <Button type="primary" size="large" >
-                      <Link to={'/plans'}
+                      <Link to={'/plansAndPrices'}
                         className="target"
                         onClick={() => {
-                          store.dispatch(setMenusData('plans', 'dashboard'));
+                          store.dispatch(setMenusData('plansAndPrices', 'dashboard'));
                         }}>
                       Generate Audience
                       </Link>
@@ -355,22 +407,25 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
             </p>
           </Tabs.TabPane>
         </Tabs>
-        <div className={showJobInfo?'show':'hide'}>
-          <p className="marginTop90 search-content">
-            Audience generation job has been created in
-            <Link
-              to={`/dashboard/jobManager?type=${activeKey}`}
-              className="target"
-              onClick={() => {
-                store.dispatch(setMenusData('jobManager', 'dashboard'));
-              }
-              }>Job Manager</Link>.
-          </p>
-          <p className="search-content">You will receive &ldquo;notification&ldquo; once job completed.</p>
-        </div>
       </div>
-      {searchData && <KeyWordSearchDetails searchData={searchData}/>}
-      {freeSearchData&& <ResultTable TableData={freeSearchData}/>}
+      <div className={showJobInfo?'show':'hide'}>
+        <p className="marginTop90 search-content">
+          Audience generation job has been created in
+          <Link
+            to={`/dashboard/jobManager?type=${JobType}`}
+            className="target"
+            onClick={() => {
+              store.dispatch(setMenusData('jobManager', 'dashboard'));
+            }
+            }>Job Manager</Link>.
+        </p>
+        <p className="search-content">You will receive &ldquo;notification&ldquo; once job completed.</p>
+      </div>
+      {(searchDataKW.length>0 && parseInt(activeKey)===1)&&(
+        <KeyWordSearchDetails saveName={saveNameKW} searchData={searchDataKW}/>)}
+      {(searchDataLA.length>0 && parseInt(activeKey)===2)&& (
+        <KeyWordSearchDetails saveName={saveNameLA} searchData={searchDataLA}/>)}
+      {(freeSearchData && activeKey===1)&& <ResultTable TableData={freeSearchData}/>}
     </Spin>
   );
 };

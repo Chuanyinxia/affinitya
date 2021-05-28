@@ -25,7 +25,7 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
   const getJobList=(page)=>{
     setLoading(true);
     const data={...page};
-    if (parseInt(data.type)===0) {
+    if (parseInt(data.type)===0||!data.type) {
       data.type='';
     }
     post( GETJOBMANAGER,
@@ -56,8 +56,11 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
       'token': userInfo.token,
     }).then((res)=>{
       message.success(res.msg);
-      getJobList({current: 1,
-        pageSize: 10});
+      getJobList({
+        pageNum: 1,
+        pageSize: 10,
+        type: jobType,
+      });
     }).catch((error)=>{
       message.error({
         content: error.toString(), key: 'netError', duration: 2,
@@ -76,8 +79,11 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
       'token': userInfo.token,
     }).then((res)=>{
       message.success(res.msg);
-      getJobList({current: 1,
-        pageSize: 10});
+      getJobList({
+        pageNum: 1,
+        pageSize: 10,
+        type: jobType,
+      });
     }).catch((error)=>{
       message.error({
         content: error.toString(), key: 'netError', duration: 2,
@@ -114,11 +120,14 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
         loading={loading}
         dataSource={jobList}
         pagination={pagination}
-        onChange={(pagination)=>getJobList(pagination)}
+        onChange={(pagination)=>getJobList({...pagination, pageNum: pagination.current, type: jobType})}
       >
         <Table.Column title="Job ID" dataIndex="id" key="Job ID"/>
         <Table.Column title="Job Title" dataIndex="title" key="Job Title"/>
-        <Table.Column title="Start  Time" dataIndex="startTime" key="Start  Time"/>
+        <Table.Column title="Type" dataIndex="type" key="Type" render={(type)=>{
+          return type===1?'Keyword':type===2?'Lookalike Audience':'Extend';
+        }}/>
+        <Table.Column title="Start Time" dataIndex="startTime" key="Start  Time"/>
         <Table.Column title="Complete Time" dataIndex="endTime" key="Complete Time"/>
         <Table.Column title="Status" dataIndex="jobStatus" key="Status" render={(jobStatus) =>(
           <Space>

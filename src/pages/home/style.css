@@ -198,3 +198,11 @@
   color: #FFFFFF;
   line-height: 16px;
 }
+.developers-title{
+  line-height:1.35em;
+  text-align:center;
+  font-size:40px;
+  color:rgb(1,32,58);
+  height: 134px;
+  padding-top: 60px;
+}

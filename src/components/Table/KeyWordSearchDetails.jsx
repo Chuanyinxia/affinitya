@@ -1,19 +1,20 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {httpLoading} from '@/store/actions';
 import './style.css';
-import {Tabs, Card, Space, Button, Modal, Input, message, Empty} from 'antd';
+import {Tabs, Card, Space, Button, Modal, Input, message, Empty, Tooltip} from 'antd';
 import ResultTable from '@/components/Table/ResultTable';
-import {post} from '@/utils/request';
-import {EXPORTCVS, SAVESEARCHMESSAGE} from '@/api';
+import {get, post} from '@/utils/request';
+import {EXPORTCVS, ISPAID, SAVESEARCHMESSAGE} from '@/api';
 
 const {TabPane} = Tabs;
 
 
-const KeyWordSearchDetails = ({userInfo, searchData}) => {
+const KeyWordSearchDetails = ({userInfo, searchData, saveName}) => {
   const [saveModal, setSaveModal]=useState(false);
-  const [audienceName, setAudienceName]=useState('');
+  const [audienceName, setAudienceName]=useState(saveName);
+  const [isPayUser, setIsPayUser] =useState(false);
   const [id]=useState(searchData[0]?searchData[0].searchId:'');
   const tableData=(tableData)=>{
     const data=tableData.map((item, index)=>{
@@ -37,7 +38,18 @@ const KeyWordSearchDetails = ({userInfo, searchData}) => {
       });
     });
   };
-
+  const isPay=()=>{
+    get(ISPAID, userInfo.token).then((res)=>{
+      setIsPayUser(res.data===2);
+    }).catch((error)=>{
+      message.error({
+        content: error.toString(), key: 'netError', duration: 2,
+      });
+    });
+  };
+  useEffect(()=>{
+    isPay();
+  }, [isPayUser]);
   return (
     <div>
       <h2 className="search-content">
@@ -45,10 +57,23 @@ const KeyWordSearchDetails = ({userInfo, searchData}) => {
         groups for optimal audience sets and ranked per affinity data.</h2>
       <div className="text-right marginB16">
         <Space>
-          <Button onClick={()=>setSaveModal(true)}>Save Audience</Button>
-          <Button
+          <Button onClick={()=>setSaveModal(true)} >Save Audience</Button>
+          {isPayUser?(<Button
             download
-            href={`${EXPORTCVS}${id}/${userInfo.token}`}>Export to CSV</Button>
+            href={`${EXPORTCVS}${id}/${userInfo.token}`}
+            disabled={!isPayUser}>
+            Export to CSV
+          </Button>):
+            (<Tooltip title="You should upgrade to use this function.">
+              <Button
+                download
+                href={`${EXPORTCVS}${id}/${userInfo.token}`}
+                disabled={!isPayUser}>
+              Export to CSV
+              </Button>
+            </Tooltip>)
+          }
+
         </Space>
       </div>
       <Card>
@@ -68,7 +93,11 @@ const KeyWordSearchDetails = ({userInfo, searchData}) => {
           setSaveModal(false);
           setAudienceName('');
         }}>
-        <Input maxLength={100} placeholder="Audience Name" onChange={(e)=>setAudienceName(e.target.value)}/>
+        <Input
+          maxLength={100}
+          defaultValue={saveName}
+          placeholder="Audience Name"
+          onChange={(e)=>setAudienceName(e.target.value)}/>
       </Modal>
     </div>
 
@@ -91,6 +120,7 @@ const mapDispatchToProps = (dispatch) => {
 KeyWordSearchDetails.propTypes = {
   userInfo: PropTypes.object.isRequired,
   searchData: PropTypes.object.isRequired,
+  saveName: PropTypes.string.isRequired,
 };
 
 export default connect(

@@ -1,6 +1,6 @@
 .item {
   width: 90%;
-  margin: 18px auto;
+  margin: 16px auto;
   background: #fff;
   border-radius: 10px;
   height: 100px;
@@ -117,4 +117,13 @@
 }
 .item-link{
   cursor:pointer;
+}
+.mangerTitle{
+  font-size: 34px;
+  font-family: FuturaBT-Medium, FuturaBT;
+  font-weight: 500;
+  color: #222222;
+  line-height: 42px;
+  margin: 20px auto 60px;
+  padding-left: 16px;
 }

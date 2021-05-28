@@ -5,7 +5,7 @@ import {httpLoading} from '@/store/actions';
 import './style.css';
 import {GETAUDIENCEMANAGER, GETSEARCHDETAIL, UPDATESEARCHRESULT} from '@/api/index';
 import {get, post} from '@/utils/request';
-import {Card, message} from 'antd';
+import {Card, message, Spin} from 'antd';
 import TaskItem from '@/pages/audienceManager/component/TaskItem';
 import TaskCol from '@/pages/audienceManager/component/TaskCol';
 import EditTable from '@/pages/audienceManager/component/EditTable';
@@ -46,6 +46,8 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
       message.error({
         content: error.toString(), key: 'netError', duration: 2,
       });
+    }).finally(()=>{
+      setHttpLoading(false);
     });
   };
   const getDetails = (id) => {
@@ -70,15 +72,15 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
     setActiveId(id);
   };
   const dragTo = (status) => {
-    const task = tasks[activeId];
+    const task = tasks.find((item)=>item.id===activeId);
     if (task.status !== status) {
       task.status = status;
       const statusCode = STATUS_CODE[status] === 'Generated' ? 1 :
         STATUS_CODE[status] === 'Test' ? 2 :
           STATUS_CODE[status] === 'Winner' ? 3 :
             STATUS_CODE[status] === 'Archive' ? 4 : null;
+      console.log(task);
       updateSearchResult(task.id, statusCode);
-      setTasks(tasks);
     }
     cancelSelect();
   };
@@ -87,6 +89,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
   };
   // 修改拖拽状态
   const updateSearchResult = (id, status) => {
+    setHttpLoading(true);
     post(UPDATESEARCHRESULT,
         {searchId: id, status: status}, {
         // eslint-disable-next-line no-tabs
@@ -101,56 +104,59 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
         content: error.toString(), key: 'netError', duration: 2,
       });
     }).finally(() => {
+      setTasks(tasks);
       getAudienceManager();
     });
   };
 
   const onSearch=(e)=>{
-    console.log(e.target.value);
     setSearchWord(e.target.value??'');
   };
   return (
     <div className="paddingB16">
-      <div className="task-wrapper">
-        {
-          Object.keys(STATUS_CODE).map((status) =>
-            <TaskCol
-              status={status}
-              key={status}
-              onSearch={onSearch}
-              dragTo={() => dragTo(status)}
-              canDragIn={activeId !== null && tasks[activeId].status !== status}>
-              {tasks && tasks.filter((t) => t.status === status).map((t, index) => {
-                if (status==='STATUS_GENERATED'&&t.campaignName.indexOf(searchWord)===-1) {
-                  return null;
+      <h2 className="mangerTitle">Organize your custom audience sets here.</h2>
+      <Spin spinning={httpLoading}>
+        <div className="task-wrapper">
+          {
+            Object.keys(STATUS_CODE).map((status) =>
+              <TaskCol
+                status={status}
+                key={status}
+                onSearch={onSearch}
+                dragTo={() => dragTo(status)}
+                canDragIn={activeId !== null && tasks.find((item)=>item.id===activeId).status !== status}>
+                {tasks && tasks.filter((t) => t.status === status).map((t) => {
+                  if (status==='STATUS_GENERATED'&&t.campaignName.indexOf(searchWord)===-1) {
+                    return null;
+                  }
+                  return (<TaskItem
+                    key={status+t.id}
+                    active={t.id === activeId}
+                    info={t}
+                    onClicks={() => getDetails(t.id)}
+                    onDragStart={() => onDragStart(t.id, t)}
+                    onDragEnd={() => cancelSelect(t.id)}
+                  />);
+                })
                 }
-                return (<TaskItem
-                  key={t.id}
-                  active={index === activeId}
-                  info={t}
-                  onClicks={() => getDetails(t.id)}
-                  onDragStart={() => onDragStart(index, t)}
-                  onDragEnd={() => cancelSelect(index)}
-                />);
-              })
-              }
-            </TaskCol>,
-          )
-        }
-      </div>
-      {details && (
-        <div>
-          <div className="padding16">
-            <h2>Audience Tracker</h2>
-            <p>Fill ad testing results for tracking and your custom audience set&apos;s optimization.</p>
-            <p>Click &ldquo;Extend&ldquo; to expand custom keywords from 50 to 300.</p>
-          </div>
-          <Card>
-            {/* <div className="text-right"><Button>Save All</Button></div>*/}
-            <EditTable details={details} id={editId} saveFunc={getDetails}/>
-          </Card>
+              </TaskCol>,
+            )
+          }
         </div>
-      )}
+        {details && (
+          <div>
+            <div className="padding16">
+              <h2>Audience Tracker</h2>
+              <p>Fill ad testing results for tracking and your custom audience set&apos;s optimization.</p>
+              <p>Click &ldquo;Extend&ldquo; to expand custom keywords from 50 to 300.</p>
+            </div>
+            <Card>
+              {/* <div className="text-right"><Button>Save All</Button></div>*/}
+              <EditTable details={details} id={editId} saveFunc={getDetails}/>
+            </Card>
+          </div>
+        )}
+      </Spin>
     </div>
 
   );

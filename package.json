@@ -2,7 +2,7 @@
   "name": "sgh",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://124.71.9.188:8881/",
+  "proxy": "http://192.168.3.6:8881/",
   "dependencies": {
     "@ant-design/charts": "^1.0.21",
     "@craco/craco": "^6.1.1",
