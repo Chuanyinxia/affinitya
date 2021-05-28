@@ -170,7 +170,7 @@ const PlansAndPrices = ({userInfo, httpLoading, setHttpLoading}) => {
                   <Form.Item
                     rules={[{
                       validator: (_, value) =>
-                      value ? Promise.resolve() : Promise.reject(new Error('Should accept agreement')),
+                      value ? Promise.resolve() : Promise.reject(new Error('Should accept the payment policy! ')),
                     }]}
                     name="payCheckbox"
                     valuePropName="checked"
@@ -179,10 +179,10 @@ const PlansAndPrices = ({userInfo, httpLoading, setHttpLoading}) => {
                     <Checkbox ></Checkbox>
                   </Form.Item>
                   <Form.Item style={{position: 'absolute', left: 24}}>
-                    <span>I have read and agre <a href="" onClick={(e)=>{
+                    <span>I have read and agreed to the <a href="" onClick={(e)=>{
                       e.preventDefault();
                       setAgreementModalVivible(true);
-                    }}>Payment Policy</a></span>
+                    }}>Payment Policy</a>.</span>
                   </Form.Item>
                 </Form.Item>
                 <Form.Item>
