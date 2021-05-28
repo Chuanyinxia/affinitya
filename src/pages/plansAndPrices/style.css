@@ -8,28 +8,6 @@
 .priceCard .ant-card-body{
   padding: 24px 0;
 }
-.plans.checked *{
-  color:#FFFFFF;
-}
-.plans.checked{
-  background:#7121EA;
-  padding: 21.5 20;
-}
-.plans.checked .priceCard{
-  background:#7121EA ;
-  color:#FFFFFF;
-}
-.plans:hover{
-  background:#7121EA ;
-  padding: 21.5 20;
-}
-.plans:hover *{
-  color:#FFFFFF;
-}
-.plans:hover .priceCard{
-  background:#7121EA ;
-  color:#FFFFFF;
-}
 .paymentName{
   height: 29px;
   line-height: 29px;
@@ -38,29 +16,33 @@
 }
 .paymentPrice{
   margin-top: 10px;
-  height: 29px;
-  line-height: 29px;
+  line-height: 49px;
   text-align: center;
   font-size: 40px;
 }
 .priceTag{
   font-size: 20px;
 }
+.paymentType{
+  text-align: center;
+  color: #c9c9c9;
+}
 .paymentDesc{
   width: 291px;
-  margin: 61px auto 0 auto;
+  margin: 16px auto 0 auto;
   text-align: center;
 }
+.paymentBtn{
+  margin-top: 48px;
+}
 .paymentValid{
+  margin-top: 10px;
   font-size: 14px;
-  color: #222222;
+  color: #c9c9c9;
   text-align: center;
 }
 .paymentFun{
   text-align: center;
   font-size: 14px;
   color: #222222;
-}
-.payCard>>>.ant-form-item-label>>>label{
-  line-height: 62px;
 }

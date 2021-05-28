@@ -12,9 +12,11 @@ import {
   Image,
   Button,
   Spin,
+  Tooltip,
+  Modal,
 } from 'antd';
 import {httpLoading} from '@/store/actions';
-import {GETPAYMENTLIST, PAY} from '@/api/index';
+import {GETPAYMENTLIST, PAY, GETAGREEMENT} from '@/api/index';
 import {get, post} from '@/utils/request';
 import paypal from '@/assets/PayPal.png';
 
@@ -23,7 +25,18 @@ import './style.css';
 const PlansAndPrices = ({userInfo, httpLoading, setHttpLoading}) => {
   const [paymentList, setPaymentList] = useState([]);
   const [payUrl, setPayUrl] = useState('');
+  const [agreement, setAgreement] = useState(null);
   const magicRef = useRef();
+  const [agreementModalVivible, setAgreementModalVivible] = useState(false);
+  const getAgreement = () => {
+    get(GETAGREEMENT + 2).then((res) => {
+      setAgreement(res.data);
+    }).catch((error) => {
+      message.error({
+        content: error.toString(), key: 'netError', duration: 2,
+      });
+    });
+  };
   const getPaymentList = ()=>{
     setHttpLoading(true);
     get(GETPAYMENTLIST, userInfo.token).then((res) => {
@@ -45,15 +58,14 @@ const PlansAndPrices = ({userInfo, httpLoading, setHttpLoading}) => {
     const data = [...paymentList];
     data.forEach((item)=>item.checked=false);
     data[index].checked = true;
-    console.log(paymentList.filter((item) => item.checked===true));
     setPaymentList(data);
   };
   const payNow = ()=>{
-    setHttpLoading(true);
     if (paymentList.every((item) => item.checked === false)) {
       message.error('You should choose a paceakge.');
       return;
     }
+    setHttpLoading(true);
     post(PAY, {paymentPackageId: paymentList.filter((item) => item.checked===true)[0].id}, {
       'Content-Type': 'application/x-www-form-urlencoded',
       'token': userInfo.token,
@@ -73,6 +85,9 @@ const PlansAndPrices = ({userInfo, httpLoading, setHttpLoading}) => {
   useEffect(() => {
     getPaymentList();
   }, []);
+  useEffect(() => {
+    getAgreement();
+  }, []);
   return (
     <div className="content">
       <Spin spinning={httpLoading}>
@@ -83,56 +98,79 @@ const PlansAndPrices = ({userInfo, httpLoading, setHttpLoading}) => {
               offset={idx===0?0:1}
               className={payment.checked?'plans checked':'plans'}
               key={payment.name}
-              onClick={()=>{
-                selectPayment(idx);
-              }}
             >
               <Card title={null} bordered={false} className="priceCard">
-                <div className="cardContent">
-                  <div className="paymentName">{payment.name}</div>
-                  <div className="paymentPrice">
-                    <span className="priceTag">$</span>
-                    {payment.price}
-                  </div>
-                  <div className="paymentDesc">{payment.desc}</div>
-                  <div className="paymentValid">{
-                    idx===0?'Valid for 3 months':'Valid for 6 months'
-                  }</div>
-                  <Divider style={{marginTop: 100}}/>
-                  <div className="paymentFun">
+                <Row>
+                  <Col span={24} className="paymentName">{payment.name}</Col>
+                </Row>
+                <Row>
+                  <Col span={24} className="paymentPrice">
+                    <div>
+                      <span className="priceTag">$</span>
+                      {payment.price}
+                    </div>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col span={24} className="paymentType">
+                    {payment.paymentType?payment.paymentType:' '}
+                  </Col>
+                </Row>
+                <Row>
+                  <Col span={14} offset={5} className="paymentDesc">
+                    {payment.desc}
+                  </Col>
+                </Row>
+                <Row>
+                  <Col flex="auto" span={8} offset={8} className="paymentValid">
+                    {
+                      idx===0?'Valid for 3 months':'Valid for 6 months'
+                    }
+                  </Col>
+                </Row>
+                <Row>
+                  <Col flex="auto" span={8} offset={8} className="paymentBtn">
+                    {payment.clickState===0?<Tooltip title="Not available for now.">
+                      <Button type="primary" block disabled>select</Button>
+                    </Tooltip>:<Button type="primary" block onClick={()=>{
+                      selectPayment(idx);
+                    }}>select</Button>}
+                  </Col>
+                </Row>
+                <Divider style={{marginTop: 48}}/>
+                <Row>
+                  <Col flex="auto" span={20} offset={2} className="paymentFun">
                     {payment.functionList.map((fun, index)=>(
-                      <div key={`fun_${index}`} style={{height: 40}}>{fun}</div>
+                      <div key={`fun_${index}`} style={{height: 32}}>{fun}</div>
                     ))}
-                  </div>
-                </div>
+                  </Col>
+                </Row>
               </Card>
             </Col>
           ))}
         </Row>
         <Row gutter={[46]} >
-          <Col
-            span={23}
-          >
+          <Col span={23}>
             <Card title={null} bordered={false} className="payCard">
               <Form onFinish={()=>{
                 payNow();
               }}>
                 <Form.Item label="Payment Method：">
-                  <Image src={paypal}></Image>
+                  <Image src={paypal} preview={false}></Image>
                 </Form.Item>
-                <Form.Item label="Payment Amount：" className="paymentPrice">
-                  <div style={{textAlign: 'left', height: 52, lineHeight: '52px'}}>
+                <Form.Item label="Payment Amount：">
+                  <div style={{textAlign: 'left', fontSize: 20}}>
                     <span className="priceTag">{paymentList.filter((item) => item.checked===true).length===0?
                     '':'$'}</span>
                     <span>{paymentList.filter((item) => item.checked===true).length===0?
                     '':paymentList.filter((item) => item.checked===true)[0].price}</span>
                   </div>
                 </Form.Item>
-                <Form.Item style={{position: 'relative'}}>
+                <Form.Item style={{position: 'relative', marginTop: 16}}>
                   <Form.Item
                     rules={[{
                       validator: (_, value) =>
-                      value ? Promise.resolve() : Promise.reject(new Error('Should accept agreement')),
+                      value ? Promise.resolve() : Promise.reject(new Error('Should accept the payment policy! ')),
                     }]}
                     name="payCheckbox"
                     valuePropName="checked"
@@ -141,7 +179,10 @@ const PlansAndPrices = ({userInfo, httpLoading, setHttpLoading}) => {
                     <Checkbox ></Checkbox>
                   </Form.Item>
                   <Form.Item style={{position: 'absolute', left: 24}}>
-                    <span>I have read and agre <a href="">Payment Policy</a></span>
+                    <span>I have read and agreed to the <a href="" onClick={(e)=>{
+                      e.preventDefault();
+                      setAgreementModalVivible(true);
+                    }}>Payment Policy</a>.</span>
                   </Form.Item>
                 </Form.Item>
                 <Form.Item>
@@ -153,6 +194,16 @@ const PlansAndPrices = ({userInfo, httpLoading, setHttpLoading}) => {
         </Row>
       </Spin>
       <a href={payUrl} ref={magicRef} target="_blank" rel="noreferrer">&nbsp;</a>
+      <Modal
+        title="Privacy Clause"
+        visible={agreementModalVivible}
+        width={800}
+        footer={null}
+        onOk={() => setAgreementModalVivible(false)}
+        onCancel={() => setAgreementModalVivible(false)}
+      >
+        <div dangerouslySetInnerHTML={{__html: agreement}} style={{maxHeight: 720, overflow: 'auto'}}></div>
+      </Modal>
     </div>
   );
 };
