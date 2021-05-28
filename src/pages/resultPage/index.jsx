@@ -8,35 +8,38 @@ import './style.css';
 
 import {} from '@/utils/request';
 import {} from '@/api';
-// import {useHistory} from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 import {} from '@/api/index';
 
 const ResultPage = ({userInfo, httpLoading, setHttpLoading}) => {
-  // const history = useHistory();
+  const history = useHistory();
   const [payStatus, setPayStatus] = useState(false);
   useEffect(() => {
-    setPayStatus(false);
+    setPayStatus(true);
   }, []);
   return (
     <div>
       {payStatus?(
         <Result
           status="success"
-          title="Successfully Purchased Cloud Server ECS!"
+          title="Pay Success"
           subTitle="Order number: 2017182818828182881 Cloud server configuration takes 1-5 minutes, please wait."
           extra={[
-            <Button type="primary" key="console">
-              Go Console
+            <Button type="primary" key="back" onClick={()=>{
+              history.push('/');
+            }}>
+              Back to Affinity Analyst
             </Button>,
-            <Button key="buy">Buy Again</Button>,
           ]}
         />):(<Result
           status="error"
-          title="Submission Failed"
+          title="Pay Failed"
           subTitle="Please check and modify the following information before resubmitting."
           extra={[
-            <Button type="primary" key="console">
-              Go Console
+            <Button type="primary" key="back" onClick={()=>{
+              history.push('/');
+            }}>
+              Back to Affinity Analyst
             </Button>,
             <Button key="buy">Buy Again</Button>,
           ]}

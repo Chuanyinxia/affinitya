@@ -45,7 +45,6 @@ const PlansAndPrices = ({userInfo, httpLoading, setHttpLoading}) => {
     const data = [...paymentList];
     data.forEach((item)=>item.checked=false);
     data[index].checked = true;
-    console.log(paymentList.filter((item) => item.checked===true));
     setPaymentList(data);
   };
   const payNow = ()=>{
@@ -110,9 +109,7 @@ const PlansAndPrices = ({userInfo, httpLoading, setHttpLoading}) => {
           ))}
         </Row>
         <Row gutter={[46]} >
-          <Col
-            span={23}
-          >
+          <Col span={23}>
             <Card title={null} bordered={false} className="payCard">
               <Form onFinish={()=>{
                 payNow();
