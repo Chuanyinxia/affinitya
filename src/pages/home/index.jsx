@@ -73,8 +73,8 @@ const Home = ({userInfo, httpLoading, setHttpLoading}) => {
               <Link to='/' className="navs">Home</Link>
               <Link to='/dashboard/audienceGenerator'
                 className="navs">Dashboard</Link>
-              <a href="#Plans" className="navs">Contact Us</a>
-              <a href="#Plans" className="navs">Plans & Pricing</a>
+              <Link to='/contactUs' className="navs">Contact Us</Link>
+              <Link to='/plansPricing' className="navs">Plans & Pricing</Link>
               <Link to='/login' className="navs">Login</Link>
             </Space>
           </Col>
@@ -188,8 +188,8 @@ const Home = ({userInfo, httpLoading, setHttpLoading}) => {
       </Content>
       <Footer className="home-footer">
         <Row className="footer-nav">
-          <Col span={6} className="text-left">Terms of service</Col>
-          <Col span={6} className="text-left">Privacy Policy</Col>
+          <Col span={6} className="text-left"><Link to='/'>Terms of service</Link></Col>
+          <Col span={6} className="text-left"><Link to="/privacyPolicy">Privacy Policy</Link></Col>
           <Col span={6} className="text-left">Mailbox: fbad-marketing@XXXX.com.cn</Col>
           <Col span={6} className="text-right"> ©2021 by Affinity Analyst.</Col>
         </Row>

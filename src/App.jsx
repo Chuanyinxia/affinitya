@@ -14,6 +14,9 @@ import Login from '@/pages/login';
 import Home from '@/pages/home';
 import SignUp from '@/pages/signUp';
 import ForgotPassword from '@/pages/forgotPassword';
+import ContactUS from '@/pages/contactUs';
+import PrivacyPolicy from '@/pages/privacyPolicy';
+import PlansPricing from '@/pages/plansPricing';
 
 const App = ({history, logged, setLogged, setUserInfo}) => {
   const userInfo = storage.getData('userInfo');
@@ -40,6 +43,9 @@ const App = ({history, logged, setLogged, setUserInfo}) => {
       <Switch>
 
         <Route path="/home" component={Home} />
+        <Route path="/privacyPolicy" component={PrivacyPolicy} />
+        <Route path="/plansPricing" component={PlansPricing} />
+        <Route path="/contactUS" component={ContactUS} />
         <Route path="/login" component={Login} />
         <Route path="/signUp" component={SignUp} />
         <Route path="/forgotPassword" component={ForgotPassword} />
