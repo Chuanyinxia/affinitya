@@ -166,7 +166,7 @@ const Home = ({userInfo, httpLoading, setHttpLoading}) => {
           </Col>
         </Row>
       </Content>
-      <Content >
+      <Content>
         <Row className="content" >
           <Col span={24} >
             <h2 className="text-center developers-title">Trusted by leading Developers & Studios.</h2>

@@ -1,20 +1,45 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {Col, Layout, Row, Space} from 'antd';
+import {
+  Col,
+  Layout,
+  Row,
+  Space,
+  Form,
+  Input,
+  Button,
+  message,
+} from 'antd';
 import {httpLoading} from '@/store/actions';
 import {Link} from 'react-router-dom';
 import './style.css';
 import logo from '@/assets/lettering-logo.webp';
-import logo1 from '@/assets/home/logo1.webp';
-import logo2 from '@/assets/home/logo2.webp';
-import logo3 from '@/assets/home/logo3.webp';
-import logo4 from '@/assets/home/logo4.webp';
+import {post} from '@/utils/request';
+import {CONTACTUS} from '@/api';
 
 const {Header, Content, Footer} = Layout;
-
+const validateMessages = {
+  types: {
+    email: 'It\'s not a valid email',
+  },
+  required: 'Email is required',
+  // ...
+};
 
 const ContactUS = ({userInfo, httpLoading, setHttpLoading}) => {
+  const submit = (values)=>{
+    setHttpLoading(true);
+    post(CONTACTUS, values, {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    }).then((res)=>{
+      message.success('Send success.Thank you for your xxx.');
+    }).catch((error)=>{
+      message.error({
+        content: error.toString(), key: 'netError', duration: 2,
+      });
+    }).finally(()=>setHttpLoading(false));
+  };
   return (
     <Layout className="layout Home">
       <Header className="padding0 text-center bg-header">
@@ -38,24 +63,49 @@ const ContactUS = ({userInfo, httpLoading, setHttpLoading}) => {
         </Row>
       </Header>
       <Content>
-        <Row className="content">
-          <Col span={24}>
-            <h2 className="text-center developers-title">Trusted by leading Developers & Studios.</h2>
-          </Col>
-          <Col span={6} className="text-center">
-            <img src={logo1} style={{width: '90%'}} alt="logo"/>
-          </Col>
-          <Col span={6} className="text-center">
-
-            <img src={logo2} style={{width: '90%'}} alt="logo"/>
-          </Col>
-          <Col span={6} className="text-center">
-            <img src={logo3} style={{width: '90%'}} alt="logo"/>
-          </Col>
-          <Col span={6} className="text-center">
-            <img src={logo4} style={{width: '90%'}} alt="logo"/>
-          </Col>
-        </Row>
+        <div className="contact-us" style={{marginTop: 120}}>
+          <Row>
+            <Col span={12} offset={6}>
+              <Form layout="vertical" validateMessages={validateMessages} onFinish={(v)=>submit(v)}>
+                <Row>
+                  <Col>
+                    <h2>Contact Us</h2>
+                  </Col>
+                </Row>
+                <Row className="form-wrapper">
+                  <Col span={12} className="input-Wrapper">
+                    <Form.Item name="firstName">
+                      <Input placeholder="First Name" bordered={false}></Input>
+                    </Form.Item>
+                  </Col>
+                  <Col span={12} className="input-Wrapper">
+                    <Form.Item name="lastName">
+                      <Input placeholder="Last Name" bordered={false}></Input>
+                    </Form.Item>
+                  </Col>
+                  <Col span={12} className="input-Wrapper">
+                    <Form.Item name="email" rules={[{required: true, type: 'email'}]}>
+                      <Input placeholder="Email" bordered={false}></Input>
+                    </Form.Item>
+                  </Col>
+                  <Col span={12} className="input-Wrapper">
+                    <Form.Item name="phone">
+                      <Input placeholder="Phone" bordered={false}></Input>
+                    </Form.Item>
+                  </Col>
+                  <Col span={24} className="input-Wrapper">
+                    <Form.Item name="suggestMsg">
+                      <Input.TextArea placeholder="Type you message here..." bordered={false} style={{resize: 'none'}}/>
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Form.Item>
+                  <Button size="large" type="primary" htmlType="submit">Submit</Button>
+                </Form.Item>
+              </Form>
+            </Col>
+          </Row>
+        </div>
       </Content>
       <Footer className="home-footer">
         <Row className="footer-nav">
