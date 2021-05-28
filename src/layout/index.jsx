@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {Link, withRouter} from 'react-router-dom';
-import {Avatar, Badge, Button, Dropdown, Layout, Menu, Space, Tooltip} from 'antd';
+import {Avatar, Badge, Button, Dropdown, Layout, Menu, Space} from 'antd';
 import {AlertOutlined, UserOutlined} from '@ant-design/icons';
 import Router from '../routers';
 import Menus from '../components/menus';
@@ -25,9 +25,27 @@ const Customlayout = ({history, sider, toggleSider, logged, setLogged}) => {
   const menu = (
     <Menu>
       <Menu.Item>
-        <Tooltip placement="left" title="This function is not available yet.">
-          <a>Change Password</a>
-        </Tooltip>
+        <Link to="/profile" onClick={() => {
+          store.dispatch(setMenusData('', ''));
+        }}>Profile</Link>
+      </Menu.Item>
+      <Menu.Item>
+        <Link to='/changePassword' onClick={() => {
+          store.dispatch(setMenusData('', ''));
+        }}>Change Password</Link>
+      </Menu.Item>
+      <Menu.Item>
+        <Link to="/transactions" onClick={() => {
+          store.dispatch(setMenusData('', ''));
+        }}>Transactions</Link>
+      </Menu.Item>
+      <Menu.Item>
+        <Link to="/subscribe" onClick={() => {
+          store.dispatch(setMenusData('', ''));
+        }}>Subscribe</Link>
+      </Menu.Item>
+      <Menu.Item>
+        <Button onClick={handleLogoutButton} type="text">Logout</Button>
       </Menu.Item>
     </Menu>
   );
@@ -64,7 +82,7 @@ const Customlayout = ({history, sider, toggleSider, logged, setLogged}) => {
                     <AlertOutlined style={{fontSize: 16}}/>
                   </Link>
                 </Badge>
-                <Button type="primary" onClick={handleLogoutButton}>Upgrade</Button>
+                <Button type="primary" ><Link to='/plansAndPrices' >Upgrade</Link></Button>
               </Space>
             </div>
           </Header>:null}

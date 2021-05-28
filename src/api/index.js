@@ -22,3 +22,5 @@ export const GETPAYMENTLIST='/api/paymentPackageList';
 export const PAY='/api/paypal/pay';
 export const EXPORTDETAIL='http://124.71.9.188:8881/api/exportDetail/';
 export const GETAUDIENCEID='/api/getAudienceId';
+export const UPDATEPASSWORD ='/api/updatePassword';
+export const IMPROVEPROFILE='/api/member/improveProfile';

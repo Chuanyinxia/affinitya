@@ -57,6 +57,7 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
   const [viewModal, setViewModal]= useState(false);
   const [lookID, setLookID]=useState(null);
   const [lookType, setLookType]=useState(null);
+  const [dataTitle, setDataTitle] = useState('Details');
   const isEditing = (record) => record.id === editingKey;
 
 
@@ -235,6 +236,7 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
                 setLookID(record.id);
                 setLookType(1);
                 setViewDetails(record.searchDetails??[]);
+                setDataTitle('Details');
               }}>
                 <FileSearchOutlined style={{fontSize: 16}}/>
               </a>
@@ -252,6 +254,7 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
                 setViewModal(true);
                 setLookID(record.id);
                 setLookType(2);
+                setDataTitle('Extend Search');
                 setViewDetails(record.extendDetail??[]);
               }}>
                 <FolderViewOutlined style={{fontSize: 16}}/>
@@ -299,7 +302,7 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
   return (
     <div >
       <Modal
-        title=""
+        title={dataTitle}
         width={1200}
         visible={viewModal}
         footer={null}
@@ -320,7 +323,7 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
         </div>
         {<ResultTable TableData={addIndex(viewDetails)}/>}
       </Modal>
-      <Form form={form} component={false} onValuesChange={valuesChange}>
+      <Form form={form} component={false} onValuesChange={valuesChange} >
         <Table
           components={{
             body: {
