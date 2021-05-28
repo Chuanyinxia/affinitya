@@ -61,11 +61,11 @@ const PlansAndPrices = ({userInfo, httpLoading, setHttpLoading}) => {
     setPaymentList(data);
   };
   const payNow = ()=>{
-    setHttpLoading(true);
     if (paymentList.every((item) => item.checked === false)) {
       message.error('You should choose a paceakge.');
       return;
     }
+    setHttpLoading(true);
     post(PAY, {paymentPackageId: paymentList.filter((item) => item.checked===true)[0].id}, {
       'Content-Type': 'application/x-www-form-urlencoded',
       'token': userInfo.token,
