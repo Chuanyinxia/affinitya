@@ -53,7 +53,7 @@ const columns = [
 const options = [
   {label: 'All', value: -1},
   {label: 'Paid', value: 1},
-  {label: 'Unpaid', value: 0},
+  {label: 'Unpaid', value: 2},
 ];
 
 const Transactions = ({userInfo, httpLoading, setHttpLoading}) => {
