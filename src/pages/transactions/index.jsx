@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name */
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {
@@ -25,6 +25,8 @@ const options = [
 const Transactions = ({userInfo, httpLoading, setHttpLoading}) => {
   const [transaction, setTransaction] = useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const downloadRef = useRef();
+  const [downloadUrl, setDownloadUrl] = useState('');
   const columns = [
     {
       title: 'Order Time',
@@ -55,8 +57,11 @@ const Transactions = ({userInfo, httpLoading, setHttpLoading}) => {
       title: 'Action',
       render: (r) => (
         r.payStatus===1?<a
-          download="invoice"
-          href={DOWNLOADINVOICE+ r.id}
+          // onClick={(e)=>{
+          //   e.preventDefault();
+          //   downloadInvoice(r.id);
+          // }}
+          href={DOWNLOADINVOICE + r.id + '/' + userInfo.token}
         >Invoice</a>:null
       ),
     },
@@ -77,6 +82,13 @@ const Transactions = ({userInfo, httpLoading, setHttpLoading}) => {
       });
     });
   };
+  const downloadInvoice = (ids)=>{
+    setHttpLoading(true);
+    setDownloadUrl(DOWNLOADINVOICE + ids + '/' + userInfo.token);
+    setTimeout(()=>{
+      downloadRef.current.click();
+    }, 250);
+  };
   useEffect(() => {
     getTransaction(1);
   }, []);
@@ -96,8 +108,9 @@ const Transactions = ({userInfo, httpLoading, setHttpLoading}) => {
             <Button
               type="link"
               disabled={selectedRowKeys.length===0?true:false}
-              download="invoice"
-              href={DOWNLOADINVOICE + selectedRowKeys.join(',')}
+              onClick={()=>{
+                downloadInvoice(selectedRowKeys.join(','));
+              }}
             >Invoice All</Button>
           </Space>
         </Col>
@@ -119,6 +132,10 @@ const Transactions = ({userInfo, httpLoading, setHttpLoading}) => {
           },
         }}
       />
+      <a
+        href={downloadUrl}
+        ref={downloadRef}
+      ></a>
     </div>
   );
 };
