@@ -57,11 +57,10 @@ const Transactions = ({userInfo, httpLoading, setHttpLoading}) => {
       title: 'Action',
       render: (r) => (
         r.payStatus===1?<a
-          // onClick={(e)=>{
-          //   e.preventDefault();
-          //   downloadInvoice(r.id);
-          // }}
-          href={DOWNLOADINVOICE + r.id + '/' + userInfo.token}
+          onClick={(e)=>{
+            e.preventDefault();
+            downloadInvoice(r.id);
+          }}
         >Invoice</a>:null
       ),
     },
@@ -108,7 +107,8 @@ const Transactions = ({userInfo, httpLoading, setHttpLoading}) => {
             <Button
               type="link"
               disabled={selectedRowKeys.length===0?true:false}
-              onClick={()=>{
+              onClick={(e)=>{
+                e.preventDefault();
                 downloadInvoice(selectedRowKeys.join(','));
               }}
             >Invoice All</Button>
@@ -135,6 +135,7 @@ const Transactions = ({userInfo, httpLoading, setHttpLoading}) => {
       <a
         href={downloadUrl}
         ref={downloadRef}
+        download='invoice'
       ></a>
     </div>
   );
