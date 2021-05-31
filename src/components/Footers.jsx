@@ -5,10 +5,16 @@ const {Footer} = Layout;
 const Footers =()=>(
   <Footer className="home-footer">
     <Row className="footer-nav">
-      <Col span={6} className="text-left"><Link to='/'>Terms of service</Link></Col>
-      <Col span={6} className="text-left"><Link to="/privacyPolicy">Privacy Policy</Link></Col>
-      <Col span={6} className="text-left">Mailbox: fbad-marketing@XXXX.com.cn</Col>
-      <Col span={6} className="text-right"> ©2021 by Affinity Analyst.</Col>
+      <Col span={6} className="text-left">
+        <Link className="navs" to='/privacyPolicy?type=2'>Terms of Service</Link>
+      </Col>
+      <Col span={6} className="text-left">
+        <Link className="navs" to="/privacyPolicy?type=1">Privacy Policy</Link>
+      </Col>
+      <Col span={6} className="text-left">
+        <Link className="navs" to="/contactUs">Contact Us</Link>
+      </Col>
+      <Col span={6} className="text-right navs"> ©2021 by Affinity Analyst.</Col>
     </Row>
   </Footer>
 );

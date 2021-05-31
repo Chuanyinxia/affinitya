@@ -52,6 +52,7 @@
   color: #FFFFFF;
   padding-left: 50px;
   padding-bottom: 50px;
+  white-space:nowrap!important;
 }
 .navs:hover{
   color: #9c9cd0;
