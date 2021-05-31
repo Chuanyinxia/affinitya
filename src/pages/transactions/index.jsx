@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name */
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {
@@ -25,8 +25,6 @@ const options = [
 const Transactions = ({userInfo, httpLoading, setHttpLoading}) => {
   const [transaction, setTransaction] = useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const downloadRef = useRef();
-  const [downloadUrl, setDownloadUrl] = useState('');
   const columns = [
     {
       title: 'Order Time',
@@ -56,10 +54,10 @@ const Transactions = ({userInfo, httpLoading, setHttpLoading}) => {
     {
       title: 'Action',
       render: (r) => (
-        r.payStatus===1?<a onClick={(e)=>{
-          e.preventDefault();
-          downloadInvoice(r.id);
-        }}>Invoice</a>:null
+        r.payStatus===1?<a
+          download="invoice"
+          href={DOWNLOADINVOICE+ r.id}
+        >Invoice</a>:null
       ),
     },
   ];
@@ -79,14 +77,6 @@ const Transactions = ({userInfo, httpLoading, setHttpLoading}) => {
       });
     });
   };
-  const downloadInvoice = (ids)=>{
-    setHttpLoading(true);
-    setDownloadUrl(DOWNLOADINVOICE+ids);
-    setTimeout(()=>{
-      downloadRef.current.click();
-      setHttpLoading(false);
-    }, 500);
-  };
   useEffect(() => {
     getTransaction(1);
   }, []);
@@ -104,11 +94,10 @@ const Transactions = ({userInfo, httpLoading, setHttpLoading}) => {
               defaultValue={1}
             />
             <Button
-              type="primary"
+              type="link"
               disabled={selectedRowKeys.length===0?true:false}
-              onClick={()=>{
-                downloadInvoice(selectedRowKeys.join(','));
-              }}
+              download="invoice"
+              href={DOWNLOADINVOICE + selectedRowKeys.join(',')}
             >Invoice All</Button>
           </Space>
         </Col>
@@ -130,11 +119,6 @@ const Transactions = ({userInfo, httpLoading, setHttpLoading}) => {
           },
         }}
       />
-      <a
-        href={downloadUrl}
-        style={{visibility: 'hidden'}}
-        ref={downloadRef}
-        download="invoice">&NBSP;</a>
     </div>
   );
 };
