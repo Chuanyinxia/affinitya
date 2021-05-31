@@ -50,3 +50,10 @@
 .site-layout-background{
   padding-top: 20px;
 }
+.text-min{
+  font-size: 12px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #999999;
+  line-height: 16px;
+}

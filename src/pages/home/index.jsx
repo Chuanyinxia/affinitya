@@ -1,11 +1,10 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {Button, Col, Form, Input, Layout, Row, message, Space} from 'antd';
+import {Button, Col, Form, Input, Layout, message, Row} from 'antd';
 import {httpLoading} from '@/store/actions';
-import {Link} from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 import './style.css';
-import logo from '@/assets/lettering-logo.webp';
 import banner from '@/assets/home/banner.webp';
 import info1 from '@/assets/home/info1.webp';
 import info2 from '@/assets/home/info2.webp';
@@ -16,36 +15,20 @@ import logo3 from '@/assets/home/logo3.webp';
 import logo4 from '@/assets/home/logo4.webp';
 import {get} from '@/utils/request';
 import {ISEXISTED} from '@/api';
-import {useHistory} from 'react-router-dom';
-const {Header, Content, Footer} = Layout;
+import Headers from '@/components/Headers';
+import Footers from '@/components/Footers';
+
+const {Content} = Layout;
 
 
 const Home = ({userInfo, httpLoading, setHttpLoading}) => {
   const history = useHistory();
-  // const getPaymentList = ()=>{
-  //   setHttpLoading(true);
-  //   get(GETPAYMENTLIST, userInfo.token).then((res) => {
-  //     const data = res.data.items.map((item) => {
-  //       item.checked = false;
-  //       return item;
-  //     });
-  //     console.log(data);
-  //     setPaymentList(data);
-  //   }).catch((error) => {
-  //     message.error({
-  //       content: error.toString(), key: 'netError', duration: 2,
-  //     });
-  //   }).finally(()=>{
-  //     setHttpLoading(false);
-  //   });
-  // };
-
   const Finish = (value) => {
-    get(ISEXISTED+value.email).then((res)=>{
-      if (res.code!==200) {
+    get(ISEXISTED + value.email).then((res) => {
+      if (res.code !== 200) {
         message.error(res.msg);
       } else {
-        if (res.data===1) {
+        if (res.data === 1) {
           console.log(res);
           history.push('/login?email='+value.email);
         } else {
@@ -60,26 +43,7 @@ const Home = ({userInfo, httpLoading, setHttpLoading}) => {
   };
   return (
     <Layout className="layout Home">
-      <Header className="padding0 text-center bg-header">
-        <Row className="content">
-          <Col span={14}>
-            <div className="text-left">
-              <img alt="logo" src={logo} width={189}/>
-            </div>
-          </Col>
-          <Col span={10} className="text-right">
-            <Space size="large">
-
-              <Link to='/' className="navs">Home</Link>
-              <Link to='/dashboard/audienceGenerator'
-                className="navs">Dashboard</Link>
-              <Link to='/contactUs' className="navs">Contact Us</Link>
-              <Link to='/plansPricing' className="navs">Plans & Pricing</Link>
-              <Link to='/login' className="navs">Login</Link>
-            </Space>
-          </Col>
-        </Row>
-      </Header>
+      <Headers/>
       <Content className="marginTop90 banner">
         <Row className="content bannerBg">
           <Col lg={2} xxl={5}/>
@@ -186,14 +150,7 @@ const Home = ({userInfo, httpLoading, setHttpLoading}) => {
           </Col>
         </Row>
       </Content>
-      <Footer className="home-footer">
-        <Row className="footer-nav">
-          <Col span={6} className="text-left"><Link to='/'>Terms of service</Link></Col>
-          <Col span={6} className="text-left"><Link to="/privacyPolicy">Privacy Policy</Link></Col>
-          <Col span={6} className="text-left">Mailbox: fbad-marketing@XXXX.com.cn</Col>
-          <Col span={6} className="text-right"> ©2021 by Affinity Analyst.</Col>
-        </Row>
-      </Footer>
+      <Footers/>
     </Layout>
   );
 };

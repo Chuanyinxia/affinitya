@@ -1,41 +1,23 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {Col, Layout, Row, Space} from 'antd';
+import {Col, Layout, Row} from 'antd';
 import {httpLoading} from '@/store/actions';
-import {Link} from 'react-router-dom';
 import './style.css';
-import logo from '@/assets/lettering-logo.webp';
 import logo1 from '@/assets/home/logo1.webp';
 import logo2 from '@/assets/home/logo2.webp';
 import logo3 from '@/assets/home/logo3.webp';
 import logo4 from '@/assets/home/logo4.webp';
+import Headers from '@/components/Headers';
+import Footers from '@/components/Footers';
 
-const {Header, Content, Footer} = Layout;
+const {Content} = Layout;
 
 
 const PlansPricing = ({userInfo, httpLoading, setHttpLoading}) => {
   return (
     <Layout className="layout Home">
-      <Header className="padding0 text-center bg-header">
-        <Row className="content">
-          <Col span={14}>
-            <div className="text-left">
-              <img alt="logo" src={logo} width={189}/>
-            </div>
-          </Col>
-          <Col span={10} className="text-right">
-            <Space size="large">
-              <Link to='/' className="navs">Home</Link>
-              <Link to='/dashboard/audienceGenerator'
-                className="navs">Dashboard</Link>
-              <Link to='/contactUs' className="navs">Contact Us</Link>
-              <Link to='/plansPricing' className="navs">Plans & Pricing</Link>
-              <Link to='/login' className="navs">Login</Link>
-            </Space>
-          </Col>
-        </Row>
-      </Header>
+      <Headers/>
       <Content>
         <Row className="content">
           <Col span={24}>
@@ -56,14 +38,7 @@ const PlansPricing = ({userInfo, httpLoading, setHttpLoading}) => {
           </Col>
         </Row>
       </Content>
-      <Footer className="home-footer">
-        <Row className="footer-nav">
-          <Col span={6} className="text-left">Terms of service</Col>
-          <Col span={6} className="text-left">Privacy Policy</Col>
-          <Col span={6} className="text-left">Mailbox: fbad-marketing@XXXX.com.cn</Col>
-          <Col span={6} className="text-right"> ©2021 by Affinity Analyst.</Col>
-        </Row>
-      </Footer>
+      <Footers/>
     </Layout>
   );
 };
