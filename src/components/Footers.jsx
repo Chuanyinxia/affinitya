@@ -6,10 +6,10 @@ const Footers =()=>(
   <Footer className="home-footer">
     <Row className="footer-nav">
       <Col span={6} className="text-left">
-        <Link className="navs" to='/privacyPolicy?type=2'>Terms of Service</Link>
+        <Link className="navs" to='/termsService?type=3'>Terms of Service</Link>
       </Col>
       <Col span={6} className="text-left">
-        <Link className="navs" to="/privacyPolicy?type=1">Privacy Policy</Link>
+        <Link className="navs" to="/privacyPolicy?type=4">Privacy Policy</Link>
       </Col>
       <Col span={6} className="text-left">
         <Link className="navs" to="/contactUs">Contact Us</Link>

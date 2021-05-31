@@ -17,7 +17,7 @@ import ForgotPassword from '@/pages/forgotPassword';
 import ContactUS from '@/pages/contactUs';
 import PrivacyPolicy from '@/pages/privacyPolicy';
 import PlansPricing from '@/pages/plansPricing';
-
+import TermsService from '@/pages/termsService';
 const App = ({history, logged, setLogged, setUserInfo}) => {
   const userInfo = storage.getData('userInfo');
   const checkLogin = ()=>{
@@ -44,6 +44,7 @@ const App = ({history, logged, setLogged, setUserInfo}) => {
 
         <Route path="/home" component={Home} />
         <Route path="/privacyPolicy" component={PrivacyPolicy} />
+        <Route path="/termsService" component={TermsService} />
         <Route path="/plansPricing" component={PlansPricing} />
         <Route path="/contactUS" component={ContactUS} />
         <Route path="/login" component={Login} />

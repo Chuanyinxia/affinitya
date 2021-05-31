@@ -128,3 +128,7 @@
   margin: 20px auto 60px;
   padding-left: 16px;
 }
+.height900{
+  height: 700px;
+  overflow-y: auto;
+    }

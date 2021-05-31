@@ -13,8 +13,8 @@ import {
   SyncOutlined,
   FolderViewOutlined,
 } from '@ant-design/icons';
-import {post} from '@/utils/request';
-import {SAVESEARCHRESULT, GETEXTENDBYAUDI, RESTARTJOB, EXPORTDETAIL} from '@/api/index';
+import {get, post} from '@/utils/request';
+import {SAVESEARCHRESULT, GETEXTENDBYAUDI, RESTARTJOB, EXPORTDETAIL, ISPAID} from '@/api/index';
 import ResultTable from '@/components/Table/ResultTable';
 
 
@@ -58,12 +58,21 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
   const [lookID, setLookID]=useState(null);
   const [lookType, setLookType]=useState(null);
   const [dataTitle, setDataTitle] = useState('Details');
+  const [isPayUser, setIsPayUser] =useState(false);
   const isEditing = (record) => record.id === editingKey;
 
-
-  useEffect(() => {
-
-  }, []);
+  const isPay=()=>{
+    get(ISPAID, userInfo.token).then((res)=>{
+      setIsPayUser(res.data===2);
+    }).catch((error)=>{
+      message.error({
+        content: error.toString(), key: 'netError', duration: 2,
+      });
+    });
+  };
+  useEffect(()=>{
+    isPay();
+  }, [isPayUser]);
 
   const edit = (record) => {
     form.setFieldsValue({
@@ -305,6 +314,7 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
         title={dataTitle}
         width={1200}
         visible={viewModal}
+        className="height900"
         footer={null}
         onOk={()=>{
           setViewDetails([]);
@@ -316,9 +326,21 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
         }}>
         <div className="text-right marginB16 marginT16">
           <Space>
-            <Button
+            {isPayUser?(<Button
               download
-              href={`${EXPORTDETAIL}${lookID}/${lookType}/${userInfo.token}`}>Export to CSV</Button>
+              href={`${EXPORTDETAIL}${lookID}/${lookType}/${userInfo.token}`}
+              disabled={!isPayUser}>
+                Export to CSV
+            </Button>):
+              (<Tooltip title="Pls upgrade to use this function.">
+                <Button
+                  download
+                  href={`${EXPORTDETAIL}${lookID}/${lookType}/${userInfo.token}`}
+                  disabled={!isPayUser}>
+                  Export to CSV
+                </Button>
+              </Tooltip>)
+            }
           </Space>
         </div>
         {<ResultTable TableData={addIndex(viewDetails)}/>}

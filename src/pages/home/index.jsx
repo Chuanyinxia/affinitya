@@ -51,17 +51,18 @@ const Home = ({userInfo, httpLoading, setHttpLoading}) => {
             <h1 className="homeBannerText">Insights Powered</h1>
             <h1 className="homeBannerText">By the Players</h1>
             <h2 className="homeBannerSubTitle">A.I. Social Data Platform</h2>
-            <p className="banner-info">try free-use A.I. for a 360° degree view of your players</p>
+            <p className="banner-info">Try free-use A.I. for a 360° degree view of your players</p>
             <Form onFinish={Finish} layout="inline">
               <Form.Item
                 name="email"
-                rules={[{required: true, type: 'email', message: 'Please input your Email address !'}]}
+                rules={[{required: true, message: 'Please input your email address!!'},
+                  {type: 'email', message: 'Please input a vailid email address!'}]}
               >
                 <Input placeholder="Email Address*" size="large" className="bannerInput" style={{width: 460}}/>
               </Form.Item>
               <Form.Item>
                 <Button type="primary" size="large" htmlType="submit" style={{width: 160}}>
-                  Access for free
+                  Access for Free
                 </Button>
               </Form.Item>
             </Form>

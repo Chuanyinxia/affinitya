@@ -149,7 +149,9 @@ const Customlayout = ({history, activeKey, setLogged}) => {
                     <AlertOutlined style={{fontSize: 16}}/>
                   </Popover>
                 </Badge>
-                <Button type="primary" ><Link to='/plansAndPrices' >Upgrade</Link></Button>
+                <Button type="primary" onClick={() => {
+                  store.dispatch(setMenusData('plansAndPrices', ''));
+                }} ><Link to='/plansAndPrices' >Upgrade</Link></Button>
               </Space>
             </div>
           </Header>:null}

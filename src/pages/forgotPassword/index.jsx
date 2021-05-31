@@ -118,7 +118,7 @@ const ForgotPassword = ({history, httpLoading, setHttpLoading, setLogged, setUse
               </Form.Item>
               <Form.Item
                 name="verificationCode"
-                rules={[{required: true, message: 'Please input Verification Code!'}]}
+                rules={[{required: true, message: 'Please input verification code!'}]}
               >
                 <Input
                   bordered={false}

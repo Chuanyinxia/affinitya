@@ -6,7 +6,7 @@ import {Button, Card, Col, Divider, Form, Input, InputNumber, message, Row, Sele
 import './style.css';
 import {Link} from 'react-router-dom';
 import {Countrys} from '@/components/plugin/Country';
-import {GETJOBDETAIL, SEARCHAUID, SEARCHKW, ISPAID, GETAUDIENCEID} from '@/api/index';
+import {GETAUDIENCEID, GETJOBDETAIL, ISPAID, SEARCHAUID, SEARCHKW} from '@/api/index';
 import {get, post} from '@/utils/request';
 import KeyWordSearchDetails from '@/components/Table/KeyWordSearchDetails';
 import {PlusOutlined} from '@ant-design/icons';
@@ -15,6 +15,7 @@ import store from '@/store';
 // eslint-disable-next-line no-unused-vars
 import {search, type} from '@/components/plugin/Searchdata';
 import ResultTable from '@/components/Table/ResultTable';
+
 const layout = {
   labelCol: {span: 8},
   wrapperCol: {span: 16},
@@ -96,11 +97,9 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
         'Content-Type': 'application/x-www-form-urlencoded',
         'token': userInfo.token,
       }).then((res) => {
-        console.log(isPayUser, activeKey);
+        console.log(isPayUser);
         if (isPayUser) {
-          console.log(isPayUser, activeKey, res.data);
           setSearchDataKW(res.data||[]);
-          console.log(searchDataKW);
         } else {
           setFreeSearchData(res.data||[]);
         }
@@ -109,9 +108,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
           setShowJobInfo(false);
         }
       }).catch((error) => {
-        message.error({
-          content: error.toString(), key: 'netError', duration: 2,
-        });
+        console.log(error);
       });
     });
   };
@@ -122,13 +119,14 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
       console.log(res);
       const baseData=res.data.baseSearchRequest;
       const AIDData= res.data.audienceIdSearchRequest;
+      console.log(activeKey);
       if (parseInt(activeKey)===1) {
         keywordsForm.setFieldsValue({
           keyWord: res.data.keywords,
         });
-        // setKeyWords(res.data.keywords);
-        // console.log(res.data.keywords);
+        setSearchDataKW(res.data.kwResultVoList || []);
       } else {
+        setSearchDataLA(res.data.audienceIdSearchRequest || []);
         audienceIdSearchForm.setFieldsValue({
           ...AIDData,
         });
@@ -139,11 +137,6 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
         minAge: baseData.age.split(',')[0],
         maxAge: baseData.age.split(',')[1],
       });
-      if (activeKey===1) {
-        setSearchDataKW(res.data.kwResultVoList||[]);
-      } else {
-        setSearchDataLA(res.data.audienceIdSearchRequest||[]);
-      }
     }).catch((error) => {
       message.error({
         content: error.toString(), key: 'netError', duration: 2,
@@ -346,7 +339,14 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
                   </Form.Item>
                 </Col>
                 <Col span={14}>
-                  <a>How to retrive your token?</a>
+                  {/* eslint-disable-next-line react/jsx-no-target-blank */}
+                  <a
+                    href="https://docs.google.com/document/d
+                    /1YbDT-sGD3nsggQj7wLeG4seVE_pGg7dM4ieQxkwUqSM/edit?usp=sharing"
+                    target="_blank"
+                  >
+                    How to retrive your token?
+                  </a>
                 </Col>
               </Row>
 
@@ -409,7 +409,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
         </Tabs>
       </div>
       <div className={showJobInfo?'show':'hide'}>
-        <p className="marginTop90 search-content">
+        <p className="marginT30 search-content">
           Audience generation job has been created in
           <Link
             to={`/dashboard/jobManager?type=${JobType}`}
@@ -417,9 +417,8 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
             onClick={() => {
               store.dispatch(setMenusData('jobManager', 'dashboard'));
             }
-            }>Job Manager</Link>.
+            }>Job Manager</Link>. You will receive &ldquo;notification&ldquo; once job completed.
         </p>
-        <p className="search-content">You will receive &ldquo;notification&ldquo; once job completed.</p>
       </div>
       {(searchDataKW.length>0 && parseInt(activeKey)===1)&&(
         <KeyWordSearchDetails saveName={saveNameKW} searchData={searchDataKW}/>)}

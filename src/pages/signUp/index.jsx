@@ -22,6 +22,9 @@ const SignUp = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) 
   const [agreementBox, setAgreementBox] = useState(false);
   useEffect(() => {
     getAgreement();
+    if (email) {
+      setGetCode(false);
+    }
   }, []);
 
   const handleLogin = (values) => {
@@ -122,7 +125,7 @@ const SignUp = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) 
               </Form.Item>
               <Form.Item
                 name="verificationCode"
-                rules={[{required: true, message: 'Please input Verification Code!'}]}
+                rules={[{required: true, message: 'Please input verification code!'}]}
               >
                 <Input
                   bordered={false}
@@ -147,7 +150,7 @@ const SignUp = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) 
                 rules={[
                   {
                     validator: (_, value) =>
-                      value ? Promise.resolve() : Promise.reject(new Error('Should accept privacy clause!')),
+                      value ? Promise.resolve() : Promise.reject(new Error('Should accept the privacy clause!')),
                   },
                 ]}
               >

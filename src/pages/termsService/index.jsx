@@ -11,7 +11,7 @@ import {GETAGREEMENT} from '@/api';
 const {Content} = Layout;
 import {type} from '@/components/plugin/Searchdata';
 
-const PrivacyPolicy = ({userInfo, httpLoading, setHttpLoading}) => {
+const TermsService = ({userInfo, httpLoading, setHttpLoading}) => {
   const [agreement, setAgreement] = useState(null);
   const getAgreement = () => {
     get(GETAGREEMENT + type()).then((res) => {
@@ -51,7 +51,7 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-PrivacyPolicy.propTypes = {
+TermsService.propTypes = {
   httpLoading: PropTypes.bool.isRequired,
   setHttpLoading: PropTypes.func.isRequired,
   userInfo: PropTypes.object.isRequired,
@@ -60,4 +60,4 @@ PrivacyPolicy.propTypes = {
 export default connect(
     mapStateToProps,
     mapDispatchToProps,
-)(PrivacyPolicy);
+)(TermsService);
