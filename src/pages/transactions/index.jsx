@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name */
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {
@@ -12,44 +12,10 @@ import {
   Button,
 } from 'antd';
 import {httpLoading} from '@/store/actions';
-import {GETTRANSACTION} from '@/api/index';
+import {GETTRANSACTION, DOWNLOADINVOICE} from '@/api/index';
 import {post} from '@/utils/request';
-
-
 import './style.css';
-const columns = [
-  {
-    title: 'Order Time',
-    dataIndex: 'createTime',
-    key: 'createTime',
-  },
-  {
-    title: 'Package Name',
-    dataIndex: 'productName',
-    key: 'productName',
-  },
-  {
-    title: 'Describtion',
-    dataIndex: 'describe',
-    key: 'describe',
-  },
-  {
-    title: 'Amount',
-    key: 'grossAmount',
-    dataIndex: 'grossAmount',
-  },
-  {
-    title: 'Payment Method',
-    key: 'paymentMethod',
-    dataIndex: 'paymentMethod',
-  },
-  {
-    title: 'Action',
-    render: (r) => (
-      r.payStatus===1?<a>Invoice</a>:null
-    ),
-  },
-];
+
 const options = [
   {label: 'All', value: -1},
   {label: 'Paid', value: 1},
@@ -59,7 +25,47 @@ const options = [
 const Transactions = ({userInfo, httpLoading, setHttpLoading}) => {
   const [transaction, setTransaction] = useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-
+  const downloadRef = useRef();
+  const [downloadUrl, setDownloadUrl] = useState('');
+  const columns = [
+    {
+      title: 'Order Time',
+      dataIndex: 'createTime',
+      key: 'createTime',
+    },
+    {
+      title: 'Package Name',
+      dataIndex: 'productName',
+      key: 'productName',
+    },
+    {
+      title: 'Describtion',
+      dataIndex: 'describe',
+      key: 'describe',
+    },
+    {
+      title: 'Amount',
+      key: 'grossAmount',
+      dataIndex: 'grossAmount',
+    },
+    {
+      title: 'Payment Method',
+      key: 'paymentMethod',
+      dataIndex: 'paymentMethod',
+    },
+    {
+      title: 'Action',
+      render: (r) => (
+        r.payStatus===1?<a
+          // onClick={(e)=>{
+          //   e.preventDefault();
+          //   downloadInvoice(r.id);
+          // }}
+          href={DOWNLOADINVOICE + r.id + '/' + userInfo.token}
+        >Invoice</a>:null
+      ),
+    },
+  ];
   const getTransaction = (status) => {
     post(GETTRANSACTION, {
       pageNum: 1,
@@ -75,6 +81,13 @@ const Transactions = ({userInfo, httpLoading, setHttpLoading}) => {
         content: error.toString(), key: 'netError', duration: 2,
       });
     });
+  };
+  const downloadInvoice = (ids)=>{
+    setHttpLoading(true);
+    setDownloadUrl(DOWNLOADINVOICE + ids + '/' + userInfo.token);
+    setTimeout(()=>{
+      downloadRef.current.click();
+    }, 250);
   };
   useEffect(() => {
     getTransaction(1);
@@ -92,9 +105,14 @@ const Transactions = ({userInfo, httpLoading, setHttpLoading}) => {
               }}
               defaultValue={1}
             />
-            <Button type="primary" disabled={selectedRowKeys.length===0?true:false}>Invoice All</Button>
+            <Button
+              type="link"
+              disabled={selectedRowKeys.length===0?true:false}
+              onClick={()=>{
+                downloadInvoice(selectedRowKeys.join(','));
+              }}
+            >Invoice All</Button>
           </Space>
-
         </Col>
       </Row>
       <Table
@@ -114,6 +132,10 @@ const Transactions = ({userInfo, httpLoading, setHttpLoading}) => {
           },
         }}
       />
+      <a
+        href={downloadUrl}
+        ref={downloadRef}
+      ></a>
     </div>
   );
 };

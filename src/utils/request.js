@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {storage} from '@/utils/storage';
+// import {storage} from '@/utils/storage';
 
 axios.interceptors.request.use((config) => {
   return config;
@@ -13,8 +13,8 @@ axios.interceptors.response.use((response) => {
       return response.data;
     // check token
     case 401:
-      storage.clearData();
-      window.location.reload();
+      // storage.clearData();
+      // window.location.reload();
       return Promise.reject(new Error('Token 过期或失效，请重新登录!'));
     case 314:
       return Promise.reject(response.data.msg);

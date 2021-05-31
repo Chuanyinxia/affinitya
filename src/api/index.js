@@ -29,3 +29,4 @@ export const GETTRANSACTION='/api/transactionList';
 export const GETNOTICEMSG= '/api/getNoticeMsg';
 export const UPDATEREADSTATUS='/api/updateReadStatus';
 export const MEMBERSUBSCRIBEMSG='/api/memberSubscribeMsg';
+export const DOWNLOADINVOICE='/api/downloadInvoiceBatch/';
