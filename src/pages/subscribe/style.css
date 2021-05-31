@@ -1,0 +1,28 @@
+.subscribe-title{
+  font-size: 24px;
+  font-family: PingFangSC-Semibold, PingFang SC;
+  font-weight: 600;
+  color: #4A4A4A;
+  line-height: 29px;
+
+}
+.subscribe-info{
+  font-size: 16px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #666666;
+  line-height: 22px;
+}
+.subscribe-tip{
+  font-size: 14px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #999999;
+  line-height: 20px;
+}
+.marginT30{
+  margin-top: 30px;
+}
+.marginB30{
+  margin-bottom: 30px;
+ }

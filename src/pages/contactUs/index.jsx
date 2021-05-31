@@ -1,24 +1,15 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {
-  Col,
-  Layout,
-  Row,
-  Space,
-  Form,
-  Input,
-  Button,
-  message,
-} from 'antd';
+import {Button, Col, Form, Input, Layout, message, Row} from 'antd';
 import {httpLoading} from '@/store/actions';
-import {Link} from 'react-router-dom';
 import './style.css';
-import logo from '@/assets/lettering-logo.webp';
 import {post} from '@/utils/request';
 import {CONTACTUS} from '@/api';
+import Headers from '@/components/Headers';
+import Footers from '@/components/Footers';
 
-const {Header, Content, Footer} = Layout;
+const {Content} = Layout;
 const validateMessages = {
   types: {
     email: 'It\'s not a valid email',
@@ -42,31 +33,12 @@ const ContactUS = ({userInfo, httpLoading, setHttpLoading}) => {
   };
   return (
     <Layout className="layout Home">
-      <Header className="padding0 text-center bg-header">
-        <Row className="content">
-          <Col span={14}>
-            <div className="text-left">
-              <img alt="logo" src={logo} width={189}/>
-            </div>
-          </Col>
-          <Col span={10} className="text-right">
-            <Space size="large">
-
-              <Link to='/' className="navs">Home</Link>
-              <Link to='/dashboard/audienceGenerator'
-                className="navs">Dashboard</Link>
-              <Link to='/contactUs' className="navs">Contact Us</Link>
-              <Link to='/plansPricing' className="navs">Plans & Pricing</Link>
-              <Link to='/login' className="navs">Login</Link>
-            </Space>
-          </Col>
-        </Row>
-      </Header>
+      <Headers/>
       <Content>
         <div className="contact-us" style={{marginTop: 120}}>
           <Row>
             <Col span={12} offset={6}>
-              <Form layout="vertical" validateMessages={validateMessages} onFinish={(v)=>submit(v)}>
+              <Form layout="vertical" validateMessages={validateMessages} onFinish={(v) => submit(v)}>
                 <Row>
                   <Col>
                     <h2>Contact Us</h2>
@@ -80,17 +52,17 @@ const ContactUS = ({userInfo, httpLoading, setHttpLoading}) => {
                   </Col>
                   <Col span={12} className="input-Wrapper">
                     <Form.Item name="lastName">
-                      <Input placeholder="Last Name" bordered={false}></Input>
+                      <Input placeholder="Last Name" bordered={false}/>
                     </Form.Item>
                   </Col>
                   <Col span={12} className="input-Wrapper">
                     <Form.Item name="email" rules={[{required: true, type: 'email'}]}>
-                      <Input placeholder="Email" bordered={false}></Input>
+                      <Input placeholder="Email" bordered={false}/>
                     </Form.Item>
                   </Col>
                   <Col span={12} className="input-Wrapper">
                     <Form.Item name="phone">
-                      <Input placeholder="Phone" bordered={false}></Input>
+                      <Input placeholder="Phone" bordered={false}/>
                     </Form.Item>
                   </Col>
                   <Col span={24} className="input-Wrapper">
@@ -107,14 +79,7 @@ const ContactUS = ({userInfo, httpLoading, setHttpLoading}) => {
           </Row>
         </div>
       </Content>
-      <Footer className="home-footer">
-        <Row className="footer-nav">
-          <Col span={6} className="text-left"><Link to='/'>Terms of service</Link></Col>
-          <Col span={6} className="text-left"><Link to="/privacyPolicy">Privacy Policy</Link></Col>
-          <Col span={6} className="text-left">Mailbox: fbad-marketing@XXXX.com.cn</Col>
-          <Col span={6} className="text-right"> ©2021 by Affinity Analyst.</Col>
-        </Row>
-      </Footer>
+      <Footers/>
     </Layout>
   );
 };

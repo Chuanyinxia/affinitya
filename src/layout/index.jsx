@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {Link, withRouter} from 'react-router-dom';
-import {Avatar, Badge, Button, Dropdown, Layout, Menu, Space} from 'antd';
+import {Avatar, Badge, Button, Dropdown, Layout, Menu, Space, Popover, message, List, Row, Col} from 'antd';
 import {AlertOutlined, UserOutlined} from '@ant-design/icons';
 import Router from '../routers';
 import Menus from '../components/menus';
@@ -11,11 +11,30 @@ import logo from '../assets/lettering-logo.webp';
 import './style.css';
 import {storage} from '@/utils/storage';
 import store from '../store';
+import {get, post} from '@/utils/request';
+import {GETNOTICEMSG, UPDATEREADSTATUS} from '@/api/index';
+import msg1 from '@/assets/msg01.png';
+import msg2 from '@/assets/msg02.png';
 
-const Customlayout = ({history, sider, toggleSider, logged, setLogged}) => {
+const Customlayout = ({history, activeKey, setLogged}) => {
   const {Header, Content, Sider} = Layout;
   const [userInfo] = useState(storage.getData('userInfo') ?? null);
   const [headerFooterShow, setHeaderFooterShow] = useState(true);
+  const [noticeMsg, seNoticeMsg]= useState([]);
+  const [loading, setLoading] =useState(false);
+  const getNoticeMsg=()=>{
+    setLoading(true);
+    get(GETNOTICEMSG, userInfo.token).then((res)=>{
+      console.log(res);
+      seNoticeMsg(res.data);
+    }).catch((error) => {
+      message.error({
+        content: error.toString(), key: 'netError', duration: 2,
+      });
+    }).finally(()=>{
+      setLoading(false);
+    });
+  };
   const handleLogoutButton = () => {
     setLogged(false);
     storage.clearData('local', 'userInfo');
@@ -45,14 +64,64 @@ const Customlayout = ({history, sider, toggleSider, logged, setLogged}) => {
         }}>Subscribe</Link>
       </Menu.Item>
       <Menu.Item>
-        <Button onClick={handleLogoutButton} type="text">Logout</Button>
+        <Link to="/login" onClick={handleLogoutButton} >Logout</Link>
       </Menu.Item>
     </Menu>
   );
+  const readMsg=(id)=>{
+    const data={
+      ids: id,
+    };
+    post(UPDATEREADSTATUS, data, {
+      // eslint-disable-next-line no-tabs
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'token': userInfo.token,
+    }).then((res) => {
+      getNoticeMsg();
+    }).catch((error) => {
+      message.error({
+        content: error.toString(), key: 'netError', duration: 2,
+      });
+    });
+  };
+  const readAllMsg=()=>{
+    const ids=[];
+    noticeMsg.forEach((item)=>{
+      ids.push(item.id);
+    });
+    readMsg(ids);
+  };
+  const content=(
+    <List
+      style={{width: 500}}
+      itemLayout="horizontal"
+      dataSource={noticeMsg}
+      loading={loading}
+      pagination={{
+        pageSize: 5,
+        size: 'small',
+      }}
+      footer={<Button block onClick={readAllMsg}>Read All</Button>}
+      renderItem={(item) => (
+        <List.Item key={item.id} onClick={()=>readMsg([item.id])}>
+          <List.Item.Meta
+            avatar={<Avatar src={parseInt(item.readStatus)===1?msg1:msg2} />}
+            title={<Row>
+              <Col span={14}>{item.title}</Col>
+              <Col span={10} className="text-min text-right">{item.createTime}</Col>
+            </Row>}
+            description={item.notice}
+          />
+        </List.Item>
+      )}
+    />
+  );
   useEffect(() => {
-    console.log(window.location.pathname);
     setHeaderFooterShow(!window.location.pathname.includes('result'));
   }, []);
+  useEffect(() => {
+    getNoticeMsg();
+  }, [activeKey]);
   return (
     <div>
       <Layout style={{minHeight: '100vh'}}>
@@ -76,11 +145,9 @@ const Customlayout = ({history, sider, toggleSider, logged, setLogged}) => {
                   <Avatar icon={<UserOutlined/>} size={26}/>
                 </Dropdown>
                 <Badge dot>
-                  <Link to="/alarm" onClick={() => {
-                    store.dispatch(setMenusData('', ''));
-                  }}>
+                  <Popover content={content} trigger="click" placement="bottomRight">
                     <AlertOutlined style={{fontSize: 16}}/>
-                  </Link>
+                  </Popover>
                 </Badge>
                 <Button type="primary" ><Link to='/plansAndPrices' >Upgrade</Link></Button>
               </Space>
@@ -102,6 +169,8 @@ const mapStateToProps = (state) => {
   return {
     sider: state.toggleSider.collapsed,
     logged: state.toggleLogin.logged,
+    activeKey: state.menus.activeKey,
+    userInfo: state.getUserInfo.info,
   };
 };
 
@@ -120,6 +189,8 @@ Customlayout.propTypes = {
   logged: PropTypes.bool.isRequired,
   setLogged: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
+  activeKey: PropTypes.string.isRequired,
+  userInfo: PropTypes.object.isRequired,
 };
 
 export default connect(

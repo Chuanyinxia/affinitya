@@ -11,6 +11,7 @@ import ResultPage from '../pages/resultPage';
 import ErrorPage from '../pages/ErrorPage';
 import ChangePassword from '@/pages/changePassword';
 import Profile from '@/pages/profile';
+import Subscribe from '@/pages/subscribe';
 const Router = () => {
   return (
     <Switch>
@@ -25,6 +26,8 @@ const Router = () => {
       <Route path="/result" component={ResultPage} />
       <Route path="/changePassword" component={ChangePassword} />
       <Route path="/profile" component={Profile} />
+      <Route path="/Subscribe" component={Subscribe} />
+      <Route path="/Subscribe" component={Subscribe} />
       <Route component={ErrorPage} />
     </Switch>
   );

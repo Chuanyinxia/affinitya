@@ -26,3 +26,6 @@ export const UPDATEPASSWORD ='/api/updatePassword';
 export const IMPROVEPROFILE='/api/member/improveProfile';
 export const CONTACTUS='/api/saveContactUs';
 export const GETTRANSACTION='/api/transactionList';
+export const GETNOTICEMSG= '/api/getNoticeMsg';
+export const UPDATEREADSTATUS='/api/updateReadStatus';
+export const MEMBERSUBSCRIBEMSG='/api/memberSubscribeMsg';
