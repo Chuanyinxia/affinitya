@@ -64,7 +64,7 @@ const KeyWordSearchDetails = ({userInfo, searchData, saveName}) => {
             disabled={!isPayUser}>
             Export to CSV
           </Button>):
-            (<Tooltip title="You should upgrade to use this function.">
+            (<Tooltip title="Pls upgrade to use this function.">
               <Button
                 download
                 href={`${EXPORTCVS}${id}/${userInfo.token}`}
