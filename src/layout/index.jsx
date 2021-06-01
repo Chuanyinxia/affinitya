@@ -12,14 +12,14 @@ import './style.css';
 import {storage} from '@/utils/storage';
 import store from '../store';
 import {get, post} from '@/utils/request';
-import {GETNOTICEMSG, UPDATEREADSTATUS} from '@/api/index';
+import {GETNOTICEMSG, ISPAID, UPDATEREADSTATUS} from '@/api/index';
 import msg1 from '@/assets/msg01.png';
 import msg2 from '@/assets/msg02.png';
 
 const Customlayout = ({history, activeKey, setLogged}) => {
   const {Header, Content, Sider} = Layout;
+  const [isPayUser, setIsPayUser] =useState(false);
   const [userInfo] = useState(storage.getData('userInfo') ?? null);
-  const [headerFooterShow, setHeaderFooterShow] = useState(true);
   const [noticeMsg, seNoticeMsg]= useState([]);
   const [loading, setLoading] =useState(false);
   const getNoticeMsg=()=>{
@@ -68,6 +68,15 @@ const Customlayout = ({history, activeKey, setLogged}) => {
       </Menu.Item>
     </Menu>
   );
+  const isPay=()=>{
+    get(ISPAID, userInfo.token).then((res)=>{
+      setIsPayUser(res.data===2);
+    }).catch((error)=>{
+      message.error({
+        content: error.toString(), key: 'netError', duration: 2,
+      });
+    });
+  };
   const readMsg=(id)=>{
     const data={
       ids: id,
@@ -117,7 +126,7 @@ const Customlayout = ({history, activeKey, setLogged}) => {
     />
   );
   useEffect(() => {
-    setHeaderFooterShow(!window.location.pathname.includes('result'));
+    isPay();
   }, []);
   useEffect(() => {
     getNoticeMsg();
@@ -125,7 +134,7 @@ const Customlayout = ({history, activeKey, setLogged}) => {
   return (
     <div>
       <Layout style={{minHeight: '100vh'}}>
-        {headerFooterShow?<Sider
+        <Sider
           breakpoint="lg"
           trigger={null}
           style={{width: 270}}
@@ -134,9 +143,9 @@ const Customlayout = ({history, activeKey, setLogged}) => {
             <img src={logo} width={168}/>
           </div>
           <Menus/>
-        </Sider>:null}
+        </Sider>
         <Layout>
-          {headerFooterShow?<Header className="login-header">
+          <Header className="login-header">
 
             <div className="text-right">
               <Space size="large">
@@ -144,24 +153,25 @@ const Customlayout = ({history, activeKey, setLogged}) => {
                 <Dropdown overlay={menu} placement="bottomCenter">
                   <Avatar icon={<UserOutlined/>} size={26}/>
                 </Dropdown>
-                <Badge dot>
+                <Badge dot={noticeMsg.length>0}>
                   <Popover content={content} trigger="click" placement="bottomRight">
                     <AlertOutlined style={{fontSize: 16}}/>
                   </Popover>
                 </Badge>
-                <Button type="primary" onClick={() => {
+                {!isPayUser&&( <Button type="primary" onClick={() => {
                   store.dispatch(setMenusData('plansAndPrices', ''));
-                }} ><Link to='/plansAndPrices' >Upgrade</Link></Button>
+                }} >
+                  <Link to='/plansAndPrices' >Upgrade</Link>
+                </Button>)}
               </Space>
             </div>
-          </Header>:null}
+          </Header>
           <Content>
             <div className="site-layout-background" style={{minHeight: 'calc(100vh - 89px)'}}>
               <Router/>
             </div>
           </Content>
         </Layout>
-        {/* <Footer style={{textAlign: 'center'}}>一个可爱的页脚@HYCTech</Footer> */}
       </Layout>
     </div>
   );

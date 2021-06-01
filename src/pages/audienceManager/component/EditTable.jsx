@@ -24,8 +24,8 @@ const EditableCell = ({
   ...restProps
 }) => {
   const inputNode = inputType === 'number' ?
-    <InputNumber/> :
-    <InputNumber/>;
+    <InputNumber min={0}/> :
+    <InputNumber min={1}/>;
   return (
     <td {...restProps}>
       {editing ? (
@@ -33,11 +33,12 @@ const EditableCell = ({
           name={dataIndex}
           style={{
             margin: 0,
+            height: 45,
           }}
           rules={[
             {
               required: true,
-              message: ` `,
+              message: `Required field`,
             },
           ]}
         >
@@ -49,6 +50,7 @@ const EditableCell = ({
     </td>
   );
 };
+
 const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id}) => {
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState('');
@@ -193,8 +195,8 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
     {
       title: 'Install',
       dataIndex: 'install',
+      inputType: 'install',
       editable: true,
-      inputType: 'number',
     },
     {
       title: 'Purchase',
@@ -211,7 +213,7 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
     {
       title: 'CPI(Spend/Install)',
       dataIndex: 'cpi',
-      inputType: 'cpi',
+      inputType: 'number',
       editable: true,
     },
     {
@@ -263,7 +265,7 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
                 setViewModal(true);
                 setLookID(record.id);
                 setLookType(2);
-                setDataTitle('Extend Search');
+                setDataTitle('Extend Search Results');
                 setViewDetails(record.extendDetail??[]);
               }}>
                 <FolderViewOutlined style={{fontSize: 16}}/>
@@ -324,26 +326,29 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
           setViewDetails([]);
           setViewModal(false);
         }}>
-        <div className="text-right marginB16 marginT16">
-          <Space>
-            {isPayUser?(<Button
-              download
-              href={`${EXPORTDETAIL}${lookID}/${lookType}/${userInfo.token}`}
-              disabled={!isPayUser}>
-                Export to CSV
-            </Button>):
-              (<Tooltip title="Pls upgrade to use this function.">
-                <Button
-                  download
-                  href={`${EXPORTDETAIL}${lookID}/${lookType}/${userInfo.token}`}
-                  disabled={!isPayUser}>
+        <div >
+          <div className="text-right marginB16">
+            <Space>
+              {isPayUser?(<Button
+                download
+                href={`${EXPORTDETAIL}${lookID}/${lookType}/${userInfo.token}`}
+                disabled={!isPayUser}>
                   Export to CSV
-                </Button>
-              </Tooltip>)
-            }
-          </Space>
+              </Button>):
+                (<Tooltip title="Pls upgrade to use this function.">
+                  <Button
+                    download
+                    href={`${EXPORTDETAIL}${lookID}/${lookType}/${userInfo.token}`}
+                    disabled={!isPayUser}>
+                    Export to CSV
+                  </Button>
+                </Tooltip>)
+              }
+            </Space>
+          </div>
+          {<ResultTable TableData={addIndex(viewDetails)}/>}
         </div>
-        {<ResultTable TableData={addIndex(viewDetails)}/>}
+
       </Modal>
       <Form form={form} component={false} onValuesChange={valuesChange} >
         <Table

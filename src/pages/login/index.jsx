@@ -78,7 +78,10 @@ const Login = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) =
             >
               <Form.Item
                 name="email"
-                rules={[{required: true, type: 'email', message: 'Please input your email!'}]}
+                rules={[
+                  {required: true, message: 'Please input your email!'},
+                  {type: 'email', message: 'Please input a valid email!'},
+                ]}
               >
                 <Input
                   bordered={false}

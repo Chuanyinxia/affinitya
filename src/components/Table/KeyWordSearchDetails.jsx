@@ -57,7 +57,11 @@ const KeyWordSearchDetails = ({userInfo, searchData, saveName}) => {
         groups for optimal audience sets and ranked per affinity data.</h2>
       <div className="text-right marginB16">
         <Space>
-          <Button onClick={()=>setSaveModal(true)} >Save Audience</Button>
+          {isPayUser?(<Button onClick={()=>setSaveModal(true)} >Save Audience</Button>):
+            (<Tooltip title="Pls upgrade to use this function.">
+              <Button disabled>Save Audience</Button>
+            </Tooltip>
+              )}
           {isPayUser?(<Button
             download
             href={`${EXPORTCVS}${id}/${userInfo.token}`}
@@ -65,10 +69,7 @@ const KeyWordSearchDetails = ({userInfo, searchData, saveName}) => {
             Export to CSV
           </Button>):
             (<Tooltip title="Pls upgrade to use this function.">
-              <Button
-                download
-                href={`${EXPORTCVS}${id}/${userInfo.token}`}
-                disabled={!isPayUser}>
+              <Button disabled>
               Export to CSV
               </Button>
             </Tooltip>)

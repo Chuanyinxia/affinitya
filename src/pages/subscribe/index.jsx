@@ -33,8 +33,8 @@ const Subscribe = ({userInfo, httpLoading, setHttpLoading}) => {
       <h2 className="mangerTitle">Subscribe</h2>
       <Card>
         <Row>
-          {memberSubscribeMsg && <Col span={10}>
-            <h3 className="subscribe-title">{memberSubscribeMsg.title}</h3>
+          {memberSubscribeMsg ? <Col span={10}>
+            <h3 className="subscribe-title">{memberSubscribeMsg.name}</h3>
             <Statistic
               className="marginB30 marginT30"
               valueStyle={{fontSize: 36}}
@@ -43,6 +43,8 @@ const Subscribe = ({userInfo, httpLoading, setHttpLoading}) => {
             <p className="subscribe-tip">{memberSubscribeMsg.cycleMessage}</p>
             <p className="subscribe-tip">{memberSubscribeMsg.automaticMessage}</p>
             <a href="mailto:hello@affinityanalyst.com">Contact us to unsubscribe</a>
+          </Col>:<Col>
+            You haven&apos;t subscribed to any packages yet.
           </Col>}
         </Row>
       </Card>

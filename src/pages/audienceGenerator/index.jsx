@@ -33,7 +33,8 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
   const [loading, setLoading] = useState(false);
   const [audienceIdItem, setAudienceIdItem] = useState([]);
   const [activeKey, setActiveKey]=useState(type()?type():1);
-  const [showJobInfo, setShowJobInfo]=useState(false);
+  const [showJobInfoKW, setShowJobInfoKW]=useState(false);
+  const [showJobInfoLA, setShowJobInfoLA]=useState(false);
   const [isPayUser, setIsPayUser] =useState(false);
   const [freeSearchData, setFreeSearchData] =useState(null);
   // const [keyWords, setKeyWords]=useState(null);
@@ -60,12 +61,15 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
       myAppSecret: values.myAppSecret.trim(),
       audienceId: values.audienceId,
     };
+    setShowJobInfoLA(true);
+    setSearchDataLA([]);
     post(SEARCHAUID, data, {
       // eslint-disable-next-line no-tabs
       'Content-Type': 'application/x-www-form-urlencoded',
       'token': userInfo.token,
     }).then((res) => {
       setSearchDataLA(res.data);
+      setShowJobInfoLA(false);
       setSaveNameLA(values.audienceId+moment().format('YYYYMMDDhhmmss'));
     }).catch((error) => {
       message.error({
@@ -86,7 +90,9 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
       keyWord: values.keyWord,
       country: search.country.toString(),
     };
-    setShowJobInfo(true);
+    setShowJobInfoKW(true);
+    setSearchDataKW([]);
+    setFreeSearchData([]);
     get(ISPAID, userInfo.token).then((res)=>{
       setIsPayUser(res.data===2);
     }).catch((error)=>{
@@ -105,7 +111,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
         }
         setSaveNameKW(values.keyWord[0]+moment().format('YYYYMMDDhhmmss'));
         if (res.data) {
-          setShowJobInfo(false);
+          setShowJobInfoKW(false);
         }
       }).catch((error) => {
         console.log(error);
@@ -126,7 +132,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
         });
         setSearchDataKW(res.data.kwResultVoList || []);
       } else {
-        setSearchDataLA(res.data.audienceIdSearchRequest || []);
+        setSearchDataLA(res.data.kwResultVoList || []);
         audienceIdSearchForm.setFieldsValue({
           ...AIDData,
         });
@@ -189,6 +195,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
       });
     }
   };
+
   useEffect(() => {
     isPay();
     const data=search();
@@ -256,7 +263,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
             </Col>
             <Col span={8}>
               <Form.Item name="os" label="User OS" labelAlign="right" initialValue={['na']}>
-                <Select mode="multiple">
+                <Select >
                   <Select.Option value="na">All</Select.Option>
                   <Select.Option value="iOS">iOS</Select.Option>
                   <Select.Option value="Android">Android</Select.Option>
@@ -282,7 +289,6 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
       <div className="card-container marginT16">
         <Tabs type="card" defaultActiveKey={activeKey} onChange={(key)=> {
           setActiveKey(key);
-          setShowJobInfo(false);
         }}>
           <Tabs.TabPane tab="Keyword Search" key="1">
             <h1 className="search-title">
@@ -408,7 +414,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
           </Tabs.TabPane>
         </Tabs>
       </div>
-      <div className={showJobInfo?'show':'hide'}>
+      {parseInt(activeKey)===1&&(<div className={showJobInfoKW?'show':'hide'}>
         <p className="marginT30 search-content">
           Audience generation job has been created in
           <Link
@@ -419,7 +425,19 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
             }
             }>Job Manager</Link>. You will receive &ldquo;notification&ldquo; once job completed.
         </p>
-      </div>
+      </div>)}
+      {parseInt(activeKey)===2&&(<div className={showJobInfoLA?'show':'hide'}>
+        <p className="marginT30 search-content">
+          Audience generation job has been created in
+          <Link
+            to={`/dashboard/jobManager?type=${JobType}`}
+            className="target"
+            onClick={() => {
+              store.dispatch(setMenusData('jobManager', 'dashboard'));
+            }
+            }>Job Manager</Link>. You will receive &ldquo;notification&ldquo; once job completed.
+        </p>
+      </div>)}
       {(searchDataKW.length>0 && parseInt(activeKey)===1)&&(
         <KeyWordSearchDetails saveName={saveNameKW} searchData={searchDataKW}/>)}
       {(searchDataLA.length>0 && parseInt(activeKey)===2)&& (
