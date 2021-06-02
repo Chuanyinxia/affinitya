@@ -179,6 +179,7 @@
 }
 .homeBannerSubTitle{
   color: #FFFFFF;
+  padding-left: 16px;
   line-height: 1.25em;
   font-size: 40px;
 }

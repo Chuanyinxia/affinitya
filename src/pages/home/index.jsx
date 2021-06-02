@@ -29,7 +29,6 @@ const Home = ({userInfo, httpLoading, setHttpLoading}) => {
         message.error(res.msg);
       } else {
         if (res.data === 1) {
-          console.log(res);
           history.push('/login?email='+value.email);
         } else {
           history.push('/signUp?email='+value.email);
@@ -51,11 +50,11 @@ const Home = ({userInfo, httpLoading, setHttpLoading}) => {
             <h1 className="homeBannerText">Insights Powered</h1>
             <h1 className="homeBannerText">By the Players</h1>
             <h2 className="homeBannerSubTitle">A.I. Social Data Platform</h2>
-            <p className="banner-info">Try free-use A.I. for a 360° degree view of your players</p>
+            <p className="banner-info">Try free - use A.I. for a 360° view of your players.</p>
             <Form onFinish={Finish} layout="inline">
               <Form.Item
                 name="email"
-                rules={[{required: true, message: 'Please input your email address!!'},
+                rules={[{required: true, message: 'Please input your email address!'},
                   {type: 'email', message: 'Please input a vailid email address!'}]}
               >
                 <Input placeholder="Email Address*" size="large" className="bannerInput" style={{width: 460}}/>
@@ -84,7 +83,7 @@ const Home = ({userInfo, httpLoading, setHttpLoading}) => {
               Post-IDFA, players are a fragmented collection of interests, our<br/>
               proprietary interests analyst algorithms help you discover<br/>
               accurate and granular audiences, at scale.</p>
-            <p className="info-content">Affinity Accelerator+, our proprietary affinity analysis engine<br/>
+            <p className="info-content"><u>Affinity Accelerator+</u>, our proprietary affinity analysis engine<br/>
               processes real-time interests, volume, and topical patterns -<br/>
               uncovering hidden opportunities for player acquisition.</p>
           </Col>
@@ -104,7 +103,7 @@ const Home = ({userInfo, httpLoading, setHttpLoading}) => {
               and extensions to test and drive the growth of your audience.
             </p>
             <p className="info-content">
-              Affinity Accelerator+ isn&apos;t only about uncovering potential interests, <br/>it&apos;s also
+              <u>Affinity Accelerator+</u> isn&apos;t only about uncovering potential interests, <br/>it&apos;s also
               about creating interest audience sets - we mesh audience<br/>
               data, cross-platform signals, and provide the key use-side<br/>
               configurations and filters to go from discovering to creating.</p>

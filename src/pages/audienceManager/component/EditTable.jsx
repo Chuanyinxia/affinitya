@@ -260,7 +260,7 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
             {record.status===1&&(<Tooltip title="Running">
               <RedoOutlined spin style={{fontSize: 16}}/>
             </Tooltip>)}
-            {record.status===2&&(<Tooltip title="Extend Keyword">
+            {record.status===2&&(<Tooltip title="View Extend Search Results">
               <a type="link" onClick={()=>{
                 setViewModal(true);
                 setLookID(record.id);

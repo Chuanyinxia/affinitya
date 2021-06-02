@@ -1,11 +1,11 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {httpLoading} from '@/store/actions';
 import {Button, Card, Col, Form, Input, message, Row, Spin} from 'antd';
 import './style.css';
-import {IMPROVEPROFILE} from '@/api/index';
-import {post} from '@/utils/request';
+import {IMPROVEPROFILE, MEMBERINFO} from '@/api/index';
+import {post, get} from '@/utils/request';
 
 
 const Profile = ({userInfo, httpLoading, setHttpLoading}) => {
@@ -18,15 +18,33 @@ const Profile = ({userInfo, httpLoading, setHttpLoading}) => {
       'token': userInfo.token,
     }).then((res) => {
       console.log(res);
+      memberInfo();
     }).catch((error) => {
       message.error({
         content: error.toString(), key: 'netError', duration: 2,
       });
     }).finally(() => {
       setHttpLoading(false);
-      form.resetFields();
     });
   };
+  const memberInfo = ()=>{
+    get(MEMBERINFO, userInfo.token).then((res) => {
+      console.log(res);
+      form.setFieldsValue({
+        email: res.data.email,
+        nickName: res.data.nickName,
+        companyName: res.data.companyName,
+      });
+    }).catch((error) => {
+      message.error({
+        content: error.toString(), key: 'netError', duration: 2,
+      });
+    });
+  };
+  useEffect(()=>{
+    memberInfo();
+  }, []);
+
   return (
     <Spin spinning={httpLoading}>
       <h2 className="mangerTitle">Profile</h2>
@@ -49,7 +67,7 @@ const Profile = ({userInfo, httpLoading, setHttpLoading}) => {
               </Form.Item>
               <Form.Item
                 label="Company Name"
-                name="confirmPassword"
+                name="companyName"
                 rules={[{required: true, message: 'Please input company name!'}]}
               >
                 <Input/>

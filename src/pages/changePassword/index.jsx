@@ -18,13 +18,13 @@ const ChangePassword = ({userInfo, httpLoading, setHttpLoading}) => {
       'token': userInfo.token,
     }).then((res) => {
       message.success(res.msg);
+      form.resetFields();
     }).catch((error) => {
       message.error({
         content: error.toString(), key: 'netError', duration: 2,
       });
     }).finally(() => {
       setHttpLoading(false);
-      form.resetFields();
     });
   };
   return (

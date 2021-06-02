@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {httpLoading, setMenusData} from '@/store/actions';
-import {Button, Card, Col, Divider, Form, Input, InputNumber, message, Row, Select, Spin, Tabs} from 'antd';
+import {Button, Card, Col, Divider, Form, Input, InputNumber, message, Row, Select, Spin, Tabs, Popconfirm} from 'antd';
 import './style.css';
 import {Link} from 'react-router-dom';
 import {Countrys} from '@/components/plugin/Country';
@@ -12,16 +12,18 @@ import KeyWordSearchDetails from '@/components/Table/KeyWordSearchDetails';
 import {PlusOutlined} from '@ant-design/icons';
 import moment from 'moment';
 import store from '@/store';
+import {useHistory} from 'react-router-dom';
 // eslint-disable-next-line no-unused-vars
 import {search, type} from '@/components/plugin/Searchdata';
 import ResultTable from '@/components/Table/ResultTable';
-
+import PDF from '@/assets/Guide to get App ID, Token(1).pdf';
 const layout = {
   labelCol: {span: 8},
   wrapperCol: {span: 16},
 };
 
 const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
+  const history = useHistory();
   const [baseSearchForm] = Form.useForm();
   const [audienceIdSearchForm]= Form.useForm();
   const [keywordsForm] =Form.useForm();
@@ -36,7 +38,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
   const [showJobInfoKW, setShowJobInfoKW]=useState(false);
   const [showJobInfoLA, setShowJobInfoLA]=useState(false);
   const [isPayUser, setIsPayUser] =useState(false);
-  const [freeSearchData, setFreeSearchData] =useState(null);
+  const [freeSearchData, setFreeSearchData] =useState(false);
   // const [keyWords, setKeyWords]=useState(null);
   const addItem = () => {
     if (audienceID) {
@@ -103,7 +105,6 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
         'Content-Type': 'application/x-www-form-urlencoded',
         'token': userInfo.token,
       }).then((res) => {
-        console.log(isPayUser);
         if (isPayUser) {
           setSearchDataKW(res.data||[]);
         } else {
@@ -114,7 +115,11 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
           setShowJobInfoKW(false);
         }
       }).catch((error) => {
-        console.log(error);
+        if (isPayUser) {
+          setSearchDataKW(false);
+        } else {
+          setFreeSearchData(false);
+        }
       });
     });
   };
@@ -131,8 +136,10 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
           keyWord: res.data.keywords,
         });
         setSearchDataKW(res.data.kwResultVoList || []);
+        setSaveNameKW(res.data.keyWord+moment().format('YYYYMMDDhhmmss'));
       } else {
         setSearchDataLA(res.data.kwResultVoList || []);
+        setSaveNameLA(res.data.audienceIdSearchRequest.audienceId+moment().format('YYYYMMDDhhmmss'));
         audienceIdSearchForm.setFieldsValue({
           ...AIDData,
         });
@@ -244,8 +251,8 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
               <Form.Item name="age" labelAlign="right" label="Age" initialValue="1,2">
                 <Form.Item name="minAge" noStyle initialValue={13}>
                   <InputNumber
-                    min={0}
-                    max={120}
+                    min={13}
+                    max={65}
                     decimalSeparator={0}
                   />
                 </Form.Item>
@@ -254,8 +261,8 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
                 </span>
                 <Form.Item name="maxAge" noStyle initialValue={65}>
                   <InputNumber
-                    min={0}
-                    max={120}
+                    min={13}
+                    max={65}
                     decimalSeparator={0}
                   />
                 </Form.Item>
@@ -291,12 +298,14 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
           setActiveKey(key);
         }}>
           <Tabs.TabPane tab="Keyword Search" key="1">
-            <h1 className="search-title">
-              Access to 40 keywords is free. Need access to all 300 of your custom keyword audience?
-              {!isPayUser&&(<Link to="/plansAndPrices" className="target" onClick={() => {
-                store.dispatch(setMenusData('plansAndPrices', 'dashboard'));
-              }}> Upgrade now!</Link>)}
-            </h1>
+            {!isPayUser&&(
+              <h1 className="search-title">
+                Access to 40 keywords is free. Need access to all 300 of your custom keyword audience?
+                <Link to="/plansAndPrices" className="target" onClick={() => {
+                  store.dispatch(setMenusData('plansAndPrices', 'dashboard'));
+                }}> Upgrade now!</Link>
+              </h1>)}
+
             <Form onFinish={onSearch} name="search" layout="horizontal" form={keywordsForm}>
               <Form.Item
                 name="keyWord"
@@ -346,12 +355,8 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
                 </Col>
                 <Col span={14}>
                   {/* eslint-disable-next-line react/jsx-no-target-blank */}
-                  <a
-                    href="https://docs.google.com/document/d
-                    /1YbDT-sGD3nsggQj7wLeG4seVE_pGg7dM4ieQxkwUqSM/edit?usp=sharing"
-                    target="_blank"
-                  >
-                    How to retrive your token?
+                  <a href={PDF} target="_blank">
+                    How to retrieve your token?
                   </a>
                 </Col>
               </Row>
@@ -394,15 +399,19 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
                 {isPayUser? (<Button type="primary" size="large" htmlType="submit">
                   Generate Audience
                 </Button>):(
+                  <Popconfirm
+                    placement="topLeft"
+                    title="Pls upgrade to use this function."
+                    onConfirm={()=>{
+                      store.dispatch(setMenusData('plansAndPrices', 'dashboard'));
+                      history.push('/plansAndPrices');
+                    }}
+                    okText="Upgrade"
+                    cancelText="Cancel">
                     <Button type="primary" size="large" >
-                      <Link to={'/plansAndPrices'}
-                        className="target"
-                        onClick={() => {
-                          store.dispatch(setMenusData('plansAndPrices', 'dashboard'));
-                        }}>
                       Generate Audience
-                      </Link>
                     </Button>
+                  </Popconfirm>
                   )}
               </Form.Item>
             </Form>
@@ -442,7 +451,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
         <KeyWordSearchDetails saveName={saveNameKW} searchData={searchDataKW}/>)}
       {(searchDataLA.length>0 && parseInt(activeKey)===2)&& (
         <KeyWordSearchDetails saveName={saveNameLA} searchData={searchDataLA}/>)}
-      {(freeSearchData && activeKey===1)&& <ResultTable TableData={freeSearchData}/>}
+      {(freeSearchData.length>0 && activeKey===1)&& <ResultTable TableData={freeSearchData}/>}
     </Spin>
   );
 };

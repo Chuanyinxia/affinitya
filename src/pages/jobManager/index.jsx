@@ -127,8 +127,14 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
         <Table.Column title="Type" dataIndex="type" key="Type" render={(type)=>{
           return type===1?'Keyword':type===2?'Lookalike Audience':'Extend';
         }}/>
-        <Table.Column title="Start Time" dataIndex="startTime" key="Start  Time"/>
-        <Table.Column title="Complete Time" dataIndex="endTime" key="Complete Time"/>
+        <Table.Column title="Start Time" dataIndex="startTime" key="Start Time"/>
+        <Table.Column
+          title="Complete Time"
+          dataIndex="endTime"
+          key="Complete Time"
+          render={(endTime, record)=>{
+            return (endTime&&record.jobStatus===1)?endTime+`(Estimate)`:endTime;
+          }}/>
         <Table.Column title="Status" dataIndex="jobStatus" key="Status" render={(jobStatus) =>(
           <Space>
             {(jobStatus===1)?(<Tag color="purple">Running</Tag>):
