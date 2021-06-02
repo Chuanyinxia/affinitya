@@ -193,9 +193,9 @@ const PlansAndPrices = ({userInfo, httpLoading, setHttpLoading}) => {
           </Col>
         </Row>
       </Spin>
-      <a href={payUrl} ref={magicRef} target="_blank" rel="noreferrer">&nbsp;</a>
+      <a href={payUrl} ref={magicRef} target="_self" rel="noreferrer">&nbsp;</a>
       <Modal
-        title="Privacy Clause"
+        title="Payment Policy"
         visible={agreementModalVivible}
         width={800}
         footer={null}
