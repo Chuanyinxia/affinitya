@@ -2,8 +2,8 @@ import React from 'react';
 import {Col, Layout, Row, Space} from 'antd';
 import logo from '@/assets/lettering-logo.webp';
 import {Link} from 'react-router-dom';
+
 const {Header} = Layout;
-import {UserOutlined} from '@ant-design/icons';
 const Headers=()=>( <Header className="padding0 text-center bg-header">
   <Row className="content">
     <Col span={8}>
@@ -18,7 +18,7 @@ const Headers=()=>( <Header className="padding0 text-center bg-header">
           className="navs">Dashboard</Link>
         <Link to='/contactUs' className="navs">Contact Us</Link>
         <Link to='/plansPricing' className="navs">Plans & Pricing</Link>
-        <Link to='/login' className="navs"><UserOutlined />Login</Link>
+        <Link to='/login' className="navs">Login</Link>
       </Space>
     </Col>
   </Row>
