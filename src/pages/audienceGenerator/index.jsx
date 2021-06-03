@@ -15,12 +15,14 @@ import store from '@/store';
 import {useHistory} from 'react-router-dom';
 // eslint-disable-next-line no-unused-vars
 import {search, type} from '@/components/plugin/Searchdata';
-import ResultTable from '@/components/Table/ResultTable';
 import PDF from '@/assets/Guide to get App ID, Token(1).pdf';
+import ResultTableBlur from '@/components/Table/ResultTableBlur';
+
 const layout = {
   labelCol: {span: 8},
   wrapperCol: {span: 16},
 };
+
 
 const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
   const history = useHistory();
@@ -29,6 +31,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
   const [keywordsForm] =Form.useForm();
   const [searchDataKW, setSearchDataKW] = useState([]);
   const [searchDataLA, setSearchDataLA] = useState([]);
+  const [freeSearchData, setFreeSearchData] =useState([]);
   const [saveNameKW, setSaveNameKW]=useState('');
   const [saveNameLA, setSaveNameLA]=useState('');
   const [audienceID, setAudienceID] = useState('');
@@ -38,7 +41,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
   const [showJobInfoKW, setShowJobInfoKW]=useState(false);
   const [showJobInfoLA, setShowJobInfoLA]=useState(false);
   const [isPayUser, setIsPayUser] =useState(false);
-  const [freeSearchData, setFreeSearchData] =useState(false);
+
   // const [keyWords, setKeyWords]=useState(null);
   const addItem = () => {
     if (audienceID) {
@@ -116,9 +119,9 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
         }
       }).catch((error) => {
         if (isPayUser) {
-          setSearchDataKW(false);
+          setSearchDataKW([]);
         } else {
-          setFreeSearchData(false);
+          setFreeSearchData([]);
         }
       });
     });
@@ -451,7 +454,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
         <KeyWordSearchDetails saveName={saveNameKW} searchData={searchDataKW}/>)}
       {(searchDataLA.length>0 && parseInt(activeKey)===2)&& (
         <KeyWordSearchDetails saveName={saveNameLA} searchData={searchDataLA}/>)}
-      {(freeSearchData.length>0 && activeKey===1)&& <ResultTable TableData={freeSearchData}/>}
+      {(freeSearchData.length>0 && parseInt(activeKey)===1)&& <ResultTableBlur TableData={freeSearchData}/>}
     </Spin>
   );
 };
