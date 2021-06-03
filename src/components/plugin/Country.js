@@ -1,9 +1,5 @@
 export const Countrys= [
   {
-    'name': 'World Wide',
-    'country_code': 'worldwide',
-  },
-  {
     'name': 'Andorra',
     'country_code': 'AD',
   },

@@ -55,7 +55,7 @@ const Home = ({userInfo, httpLoading, setHttpLoading}) => {
               <Form.Item
                 name="email"
                 rules={[{required: true, message: 'Please input your email address!'},
-                  {type: 'email', message: 'Please input a vailid email address!'}]}
+                  {type: 'email', message: 'Please input a valid email address!'}]}
               >
                 <Input placeholder="Email Address*" size="large" className="bannerInput" style={{width: 460}}/>
               </Form.Item>
@@ -119,7 +119,7 @@ const Home = ({userInfo, httpLoading, setHttpLoading}) => {
               unified mesh, for developers and advertisers to find the story<br/>
               and insights above the interest.</p>
             <p className="info-content">
-              Nexus A.I. builds upon our Affinity Accelerator technology - we<br/>
+              <u>Nexus A.I.</u> builds upon our Affinity Accelerator technology - we<br/>
               capture real-time social content to integrate with the interests data -<br/>
               adding an invaluable dimension to better comprehend your<br/>
               players, their complex webs of interests, and methods of approach.

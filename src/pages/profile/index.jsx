@@ -17,7 +17,7 @@ const Profile = ({userInfo, httpLoading, setHttpLoading}) => {
       'Content-Type': 'application/x-www-form-urlencoded',
       'token': userInfo.token,
     }).then((res) => {
-      console.log(res);
+      message.success(res.msg);
       memberInfo();
     }).catch((error) => {
       message.error({
@@ -39,6 +39,8 @@ const Profile = ({userInfo, httpLoading, setHttpLoading}) => {
       message.error({
         content: error.toString(), key: 'netError', duration: 2,
       });
+    }).finally(()=>{
+      setHttpLoading(false);
     });
   };
   useEffect(()=>{

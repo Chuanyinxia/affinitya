@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Row, Col} from 'antd';
+import {Row, Col, Typography} from 'antd';
+const {Text} = Typography;
 const TaskItem=({info, active, onDragEnd, onDragStart, onClicks, userInfo})=>{
   const handleDragStart=(e)=>{
     onDragStart(info.id);
@@ -15,7 +16,14 @@ const TaskItem=({info, active, onDragEnd, onDragStart, onClicks, userInfo})=>{
       draggable="true"
     >
       <Row onClick={onClicks} className="item-link">
-        <Col span={24} className="item-header" >{info.campaignName}</Col>
+        <Col span={24} className="item-header" >
+          <Text
+            style={{width: '100%'}}
+            ellipsis={{tooltip: info.campaignName}}
+          >
+            {info.campaignName}
+          </Text>
+        </Col>
         <Col span={8} className="item-main">{info.type}</Col>
         <Col span={16} className="text-right item-time">{info.createTime}</Col>
       </Row>

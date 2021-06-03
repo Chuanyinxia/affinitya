@@ -98,8 +98,10 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
     setShowJobInfoKW(true);
     setSearchDataKW([]);
     setFreeSearchData([]);
+    let isPay;
     get(ISPAID, userInfo.token).then((res)=>{
       setIsPayUser(res.data===2);
+      isPay=res.data===2;
     }).catch((error)=>{
       console.log(error);
     }).finally(()=>{
@@ -108,17 +110,17 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
         'Content-Type': 'application/x-www-form-urlencoded',
         'token': userInfo.token,
       }).then((res) => {
-        if (isPayUser) {
-          setSearchDataKW(res.data||[]);
+        if (isPay) {
+          setSearchDataKW(res.data);
         } else {
-          setFreeSearchData(res.data||[]);
+          setFreeSearchData(res.data[0].searchDetails);
         }
         setSaveNameKW(values.keyWord[0]+moment().format('YYYYMMDDhhmmss'));
         if (res.data) {
           setShowJobInfoKW(false);
         }
       }).catch((error) => {
-        if (isPayUser) {
+        if (isPay) {
           setSearchDataKW([]);
         } else {
           setFreeSearchData([]);
@@ -129,36 +131,46 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
 
   const getJobdetails = (id) => {
     setLoading(true);
-    get(GETJOBDETAIL + id, userInfo.token).then((res) => {
-      console.log(res);
-      const baseData=res.data.baseSearchRequest;
-      const AIDData= res.data.audienceIdSearchRequest;
-      console.log(activeKey);
-      if (parseInt(activeKey)===1) {
-        keywordsForm.setFieldsValue({
-          keyWord: res.data.keywords,
+    let isPay;
+    get(ISPAID, userInfo.token).then((res)=>{
+      setIsPayUser(res.data===2);
+      isPay = (res.data===2);
+    }).catch((error)=>{
+      console.log(error);
+    }).finally(()=>{
+      get(GETJOBDETAIL + id, userInfo.token).then((res) => {
+        const baseData=res.data.baseSearchRequest;
+        const AIDData= res.data.audienceIdSearchRequest;
+        if (parseInt(activeKey)===1) {
+          keywordsForm.setFieldsValue({
+            keyWord: res.data.keywords,
+          });
+          if (isPay) {
+            setSearchDataKW(res.data.kwResultVoList);
+            setSaveNameKW(res.data.keywords[0]+moment().format('YYYYMMDDHHmmss'));
+          } else {
+            setFreeSearchData(res.data.kwResultVoList[0].searchDetails||[]);
+          }
+        } else {
+          setSearchDataLA(res.data.kwResultVoList || []);
+          setSaveNameLA(res.data.audienceIdSearchRequest.audienceId+moment().format('YYYYMMDDHHmmss'));
+          audienceIdSearchForm.setFieldsValue({
+            ...AIDData,
+          });
+        }
+        baseSearchForm.setFieldsValue({
+          ...baseData,
+          country: baseData.country.split(','),
+          minAge: baseData.age.split(',')[0],
+          maxAge: baseData.age.split(',')[1],
         });
-        setSearchDataKW(res.data.kwResultVoList || []);
-        setSaveNameKW(res.data.keyWord+moment().format('YYYYMMDDhhmmss'));
-      } else {
-        setSearchDataLA(res.data.kwResultVoList || []);
-        setSaveNameLA(res.data.audienceIdSearchRequest.audienceId+moment().format('YYYYMMDDhhmmss'));
-        audienceIdSearchForm.setFieldsValue({
-          ...AIDData,
+      }).catch((error) => {
+        message.error({
+          content: error.toString(), key: 'netError', duration: 2,
         });
-      }
-      baseSearchForm.setFieldsValue({
-        ...baseData,
-        country: baseData.country.split(','),
-        minAge: baseData.age.split(',')[0],
-        maxAge: baseData.age.split(',')[1],
+      }).finally(() => {
+        setLoading(false);
       });
-    }).catch((error) => {
-      message.error({
-        content: error.toString(), key: 'netError', duration: 2,
-      });
-    }).finally(() => {
-      setLoading(false);
     });
   };
 
@@ -207,10 +219,11 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
   };
 
   useEffect(() => {
-    isPay();
     const data=search();
     if (data) {
       getJobdetails(data.id);
+    } else {
+      isPay();
     }
   },
   []);
@@ -419,7 +432,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
               </Form.Item>
             </Form>
             <p className="search-info">
-              By clicking &ldquo;Genereate Audience&ldquo; button, Affinity Analayst extends high correlation audiences
+              By clicking &quot;Genereate Audience&quot; button, Affinity Analayst extends high correlation audiences
               from your custom audiences, organized in high relation groups for optimal audience sets and ranked per
               affinity data.
             </p>
@@ -435,7 +448,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
             onClick={() => {
               store.dispatch(setMenusData('jobManager', 'dashboard'));
             }
-            }>Job Manager</Link>. You will receive &ldquo;notification&ldquo; once job completed.
+            }>Job Manager</Link>. You will receive &quot;notification&quot; once job completed.
         </p>
       </div>)}
       {parseInt(activeKey)===2&&(<div className={showJobInfoLA?'show':'hide'}>
@@ -450,11 +463,11 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
             }>Job Manager</Link>. You will receive &ldquo;notification&ldquo; once job completed.
         </p>
       </div>)}
-      {(searchDataKW.length>0 && parseInt(activeKey)===1)&&(
+      {(isPayUser && !showJobInfoKW && parseInt(activeKey)===1)&&(
         <KeyWordSearchDetails saveName={saveNameKW} searchData={searchDataKW}/>)}
-      {(searchDataLA.length>0 && parseInt(activeKey)===2)&& (
+      {(!showJobInfoLA && parseInt(activeKey)===2)&& (
         <KeyWordSearchDetails saveName={saveNameLA} searchData={searchDataLA}/>)}
-      {(freeSearchData.length>0 && parseInt(activeKey)===1)&& <ResultTableBlur TableData={freeSearchData}/>}
+      {(!isPayUser &&!showJobInfoKW && parseInt(activeKey)===1)&& <ResultTableBlur TableData={freeSearchData}/>}
     </Spin>
   );
 };
