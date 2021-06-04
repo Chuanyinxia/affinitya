@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {httpLoading, setMenusData} from '@/store/actions';
-import {Button, Card, Col, Divider, Form, Input, InputNumber, message, Row, Select, Spin, Tabs} from 'antd';
+import {Button, Card, Col, Divider, Form, Input, InputNumber, message, Row, Select, Spin, Tabs, Popconfirm} from 'antd';
 import './style.css';
 import {Link} from 'react-router-dom';
 import {Countrys} from '@/components/plugin/Country';
@@ -12,21 +12,26 @@ import KeyWordSearchDetails from '@/components/Table/KeyWordSearchDetails';
 import {PlusOutlined} from '@ant-design/icons';
 import moment from 'moment';
 import store from '@/store';
+import {useHistory} from 'react-router-dom';
 // eslint-disable-next-line no-unused-vars
 import {search, type} from '@/components/plugin/Searchdata';
-import ResultTable from '@/components/Table/ResultTable';
+import PDF from '@/assets/Guide to get App ID, Token(1).pdf';
+import ResultTableBlur from '@/components/Table/ResultTableBlur';
 
 const layout = {
   labelCol: {span: 8},
   wrapperCol: {span: 16},
 };
 
+
 const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
+  const history = useHistory();
   const [baseSearchForm] = Form.useForm();
   const [audienceIdSearchForm]= Form.useForm();
   const [keywordsForm] =Form.useForm();
   const [searchDataKW, setSearchDataKW] = useState([]);
   const [searchDataLA, setSearchDataLA] = useState([]);
+  const [freeSearchData, setFreeSearchData] =useState([]);
   const [saveNameKW, setSaveNameKW]=useState('');
   const [saveNameLA, setSaveNameLA]=useState('');
   const [audienceID, setAudienceID] = useState('');
@@ -36,7 +41,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
   const [showJobInfoKW, setShowJobInfoKW]=useState(false);
   const [showJobInfoLA, setShowJobInfoLA]=useState(false);
   const [isPayUser, setIsPayUser] =useState(false);
-  const [freeSearchData, setFreeSearchData] =useState(null);
+
   // const [keyWords, setKeyWords]=useState(null);
   const addItem = () => {
     if (audienceID) {
@@ -93,8 +98,10 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
     setShowJobInfoKW(true);
     setSearchDataKW([]);
     setFreeSearchData([]);
+    let isPay;
     get(ISPAID, userInfo.token).then((res)=>{
       setIsPayUser(res.data===2);
+      isPay=res.data===2;
     }).catch((error)=>{
       console.log(error);
     }).finally(()=>{
@@ -103,52 +110,67 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
         'Content-Type': 'application/x-www-form-urlencoded',
         'token': userInfo.token,
       }).then((res) => {
-        console.log(isPayUser);
-        if (isPayUser) {
-          setSearchDataKW(res.data||[]);
+        if (isPay) {
+          setSearchDataKW(res.data);
         } else {
-          setFreeSearchData(res.data||[]);
+          setFreeSearchData(res.data[0].searchDetails);
         }
         setSaveNameKW(values.keyWord[0]+moment().format('YYYYMMDDhhmmss'));
         if (res.data) {
           setShowJobInfoKW(false);
         }
       }).catch((error) => {
-        console.log(error);
+        if (isPay) {
+          setSearchDataKW([]);
+        } else {
+          setFreeSearchData([]);
+        }
       });
     });
   };
 
   const getJobdetails = (id) => {
     setLoading(true);
-    get(GETJOBDETAIL + id, userInfo.token).then((res) => {
-      console.log(res);
-      const baseData=res.data.baseSearchRequest;
-      const AIDData= res.data.audienceIdSearchRequest;
-      console.log(activeKey);
-      if (parseInt(activeKey)===1) {
-        keywordsForm.setFieldsValue({
-          keyWord: res.data.keywords,
+    let isPay;
+    get(ISPAID, userInfo.token).then((res)=>{
+      setIsPayUser(res.data===2);
+      isPay = (res.data===2);
+    }).catch((error)=>{
+      console.log(error);
+    }).finally(()=>{
+      get(GETJOBDETAIL + id, userInfo.token).then((res) => {
+        const baseData=res.data.baseSearchRequest;
+        const AIDData= res.data.audienceIdSearchRequest;
+        if (parseInt(activeKey)===1) {
+          keywordsForm.setFieldsValue({
+            keyWord: res.data.keywords,
+          });
+          if (isPay) {
+            setSearchDataKW(res.data.kwResultVoList);
+            setSaveNameKW(res.data.keywords[0]+moment().format('YYYYMMDDHHmmss'));
+          } else {
+            setFreeSearchData(res.data.kwResultVoList[0].searchDetails||[]);
+          }
+        } else {
+          setSearchDataLA(res.data.kwResultVoList || []);
+          setSaveNameLA(res.data.audienceIdSearchRequest.audienceId+moment().format('YYYYMMDDHHmmss'));
+          audienceIdSearchForm.setFieldsValue({
+            ...AIDData,
+          });
+        }
+        baseSearchForm.setFieldsValue({
+          ...baseData,
+          country: baseData.country.split(','),
+          minAge: baseData.age.split(',')[0],
+          maxAge: baseData.age.split(',')[1],
         });
-        setSearchDataKW(res.data.kwResultVoList || []);
-      } else {
-        setSearchDataLA(res.data.kwResultVoList || []);
-        audienceIdSearchForm.setFieldsValue({
-          ...AIDData,
+      }).catch((error) => {
+        message.error({
+          content: error.toString(), key: 'netError', duration: 2,
         });
-      }
-      baseSearchForm.setFieldsValue({
-        ...baseData,
-        country: baseData.country.split(','),
-        minAge: baseData.age.split(',')[0],
-        maxAge: baseData.age.split(',')[1],
+      }).finally(() => {
+        setLoading(false);
       });
-    }).catch((error) => {
-      message.error({
-        content: error.toString(), key: 'netError', duration: 2,
-      });
-    }).finally(() => {
-      setLoading(false);
     });
   };
 
@@ -197,10 +219,11 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
   };
 
   useEffect(() => {
-    isPay();
     const data=search();
     if (data) {
       getJobdetails(data.id);
+    } else {
+      isPay();
     }
   },
   []);
@@ -244,8 +267,8 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
               <Form.Item name="age" labelAlign="right" label="Age" initialValue="1,2">
                 <Form.Item name="minAge" noStyle initialValue={13}>
                   <InputNumber
-                    min={0}
-                    max={120}
+                    min={13}
+                    max={65}
                     decimalSeparator={0}
                   />
                 </Form.Item>
@@ -254,8 +277,8 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
                 </span>
                 <Form.Item name="maxAge" noStyle initialValue={65}>
                   <InputNumber
-                    min={0}
-                    max={120}
+                    min={13}
+                    max={65}
                     decimalSeparator={0}
                   />
                 </Form.Item>
@@ -291,12 +314,14 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
           setActiveKey(key);
         }}>
           <Tabs.TabPane tab="Keyword Search" key="1">
-            <h1 className="search-title">
-              Access to 40 keywords is free. Need access to all 300 of your custom keyword audience?
-              {!isPayUser&&(<Link to="/plansAndPrices" className="target" onClick={() => {
-                store.dispatch(setMenusData('plansAndPrices', 'dashboard'));
-              }}> Upgrade now!</Link>)}
-            </h1>
+            {!isPayUser&&(
+              <h1 className="search-title">
+                Access to 40 keywords is free. Need access to all 300 of your custom keyword audience?
+                <Link to="/plansAndPrices" className="target" onClick={() => {
+                  store.dispatch(setMenusData('plansAndPrices', 'dashboard'));
+                }}> Upgrade now!</Link>
+              </h1>)}
+
             <Form onFinish={onSearch} name="search" layout="horizontal" form={keywordsForm}>
               <Form.Item
                 name="keyWord"
@@ -346,12 +371,8 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
                 </Col>
                 <Col span={14}>
                   {/* eslint-disable-next-line react/jsx-no-target-blank */}
-                  <a
-                    href="https://docs.google.com/document/d
-                    /1YbDT-sGD3nsggQj7wLeG4seVE_pGg7dM4ieQxkwUqSM/edit?usp=sharing"
-                    target="_blank"
-                  >
-                    How to retrive your token?
+                  <a href={PDF} target="_blank">
+                    How to retrieve your token?
                   </a>
                 </Col>
               </Row>
@@ -394,20 +415,24 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
                 {isPayUser? (<Button type="primary" size="large" htmlType="submit">
                   Generate Audience
                 </Button>):(
+                  <Popconfirm
+                    placement="topLeft"
+                    title="Pls upgrade to use this function."
+                    onConfirm={()=>{
+                      store.dispatch(setMenusData('plansAndPrices', 'dashboard'));
+                      history.push('/plansAndPrices');
+                    }}
+                    okText="Upgrade"
+                    cancelText="Cancel">
                     <Button type="primary" size="large" >
-                      <Link to={'/plansAndPrices'}
-                        className="target"
-                        onClick={() => {
-                          store.dispatch(setMenusData('plansAndPrices', 'dashboard'));
-                        }}>
                       Generate Audience
-                      </Link>
                     </Button>
+                  </Popconfirm>
                   )}
               </Form.Item>
             </Form>
             <p className="search-info">
-              By clicking &ldquo;Genereate Audience&ldquo; button, Affinity Analayst extends high correlation audiences
+              By clicking &quot;Genereate Audience&quot; button, Affinity Analayst extends high correlation audiences
               from your custom audiences, organized in high relation groups for optimal audience sets and ranked per
               affinity data.
             </p>
@@ -423,7 +448,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
             onClick={() => {
               store.dispatch(setMenusData('jobManager', 'dashboard'));
             }
-            }>Job Manager</Link>. You will receive &ldquo;notification&ldquo; once job completed.
+            }>Job Manager</Link>. You will receive &quot;notification&quot; once job completed.
         </p>
       </div>)}
       {parseInt(activeKey)===2&&(<div className={showJobInfoLA?'show':'hide'}>
@@ -438,11 +463,11 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
             }>Job Manager</Link>. You will receive &ldquo;notification&ldquo; once job completed.
         </p>
       </div>)}
-      {(searchDataKW.length>0 && parseInt(activeKey)===1)&&(
+      {(isPayUser && !showJobInfoKW && parseInt(activeKey)===1)&&(
         <KeyWordSearchDetails saveName={saveNameKW} searchData={searchDataKW}/>)}
-      {(searchDataLA.length>0 && parseInt(activeKey)===2)&& (
+      {(!showJobInfoLA && parseInt(activeKey)===2)&& (
         <KeyWordSearchDetails saveName={saveNameLA} searchData={searchDataLA}/>)}
-      {(freeSearchData && activeKey===1)&& <ResultTable TableData={freeSearchData}/>}
+      {(!isPayUser &&!showJobInfoKW && parseInt(activeKey)===1)&& <ResultTableBlur TableData={freeSearchData}/>}
     </Spin>
   );
 };

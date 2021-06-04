@@ -35,7 +35,11 @@ const ContactUS = ({userInfo, httpLoading, setHttpLoading}) => {
     <Layout className="layout Home">
       <Headers/>
       <Content>
-        <div className="contact-us" style={{marginTop: 120}}>
+        <div className="contact-us" style={{
+          marginTop: 90,
+          minHeight: 'calc(100vh - 180px )',
+          paddingTop: 'calc((100vh - 548px )/2)',
+        }}>
           <Row>
             <Col span={12} offset={6}>
               <Form layout="vertical" validateMessages={validateMessages} onFinish={(v) => submit(v)}>

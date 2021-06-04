@@ -22,11 +22,15 @@ const Customlayout = ({history, activeKey, setLogged}) => {
   const [userInfo] = useState(storage.getData('userInfo') ?? null);
   const [noticeMsg, seNoticeMsg]= useState([]);
   const [loading, setLoading] =useState(false);
+  const [dotShow, setDotShow] = useState(false);
   const getNoticeMsg=()=>{
     setLoading(true);
     get(GETNOTICEMSG, userInfo.token).then((res)=>{
-      console.log(res);
       seNoticeMsg(res.data);
+      const newMsg=res.data.filter((item)=> {
+        return parseInt(item.readStatus) === 1;
+      });
+      setDotShow(newMsg.length>0);
     }).catch((error) => {
       message.error({
         content: error.toString(), key: 'netError', duration: 2,
@@ -106,11 +110,11 @@ const Customlayout = ({history, activeKey, setLogged}) => {
       itemLayout="horizontal"
       dataSource={noticeMsg}
       loading={loading}
-      pagination={{
+      pagination={noticeMsg.length>0?{
         pageSize: 5,
         size: 'small',
-      }}
-      footer={<Button block onClick={readAllMsg}>Read All</Button>}
+      }:false}
+      footer={noticeMsg.length>0?(<Button block onClick={readAllMsg}>Read All</Button>):false}
       renderItem={(item) => (
         <List.Item key={item.id} onClick={()=>readMsg([item.id])}>
           <List.Item.Meta
@@ -153,7 +157,7 @@ const Customlayout = ({history, activeKey, setLogged}) => {
                 <Dropdown overlay={menu} placement="bottomCenter">
                   <Avatar icon={<UserOutlined/>} size={26}/>
                 </Dropdown>
-                <Badge dot={noticeMsg.length>0}>
+                <Badge dot={dotShow}>
                   <Popover content={content} trigger="click" placement="bottomRight">
                     <AlertOutlined style={{fontSize: 16}}/>
                   </Popover>

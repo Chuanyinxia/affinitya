@@ -158,7 +158,7 @@
   padding-top:80px ;
   height: 580px;
 }
-@media screen and (max-width: 1450px)  {
+@media screen and (max-width: 1550px)  {
   .bannerBg{
     background-size:50% ;
   }
@@ -179,6 +179,7 @@
 }
 .homeBannerSubTitle{
   color: #FFFFFF;
+  padding-left: 16px;
   line-height: 1.25em;
   font-size: 40px;
 }

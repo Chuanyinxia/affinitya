@@ -1,9 +1,9 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {httpLoading} from '@/store/actions';
 import './style.css';
-import {Tabs, Card, Space, Button, Modal, Input, message, Empty, Tooltip} from 'antd';
+import {Button, Card, Empty, Input, message, Modal, Space, Tabs, Tooltip} from 'antd';
 import ResultTable from '@/components/Table/ResultTable';
 import {get, post} from '@/utils/request';
 import {EXPORTCVS, ISPAID, SAVESEARCHMESSAGE} from '@/api';
@@ -14,25 +14,26 @@ const {TabPane} = Tabs;
 const KeyWordSearchDetails = ({userInfo, searchData, saveName}) => {
   const [saveModal, setSaveModal]=useState(false);
   const [audienceName, setAudienceName]=useState(saveName);
-  const [isPayUser, setIsPayUser] =useState(false);
-  const [id]=useState(searchData[0]?searchData[0].searchId:'');
-  const tableData=(tableData)=>{
-    const data=tableData.map((item, index)=>{
-      return {...item, index: index+1};
+  const [isPayUser, setIsPayUser] = useState(false);
+  const id = searchData[0] ? searchData[0].searchId : '';
+  const tableData = (tableData) => {
+    const data = tableData.map((item, index) => {
+      return {...item, index: index + 1};
     });
     return data;
   };
-  const saveAudience=()=>{
-    // console.log(id);
-    post(SAVESEARCHMESSAGE, {searchId: id, audienceName: audienceName}, {
-      // eslint-disable-next-line no-tabs
-      'Content-Type':	'application/x-www-form-urlencoded',
-      'token': userInfo.token,
-    }).then((res)=>{
+  const saveAudience=()=> {
+    post(SAVESEARCHMESSAGE,
+        {searchId: id, audienceName: audienceName !== '' ? audienceName : saveName},
+        {
+          // eslint-disable-next-line no-tabs
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'token': userInfo.token,
+        }).then((res) => {
       message.success(res.msg);
       setSaveModal(false);
       setAudienceName('');
-    }).catch((error)=>{
+    }).catch((error) => {
       message.error({
         content: error.toString(), key: 'netError', duration: 2,
       });

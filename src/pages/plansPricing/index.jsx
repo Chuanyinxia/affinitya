@@ -43,64 +43,65 @@ const PlansPricing = ({userInfo, httpLoading, setHttpLoading}) => {
     <Layout className="layout Home">
       <Headers/>
       <Content>
-        <Row gutter={[46]} >
-          {paymentList.map((payment, idx) => (
-            <Col
-              span={7}
-              offset={idx===0?0:1}
-              className={payment.checked?'plans checked':'plans'}
-              key={payment.name}
-            >
-              <Card title={null} bordered={false} className="priceCard">
-                <Row>
-                  <Col span={24} className="paymentName">{payment.name}</Col>
-                </Row>
-                <Row>
-                  <Col span={24} className="paymentPrice">
-                    <div>
-                      <span className="priceTag">$</span>
-                      {payment.price}
-                    </div>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col span={24} className="paymentType">
-                    {payment.paymentType?payment.paymentType:' '}
-                  </Col>
-                </Row>
-                <Row>
-                  <Col span={14} offset={5} className="paymentDesc">
-                    {payment.desc}
-                  </Col>
-                </Row>
-                <Row>
-                  <Col flex="auto" span={8} offset={8} className="paymentValid">
-                    {
-                      idx===0?'Valid for 3 months':'Valid for 6 months'
-                    }
-                  </Col>
-                </Row>
-                <Row>
-                  <Col flex="auto" span={8} offset={8} className="paymentBtn">
-                    {payment.clickState===0?<Tooltip title="Not available for now.">
-                      <Button type="primary" block disabled>select</Button>
-                    </Tooltip>:<Button type="primary" block onClick={()=>{
-                      selectPayment(idx);
-                    }}>select</Button>}
-                  </Col>
-                </Row>
-                <Divider style={{marginTop: 48}}/>
-                <Row>
-                  <Col flex="auto" span={20} offset={2} className="paymentFun">
-                    {payment.functionList.map((fun, index)=>(
-                      <div key={`fun_${index}`} style={{height: 32}}>{fun}</div>
-                    ))}
-                  </Col>
-                </Row>
-              </Card>
-            </Col>
-          ))}
-        </Row>
+        <div className="marginTop90 content" style={{minHeight: 'calc(100vh - 180px)', paddingTop: 30}}>
+          <Row gutter={[60, 24]} >
+            {paymentList.map((payment, idx) => (
+              <Col
+                span={8}
+                className={payment.checked?'plans checked':'plans'}
+                key={payment.name}
+              >
+                <Card title={null} bordered={false} className="priceCard">
+                  <Row>
+                    <Col span={24} className="paymentName">{payment.name}</Col>
+                  </Row>
+                  <Row>
+                    <Col span={24} className="paymentPrice">
+                      <div>
+                        <span className="priceTag">$</span>
+                        {payment.price}
+                      </div>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col span={24} className="paymentType">
+                      {payment.paymentType?payment.paymentType:' '}
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col span={14} offset={5} className="paymentDesc">
+                      {payment.desc}
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col flex="auto" span={8} offset={8} className="paymentValid">
+                      {
+                        idx===0?'Valid for 3 months':'Valid for 6 months'
+                      }
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col flex="auto" span={8} offset={8} className="paymentBtn">
+                      {payment.clickState===0?<Tooltip title="Not available for now.">
+                        <Button type="primary" block disabled>select</Button>
+                      </Tooltip>:<Button type="primary" block onClick={()=>{
+                        selectPayment(idx);
+                      }}>select</Button>}
+                    </Col>
+                  </Row>
+                  <Divider style={{marginTop: 48}}/>
+                  <Row>
+                    <Col flex="auto" span={20} offset={2} className="paymentFun">
+                      {payment.functionList.map((fun, index)=>(
+                        <div key={`fun_${index}`} style={{height: 32}}>{fun}</div>
+                      ))}
+                    </Col>
+                  </Row>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+        </div>
       </Content>
       <Footers/>
     </Layout>

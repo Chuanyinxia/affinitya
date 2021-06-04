@@ -2,8 +2,8 @@ import React from 'react';
 import {Col, Layout, Row, Space} from 'antd';
 import logo from '@/assets/lettering-logo.webp';
 import {Link} from 'react-router-dom';
-const {Header} = Layout;
 
+const {Header} = Layout;
 const Headers=()=>( <Header className="padding0 text-center bg-header">
   <Row className="content">
     <Col span={8}>
