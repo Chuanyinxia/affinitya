@@ -24,7 +24,7 @@ const ContactUS = ({userInfo, httpLoading, setHttpLoading}) => {
     post(CONTACTUS, values, {
       'Content-Type': 'application/x-www-form-urlencoded',
     }).then((res)=>{
-      message.success('Send success，thank you for your inquiry！');
+      message.success('Send success，thank you for your inquiry!');
     }).catch((error)=>{
       message.error({
         content: error.toString(), key: 'netError', duration: 2,
