@@ -7,3 +7,11 @@
   height: 134px;
   padding-top: 60px;
 }
+.PPContent {
+  min-width: 980px;
+  margin: 0 auto;
+  width: 1200px;
+}
+.paymentDesc{
+  height: 44px;
+}

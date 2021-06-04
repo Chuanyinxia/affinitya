@@ -29,9 +29,9 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
   const [baseSearchForm] = Form.useForm();
   const [audienceIdSearchForm]= Form.useForm();
   const [keywordsForm] =Form.useForm();
-  const [searchDataKW, setSearchDataKW] = useState([]);
-  const [searchDataLA, setSearchDataLA] = useState([]);
-  const [freeSearchData, setFreeSearchData] =useState([]);
+  const [searchDataKW, setSearchDataKW] = useState(null);
+  const [searchDataLA, setSearchDataLA] = useState(null);
+  const [freeSearchData, setFreeSearchData] =useState(null);
   const [saveNameKW, setSaveNameKW]=useState('');
   const [saveNameLA, setSaveNameLA]=useState('');
   const [audienceID, setAudienceID] = useState('');
@@ -460,14 +460,15 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
             onClick={() => {
               store.dispatch(setMenusData('jobManager', 'dashboard'));
             }
-            }>Job Manager</Link>. You will receive &ldquo;notification&ldquo; once job completed.
+            }>Job Manager</Link>. You will receive &quot;notification&quot; once job completed.
         </p>
       </div>)}
-      {(isPayUser && !showJobInfoKW && parseInt(activeKey)===1)&&(
+      {(isPayUser && !showJobInfoKW && parseInt(activeKey)===1&&searchDataKW)&&(
         <KeyWordSearchDetails saveName={saveNameKW} searchData={searchDataKW}/>)}
-      {(!showJobInfoLA && parseInt(activeKey)===2)&& (
+      {(!showJobInfoLA && parseInt(activeKey)===2&& searchDataLA)&& (
         <KeyWordSearchDetails saveName={saveNameLA} searchData={searchDataLA}/>)}
-      {(!isPayUser &&!showJobInfoKW && parseInt(activeKey)===1)&& <ResultTableBlur TableData={freeSearchData}/>}
+      {(!isPayUser &&!showJobInfoKW && parseInt(activeKey)===1&&freeSearchData)&&
+      (<ResultTableBlur TableData={freeSearchData}/>)}
     </Spin>
   );
 };

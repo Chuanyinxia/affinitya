@@ -18,7 +18,7 @@ const PlansPricing = ({userInfo, httpLoading, setHttpLoading}) => {
   const [paymentList, setPaymentList] = useState([]);
   const getPaymentList = ()=>{
     setHttpLoading(true);
-    get(GETPAYMENTLIST, userInfo.token).then((res) => {
+    get(GETPAYMENTLIST).then((res) => {
       const data = res.data.items.map((item) => {
         item.checked = false;
         return item;
@@ -43,7 +43,7 @@ const PlansPricing = ({userInfo, httpLoading, setHttpLoading}) => {
     <Layout className="layout Home">
       <Headers/>
       <Content>
-        <div className="marginTop90 content" style={{minHeight: 'calc(100vh - 180px)', paddingTop: 30}}>
+        <div className="marginTop90 PPContent" style={{minHeight: 'calc(100vh - 180px)', paddingTop: 30}}>
           <Row gutter={[60, 24]} >
             {paymentList.map((payment, idx) => (
               <Col
