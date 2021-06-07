@@ -77,9 +77,10 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
       setShowJobInfoLA(false);
       setSaveNameLA(values.audienceId+moment().format('YYYYMMDDhhmmss'));
     }).catch((error) => {
-      message.error({
-        content: error.toString(), key: 'netError', duration: 2,
-      });
+      console.log(error);
+      // message.error({
+      //   content: error.toString(), key: 'netError', duration: 2,
+      // });
     });
   };
 
@@ -187,7 +188,6 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
   const JobType=isPayUser?activeKey:0;
 
   const onLKSearchChange=(changedValues, allValues)=>{
-    console.log(changedValues, allValues);
     const adAccountId=allValues.adAccountId;
     const accessToken=allValues.accessToken;
     const myAppId=allValues.myAppId;
@@ -204,7 +204,6 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
         myAppId: myAppId,
         myAppSecret: myAppSecret,
       };
-      console.log(data);
       post(GETAUDIENCEID, data, {
         'token': userInfo.token,
         'Content-Type': 'application/x-www-form-urlencoded',
