@@ -236,8 +236,16 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
               <Form.Item name="country" labelAlign="right" label="Country" initialValue={['US']}>
                 <Select
                   mode="multiple"
+                  showSearch
                   maxTagCount={1}
                   maxTagTextLength={30}
+                  optionFilterProp="children"
+                  filterOption={(input, option) =>
+                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                  }
+                  filterSort={(optionA, optionB) =>
+                    optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
+                  }
                 >
                   {Countrys.map((item) => (
                     <Select.Option key={item.country_code} value={item.country_code}>{item.name}</Select.Option>
