@@ -106,14 +106,14 @@ const PlansAndPrices = ({userInfo, httpLoading, setHttpLoading}) => {
                 <Row>
                   <Col span={24} className="paymentPrice">
                     <div>
-                      <span className="priceTag">$</span>
-                      {payment.price}
+                      {payment.price?<span className="priceTag">$</span>:<span>&nbsp;</span>}
+                      {payment.price?<span>{payment.price}</span>:<span>&nbsp;</span>}
                     </div>
                   </Col>
                 </Row>
                 <Row>
                   <Col span={24} className="paymentType">
-                    {payment.paymentType?payment.paymentType:' '}
+                    {payment.paymentType?<span>{payment.paymentType}</span>:<span>&nbsp;</span>}
                   </Col>
                 </Row>
                 <Row>
@@ -123,9 +123,7 @@ const PlansAndPrices = ({userInfo, httpLoading, setHttpLoading}) => {
                 </Row>
                 <Row>
                   <Col flex="auto" span={8} offset={8} className="paymentValid">
-                    {
-                      idx===0?'Valid for 3 months':'Valid for 6 months'
-                    }
+                    {payment.paymentCycle?<span>{payment.paymentCycle}</span>:<span>&nbsp;</span>}
                   </Col>
                 </Row>
                 <Row>
