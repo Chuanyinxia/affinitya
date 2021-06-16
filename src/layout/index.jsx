@@ -35,6 +35,10 @@ const Customlayout = ({history, activeKey, setLogged}) => {
       message.error({
         content: error.toString(), key: 'netError', duration: 2,
       });
+      console.log(error.toString());
+      if (error.toString()==='Error: Token 过期或失效，请重新登录!') {
+        history.push('/login');
+      }
     }).finally(()=>{
       setLoading(false);
     });
