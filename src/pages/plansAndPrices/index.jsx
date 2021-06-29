@@ -121,11 +121,11 @@ const PlansAndPrices = ({userInfo, httpLoading, setHttpLoading}) => {
                     {payment.desc}
                   </Col>
                 </Row>
-                <Row>
+                {/* <Row>
                   <Col flex="auto" span={8} offset={8} className="paymentValid">
                     {payment.paymentCycle?<span>{payment.paymentCycle}</span>:<span>&nbsp;</span>}
                   </Col>
-                </Row>
+                </Row>*/}
                 <Row>
                   <Col flex="auto" span={8} offset={8} className="paymentBtn">
                     {payment.clickState===0?<Tooltip title="Not available for now.">
