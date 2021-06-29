@@ -11,7 +11,7 @@ import {EXPORTCVS, ISPAID, SAVESEARCHMESSAGE} from '@/api';
 const {TabPane} = Tabs;
 
 
-const KeyWordSearchDetails = ({userInfo, searchData, saveName}) => {
+const KeyWordSearchDetails = ({userInfo, searchData, saveName, saveStatus, setSaveStatus}) => {
   const [saveModal, setSaveModal]=useState(false);
   const [audienceName, setAudienceName]=useState(saveName);
   const [isPayUser, setIsPayUser] = useState(false);
@@ -23,6 +23,10 @@ const KeyWordSearchDetails = ({userInfo, searchData, saveName}) => {
     return data;
   };
   const saveAudience=()=> {
+    if (searchData.length<1) {
+      message.warn('The search result is empty and cannot be saved.');
+      return false;
+    }
     post(SAVESEARCHMESSAGE,
         {searchId: id, audienceName: audienceName !== '' ? audienceName : saveName},
         {
@@ -31,6 +35,7 @@ const KeyWordSearchDetails = ({userInfo, searchData, saveName}) => {
           'token': userInfo.token,
         }).then((res) => {
       message.success(res.msg);
+      setSaveStatus(1);
       setSaveModal(false);
       setAudienceName('');
     }).catch((error) => {
@@ -48,6 +53,22 @@ const KeyWordSearchDetails = ({userInfo, searchData, saveName}) => {
       });
     });
   };
+  const saveAudienceButton=()=>{
+    if (isPayUser) {
+      if (parseInt(saveStatus)===1) {
+        return (
+          <Tooltip title="You have saved this result.">
+            <Button disabled>Save Audience</Button>
+          </Tooltip>);
+      }
+      return (<Button
+        onClick={()=>setSaveModal(true)}
+      >Save Audience</Button>);
+    }
+    return (<Tooltip title="Pls upgrade to use this function.">
+      <Button disabled>Save Audience</Button>
+    </Tooltip>);
+  };
   useEffect(()=>{
     isPay();
   }, [isPayUser]);
@@ -58,11 +79,7 @@ const KeyWordSearchDetails = ({userInfo, searchData, saveName}) => {
         groups for optimal audience sets and ranked per affinity data.</h2>
       <div className="text-right marginB16">
         <Space>
-          {isPayUser?(<Button onClick={()=>setSaveModal(true)} >Save Audience</Button>):
-            (<Tooltip title="Pls upgrade to use this function.">
-              <Button disabled>Save Audience</Button>
-            </Tooltip>
-              )}
+          {saveAudienceButton()}
           {isPayUser?(<Button
             download
             href={`${EXPORTCVS}${id}/${userInfo.token}`}
@@ -123,6 +140,8 @@ KeyWordSearchDetails.propTypes = {
   userInfo: PropTypes.object.isRequired,
   searchData: PropTypes.object.isRequired,
   saveName: PropTypes.string.isRequired,
+  saveStatus: PropTypes.string.isRequired,
+  setSaveStatus: PropTypes.func.isRequired,
 };
 
 export default connect(

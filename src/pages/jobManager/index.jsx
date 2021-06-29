@@ -190,7 +190,7 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
           )}/>
           <Table.Column title="Action" key="Action" render={(record) => (
             <Space size="middle">
-              {(record.jobStatus===1)?(
+              {(record.jobStatus===1||record.jobStatus===5)?(
                 <Tooltip title="Kill the job">
                   <a onClick={()=>killJob(record.id)} type="link">
                     <CloseOutlined />

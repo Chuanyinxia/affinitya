@@ -58,14 +58,14 @@ const PlansPricing = ({userInfo, httpLoading, setHttpLoading}) => {
                   <Row>
                     <Col span={24} className="paymentPrice">
                       <div>
-                        <span className="priceTag">$</span>
+                        {payment.price&&(<span className="priceTag">$</span>)}
                         {payment.price}
                       </div>
                     </Col>
                   </Row>
                   <Row>
-                    <Col span={24} className="paymentType">
-                      {payment.paymentType?payment.paymentType:' '}
+                    <Col span={24} className="paymentType" >
+                      {payment.paymentType?payment.paymentType:<span/>}
                     </Col>
                   </Row>
                   <Row>

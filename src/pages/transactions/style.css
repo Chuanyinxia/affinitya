@@ -24,8 +24,9 @@
   font-size: 20px;
 }
 .paymentType{
-  text-align: center;
-  color: #c9c9c9;
+    text-align: center;
+    color: #c9c9c9;
+    height: 22px;
 }
 .paymentDesc{
   width: 291px;

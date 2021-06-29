@@ -41,7 +41,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
   const [showJobInfoKW, setShowJobInfoKW]=useState(false);
   const [showJobInfoLA, setShowJobInfoLA]=useState(false);
   const [isPayUser, setIsPayUser] =useState(false);
-
+  const [saveStatus, setSaveStatus]= useState(null);
   // const [keyWords, setKeyWords]=useState(null);
   const addItem = () => {
     if (audienceID) {
@@ -73,11 +73,12 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
       'Content-Type': 'application/x-www-form-urlencoded',
       'token': userInfo.token,
     }).then((res) => {
-      setSearchDataLA(res.data);
+      setSearchDataLA(res.data.kwResultVoList);
+      setSaveStatus(res.data.status);
       setShowJobInfoLA(false);
       setSaveNameLA(values.audienceId+moment().format('YYYYMMDDhhmmss'));
     }).catch((error) => {
-      console.log(error);
+      // console.log(error);
       // message.error({
       //   content: error.toString(), key: 'netError', duration: 2,
       // });
@@ -94,6 +95,8 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
       gender: search.gender,
       platform: search.platform.trim(),
       keyWord: values.keyWord,
+      adAccountId: values.adAccountId,
+      accessToken: values.accessToken.trim(),
       country: search.country.toString(),
     };
     setShowJobInfoKW(true);
@@ -104,7 +107,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
       setIsPayUser(res.data===2);
       isPay=res.data===2;
     }).catch((error)=>{
-      console.log(error);
+      // console.log(error);
     }).finally(()=>{
       post(SEARCHKW, data, {
         // eslint-disable-next-line no-tabs
@@ -112,7 +115,8 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
         'token': userInfo.token,
       }).then((res) => {
         if (isPay) {
-          setSearchDataKW(res.data);
+          setSearchDataKW(res.data.kwResultVoList);
+          setSaveStatus(res.data.status);
         } else {
           setFreeSearchData(res.data[0].searchDetails);
         }
@@ -159,6 +163,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
             ...AIDData,
           });
         }
+        setSaveStatus(res.data.status);
         baseSearchForm.setFieldsValue({
           ...baseData,
           country: baseData.country.split(','),
@@ -519,9 +524,19 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
         </p>
       </div>)}
       {(isPayUser && !showJobInfoKW && parseInt(activeKey)===1&&searchDataKW)&&(
-        <KeyWordSearchDetails saveName={saveNameKW} searchData={searchDataKW}/>)}
+        <KeyWordSearchDetails
+          saveName={saveNameKW}
+          searchData={searchDataKW}
+          saveStatus={saveStatus}
+          setSaveStatus={setSaveStatus}
+        />)}
       {(!showJobInfoLA && parseInt(activeKey)===2&& searchDataLA)&& (
-        <KeyWordSearchDetails saveName={saveNameLA} searchData={searchDataLA}/>)}
+        <KeyWordSearchDetails
+          saveName={saveNameLA}
+          searchData={searchDataLA}
+          saveStatus={saveStatus}
+          setSaveStatus={setSaveStatus}
+        />)}
       {(!isPayUser &&!showJobInfoKW && parseInt(activeKey)===1&&freeSearchData)&&
       (<ResultTableBlur TableData={freeSearchData}/>)}
     </Spin>
