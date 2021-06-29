@@ -183,7 +183,9 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
             <Space>
               {(jobStatus===1)?(<Tag color="purple">Running</Tag>):
                 (jobStatus===2)?(<Tag color="green">Completed</Tag>):
-                  (jobStatus===3)?(<Tag>Canceld</Tag>):(<Tag color="error">Failed</Tag>)}
+                  (jobStatus===3)?(<Tag>Canceled</Tag>):
+                    (jobStatus===4)?(<Tag color="error">Failed</Tag>):
+                      (<Tag color="lime">Waiting</Tag>)}
             </Space>
           )}/>
           <Table.Column title="Action" key="Action" render={(record) => (

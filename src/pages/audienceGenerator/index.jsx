@@ -223,6 +223,22 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
       getJobdetails(data.id);
     } else {
       isPay();
+      const sdata={
+        adAccountId: userInfo.adAccountId,
+        accessToken: userInfo.accessToken,
+        myAppId: userInfo.myAppId,
+        myAppSecret: userInfo.myAppSecret,
+      };
+      post(GETAUDIENCEID, sdata, {
+        'token': userInfo.token,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      }).then((res) => {
+        setAudienceIdItem(res.data);
+      }).catch((error) => {
+        message.error({
+          content: error.toString(), key: 'netError', duration: 2,
+        });
+      });
     }
   },
   []);
@@ -329,7 +345,12 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
                 }}> Upgrade now!</Link>
               </h1>)}
 
-            <Form onFinish={onSearch} name="search" layout="horizontal" form={keywordsForm}>
+            <Form
+              initialValues={{
+                adAccountId: userInfo.adAccountId,
+                accessToken: userInfo.accessToken,
+              }}
+              onFinish={onSearch} name="search" layout="horizontal" form={keywordsForm}>
               <Form.Item
                 name="keyWord"
                 rules={[{required: true, message: 'Please input keyword!'}]}
@@ -337,11 +358,28 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
               >
                 <Select
                   placeholder="One word only for free user, premium users are able add up to 10 keywords in one search."
-                  className="width60P"
+                  style={{width: '40%'}}
                   mode="tags"
-                  size="large"
                   open={false}
                   tokenSeparators={[',']}/>
+              </Form.Item>
+              <Row>
+                <Col span={10} noStyle>
+                  <Form.Item name="accessToken" rules={[{required: true, message: 'Please input access token!'}]}>
+                    <Input placeholder="Access Token" maxLength={255} className="width50P"/>
+                  </Form.Item>
+                </Col>
+                <Col span={14}>
+                  {/* eslint-disable-next-line react/jsx-no-target-blank */}
+                  <a href={PDF} target="_blank">
+                    How to retrieve your token?
+                  </a>
+                </Col>
+              </Row>
+              <Form.Item
+                name="adAccountId"
+                rules={[{required: true, message: 'Please input Facebook Ad account!'}]}>
+                <Input placeholder="Facebook Ad Account" maxLength={100} className="width50P"/>
               </Form.Item>
               <Form.Item>
                 <Button type="primary" size="large" htmlType="submit">
@@ -363,7 +401,17 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
                 store.dispatch(setMenusData('plansAndPrices', 'dashboard'));
               }}> Upgrade now!</Link>)}
             </h1>
-            <Form onFinish={LookalikeSearch} form={audienceIdSearchForm} onValuesChange={onLKSearchChange}>
+            <Form
+              onFinish={LookalikeSearch}
+              form={audienceIdSearchForm}
+              initialValues={{
+                adAccountId: userInfo.adAccountId,
+                accessToken: userInfo.accessToken,
+                myAppId: userInfo.myAppId,
+                myAppSecret: userInfo.myAppSecret,
+              }}
+              onValuesChange={onLKSearchChange}
+            >
               <Form.Item name="myAppId" rules={[{required: true, message: 'Please input APP ID!'}]}>
                 <Input placeholder="APP ID" maxLength={100} className="width50P"/>
               </Form.Item>

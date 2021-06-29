@@ -73,13 +73,13 @@ const PlansPricing = ({userInfo, httpLoading, setHttpLoading}) => {
                       {payment.desc}
                     </Col>
                   </Row>
-                  <Row>
+                  {/*   <Row>
                     <Col flex="auto" span={8} offset={8} className="paymentValid">
                       {
                         idx===0?'Valid for 3 months':'Valid for 6 months'
                       }
                     </Col>
-                  </Row>
+                  </Row>*/}
                   <Row>
                     <Col flex="auto" span={8} offset={8} className="paymentBtn">
                       {payment.clickState===0?<Tooltip title="Not available for now.">

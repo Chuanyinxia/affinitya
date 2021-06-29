@@ -171,6 +171,7 @@ const Customlayout = ({history, activeKey, setLogged}) => {
                 }} >
                   <Link to='/plansAndPrices' >Upgrade</Link>
                 </Button>)}
+                {isPayUser&&( <Button type="primary" disabled>Paid</Button>)}
               </Space>
             </div>
           </Header>

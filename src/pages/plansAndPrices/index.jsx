@@ -62,7 +62,7 @@ const PlansAndPrices = ({userInfo, httpLoading, setHttpLoading}) => {
   };
   const payNow = ()=>{
     if (paymentList.every((item) => item.checked === false)) {
-      message.error('You should choose a paceakge.');
+      message.error('You should choose a package.');
       return;
     }
     setHttpLoading(true);

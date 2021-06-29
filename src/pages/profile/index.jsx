@@ -1,14 +1,15 @@
 import React, {useEffect} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {httpLoading} from '@/store/actions';
+import {httpLoading, userInfo} from '@/store/actions';
 import {Button, Card, Col, Form, Input, message, Row, Spin} from 'antd';
 import './style.css';
 import {IMPROVEPROFILE, MEMBERINFO} from '@/api/index';
 import {post, get} from '@/utils/request';
+import {storage} from '@/utils/storage';
 
 
-const Profile = ({userInfo, httpLoading, setHttpLoading}) => {
+const Profile = ({userInfo, httpLoading, setHttpLoading, setUserInfo}) => {
   const [form] = Form.useForm();
   const onChangePassword = (value) => {
     setHttpLoading(true);
@@ -17,8 +18,14 @@ const Profile = ({userInfo, httpLoading, setHttpLoading}) => {
       'Content-Type': 'application/x-www-form-urlencoded',
       'token': userInfo.token,
     }).then((res) => {
+      const userData={
+        ...userInfo,
+        nickName: value.nickName,
+      };
       message.success(res.msg);
-      memberInfo();
+      storage.saveData('session', 'userInfo', userData);
+      setUserInfo(userData);
+      window.location.reload();
     }).catch((error) => {
       message.error({
         content: error.toString(), key: 'netError', duration: 2,
@@ -98,6 +105,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     setHttpLoading: (f) => dispatch(httpLoading(f)),
+    setUserInfo: (f) => dispatch(userInfo(f)),
   };
 };
 
@@ -105,6 +113,7 @@ Profile.propTypes = {
   userInfo: PropTypes.object.isRequired,
   httpLoading: PropTypes.bool.isRequired,
   setHttpLoading: PropTypes.func.isRequired,
+  setUserInfo: PropTypes.func.isRequired,
 };
 
 export default connect(
