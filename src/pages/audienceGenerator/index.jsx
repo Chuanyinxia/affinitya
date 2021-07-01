@@ -342,51 +342,71 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
           setActiveKey(key);
         }}>
           <Tabs.TabPane tab="Keyword Search" key="1">
-            {!isPayUser&&(
-              <h1 className="search-title">
+            <h1 className="search-title">
+              {!isPayUser&&(
+                <span>
                 Access to 40 keywords is free. Need access to all 300 of your custom keyword audience?
-                <Link to="/plansAndPrices" className="target" onClick={() => {
-                  store.dispatch(setMenusData('plansAndPrices', 'dashboard'));
-                }}> Upgrade now!</Link>
-              </h1>)}
-
+                  <Link to="/plansAndPrices" className="target" onClick={() => {
+                    store.dispatch(setMenusData('plansAndPrices', 'dashboard'));
+                  }}> Upgrade now!</Link>
+                </span>
+              )}
+              <p className="text-min marginT16">
+                {/* eslint-disable-next-line react/jsx-no-target-blank */}
+                <a href={PDF} target="_blank">
+                How to retrieve your token?
+                </a>
+              </p>
+            </h1>
             <Form
               initialValues={{
                 adAccountId: userInfo.adAccountId,
                 accessToken: userInfo.accessToken,
               }}
-              onFinish={onSearch} name="search" layout="horizontal" form={keywordsForm}>
+              labelCol={{
+                span: 3,
+              }}
+              wrapperCol={{
+                span: 10,
+              }}
+              onFinish={onSearch}
+              name="search"
+              layout="horizontal"
+              form={keywordsForm}
+            >
               <Form.Item
                 name="keyWord"
+                label="Keywords"
                 rules={[{required: true, message: 'Please input keyword!'}]}
                 // initialValue={keyWords}
               >
                 <Select
                   placeholder="One word only for free user, premium users are able add up to 10 keywords in one search."
-                  style={{width: '40%'}}
+
                   mode="tags"
                   open={false}
                   tokenSeparators={[',']}/>
               </Form.Item>
-              <Row>
-                <Col span={10} noStyle>
-                  <Form.Item name="accessToken" rules={[{required: true, message: 'Please input access token!'}]}>
-                    <Input placeholder="Access Token" maxLength={255} className="width50P"/>
-                  </Form.Item>
-                </Col>
-                <Col span={14}>
-                  {/* eslint-disable-next-line react/jsx-no-target-blank */}
-                  <a href={PDF} target="_blank">
-                    How to retrieve your token?
-                  </a>
-                </Col>
-              </Row>
+
+              <Form.Item
+                name="accessToken"
+                label="Access Token"
+                rules={[{required: true, message: 'Please input access token!'}]}>
+                <Input placeholder="Access Token" maxLength={255} />
+              </Form.Item>
+
               <Form.Item
                 name="adAccountId"
+                label="Facebook Ad Account"
                 rules={[{required: true, message: 'Please input Facebook Ad account!'}]}>
-                <Input placeholder="Facebook Ad Account" maxLength={100} className="width50P"/>
+                <Input placeholder="Facebook Ad Account" maxLength={100} />
               </Form.Item>
-              <Form.Item>
+              <Form.Item
+                wrapperCol={{
+                  offset: 3,
+                  span: 16,
+                }}
+              >
                 <Button type="primary" size="large" htmlType="submit">
                   Generate Audience
                 </Button>
@@ -405,10 +425,23 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
               {!isPayUser&&(<Link to="/plansAndPrices" className="target" onClick={() => {
                 store.dispatch(setMenusData('plansAndPrices', 'dashboard'));
               }}> Upgrade now!</Link>)}
+              <p className="text-min marginT16">
+                {/* eslint-disable-next-line react/jsx-no-target-blank */}
+                <a href={PDF} target="_blank">
+                  How to retrieve your token?
+                </a>
+              </p>
             </h1>
+
             <Form
               onFinish={LookalikeSearch}
               form={audienceIdSearchForm}
+              labelCol={{
+                span: 3,
+              }}
+              wrapperCol={{
+                span: 10,
+              }}
               initialValues={{
                 adAccountId: userInfo.adAccountId,
                 accessToken: userInfo.accessToken,
@@ -417,34 +450,37 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
               }}
               onValuesChange={onLKSearchChange}
             >
-              <Form.Item name="myAppId" rules={[{required: true, message: 'Please input APP ID!'}]}>
-                <Input placeholder="APP ID" maxLength={100} className="width50P"/>
+              <Form.Item
+                label="APP ID"
+                name="myAppId"
+                rules={[{required: true, message: 'Please input APP ID!'}]}>
+                <Input placeholder="APP ID" maxLength={100} />
               </Form.Item>
-              <Form.Item name="myAppSecret" rules={[{required: true, message: 'Please input APP secret!'}]}>
-                <Input placeholder="APP Secret" maxLength={100} className="width50P"/>
+              <Form.Item
+                label="APP Secret"
+                name="myAppSecret"
+                rules={[{required: true, message: 'Please input APP secret!'}]}>
+                <Input placeholder="APP Secret" maxLength={100} />
               </Form.Item>
-              <Row>
-                <Col span={10} noStyle>
-                  <Form.Item name="accessToken" rules={[{required: true, message: 'Please input access token!'}]}>
-                    <Input placeholder="Access Token" maxLength={255} className="width50P"/>
-                  </Form.Item>
-                </Col>
-                <Col span={14}>
-                  {/* eslint-disable-next-line react/jsx-no-target-blank */}
-                  <a href={PDF} target="_blank">
-                    How to retrieve your token?
-                  </a>
-                </Col>
-              </Row>
+
+              <Form.Item
+                label="Access Token"
+                name="accessToken"
+                rules={[{required: true, message: 'Please input access token!'}]}>
+                <Input placeholder="Access Token" maxLength={255} />
+              </Form.Item>
 
               <Form.Item
                 name="adAccountId"
+                label="Facebook Ad Account"
                 rules={[{required: true, message: 'Please input Facebook Ad account!'}]}>
-                <Input placeholder="Facebook Ad Account" maxLength={100} className="width50P"/>
+                <Input placeholder="Facebook Ad Account" maxLength={100} />
               </Form.Item>
-              <Form.Item name="audienceId" rules={[{required: true, message: 'Please input custom audience ID!'}]}>
+              <Form.Item
+                label="Custom Audience ID"
+                name="audienceId"
+                rules={[{required: true, message: 'Please input custom audience ID!'}]}>
                 <Select
-                  style={{width: '40%'}}
                   placeholder="Custom Audience ID"
                   dropdownRender={(menu) => (
                     <div>
@@ -471,7 +507,12 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
                   ))}
                 </Select>
               </Form.Item>
-              <Form.Item>
+              <Form.Item
+                wrapperCol={{
+                  offset: 3,
+                  span: 16,
+                }}
+              >
                 {isPayUser? (<Button type="primary" size="large" htmlType="submit">
                   Generate Audience
                 </Button>):(
