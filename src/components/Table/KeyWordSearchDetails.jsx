@@ -69,6 +69,30 @@ const KeyWordSearchDetails = ({userInfo, searchData, saveName, saveStatus, setSa
       <Button disabled>Save Audience</Button>
     </Tooltip>);
   };
+
+  const downloadButton=()=>{
+    if (isPayUser) {
+      if (searchData.length<1) {
+        return ( <Tooltip title="The search result is empty and cannot be exported.">
+          <Button disabled>
+            Export to CSV
+          </Button>
+        </Tooltip>);
+      }
+      return (<Button
+        download
+        href={`${EXPORTCVS}${id}/${userInfo.token}`}
+        disabled={!isPayUser}>
+        Export to CSV
+      </Button>);
+    }
+    return (
+      <Tooltip title="Pls upgrade to use this function.">
+        <Button disabled>
+          Export to CSV
+        </Button>
+      </Tooltip>);
+  };
   useEffect(()=>{
     isPay();
   }, [isPayUser]);
@@ -80,19 +104,7 @@ const KeyWordSearchDetails = ({userInfo, searchData, saveName, saveStatus, setSa
       <div className="text-right marginB16">
         <Space>
           {saveAudienceButton()}
-          {isPayUser?(<Button
-            download
-            href={`${EXPORTCVS}${id}/${userInfo.token}`}
-            disabled={!isPayUser}>
-            Export to CSV
-          </Button>):
-            (<Tooltip title="Pls upgrade to use this function.">
-              <Button disabled>
-              Export to CSV
-              </Button>
-            </Tooltip>)
-          }
-
+          {downloadButton()}
         </Space>
       </div>
       <Card>
