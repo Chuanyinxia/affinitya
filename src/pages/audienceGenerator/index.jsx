@@ -228,22 +228,24 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
       getJobdetails(data.id);
     } else {
       isPay();
-      const sdata={
-        adAccountId: userInfo.adAccountId,
-        accessToken: userInfo.accessToken,
-        myAppId: userInfo.myAppId,
-        myAppSecret: userInfo.myAppSecret,
-      };
-      post(GETAUDIENCEID, sdata, {
-        'token': userInfo.token,
-        'Content-Type': 'application/x-www-form-urlencoded',
-      }).then((res) => {
-        setAudienceIdItem(res.data);
-      }).catch((error) => {
-        message.error({
-          content: error.toString(), key: 'netError', duration: 2,
+      if (userInfo.adAccountId&&userInfo.accessToken&&userInfo.myAppId&&userInfo.myAppSecret) {
+        const sdata={
+          adAccountId: userInfo.adAccountId,
+          accessToken: userInfo.accessToken,
+          myAppId: userInfo.myAppId,
+          myAppSecret: userInfo.myAppSecret,
+        };
+        post(GETAUDIENCEID, sdata, {
+          'token': userInfo.token,
+          'Content-Type': 'application/x-www-form-urlencoded',
+        }).then((res) => {
+          setAudienceIdItem(res.data);
+        }).catch((error) => {
+          message.error({
+            content: error.toString(), key: 'netError', duration: 2,
+          });
         });
-      });
+      }
     }
   },
   []);
@@ -364,10 +366,10 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
                 accessToken: userInfo.accessToken,
               }}
               labelCol={{
-                span: 3,
+                span: 4,
               }}
               wrapperCol={{
-                span: 10,
+                span: 12,
               }}
               onFinish={onSearch}
               name="search"
@@ -403,7 +405,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
               </Form.Item>
               <Form.Item
                 wrapperCol={{
-                  offset: 3,
+                  offset: 4,
                   span: 16,
                 }}
               >
@@ -437,10 +439,10 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
               onFinish={LookalikeSearch}
               form={audienceIdSearchForm}
               labelCol={{
-                span: 3,
+                span: 4,
               }}
               wrapperCol={{
-                span: 10,
+                span: 12,
               }}
               initialValues={{
                 adAccountId: userInfo.adAccountId,
@@ -509,7 +511,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
               </Form.Item>
               <Form.Item
                 wrapperCol={{
-                  offset: 3,
+                  offset: 4,
                   span: 16,
                 }}
               >
