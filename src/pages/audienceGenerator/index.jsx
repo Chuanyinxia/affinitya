@@ -73,10 +73,14 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
       'Content-Type': 'application/x-www-form-urlencoded',
       'token': userInfo.token,
     }).then((res) => {
-      setSearchDataLA(res.data.kwResultVoList);
-      setSaveStatus(res.data.status);
-      setShowJobInfoLA(false);
-      setSaveNameLA(values.audienceId+moment().format('YYYYMMDDhhmmss'));
+      if (res.data.length>0) {
+        setSearchDataLA(res.data.kwResultVoList);
+        setSaveStatus(res.data.status);
+        setShowJobInfoLA(false);
+        setSaveNameLA(values.audienceId+moment().format('YYYYMMDDhhmmss'));
+      } else {
+        setShowJobInfoLA(true); setShowJobInfoLA(false);
+      }
     }).catch((error) => {
       // console.log(error);
       // message.error({
@@ -99,7 +103,6 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
       accessToken: values.accessToken.trim(),
       country: search.country.toString(),
     };
-    setShowJobInfoKW(true);
     setSearchDataKW([]);
     setFreeSearchData([]);
     let isPay;
@@ -114,21 +117,28 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
         'Content-Type': 'application/x-www-form-urlencoded',
         'token': userInfo.token,
       }).then((res) => {
-        if (isPay) {
-          setSearchDataKW(res.data.kwResultVoList);
-          setSaveStatus(res.data.status);
-        } else {
-          setFreeSearchData(res.data[0].searchDetails);
-        }
-        setSaveNameKW(values.keyWord[0]+moment().format('YYYYMMDDhhmmss'));
-        if (res.data) {
+        if (res.data.length>0) {
           setShowJobInfoKW(false);
+          if (isPay) {
+            setSearchDataKW(res.data.kwResultVoList);
+            setSaveStatus(res.data.status);
+          } else {
+            setFreeSearchData(res.data[0].searchDetails);
+          }
+          setSaveNameKW(values.keyWord[0]+moment().format('YYYYMMDDhhmmss'));
+          // console.log(1);
+        } else {
+          setShowJobInfoKW(true);
+          // console.log(2);
         }
       }).catch((error) => {
+        message.error({
+          content: error.toString(), key: 'netError', duration: 2,
+        });
         if (isPay) {
-          setSearchDataKW([]);
+          setSearchDataKW(null);
         } else {
-          setFreeSearchData([]);
+          setFreeSearchData(null);
         }
       });
     });
@@ -136,10 +146,8 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
 
   const getJobdetails = (id) => {
     setLoading(true);
-    let isPay;
     get(ISPAID, userInfo.token).then((res)=>{
       setIsPayUser(res.data===2);
-      isPay = (res.data===2);
     }).catch((error)=>{
       console.log(error);
     }).finally(()=>{
@@ -150,11 +158,12 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
           keywordsForm.setFieldsValue({
             keyWord: res.data.keywords,
           });
-          if (isPay) {
+          if (res.data.isPayUser===2) {
             setSearchDataKW(res.data.kwResultVoList);
             setSaveNameKW(res.data.keywords[0]+moment().format('YYYYMMDDHHmmss'));
           } else {
-            setFreeSearchData(res.data.kwResultVoList[0].searchDetails||[]);
+            const dd=res.data.kwResultVoList[0]?res.data.kwResultVoList[0].searchDetails:[];
+            setFreeSearchData(dd);
           }
         } else {
           setSearchDataLA(res.data.kwResultVoList || []);
