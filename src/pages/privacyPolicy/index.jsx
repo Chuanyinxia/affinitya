@@ -29,7 +29,7 @@ const PrivacyPolicy = ({userInfo, httpLoading, setHttpLoading}) => {
     <Layout className="layout Home">
       <Headers/>
       <Content className="marginTop90">
-        <div className="content" dangerouslySetInnerHTML={{__html: agreement}}></div>
+        <div className="content" dangerouslySetInnerHTML={{__html: agreement}}/>
       </Content>
       <Footers/>
     </Layout>

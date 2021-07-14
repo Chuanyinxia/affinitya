@@ -9,6 +9,17 @@ import {CONTACTUS} from '@/api';
 import Headers from '@/components/Headers';
 import Footers from '@/components/Footers';
 
+const contactText={
+  title: 'Contact Us',
+  form: {
+    label1: 'First Name',
+    label2: 'Last Name',
+    label3: 'Email',
+    label4: 'Phone',
+    label5: 'Type you message here...',
+  },
+};
+
 const {Content} = Layout;
 const validateMessages = {
   types: {
@@ -45,33 +56,33 @@ const ContactUS = ({userInfo, httpLoading, setHttpLoading}) => {
               <Form layout="vertical" validateMessages={validateMessages} onFinish={(v) => submit(v)}>
                 <Row>
                   <Col>
-                    <h2>Contact Us</h2>
+                    <h2>{contactText.title}</h2>
                   </Col>
                 </Row>
                 <Row className="form-wrapper">
                   <Col span={12} className="input-Wrapper">
                     <Form.Item name="firstName">
-                      <Input placeholder="First Name" bordered={false}></Input>
+                      <Input placeholder={contactText.form.label1} bordered={false}/>
                     </Form.Item>
                   </Col>
                   <Col span={12} className="input-Wrapper">
                     <Form.Item name="lastName">
-                      <Input placeholder="Last Name" bordered={false}/>
+                      <Input placeholder={contactText.form.label2} bordered={false}/>
                     </Form.Item>
                   </Col>
                   <Col span={12} className="input-Wrapper">
                     <Form.Item name="email" rules={[{required: true, type: 'email'}]}>
-                      <Input placeholder="Email" bordered={false}/>
+                      <Input placeholder={contactText.form.label3} bordered={false}/>
                     </Form.Item>
                   </Col>
                   <Col span={12} className="input-Wrapper">
                     <Form.Item name="phone">
-                      <Input placeholder="Phone" bordered={false}/>
+                      <Input placeholder={contactText.form.label4} bordered={false}/>
                     </Form.Item>
                   </Col>
                   <Col span={24} className="input-Wrapper">
                     <Form.Item name="suggestMsg">
-                      <Input.TextArea placeholder="Type you message here..." bordered={false} style={{resize: 'none'}}/>
+                      <Input.TextArea placeholder={contactText.form.label5} bordered={false} style={{resize: 'none'}}/>
                     </Form.Item>
                   </Col>
                 </Row>

@@ -20,13 +20,17 @@ const STATUS_GENERATED = 'STATUS_GENERATED';
 const STATUS_TEST = 'STATUS_TEST';
 const STATUS_WINNER = 'STATUS_WINNER';
 const STATUS_ARCHIVE = 'STATUS_ARCHIVE';
-
+const aduienceMangerText = {
+  title: 'Organize your custom audience sets here.',
+  subtitle: '',
+  info: '',
+};
 const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
   const [tasks, setTasks] = useState(null);
   const [activeId, setActiveId] = useState(null);
   const [details, setDetails] = useState(null);
-  const [editId, setEditId]=useState(null);
-  const [searchWord, setSearchWord] =useState('');
+  const [editId, setEditId] = useState(null);
+  const [searchWord, setSearchWord] = useState('');
   const getAudienceManager = () => {
     post(GETAUDIENCEMANAGER, {pageNum: 1, pageSize: 10000}, {
       // eslint-disable-next-line no-tabs
@@ -114,7 +118,9 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
   };
   return (
     <div className="paddingB16">
-      <h2 className="mangerTitle">Organize your custom audience sets here.</h2>
+      <h2 className="mangerTitle">{aduienceMangerText.title}</h2>
+      <p>{aduienceMangerText.subtitle}</p>
+      <p>{aduienceMangerText.info}</p>
       <Spin spinning={httpLoading}>
         <div className="task-wrapper">
           {
@@ -124,7 +130,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                 key={status}
                 onSearch={onSearch}
                 dragTo={() => dragTo(status)}
-                canDragIn={activeId !== null && tasks.find((item)=>item.id===activeId).status !== status}>
+                canDragIn={activeId !== null && tasks.find((item) => item.id === activeId).status !== status}>
                 {tasks && tasks.filter((t) => t.status === status).map((t) => {
                   if (status==='STATUS_GENERATED'&&t.campaignName.indexOf(searchWord)===-1) {
                     return null;

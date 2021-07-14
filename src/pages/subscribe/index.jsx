@@ -6,11 +6,12 @@ import {httpLoading} from '@/store/actions';
 import {Card, Col, message, Row, Spin, Statistic} from 'antd';
 import {InfoCircleTwoTone} from '@ant-design/icons';
 import './style.css';
-import {post} from '@/utils/request';
+import {post, get} from '@/utils/request';
 import {MEMBERSUBSCRIBEMSG} from '@/api/index';
 
 const Subscribe = ({userInfo, httpLoading, setHttpLoading}) => {
   const [memberSubscribeMsg, setMemberSubscribeMsg]=useState(null);
+  const [validPeriod, setValidPeriod]=useState(null);
   const getSubscribeMsg=()=>{
     setHttpLoading(true);
     post(MEMBERSUBSCRIBEMSG, '', {
@@ -20,8 +21,12 @@ const Subscribe = ({userInfo, httpLoading, setHttpLoading}) => {
     }).then((res)=>{
       setMemberSubscribeMsg(res.data);
     }).catch((error) => {
-      message.error({
-        content: error.toString(), key: 'netError', duration: 2,
+      get('/api/isPaidSubscribe', userInfo.token).then((res)=>{
+        setValidPeriod(res.data.validPeriod);
+      }).catch((error)=>{
+        message.error({
+          content: error.toString(), key: 'netError', duration: 2,
+        });
       });
     }).finally(()=>{
       setHttpLoading(false);
@@ -36,8 +41,7 @@ const Subscribe = ({userInfo, httpLoading, setHttpLoading}) => {
       <Card>
         <Row>
           {memberSubscribeMsg ?
-          (memberSubscribeMsg.paymentState===2?
-          <Col span={10}>
+          (memberSubscribeMsg.paymentState===2? <Col span={10}>
             <h3 className="subscribe-title">{memberSubscribeMsg.name}</h3>
             <Statistic
               className="marginB30 marginT30"
@@ -47,8 +51,7 @@ const Subscribe = ({userInfo, httpLoading, setHttpLoading}) => {
             <p className="subscribe-tip">{memberSubscribeMsg.cycleMessage}</p>
             <p className="subscribe-tip">{memberSubscribeMsg.automaticMessage}</p>
             <a href="mailto:hello@affinityanalyst.com">Contact us to unsubscribe</a>
-          </Col>:
-          <Col span={12}>
+          </Col>: <Col span={12}>
             <h3 className="subscribe-title">{memberSubscribeMsg.name}</h3>
             <Statistic
               className="marginB30 marginT30"
@@ -68,7 +71,12 @@ const Subscribe = ({userInfo, httpLoading, setHttpLoading}) => {
             </p>
           </Col>):
           <Col>
-            You haven&apos;t subscribed to any packages yet.
+            {validPeriod?(
+              <div>
+                <h3>Enterprise plan</h3>
+                <p>Valid until: {validPeriod}</p>
+              </div>
+            ):(<div>You haven&apos;t subscribed to any packages yet.</div>)}
           </Col>}
         </Row>
       </Card>

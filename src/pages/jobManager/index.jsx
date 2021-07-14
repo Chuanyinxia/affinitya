@@ -12,6 +12,9 @@ import store from '@/store';
 import {type} from '@/components/plugin/Searchdata';
 import ResultTable from '@/components/Table/ResultTable';
 
+const jobMangerText= {
+  title: 'Unsaved audience will be deleted after 30 days.',
+};
 const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
   const history = useHistory();
   const [isPayUser, setIsPayUser] =useState(false);
@@ -142,7 +145,7 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
   };
   return (
     <div>
-      <p className="search-info">Unsaved audience will be deleted after 30 days.</p>
+      <p className="search-info">{jobMangerText.title}</p>
       <Card>
         <Tabs
           defaultActiveKey={jobType}
