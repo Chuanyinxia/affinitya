@@ -3,28 +3,34 @@ import {connect} from 'react-redux';
 import {Link, withRouter} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {Button, Checkbox, Col, Form, Input, message, Modal, Row, Spin, Tooltip} from 'antd';
-
 import {httpLoading, login, userInfo} from '@/store/actions';
 import {get, post} from '@/utils/request';
 import {GETAGREEMENT, GETVERIFICATIONCODE, REGISTER} from '@/api';
-
 import './style.css';
 import bg from '@/assets/login/bg.png';
 import {Email} from '@/components/plugin/Searchdata';
 import {storage} from '@/utils/storage';
 
 const SignUp = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) => {
-  // eslint-disable-next-line new-cap
-  const [email] = useState(Email());
-  const [form] = Form.useForm();
+  const [read, setRead] = useState(true);
+  const [singForm] = Form.useForm();
   const [getCode, setGetCode] = useState(true);
   const [agreement, setAgreement] = useState(null);
   const [agreementBox, setAgreementBox] = useState(false);
+  const [loading, setLoading]=useState(false);
   useEffect(() => {
     getAgreement();
+    // eslint-disable-next-line new-cap
+    const email= Email();
     if (email) {
+      singForm.setFieldsValue({
+        email: email,
+      });
       setGetCode(false);
     }
+    setTimeout(() => {
+      setRead(false);
+    }, 1000);
   }, []);
 
   const handleLogin = (values) => {
@@ -59,7 +65,8 @@ const SignUp = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) 
     });
   };
   const getVerificationCode = () => {
-    const e = form.getFieldsValue('email').email;
+    const e = singForm.getFieldsValue('email').email;
+    setLoading(true),
     post(GETVERIFICATIONCODE + '1', {email: e}, {
       'Content-Type': 'application/x-www-form-urlencoded',
     }).then((res) => {
@@ -68,6 +75,8 @@ const SignUp = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) 
       message.error({
         content: error.toString(), key: 'netError', duration: 2,
       });
+    }).finally(()=>{
+      setLoading(false);
     });
   };
   const onEmailChange = (e) => {
@@ -89,15 +98,18 @@ const SignUp = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) 
             <img src={bg} style={{width: '100%'}} alt="bg"/>
           </Col>
           <Col span={12} className="paddingL36 paddingR36">
-            <h1 className="login-title">Sign Up</h1>
+            <h1 className="login-title" >Sign Up</h1>
             <Form
-              name="loginForm"
+              name="singForm"
               layout="vertical"
-              form={form}
+              form={singForm}
+              Autocomplete="off"
+              autocomplete="nope"
               onFinish={(values) => handleLogin(values)}
               initialValues={{
                 remember: true,
-                email: email,
+                email: '',
+                password: '',
               }}
             >
               <Form.Item
@@ -108,9 +120,12 @@ const SignUp = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) 
                 ]}
               >
                 <Input
+                  id="text"
                   bordered={false}
                   onChange={onEmailChange}
                   size="large"
+                  readOnly={read}
+                  autoComplete="off"
                   className="borderB"
                   placeholder="Email"/>
               </Form.Item>
@@ -120,6 +135,8 @@ const SignUp = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) 
               >
                 <Input.Password
                   bordered={false}
+                  readOnly={read}
+                  autoComplete="off"
                   size="large"
                   className="borderB"
                   placeholder="Password"
@@ -140,6 +157,7 @@ const SignUp = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) 
                       <Button
                         type="text"
                         disabled={getCode}
+                        loading={loading}
                         onClick={getVerificationCode}>
                       Get verification code
                       </Button>
@@ -188,7 +206,7 @@ const SignUp = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) 
         onOk={() => setAgreementBox(false)}
         onCancel={() => setAgreementBox(false)}
       >
-        <div dangerouslySetInnerHTML={{__html: agreement}}></div>
+        <div dangerouslySetInnerHTML={{__html: agreement}}/>
       </Modal>
     </div>
 

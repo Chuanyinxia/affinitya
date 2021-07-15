@@ -159,10 +159,12 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
             keyWord: res.data.keywords,
           });
           if (res.data.isPayUser===2) {
+            setIsPayUser(true);
             setSearchDataKW(res.data.kwResultVoList);
             setSaveNameKW(res.data.keywords[0]+moment().format('YYYYMMDDHHmmss'));
           } else {
             const dd=res.data.kwResultVoList[0]?res.data.kwResultVoList[0].searchDetails:[];
+            console.log(dd);
             setFreeSearchData(dd);
           }
         } else {

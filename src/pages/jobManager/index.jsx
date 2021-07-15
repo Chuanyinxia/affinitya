@@ -180,7 +180,7 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
             dataIndex="endTime"
             key="Complete Time"
             render={(endTime, record)=>{
-              return (endTime&&record.jobStatus===1)?endTime+`(Estimate)`:endTime;
+              return (endTime&&(record.jobStatus===1||record.jobStatus===5))?endTime+`(Estimate)`:endTime;
             }}/>
           <Table.Column title="Status" dataIndex="jobStatus" key="Status" render={(jobStatus) =>(
             <Space>
