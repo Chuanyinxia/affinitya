@@ -7,6 +7,9 @@ import {Button, Space, Table, Tooltip, Card} from 'antd';
 
 const ResultTableBlur = ({userInfo, TableData}) => {
   const blurData=(TableData)=>{
+    if (!TableData) {
+      return [];
+    }
     const datas = TableData.map((item, index) => {
       return {
         ...item,
@@ -21,6 +24,10 @@ const ResultTableBlur = ({userInfo, TableData}) => {
           size: 3500000,
           path: 'Interests/Additional Interests/Sports betting',
         });
+      }
+    } else if (datas.length>40) {
+      for (let i = 41; i < 51; i++) {
+        datas[i-1].keyword='BlursData';
       }
     }
     return datas;

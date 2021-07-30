@@ -38,14 +38,12 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
   const [loading, setLoading] = useState(false);
   const [audienceIdItem, setAudienceIdItem] = useState([]);
   const [activeKey, setActiveKey]=useState(type()?type():1);
+  const [showJobInfoKW, setShowJobInfoKW]=useState(false);
+  const [showJobInfoLA, setShowJobInfoLA]=useState(false);
   const [isPayUser, setIsPayUser] =useState(false);
   const [saveStatus, setSaveStatus]= useState(null);
 
-  const [showJobMangerTips, setShowJobManagerTips]=useState(false);
-  const [showFreeSKData, setShowFreeSKData]=useState(false);
-  const [showPaySKData, setShowPaySKData]=useState(false);
-  const [showLAData, setShowLAData]=useState(false);
-
+  // const [keyWords, setKeyWords]=useState(null);
   const addItem = () => {
     if (audienceID) {
       audienceIdItem.push({audienceId: audienceID});
@@ -69,39 +67,26 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
       myAppSecret: values.myAppSecret.trim(),
       audienceId: values.audienceId,
     };
-    // close all table show!
-    setShowFreeSKData(false);
-    setShowPaySKData(false);
-    setShowJobManagerTips(false);
-    setShowLAData(false);
-    setLoading(true);
+    setShowJobInfoLA(true);
+    setSearchDataLA([]);
     post(SEARCHAUID, data, {
       // eslint-disable-next-line no-tabs
       'Content-Type': 'application/x-www-form-urlencoded',
       'token': userInfo.token,
     }).then((res) => {
       if (res.data.length>0) {
-        // close job manager tips
-        setShowJobManagerTips(false);
-        // show LA data table
-        setShowLAData(true);
-
         setSearchDataLA(res.data.kwResultVoList);
         setSaveStatus(res.data.status);
-        // setShowJobInfoLA(false);
+        setShowJobInfoLA(false);
         setSaveNameLA(values.audienceId+moment().format('YYYYMMDDhhmmss'));
       } else {
-        // show job manager tips,close LA data table
-        setShowLAData(false);
-        setShowJobManagerTips(true);
+        setShowJobInfoLA(true); setShowJobInfoLA(false);
       }
     }).catch((error) => {
       // console.log(error);
       // message.error({
       //   content: error.toString(), key: 'netError', duration: 2,
       // });
-    }).finally(()=>{
-      setLoading(false);
     });
   };
 
@@ -119,12 +104,8 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
       accessToken: values.accessToken.trim(),
       country: search.country.toString(),
     };
-    // close all table show!
-    setShowFreeSKData(false);
-    setShowPaySKData(false);
-    setShowJobManagerTips(false);
-    setShowLAData(false);
-    setLoading(true);
+    setSearchDataKW([]);
+    setFreeSearchData([]);
     let isPay;
     get(ISPAID, userInfo.token).then((res)=>{
       setIsPayUser(res.data===2);
@@ -137,22 +118,19 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
         'Content-Type': 'application/x-www-form-urlencoded',
         'token': userInfo.token,
       }).then((res) => {
-        if (res.data.kwResultVoList.length>0) {
+        if (res.data.length>0) {
+          setShowJobInfoKW(false);
           if (isPay) {
-            setSearchDataKW(res.data.kwResultVoList??[]);
+            setSearchDataKW(res.data.kwResultVoList);
             setSaveStatus(res.data.status);
-            setShowPaySKData(true);
-            console.log(isPay);
           } else {
-            setFreeSearchData(res.data.kwResultVoList[0].searchDetails??[]);
-            setShowFreeSKData(true);
-
-            console.log(isPay, freeSearchData, showFreeSKData);
+            setFreeSearchData(res.data[0].searchDetails);
           }
-          console.log(isPay+'3');
           setSaveNameKW(values.keyWord[0]+moment().format('YYYYMMDDhhmmss'));
+          // console.log(1);
         } else {
-          setShowJobManagerTips(true);
+          setShowJobInfoKW(true);
+          // console.log(2);
         }
       }).catch((error) => {
         message.error({
@@ -163,18 +141,11 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
         } else {
           setFreeSearchData(null);
         }
-      }).finally(()=>{
-        // close all table show!
-        setLoading(false);
       });
     });
   };
 
   const getJobdetails = (id) => {
-    setShowFreeSKData(false);
-    setShowPaySKData(false);
-    setShowJobManagerTips(false);
-    setShowLAData(false);
     setLoading(true);
     get(ISPAID, userInfo.token).then((res)=>{
       setIsPayUser(res.data===2);
@@ -189,16 +160,15 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
             keyWord: res.data.keywords,
           });
           if (res.data.isPayUser===2) {
-            setShowPaySKData(true);
+            setIsPayUser(true);
             setSearchDataKW(res.data.kwResultVoList);
             setSaveNameKW(res.data.keywords[0]+moment().format('YYYYMMDDHHmmss'));
           } else {
             const dd=res.data.kwResultVoList[0]?res.data.kwResultVoList[0].searchDetails:[];
-            setShowFreeSKData(true);
+            console.log(dd);
             setFreeSearchData(dd);
           }
         } else {
-          setShowLAData(true);
           setSearchDataLA(res.data.kwResultVoList || []);
           setSaveNameLA(res.data.audienceIdSearchRequest.audienceId+moment().format('YYYYMMDDHHmmss'));
           audienceIdSearchForm.setFieldsValue({
@@ -584,8 +554,8 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
           </Tabs.TabPane>
         </Tabs>
       </div>
-      <div className={showJobMangerTips?'show':'hide'}>
-        <p className="marginT30 search-content marginB30">
+      {parseInt(activeKey)===1&&(<div className={showJobInfoKW?'show':'hide'}>
+        <p className="marginT30 search-content">
           Audience generation job has been created in
           <Link
             to={`/dashboard/jobManager?type=${JobType}`}
@@ -595,23 +565,34 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
             }
             }>Job Manager</Link>. You will receive &quot;notification&quot; once job completed.
         </p>
-      </div>
-
-      {showPaySKData&&(
+      </div>)}
+      {parseInt(activeKey)===2&&(<div className={showJobInfoLA?'show':'hide'}>
+        <p className="marginT30 search-content">
+          Audience generation job has been created in
+          <Link
+            to={`/dashboard/jobManager?type=${JobType}`}
+            className="target"
+            onClick={() => {
+              store.dispatch(setMenusData('jobManager', 'dashboard'));
+            }
+            }>Job Manager</Link>. You will receive &quot;notification&quot; once job completed.
+        </p>
+      </div>)}
+      {(isPayUser && !showJobInfoKW && parseInt(activeKey)===1&&searchDataKW)&&(
         <KeyWordSearchDetails
           saveName={saveNameKW}
           searchData={searchDataKW}
           saveStatus={saveStatus}
           setSaveStatus={setSaveStatus}
         />)}
-      {showLAData&& (
+      {(!showJobInfoLA && parseInt(activeKey)===2&& searchDataLA)&& (
         <KeyWordSearchDetails
           saveName={saveNameLA}
           searchData={searchDataLA}
           saveStatus={saveStatus}
           setSaveStatus={setSaveStatus}
         />)}
-      {showFreeSKData&&
+      {(!isPayUser &&!showJobInfoKW && parseInt(activeKey)===1&&freeSearchData)&&
       (<ResultTableBlur TableData={freeSearchData}/>)}
     </Spin>
   );

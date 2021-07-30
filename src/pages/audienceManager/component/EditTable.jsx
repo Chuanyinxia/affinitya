@@ -12,9 +12,10 @@ import {
   SaveOutlined,
   SyncOutlined,
   FolderViewOutlined,
+  CloseOutlined,
 } from '@ant-design/icons';
 import {get, post} from '@/utils/request';
-import {SAVESEARCHRESULT, GETEXTENDBYAUDI, RESTARTJOB, EXPORTDETAIL, ISPAID} from '@/api/index';
+import {SAVESEARCHRESULT, GETEXTENDBYAUDI, RESTARTJOB, EXPORTDETAIL, ISPAID, CANCELJOB} from '@/api/index';
 import ResultTable from '@/components/Table/ResultTable';
 
 
@@ -167,6 +168,22 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
       saveFunc(id);
     });
   };
+  const killJob=(id)=>{
+    console.log(id);
+    post(CANCELJOB+id, '', {
+      // eslint-disable-next-line no-tabs
+      'Content-Type':	'application/x-www-form-urlencoded',
+      'token': userInfo.token,
+    }).then((res)=>{
+      message.success(res.msg);
+    }).catch((error)=>{
+      message.error({
+        content: error.toString(), key: 'netError', duration: 2,
+      });
+    }).finally(() => {
+      saveFunc(id);
+    });
+  };
 
   const columns = [
     {
@@ -271,12 +288,12 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
                 <FolderViewOutlined style={{fontSize: 16}}/>
               </a>
             </Tooltip>)}
-            {/* <Tooltip title="Restart the job">
-              <a type="link">
-                <SyncOutlined/>
+            {record.status===5&&(<Tooltip title="Kill Job">
+              <a type="link" onClick={()=>killJob(record.jobId)}>
+                <CloseOutlined style={{fontSize: 16}}/>
               </a>
-            </Tooltip>*/}
-            {record.status>2&&(<Tooltip title="restart">
+            </Tooltip>)}
+            {(record.status===3||record.status===4)&&(<Tooltip title="Restart">
               <a type="link" onClick={()=>running(record.jobId)}>
                 <SyncOutlined style={{fontSize: 16}}/>
               </a>

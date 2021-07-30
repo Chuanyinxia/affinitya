@@ -15,7 +15,7 @@ const KeyWordSearchDetails = ({userInfo, searchData, saveName, saveStatus, setSa
   const [saveModal, setSaveModal]=useState(false);
   const [audienceName, setAudienceName]=useState(saveName);
   const [isPayUser, setIsPayUser] = useState(false);
-  const id = searchData[0] ? searchData[0].searchId : '';
+  const id = searchData ? searchData[0].searchId : '';
   const tableData = (tableData) => {
     const data = tableData.map((item, index) => {
       return {...item, index: index + 1};
@@ -108,7 +108,7 @@ const KeyWordSearchDetails = ({userInfo, searchData, saveName, saveStatus, setSa
         </Space>
       </div>
       <Card>
-        {searchData[0]?(<Tabs defaultActiveKey={searchData[0].id}>
+        {searchData?(<Tabs defaultActiveKey={searchData[0].id}>
           {searchData.map((item)=>(
             <TabPane tab={`group${item.groupId}`} key={item.id} >
               <ResultTable TableData={tableData(item.searchDetails??[])}/>

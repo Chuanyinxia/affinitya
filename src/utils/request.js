@@ -15,15 +15,17 @@ axios.interceptors.response.use((response) => {
     case 401:
       // storage.clearData();
       // window.location.reload();
-      return Promise.reject(new Error('Token 过期或失效，请重新登录!'));
+      return Promise.reject(new Error('The token has expired, please login again!'));
     case 314:
       return Promise.reject(response.data.msg);
     default:
       return Promise.reject(new Error(response.data.msg ??
-        '服务器错误!'));
+        'Network error'));
   }
 }, (error) => {
-  return Promise.reject(error);
+  const msg=error.toString()==='Error: timeout of 20000ms exceeded'?
+    'Network connection timed out':error;
+  return Promise.reject(msg);
 });
 
 export const get = async (url, token)=>{
@@ -33,6 +35,7 @@ export const get = async (url, token)=>{
       'token': token,
     },
     url,
+
   });
 };
 
@@ -43,6 +46,7 @@ export const remove = async (url, token)=>{
       'token': token,
     },
     url,
+
   });
 };
 
@@ -54,6 +58,7 @@ export const post = async (url, data, headers)=>{
     headers,
     url,
     data: d,
+
   });
 };
 
