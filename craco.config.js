@@ -22,16 +22,17 @@ module.exports = {
         lessLoaderOptions: {
           lessOptions: {
             modifyVars: {
-              '@primary-color': '#7121EA',
-              '@link-color': '#2677F2',
-              '@success-color': '#00AB79', // 成功色
-              '@error-color': '#EA526F', // 错误色
-              '@font-size-base': '14px', // 主字号
-              '@heading-color': '#222222', // 标题色
-              '@text-color': '#272727', // 主文本色
-              '@text-color-secondary': '#666666', // 次文本色
-              '@disabled-color': '#999999', // 失效色
-              '@border-radius-base': '2px', // 组件/浮层圆角
+              '@primary-color': '#120043',
+              '@link-color': '#1CC8EE',
+              '@success-color': '#00BA88', // 成功色
+              '@error-color': '#E92C3A', // 错误色
+              '@warning-color': '#F4B740', // 警告色
+              '@font-size-base': '16px', // 主字号
+              '@heading-color': '#14142B', // 标题色
+              '@text-color': '#4E4B66', // 主文本色
+              '@text-color-secondary': '#4E4B66', // 次文本色
+              '@disabled-color': '#A0A3BD', // 失效色
+              '@border-radius-base': '16px', // 组件/浮层圆角
             },
             javascriptEnabled: true,
           },

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Col, Layout, Row, Space} from 'antd';
+import {Col, Layout, Row, Space, Button} from 'antd';
 import logo from '@/assets/lettering-logo.webp';
 import {Link} from 'react-router-dom';
 
@@ -13,12 +13,14 @@ const Headers=()=>( <Header className="padding0 text-center bg-header">
     </Col>
     <Col span={16} className="text-right">
       <Space size="large">
-        <Link to='/' className="navs">Home</Link>
+        <Link to='/' className="navs">Product</Link>
         <Link to='/dashboard/audienceGenerator'
-          className="navs">Dashboard</Link>
-        <Link to='/contactUs' className="navs">Contact Us</Link>
+          className="navs">About</Link>
         <Link to='/plansPricing' className="navs">Plans & Pricing</Link>
+        <Link to='/contactUs' className="navs">Contact Sales</Link>
+        <span className="navs">|</span>
         <Link to='/login' className="navs">Login</Link>
+        <Button href="/signUp" className="navButton">Sign Up</Button>
       </Space>
     </Col>
   </Row>

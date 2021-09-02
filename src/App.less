@@ -7,6 +7,7 @@
   background: #f5f5f5;
   min-width: 1280px;
   min-height: 100vh;
+  letter-spacing: 1px;
 }
 
 
@@ -70,41 +71,47 @@
 .bg-gray{
   background: rgba(40, 40, 40, 0.01);
 }
-
-
-@font-face {
-  font-family: Futura_Bold;//自定义字体名称
-  src: url(./font/Futura_Bold.ttf)
+.bg-white{
+  background: #ffffff;
 }
 
 @font-face {
-  font-family: Futura_Book;//自定义字体名称
-  src: url(./font/Futura_Book.ttf)
+  font-family: Poppins;//自定义字体名称
+  src: url(./font/Poppins/Poppins-Regular.ttf)
 }
 @font-face {
-  font-family: Futura_Round;//自定义字体名称
-  src: url(./font/Futura_Round.ttf)
+  font-family: Poppins-Blod;//自定义字体名称
+  src: url(./font/Poppins/PoppinsBold.ttf)
 }
-@font-face {
-  font-family: Futura_Std_Book;//自定义字体名称
-  src: url(./font/Futura_Std_Book.ttf)
-}
-@font-face {
-  font-family: Futura_Std_Heavy;//自定义字体名称
-  src: url(./font/Futura_Std_Heavy.ttf)
-}
-@font-face {
-  font-family: Futura_Thin;//自定义字体名称
-  src: url(./font/Futura_Thin.ttf)
-}
-@font-face {
-  font-family: Futura_Medium;//自定义字体名称
-  src: url(./font/Futura-Medium-6.ttf)
-}
-@font-face {
-  font-family: Futura;//自定义字体名称
-  src: url(./font/futura/futur.ttf)
-}
+//
+//@font-face {
+//  font-family: Futura_Book;//自定义字体名称
+//  src: url(./font/Futura_Book.ttf)
+//}
+//@font-face {
+//  font-family: Futura_Round;//自定义字体名称
+//  src: url(./font/Futura_Round.ttf)
+//}
+//@font-face {
+//  font-family: Futura_Std_Book;//自定义字体名称
+//  src: url(./font/Futura_Std_Book.ttf)
+//}
+//@font-face {
+//  font-family: Futura_Std_Heavy;//自定义字体名称
+//  src: url(./font/Futura_Std_Heavy.ttf)
+//}
+//@font-face {
+//  font-family: Futura_Thin;//自定义字体名称
+//  src: url(./font/Futura_Thin.ttf)
+//}
+//@font-face {
+//  font-family: Futura_Medium;//自定义字体名称
+//  src: url(./font/Futura-Medium-6.ttf)
+//}
+//@font-face {
+//  font-family: Futura;//自定义字体名称
+//  src: url(./font/futura/futur.ttf)
+//}
 .text-center{
   text-align: center;
 }
@@ -114,8 +121,9 @@
 .text-left{
   text-align: left;
 }
+
 body{
-  font-family: Futura_Std_Book, Futura;
+  font-family: Poppins;
 }
 ::-webkit-scrollbar{
   width: 5px;
@@ -134,4 +142,7 @@ body{
 }
 .blurs{
   filter: blur(4px);
+}
+.ant-btn{
+  border-radius: 32px;
 }
