@@ -62,9 +62,11 @@
 }
 .navButton{
   min-width: 114px;
+
   height: 38px;
   line-height: 34px!important;
 }
+
 
 .bannerText {
   /*width: 779px;*/
@@ -147,17 +149,6 @@
 
 }
 
-
-/*.Home .homeBannerText {*/
-/*  line-height:1.25em;*/
-/*  font-size:72px;*/
-/*  font-family: Futura_Medium, Futura;*/
-/*  font-weight: 500;*/
-/*  color: #FFFFFF;*/
-/*  margin-bottom: 8px;*/
-/*  padding-left: 16px;*/
-
-/*}*/
 .homeBanner{
   padding-top: 45px;
 }
@@ -202,16 +193,6 @@
   margin: 0 auto;
 }
 
-@media screen and (max-width: 1040px)  {
-  .home-content{
-    width: 100%;
-    padding: 0 32px
-  }
-  .content{
-    min-width: 100%;
-  }
-}
-
 .Home .homeBannerText {
   color: #FFFFFF;
   font-family: Poppins-Blod;
@@ -220,6 +201,10 @@
   font-size: 64px;
   line-height: 66px;
 }
+
+
+
+
 .banner-info {
   font-family: Poppins;
   font-style: normal;
@@ -235,9 +220,7 @@
   line-height: 54px!important;
 
 }
-.ant-btn{
-  color:  #120043;
-}
+
 .paddingT90{
   padding-top: 85px;
 }
@@ -273,7 +256,7 @@
 }
 .step{
   color:#ffffff;
-  padding: 32px 0;
+  padding: 32px 32px;
 }
 .stepTitle{
 
@@ -290,6 +273,7 @@
   line-height: 28px;
   color: #FFFFFF;
   margin: 8px 0px;
+
 }
 .stepInfo{
   font-size: 14px;
@@ -297,6 +281,12 @@
   text-align: center;
   color: #FCFCFC;
   margin: 8px 0px;
+}
+.paddingL32{
+  padding-left: 32px;
+}
+.paddingR32{
+  padding-right: 32px;
 }
 .marginT64{
   margin-top: 64px;
@@ -322,4 +312,44 @@
 }
 .Cards{
   height: 340px ;
+}
+.banner-img{
+  width: 130%;
+}
+@media screen and (min-width: 1160px) and (max-width: 1260px) {
+  .banner-img{
+    width: 120%;
+  }
+
+  .banner {
+    background-size: 100% 560px;
+  }
+}
+@media screen and (min-width: 1040px) and (max-width: 1160px) {
+  .banner-img{
+    width: 108%;
+  }
+
+  .banner {
+    background-size: 100% 560px;
+  }
+}
+  @media screen and (max-width: 1040px)  {
+  .home-content{
+    width: 100%;
+    padding: 0 32px
+  }
+  .content{
+    min-width: 100%;
+  }
+  .Home .homeBannerText{
+    font-size: 24px;
+    line-height: 38px;
+  }
+  .banner {
+    background-size: 100% 420px;
+  }
+  .banner-img{
+    width: 100%;
+  }
 }

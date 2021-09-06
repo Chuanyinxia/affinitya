@@ -28,9 +28,7 @@ const {Content} = Layout;
 
 const homeText = {
   banner: {
-    title1: 'Discover Your',
-    title2: 'Game’s Audience',
-    subTitle: 'Here',
+    title: 'Discover Your Game’s Audience Here',
     describe: 'AI - Enabled Player Intelligence Platform',
   },
   feature: {
@@ -113,23 +111,18 @@ const Home = ({userInfo, httpLoading, setHttpLoading}) => {
       <Headers/>
       <Content className="marginTop90 banner">
         <Row className="home-content paddingT90">
-          <Col lg={14} xs={12} sm={12}>
-            <h1 className="homeBannerText">{homeText.banner.title1}</h1>
-            <h1 className="homeBannerText">{homeText.banner.title2}</h1>
-            <h2 className="homeBannerText">{homeText.banner.subTitle}</h2>
+          <Col lg={14} xs={12} sm={12} md={12}>
+            <h1 className="homeBannerText">{homeText.banner.title}</h1>
             <p className="banner-info">{homeText.banner.describe}</p>
             <Button href="/signUp" className="BannerButton">Register Today</Button>
           </Col>
-          <Col lg={10} xs={0} sm={0}>
-            <img style={{width: '130%'}} src={banner}/>
-          </Col>
-          <Col lg={0} xs={12} sm={12}>
-            <img style={{width: '100%'}} src={banner}/>
+          <Col lg={10} xs={12} sm={12} md={12}>
+            <img src={banner} className="banner-img"/>
           </Col>
         </Row>
         <div className="home-content marginTop90">
           <Row gutter={64}>
-            <Col className="marginB64" lg={8} sm={0} xs={0}>
+            <Col className="marginB64" lg={8} md={0} sm={0} xs={0}>
               <Card hoverable className="text-center Cards">
                 <img style={{width: 64}} src={icon1}/>
                 <div className="card-title">AI Enabled</div>
@@ -139,7 +132,7 @@ const Home = ({userInfo, httpLoading, setHttpLoading}) => {
 
               </Card>
             </Col>
-            <Col className="marginB64" lg={8} sm={0} xs={0}>
+            <Col className="marginB64" lg={8} md={0} sm={0} xs={0}>
               <Card hoverable className="text-center Cards">
                 <img style={{width: 64}} src={icon2}/>
                 <div className="card-title">Digital Anthropology</div>
@@ -149,7 +142,7 @@ const Home = ({userInfo, httpLoading, setHttpLoading}) => {
                 </div>
               </Card>
             </Col>
-            <Col className="marginB64" lg={8} sm={0} xs={0}>
+            <Col className="marginB64" lg={8} md={0} sm={0} xs={0}>
               <Card hoverable className="text-center Cards">
                 <img style={{width: 64}} src={icon3}/>
                 <div className="card-title">Social Data Mesh</div>
@@ -159,13 +152,13 @@ const Home = ({userInfo, httpLoading, setHttpLoading}) => {
                 </div>
               </Card>
             </Col>
-            <Col className="marginB16" lg={0} sm={24} xs={24}>
+            <Col className="marginB16" lg={0} md={24} sm={24} xs={24}>
               <Card hoverable className="text-left">
                 <Row gutter={16}>
-                  <Col sm={2} xs={2}>
+                  <Col sm={3} xs={4}>
                     <img style={{width: 64}} src={icon1}/>
                   </Col>
-                  <Col sm={22} xs={22}>
+                  <Col sm={21} xs={20}>
                     <div className="card-title marginT0">AI Enabled</div>
                     <div className="card-info">
                       We deploy AI to drive processing time, breadth, and accuracy of correlative inferences
@@ -174,13 +167,13 @@ const Home = ({userInfo, httpLoading, setHttpLoading}) => {
                 </Row>
               </Card>
             </Col>
-            <Col className="marginB16" lg={0} sm={24} xs={24}>
+            <Col className="marginB16" lg={0} md={24} sm={24} xs={24}>
               <Card hoverable className="text-left">
                 <Row gutter={16}>
-                  <Col sm={2} xs={24}>
+                  <Col sm={3} xs={4}>
                     <img style={{width: 64}} src={icon2}/>
                   </Col>
-                  <Col sm={22} xs={22}>
+                  <Col sm={21} xs={20}>
                     <div className="card-title marginT0">Digital Anthropology</div>
                     <div className="card-info">
                   We contextualize the player metaverse to comprehend fundamentally with a Game industry-specific BI
@@ -190,13 +183,13 @@ const Home = ({userInfo, httpLoading, setHttpLoading}) => {
                 </Row>
               </Card>
             </Col>
-            <Col className="marginB64" lg={0} sm={24} xs={24}>
+            <Col className="marginB64" lg={0} md={24} sm={24} xs={24}>
               <Card hoverable className="text-left">
                 <Row gutter={16}>
-                  <Col sm={2} xs={2}>
+                  <Col sm={3} xs={4}>
                     <img style={{width: 64}} src={icon3}/>
                   </Col>
-                  <Col sm={22} xs={22}>
+                  <Col sm={21} xs={20}>
                     <div className="card-title marginT0">Social Data Mesh</div>
                     <div className="card-info ">
                   We process directly related content across multiple social media content sources, integrate to our
@@ -274,7 +267,7 @@ const Home = ({userInfo, httpLoading, setHttpLoading}) => {
               <div className="stepTitle">{homeText.easySimple.title}</div>
             </Col>
             {homeText.easySimple.content.map((step, index) => (
-              <Col lg={6} xs={12} sm={12} key={index + 'step'} className="text-center">
+              <Col lg={6} xs={12} sm={12} key={index + 'step'} className="text-center marginB30">
                 <div className="marginB30">
                   <img src={step.icon} width={80}/>
                 </div>
