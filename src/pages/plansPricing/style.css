@@ -13,34 +13,41 @@
 .paymentDesc{
   height: 44px;
 }
-.priceCard{
+.price-card{
   min-width: 220px;
   height: 672px;
 }
-.priceCard:hover{
+.price-card:hover{
   background-color: #120043;
   color:#fff;
 }
-.priceCard:hover .price-title{
+.price-card:hover .price-title{
   color:#fff;
 }
-.priceCard:hover .price-name{
+.price-card:hover .price-name{
   color:#00E3A1;
 }
-.priceCard:hover button{
+.price-card:hover button{
   background-color: #fff;
   color:#120043
 }
-@media only screen and (min-width: 768px){
+.price-card:hover .month-tag{
+  color:#fff
+}
+.price-card{
+  margin: 0 auto;
+  cursor: pointer;
+}
+@media only screen and (max-width: 768px){
   .PPContent {
     margin: 0 auto;
     width: 688px;
   }
-  .priceCard{
+  .price-card{
     width: 220px;
   }
   .paymentPrice{
-    padding-left: 26px
+    padding-left: 8px
   }
   .price-box{
     overflow: hidden;
@@ -63,7 +70,7 @@
   }
   .price-name{
     text-align: left;
-    padding-left: 26px;
+    padding-left: 8px;
     height: 34px;
     line-height: 34px;
     margin-top: 8px;
@@ -71,20 +78,20 @@
   }
   .price-desc{
     text-align: left;
-    padding: 0px 22px 0px 26px;
+    padding: 0px 2px 0px 6px;
     margin-top: 8px;
-    height: 60px;
+    height: 140px;
     font-size: 14px;
     word-wrap: break-word;
   }
   .divider-box{
-    padding: 0px 22px 0px 26px;
+    padding: 0px 2px 0px 6px;
   }
   .price-fun{
     text-align: left;
-    padding: 0px 22px 0px 26px;
+    padding: 0px 2px 0px 6px;
     margin-top: 20px;
-    height: 320px;
+    height: 248px;
     font-size: 12px;
   }
   .price-fun>div{
@@ -101,16 +108,22 @@
     height: 40px;
   }
 }
-@media only screen and (min-width: 1440px){
+@media only screen and (min-width: 768px){
   .PPContent {
     margin: 0 auto;
     width: 1122px;
   }
-  .priceCard{
+  .price-card-wrap{
+    width: 344px;
+  }
+  .price-card-wrap .ant-divider{
+    margin: 0;
+  }
+  .price-card{
     width: 344px;
   }
   .paymentPrice{
-    padding-left: 40px
+    padding-left: 16px
   }
   .price-box{
     overflow: hidden;
@@ -133,27 +146,26 @@
   }
   .price-name{
     text-align: left;
-    padding-left: 40px;
+    padding-left: 16px;
     height: 34px;
     line-height: 34px;
-    margin-top: 20px;
     font-weight: 600;
   }
   .price-desc{
     text-align: left;
-    padding: 0px 50px 0px 40px;
+    padding: 0px 30px 0px 20px;
     margin-top: 20px;
-    height: 80px;
+    height: 140px;
     font-size: 14px;
   }
   .divider-box{
-    padding: 0px 50px 0px 40px;
+    padding: 0px 30px 0px 20px;
   }
   .price-fun{
     text-align: left;
-    padding: 0px 50px 0px 40px;
+    padding: 0px 30px 0px 20px;
     margin-top: 20px;
-    height: 280px;
+    height: 250px;
     font-size: 14px;
   }
   .price-fun>div{
@@ -170,58 +182,3 @@
     height: 62px;
   }
 }
-/* .paymentPrice{
-  padding-left: 40px
-}
-.price-box{
-  overflow: hidden;
-  height: 80px;
-}
-.price-title{
-  float: left;
-  overflow: hidden;
-  font-size: 50px;
-  color: #081F32;
-  height: 80px;
-  line-height: 80px;
-}
-.month-tag{
-  float: left;
-  color: #6E7191;
-  font-size: 14px;
-  height: 80px;
-  line-height: 96px;
-}
-.price-name{
-  text-align: left;
-  padding-left: 40px;
-  height: 34px;
-  line-height: 34px;
-  margin-top: 20px;
-}
-.price-desc{
-  text-align: left;
-  padding: 0px 50px 0px 40px;
-  margin-top: 20px;
-  height: 80px;
-  font-size: 14px;
-}
-.divider-box{
-  padding: 0px 50px 0px 40px;
-}
-.price-fun{
-  text-align: left;
-  padding: 0px 50px 0px 40px;
-  margin-top: 20px;
-  height: 280px;
-}
-.price-fun>div{
-  height: 60px;
-}
-.price-btn{
-  text-align: center;
-}
-.price-btn button{
-  width: 246px;
-  height: 62px;
-} */

@@ -1,47 +1,30 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {Button, Col, Form, Input, Layout, message, Row} from 'antd';
+import {Col, Layout, Row, Form, Input, Button} from 'antd';
 import {httpLoading} from '@/store/actions';
 import './style.css';
-import {post} from '@/utils/request';
-import {CONTACTUS} from '@/api';
+// import {post} from '@/utils/request';
+// import {CONTACTUS} from '@/api';
 import Headers from '@/components/Headers';
 import Footers from '@/components/Footers';
 
-const contactText={
-  title: 'Contact Us',
-  form: {
-    label1: 'First Name',
-    label2: 'Last Name',
-    label3: 'Email',
-    label4: 'Phone',
-    label5: 'Type you message here...',
-  },
-};
-
 const {Content} = Layout;
-const validateMessages = {
-  types: {
-    email: 'It\'s not a valid email',
-  },
-  required: 'Email is required',
-  // ...
-};
+
 
 const ContactUS = ({userInfo, httpLoading, setHttpLoading}) => {
-  const submit = (values)=>{
-    setHttpLoading(true);
-    post(CONTACTUS, values, {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    }).then((res)=>{
-      message.success('Send success，thank you for your inquiry!');
-    }).catch((error)=>{
-      message.error({
-        content: error.toString(), key: 'netError', duration: 2,
-      });
-    }).finally(()=>setHttpLoading(false));
-  };
+  // const submit = (values)=>{
+  //   setHttpLoading(true);
+  //   post(CONTACTUS, values, {
+  //     'Content-Type': 'application/x-www-form-urlencoded',
+  //   }).then((res)=>{
+  //     message.success('Send success，thank you for your inquiry!');
+  //   }).catch((error)=>{
+  //     message.error({
+  //       content: error.toString(), key: 'netError', duration: 2,
+  //     });
+  //   }).finally(()=>setHttpLoading(false));
+  // };
   return (
     <Layout className="layout Home">
       <Headers/>
@@ -50,46 +33,67 @@ const ContactUS = ({userInfo, httpLoading, setHttpLoading}) => {
           marginTop: 90,
           minHeight: 'calc(100vh - 180px )',
           paddingTop: 'calc((100vh - 548px )/2)',
+          paddingBottom: 80,
         }}>
           <Row>
-            <Col span={12} offset={6}>
-              <Form layout="vertical" validateMessages={validateMessages} onFinish={(v) => submit(v)}>
-                <Row>
-                  <Col>
-                    <h2>{contactText.title}</h2>
-                  </Col>
-                </Row>
-                <Row className="form-wrapper">
-                  <Col span={12} className="input-Wrapper">
-                    <Form.Item name="firstName">
-                      <Input placeholder={contactText.form.label1} bordered={false}/>
-                    </Form.Item>
-                  </Col>
-                  <Col span={12} className="input-Wrapper">
-                    <Form.Item name="lastName">
-                      <Input placeholder={contactText.form.label2} bordered={false}/>
-                    </Form.Item>
-                  </Col>
-                  <Col span={12} className="input-Wrapper">
-                    <Form.Item name="email" rules={[{required: true, type: 'email'}]}>
-                      <Input placeholder={contactText.form.label3} bordered={false}/>
-                    </Form.Item>
-                  </Col>
-                  <Col span={12} className="input-Wrapper">
-                    <Form.Item name="phone">
-                      <Input placeholder={contactText.form.label4} bordered={false}/>
-                    </Form.Item>
-                  </Col>
-                  <Col span={24} className="input-Wrapper">
-                    <Form.Item name="suggestMsg">
-                      <Input.TextArea placeholder={contactText.form.label5} bordered={false} style={{resize: 'none'}}/>
-                    </Form.Item>
-                  </Col>
-                </Row>
-                <Form.Item>
-                  <Button size="large" type="primary" htmlType="submit">Submit</Button>
-                </Form.Item>
-              </Form>
+            <Col span={24}>
+              <div style={{
+                color: '#14142A',
+                fontSize: '24px',
+                fontWeight: 600,
+                textAlign: 'center',
+                width: '100%',
+                marginTop: 52,
+              }}>Contact Sales</div>
+              <div style={{
+                color: '#6E7191',
+                fontSize: '14px',
+                textAlign: 'center',
+                width: '100%',
+                marginBottom: 52,
+              }}>Fill out the form below to contact sales</div>
+            </Col>
+          </Row>
+          <Row>
+            <Col sm={24} md={12}>
+              <div className="contact-log-box">
+                <div className="contact-log"></div>
+              </div>
+            </Col>
+            <Col sm={24} md={12}>
+              <div className="contact-form-box">
+                <Form layout="vertical">
+                  <Form.Item label="Name">
+                    <Input></Input>
+                  </Form.Item>
+                  <Form.Item label="Email address">
+                    <Input></Input>
+                  </Form.Item>
+                  <Form.Item label="Phone number">
+                    <Input></Input>
+                  </Form.Item>
+                  <Form.Item label="Company name">
+                    <Input></Input>
+                  </Form.Item>
+                  <Form.Item label="title">
+                    <Input></Input>
+                  </Form.Item>
+                  <Form.Item label="title">
+                    <Input.TextArea rows={4} style={{
+                      resize: 'none',
+                      background: '#EFF0F7',
+                      border: 'none',
+                    }}></Input.TextArea>
+                  </Form.Item>
+                  <Form.Item>
+                    <Button type="primary" block style={{
+                      height: 58,
+                      lineHeight: '58px',
+                      marginTop: 28,
+                    }}>Submit</Button>
+                  </Form.Item>
+                </Form>
+              </div>
             </Col>
           </Row>
         </div>

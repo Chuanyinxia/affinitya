@@ -1,49 +1,191 @@
 
-.priceCard{
-  width: 100%;
-  height: 560px;
-  box-shadow: 5px 10px 30px 0px rgba(38, 119, 242, 0.1);
-  cursor: pointer;
+.developers-title{
+  line-height:1.35em;
+  text-align:center;
+  font-size:40px;
+  color:rgb(1,32,58);
+  height: 134px;
+  padding-top: 60px;
 }
-.priceCard .ant-card-body{
-  padding: 24px 0;
-}
-.paymentName{
-  height: 29px;
-  line-height: 29px;
-  text-align: center;
-  font-size: 24px;
-}
-.paymentPrice{
-  margin-top: 10px;
-  line-height: 49px;
-  text-align: center;
-  font-size: 40px;
-    height: 55px;
-}
-.priceTag{
-  font-size: 20px;
-}
-.paymentType{
-  text-align: center;
-  color: #c9c9c9;
+.PPContent {
+  margin: 0 auto;
 }
 .paymentDesc{
-  width: 291px;
-  margin: 16px auto 0 auto;
-  text-align: center;
+  height: 44px;
 }
-.paymentBtn{
-  margin-top: 48px;
+.price-card{
+  min-width: 220px;
+  height: 672px;
 }
-.paymentValid{
-  margin-top: 10px;
-  font-size: 14px;
-  color: #c9c9c9;
-  text-align: center;
+.price-card:hover{
+  background-color: #120043;
+  color:#fff;
 }
-.paymentFun{
-  text-align: center;
-  font-size: 14px;
-  color: #222222;
+.price-card:hover .price-title{
+  color:#fff;
+}
+.price-card:hover .price-name{
+  color:#00E3A1;
+}
+.price-card:hover button{
+  background-color: #fff;
+  color:#120043
+}
+.price-card:hover .month-tag{
+  color:#fff
+}
+.price-card{
+  margin: 0 auto;
+  cursor: pointer;
+}
+@media only screen and (max-width: 768px){
+  .PPContent {
+    margin: 0 auto;
+    width: 688px;
+  }
+  .price-card{
+    width: 220px;
+  }
+  .paymentPrice{
+    padding-left: 8px
+  }
+  .price-box{
+    overflow: hidden;
+    height: 80px;
+  }
+  .price-title{
+    float: left;
+    overflow: hidden;
+    font-size: 36px;
+    color: #081F32;
+    height: 38px;
+    line-height: 38px;
+  }
+  .month-tag{
+    float: left;
+    color: #6E7191;
+    font-size: 14px;
+    height: 38px;
+    line-height: 52px;
+  }
+  .price-name{
+    text-align: left;
+    padding-left: 8px;
+    height: 34px;
+    line-height: 34px;
+    margin-top: 8px;
+    font-weight: 600;
+  }
+  .price-desc{
+    text-align: left;
+    padding: 0px 2px 0px 6px;
+    margin-top: 8px;
+    height: 140px;
+    font-size: 14px;
+    word-wrap: break-word;
+  }
+  .divider-box{
+    padding: 0px 2px 0px 6px;
+  }
+  .price-fun{
+    text-align: left;
+    padding: 0px 2px 0px 6px;
+    margin-top: 20px;
+    height: 248px;
+    font-size: 12px;
+  }
+  .price-fun>div{
+    height: 60px;
+  }
+  .price-fun>div>div{
+    height: 60px;
+  }
+  .price-btn{
+    text-align: center;
+  }
+  .price-btn button{
+    width: 142px;
+    height: 40px;
+  }
+}
+@media only screen and (min-width: 768px){
+  .PPContent {
+    margin: 0 auto;
+    width: 1122px;
+  }
+  .price-card-wrap{
+    width: 344px;
+  }
+  .price-card-wrap .ant-divider{
+    margin: 0;
+  }
+  .price-card{
+    width: 344px;
+  }
+  .paymentPrice{
+    padding-left: 16px
+  }
+  .price-box{
+    overflow: hidden;
+    height: 80px;
+  }
+  .price-title{
+    float: left;
+    overflow: hidden;
+    font-size: 50px;
+    color: #081F32;
+    height: 80px;
+    line-height: 80px;
+  }
+  .month-tag{
+    float: left;
+    color: #6E7191;
+    font-size: 14px;
+    height: 80px;
+    line-height: 96px;
+  }
+  .price-name{
+    text-align: left;
+    padding-left: 16px;
+    height: 34px;
+    line-height: 34px;
+    font-weight: 600;
+  }
+  .price-desc{
+    text-align: left;
+    padding: 0px 30px 0px 20px;
+    margin-top: 20px;
+    height: 140px;
+    font-size: 14px;
+  }
+  .divider-box{
+    padding: 0px 30px 0px 20px;
+  }
+  .price-fun{
+    text-align: left;
+    padding: 0px 30px 0px 20px;
+    margin-top: 20px;
+    height: 250px;
+    font-size: 14px;
+  }
+  .price-fun>div{
+    height: 60px;
+  }
+  .price-fun>div>div{
+    height: 60px;
+  }
+  .price-btn{
+    text-align: center;
+  }
+  .price-btn button{
+    width: 246px;
+    height: 62px;
+  }
+}
+.pay-pal{
+  background-image: url(../../assets/PayPal.png);
+  width: 114px;
+  height: 28px;
+  float: left;
+  margin-left: 24px;
 }

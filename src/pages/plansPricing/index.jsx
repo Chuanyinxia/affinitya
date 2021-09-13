@@ -48,28 +48,28 @@ const PlansPricing = ({userInfo, httpLoading, setHttpLoading}) => {
       <Headers/>
       <Content>
         <div className="marginTop90 PPContent" style={{minHeight: 'calc(100vh - 180px)', paddingTop: 30}}>
-          <Row gutter={[60, 24]} style={{marginTop: 48}}>
+          <Row style={{marginTop: 48}}>
             <Col span={24}>
               <div style={{textAlign: 'center', fontSize: 24, fontWeight: 600}}>Plans and pricing</div>
               <div style={{textAlign: 'center', fontSize: 14, color: '#6E7191', marginTop: 8}}>
                 Choose the best plan for your business.</div>
             </Col>
           </Row>
-          <Row gutter={[60, 24]} style={{marginTop: 28}}>
+          <div style={{
+            marginTop: 28, marginBottom: 64, display: 'flex', flexDirection: 'row', justifyContent: 'space-around'}}>
             {paymentList.map((payment, idx) => (
-              <Col
-                span={8}
-                className={payment.checked?'plans checked':'plans'}
+              <div
                 key={payment.name}
+                className="price-card-wrap"
               >
-                <Card title={null} bordered={false} className="priceCard">
+                <Card title={null} bordered={false} className="price-card">
                   <Row>
                     <Col span={24} className="paymentPrice">
                       <div className="price-box">
-                        <div className="price-title">{payment.price?
-                        <><span className="priceTag">$</span><span>{payment.price}</span></>:
-                        <span>{payment.price}</span>}</div>
-                        <div className="month-tag">/month</div>
+                        <div className="price-title">
+                          {idx===0?'Free':idx===1?<span>${payment.price}</span>:'Custom'}
+                        </div>
+                        {idx===1?<div className="month-tag">/month</div>:null}
                       </div>
                     </Col>
                   </Row>
@@ -111,20 +111,25 @@ const PlansPricing = ({userInfo, httpLoading, setHttpLoading}) => {
                   </Row>
                   <Row>
                     <Col span={24} className="price-btn">
-                      {payment.clickState===0?
+                      {payment.packageType===1?
                       <Tooltip title="Not available for now.">
-                        <Button type="primary" block disabled>
-                        Sign up Now</Button>
+                        <Button type="primary" block>
+                        Upgrade Now</Button>
                       </Tooltip>:
+                      payment.packageType===2?
                       <Button type="primary" block onClick={()=>{
                         selectPayment(idx);
-                      }}>Sign up Now</Button>}
+                      }}>Sign up Now</Button>:
+                      <Button type="primary" block onClick={()=>{
+                        selectPayment(idx);
+                      }}>Contact Sales</Button>
+                      }
                     </Col>
                   </Row>
                 </Card>
-              </Col>
+              </div>
             ))}
-          </Row>
+          </div>
         </div>
       </Content>
       <Footers/>
