@@ -4,3 +4,19 @@
 .ant-menu-inline-collapsed .ant-menu-submenu .ant-menu-submenu-title span:nth-child(2){
 display: none;
 }
+.menus_subTitle{
+  padding-left: 32px!important;
+}
+.menus_subTitle>a{
+  font-weight: 500 !important;
+  color: #ffffff;
+  font-size: 16px !important;
+  line-height: 24px!important;
+  opacity: 0.7
+}
+.menus_title>a{
+  color: #ffffff;
+  font-weight: 500 !important;
+  font-size: 16px !important;
+  line-height: 24px !important;
+}

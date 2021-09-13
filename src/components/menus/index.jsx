@@ -6,6 +6,9 @@ import {Menu} from 'antd';
 import './style.css';
 import store from '../../store';
 import {setMenusData} from '../../store/actions';
+import dashboard from '../../assets/Dashboard.png';
+import plans from '../../assets/Dollar.png';
+
 const {SubMenu} = Menu;
 
 
@@ -34,28 +37,28 @@ const Menus = ({history, activeKey, openKeys}) => {
       >
         <SubMenu
           key="dashboard"
-          title="Dashboard"
+          title=" Dashboard"
+          className="menus_title"
+          icon={<img src={dashboard}/>}
           onTitleClick={()=>onOpenChange(['dashboard'])}>
-          <Menu.Item key="audienceGenerator" >
+          <Menu.Item key="audienceGenerator" className="menus_subTitle">
             <Link to="/dashboard/audienceGenerator">
               Audience Generator
             </Link>
           </Menu.Item>
-          <Menu.Item key="jobManager" >
+          <Menu.Item key="jobManager" className="menus_subTitle">
             <Link to="/dashboard/jobManager">
               Job Manager
             </Link>
           </Menu.Item>
-          <Menu.Item key="audienceManager" >
+          <Menu.Item key="audienceManager" className="menus_subTitle">
             <Link to="/dashboard/audienceManager">
               Audience Manager
             </Link>
           </Menu.Item>
         </SubMenu>
-        <Menu.Item key="plansAndPrices" >
-          <Link to="/plansAndPrices">
-            Plans & Pricing
-          </Link>
+        <Menu.Item key="plansAndPrices" icon={<img src={plans}/>} className="menus_title">
+          <Link to="/plansAndPrices">Plans & Pricing</Link>
         </Menu.Item>
       </Menu>
     </div>

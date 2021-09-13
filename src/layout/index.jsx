@@ -143,9 +143,9 @@ const Customlayout = ({history, activeKey, setLogged}) => {
     <div>
       <Layout style={{minHeight: '100vh'}}>
         <Sider
+          width={230}
           breakpoint="lg"
           trigger={null}
-          style={{width: 270}}
         >
           <div className="logoBox">
             <img src={logo} width={168}/>
