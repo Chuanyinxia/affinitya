@@ -8,10 +8,220 @@
   padding-top: 60px;
 }
 .PPContent {
-  min-width: 980px;
   margin: 0 auto;
-  width: 1200px;
 }
 .paymentDesc{
   height: 44px;
 }
+.priceCard{
+  min-width: 220px;
+  height: 672px;
+}
+.priceCard:hover{
+  background-color: #120043;
+  color:#fff;
+}
+.priceCard:hover .price-title{
+  color:#fff;
+}
+.priceCard:hover .price-name{
+  color:#00E3A1;
+}
+.priceCard:hover button{
+  background-color: #fff;
+  color:#120043
+}
+@media only screen and (min-width: 768px){
+  .PPContent {
+    margin: 0 auto;
+    width: 688px;
+  }
+  .priceCard{
+    width: 220px;
+  }
+  .paymentPrice{
+    padding-left: 26px
+  }
+  .price-box{
+    overflow: hidden;
+    height: 80px;
+  }
+  .price-title{
+    float: left;
+    overflow: hidden;
+    font-size: 36px;
+    color: #081F32;
+    height: 38px;
+    line-height: 38px;
+  }
+  .month-tag{
+    float: left;
+    color: #6E7191;
+    font-size: 14px;
+    height: 38px;
+    line-height: 52px;
+  }
+  .price-name{
+    text-align: left;
+    padding-left: 26px;
+    height: 34px;
+    line-height: 34px;
+    margin-top: 8px;
+    font-weight: 600;
+  }
+  .price-desc{
+    text-align: left;
+    padding: 0px 22px 0px 26px;
+    margin-top: 8px;
+    height: 60px;
+    font-size: 14px;
+    word-wrap: break-word;
+  }
+  .divider-box{
+    padding: 0px 22px 0px 26px;
+  }
+  .price-fun{
+    text-align: left;
+    padding: 0px 22px 0px 26px;
+    margin-top: 20px;
+    height: 320px;
+    font-size: 12px;
+  }
+  .price-fun>div{
+    height: 60px;
+  }
+  .price-fun>div>div{
+    height: 60px;
+  }
+  .price-btn{
+    text-align: center;
+  }
+  .price-btn button{
+    width: 142px;
+    height: 40px;
+  }
+}
+@media only screen and (min-width: 1440px){
+  .PPContent {
+    margin: 0 auto;
+    width: 1122px;
+  }
+  .priceCard{
+    width: 344px;
+  }
+  .paymentPrice{
+    padding-left: 40px
+  }
+  .price-box{
+    overflow: hidden;
+    height: 80px;
+  }
+  .price-title{
+    float: left;
+    overflow: hidden;
+    font-size: 50px;
+    color: #081F32;
+    height: 80px;
+    line-height: 80px;
+  }
+  .month-tag{
+    float: left;
+    color: #6E7191;
+    font-size: 14px;
+    height: 80px;
+    line-height: 96px;
+  }
+  .price-name{
+    text-align: left;
+    padding-left: 40px;
+    height: 34px;
+    line-height: 34px;
+    margin-top: 20px;
+    font-weight: 600;
+  }
+  .price-desc{
+    text-align: left;
+    padding: 0px 50px 0px 40px;
+    margin-top: 20px;
+    height: 80px;
+    font-size: 14px;
+  }
+  .divider-box{
+    padding: 0px 50px 0px 40px;
+  }
+  .price-fun{
+    text-align: left;
+    padding: 0px 50px 0px 40px;
+    margin-top: 20px;
+    height: 280px;
+    font-size: 14px;
+  }
+  .price-fun>div{
+    height: 60px;
+  }
+  .price-fun>div>div{
+    height: 60px;
+  }
+  .price-btn{
+    text-align: center;
+  }
+  .price-btn button{
+    width: 246px;
+    height: 62px;
+  }
+}
+/* .paymentPrice{
+  padding-left: 40px
+}
+.price-box{
+  overflow: hidden;
+  height: 80px;
+}
+.price-title{
+  float: left;
+  overflow: hidden;
+  font-size: 50px;
+  color: #081F32;
+  height: 80px;
+  line-height: 80px;
+}
+.month-tag{
+  float: left;
+  color: #6E7191;
+  font-size: 14px;
+  height: 80px;
+  line-height: 96px;
+}
+.price-name{
+  text-align: left;
+  padding-left: 40px;
+  height: 34px;
+  line-height: 34px;
+  margin-top: 20px;
+}
+.price-desc{
+  text-align: left;
+  padding: 0px 50px 0px 40px;
+  margin-top: 20px;
+  height: 80px;
+  font-size: 14px;
+}
+.divider-box{
+  padding: 0px 50px 0px 40px;
+}
+.price-fun{
+  text-align: left;
+  padding: 0px 50px 0px 40px;
+  margin-top: 20px;
+  height: 280px;
+}
+.price-fun>div{
+  height: 60px;
+}
+.price-btn{
+  text-align: center;
+}
+.price-btn button{
+  width: 246px;
+  height: 62px;
+} */

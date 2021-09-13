@@ -2,6 +2,10 @@ import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {Col, Layout, Row, message, Button, Divider, Card, Tooltip} from 'antd';
+import {
+  CheckCircleFilled,
+} from '@ant-design/icons';
+
 import {httpLoading} from '@/store/actions';
 import {GETPAYMENTLIST} from '@/api/index';
 import {get} from '@/utils/request';
@@ -44,7 +48,14 @@ const PlansPricing = ({userInfo, httpLoading, setHttpLoading}) => {
       <Headers/>
       <Content>
         <div className="marginTop90 PPContent" style={{minHeight: 'calc(100vh - 180px)', paddingTop: 30}}>
-          <Row gutter={[60, 24]} >
+          <Row gutter={[60, 24]} style={{marginTop: 48}}>
+            <Col span={24}>
+              <div style={{textAlign: 'center', fontSize: 24, fontWeight: 600}}>Plans and pricing</div>
+              <div style={{textAlign: 'center', fontSize: 14, color: '#6E7191', marginTop: 8}}>
+                Choose the best plan for your business.</div>
+            </Col>
+          </Row>
+          <Row gutter={[60, 24]} style={{marginTop: 28}}>
             {paymentList.map((payment, idx) => (
               <Col
                 span={8}
@@ -53,23 +64,26 @@ const PlansPricing = ({userInfo, httpLoading, setHttpLoading}) => {
               >
                 <Card title={null} bordered={false} className="priceCard">
                   <Row>
-                    <Col span={24} className="paymentName">{payment.name}</Col>
-                  </Row>
-                  <Row>
                     <Col span={24} className="paymentPrice">
-                      <div>
-                        {payment.price&&(<span className="priceTag">$</span>)}
-                        {payment.price}
+                      <div className="price-box">
+                        <div className="price-title">{payment.price?
+                        <><span className="priceTag">$</span><span>{payment.price}</span></>:
+                        <span>{payment.price}</span>}</div>
+                        <div className="month-tag">/month</div>
                       </div>
                     </Col>
                   </Row>
                   <Row>
+                    <Col span={24} className="price-name">{payment.name}</Col>
+                  </Row>
+
+                  {/* <Row>
                     <Col span={24} className="paymentType" >
                       {payment.paymentType?payment.paymentType:<span/>}
                     </Col>
-                  </Row>
+                  </Row> */}
                   <Row>
-                    <Col span={14} offset={5} className="paymentDesc">
+                    <Col span={24} className="price-desc">
                       {payment.desc}
                     </Col>
                   </Row>
@@ -80,21 +94,31 @@ const PlansPricing = ({userInfo, httpLoading, setHttpLoading}) => {
                       }
                     </Col>
                   </Row>*/}
+                  <div className="divider-box">
+                    <Divider/>
+                  </div>
                   <Row>
-                    <Col flex="auto" span={8} offset={8} className="paymentBtn">
-                      {payment.clickState===0?<Tooltip title="Not available for now.">
-                        <Button type="primary" block disabled>select</Button>
-                      </Tooltip>:<Button type="primary" block onClick={()=>{
-                        selectPayment(idx);
-                      }}>select</Button>}
+                    <Col className="price-fun"span={24}>
+                      {payment.functionList.map((fun, index)=>(
+                        <div key={`fun_${index}`}>
+                          <div style={{float: 'left'}}>
+                            <CheckCircleFilled style={{marginRight: 9}}/>
+                          </div>
+                          <div>{fun}</div>
+                        </div>
+                      ))}
                     </Col>
                   </Row>
-                  <Divider style={{marginTop: 48}}/>
                   <Row>
-                    <Col flex="auto" span={20} offset={2} className="paymentFun">
-                      {payment.functionList.map((fun, index)=>(
-                        <div key={`fun_${index}`} style={{height: 32}}>{fun}</div>
-                      ))}
+                    <Col span={24} className="price-btn">
+                      {payment.clickState===0?
+                      <Tooltip title="Not available for now.">
+                        <Button type="primary" block disabled>
+                        Sign up Now</Button>
+                      </Tooltip>:
+                      <Button type="primary" block onClick={()=>{
+                        selectPayment(idx);
+                      }}>Sign up Now</Button>}
                     </Col>
                   </Row>
                 </Card>
