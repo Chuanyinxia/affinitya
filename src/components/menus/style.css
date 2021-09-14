@@ -5,18 +5,29 @@
 display: none;
 }
 .menus_subTitle{
-  padding-left: 32px!important;
+  padding-left: 24px!important;
+}
+.menus_group{
+  font-size: 14px;
+  line-height: 28px;
+  height: 40px;
+  color: #A0A3BD;
+  padding-left: 24px;
+  margin-top: 48px;
 }
 .menus_subTitle>a{
   font-weight: 500 !important;
   color: #ffffff;
   font-size: 16px !important;
   line-height: 24px!important;
-  opacity: 0.7
+  opacity: 0.7;
+  letter-spacing: 0px;
+
 }
 .menus_title>a{
   color: #ffffff;
   font-weight: 500 !important;
   font-size: 16px !important;
   line-height: 24px !important;
+  letter-spacing: 0px;
 }

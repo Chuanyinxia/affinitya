@@ -169,7 +169,7 @@ const Customlayout = ({history, activeKey, setLogged}) => {
                 {!isPayUser&&( <Button type="primary" className="btn-md" onClick={() => {
                   store.dispatch(setMenusData('plansAndPrices', ''));
                 }} >
-                  <Link to='/plansAndPrices' >Upgrade</Link>
+                  <Link to='/plansAndPrices' >Upgrade Now</Link>
                 </Button>)}
                 {isPayUser&&( <Button type="primary" disabled>Paid</Button>)}
               </Space>
