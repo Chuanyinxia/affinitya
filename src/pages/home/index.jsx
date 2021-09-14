@@ -7,8 +7,8 @@ import './style.css';
 import banner from '@/assets/home/banner_img.png';
 import info1 from '@/assets/home/info1.png';
 import info2 from '@/assets/home/info2.png';
-import info3 from '@/assets/home/info3.png';
-// import info4 from '@/assets/home/info4.png';
+// import info3 from '@/assets/home/info3.png';
+import info4 from '@/assets/home/info4.png';
 import logo1 from '@/assets/home/logo1.webp';
 import logo2 from '@/assets/home/logo2.webp';
 import logo3 from '@/assets/home/logo3.webp';
@@ -227,7 +227,7 @@ const Home = ({userInfo, httpLoading, setHttpLoading}) => {
           </Row>
           <Row gutter={64} className="marginTop90 paddingB90">
             <Col span={12} className="text-left">
-              <img src={info3} alt="banner" style={{width: '80%'}}/>
+              <img src={info4} alt="banner" style={{width: '80%'}}/>
             </Col>
             <Col span={12} className="padding16">
               {feature(3)}
