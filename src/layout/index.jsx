@@ -148,7 +148,7 @@ const Customlayout = ({history, activeKey, setLogged}) => {
           trigger={null}
         >
           <div className="logoBox">
-            <img src={logo} width={168}/>
+            <a href="/"><img src={logo} width={168}/></a>
           </div>
           <Menus/>
         </Sider>
@@ -166,7 +166,7 @@ const Customlayout = ({history, activeKey, setLogged}) => {
                     <AlertOutlined style={{fontSize: 16}}/>
                   </Popover>
                 </Badge>
-                {!isPayUser&&( <Button type="primary" onClick={() => {
+                {!isPayUser&&( <Button type="primary" className="btn-md" onClick={() => {
                   store.dispatch(setMenusData('plansAndPrices', ''));
                 }} >
                   <Link to='/plansAndPrices' >Upgrade</Link>
