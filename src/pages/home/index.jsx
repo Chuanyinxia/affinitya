@@ -35,7 +35,7 @@ const homeText = {
     title: 'Why Choose Affinity Analyst?',
   },
   developers: {
-    title: 'Trusted byTrusted by leading Developers & Studios',
+    title: 'Trusted by Leading Developers & Studios',
   },
   easySimple: {
     title: 'Just a few simple steps to access your custom audiences!',
@@ -69,7 +69,7 @@ const Home = ({userInfo, httpLoading, setHttpLoading}) => {
     switch (index) {
       case 1:
         return (<div style={{marginTop: 32}}>
-          <div className="text-h3">Bring from Your success
+          <div className="text-h3">Begin from Your Success
           </div>
           <div className="text-p">
             Discover audiences built from your successful UA ad campaigns.
@@ -79,7 +79,7 @@ const Home = ({userInfo, httpLoading, setHttpLoading}) => {
         </div>);
       case 2:
         return (<div style={{marginTop: 32}}>
-          <div className="text-h3">Discover hidden gems</div>
+          <div className="text-h3">Discover Hidden Gems</div>
           <div className="text-p">
             Every player’s interests overlap in part and deviate in others,
             creating opportunities to discover their unique potential for acquisition or for creative inspiration.
