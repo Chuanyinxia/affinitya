@@ -56,7 +56,7 @@
   .price-title{
     float: left;
     overflow: hidden;
-    font-size: 36px;
+    font-size: 22px;
     color: #081F32;
     height: 38px;
     line-height: 38px;
@@ -64,7 +64,7 @@
   .month-tag{
     float: left;
     color: #6E7191;
-    font-size: 14px;
+    font-size: 12px;
     height: 38px;
     line-height: 52px;
   }
@@ -132,7 +132,7 @@
   .price-title{
     float: left;
     overflow: hidden;
-    font-size: 50px;
+    font-size: 36px;
     color: #081F32;
     height: 80px;
     line-height: 80px;
