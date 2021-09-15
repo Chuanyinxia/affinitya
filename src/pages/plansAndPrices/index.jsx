@@ -1,7 +1,7 @@
 import React, {useEffect, useState, useRef} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {Col, Layout, Row, message, Button, Divider, Card, Tooltip, Modal, Checkbox} from 'antd';
+import {Col, Layout, Row, message, Button, Divider, Card, Tooltip, Modal, Checkbox, Result, Spin} from 'antd';
 import {
   CheckCircleFilled,
 } from '@ant-design/icons';
@@ -9,21 +9,20 @@ import {
 import {httpLoading} from '@/store/actions';
 import {GETPAYMENTLIST, PAY} from '@/api/index';
 import {get, post} from '@/utils/request';
-// import Headers from '@/components/Headers';
-import Footers from '@/components/Footers';
 import './style.css';
 import {useHistory} from 'react-router-dom';
-
 const {Content} = Layout;
-
-
 const PlansAndPrices = ({userInfo, httpLoading, setHttpLoading}) => {
   const history = useHistory();
   const [paymentList, setPaymentList] = useState([]);
   const [payModalVisible, setpayModalVisible] = useState(false);
   const [statusModalVisible, setstatusModalVisible] = useState(false);
   const [payUrl, setPayUrl] = useState('');
+  const [payStatus, setpayStatus] = useState(false);
+  const [payRadio, setpayRadio] = useState(true);
+  const [current, setcurrent] = useState({});
   const magicRef = useRef();
+  const [payLoading, setpayLoading] = useState(false);
   const getPaymentList = ()=>{
     setHttpLoading(true);
     get(GETPAYMENTLIST).then((res) => {
@@ -31,7 +30,6 @@ const PlansAndPrices = ({userInfo, httpLoading, setHttpLoading}) => {
         item.checked = false;
         return item;
       });
-      console.log(data);
       setPaymentList(data);
     }).catch((error) => {
       message.error({
@@ -41,10 +39,8 @@ const PlansAndPrices = ({userInfo, httpLoading, setHttpLoading}) => {
       setHttpLoading(false);
     });
   };
-  const selectPayment = ()=>{
-    history.push('/login');
-  };
   const pay = (id)=>{
+    setpayLoading(true);
     post(PAY, {
       paymentPackageId: id,
     }, {
@@ -54,26 +50,35 @@ const PlansAndPrices = ({userInfo, httpLoading, setHttpLoading}) => {
       setPayUrl(res.data.payUrl);
       setTimeout(()=>{
         magicRef.current.click();
+        setpayLoading(false);
       });
     }).catch((error) => {
       message.error({
         content: error.toString(), key: 'netError', duration: 2,
       });
     }).finally(() => {
-      setHttpLoading(false);
+      setpayLoading(false);
     });
+  };
+  const loadPageVar = (sVar) => {
+    return decodeURI(
+        window.location.search.replace(
+            new RegExp('^(?:.*[&\\?]' +
+          encodeURI(sVar).replace(/[.+*]/g, '\\$&') +
+          '(?:\\=([^&]*))?)?.*$', 'i'), '$1'));
   };
   useEffect(() => {
     getPaymentList();
   }, []);
   useEffect(() => {
-    console.log(location.pathname);
+    setpayStatus(loadPageVar('payStatus')==='success');
+    setstatusModalVisible(loadPageVar('payStatus')===''?false:true);
   }, []);
   return (
     <Layout className="layout Home">
       {/* <Headers/> */}
       <Content>
-        <div className="marginTop90 PPContent" style={{minHeight: 'calc(100vh - 180px)', paddingTop: 0}}>
+        <div className="PPContent" style={{minHeight: 'calc(100vh - 180px)', paddingTop: 0}}>
           <Row style={{marginTop: 18}}>
             <Col span={24}>
               <div style={{textAlign: 'center', fontSize: 24, fontWeight: 600}}>Plans and pricing</div>
@@ -93,7 +98,7 @@ const PlansAndPrices = ({userInfo, httpLoading, setHttpLoading}) => {
                     <Col span={24} className="paymentPrice">
                       <div className="price-box">
                         <div className="price-title">
-                          {idx===0?'Free':idx===1?<span>${payment.price}</span>:'Custom'}
+                          {idx===0?'Free':idx===1?<span>USD${payment.price}</span>:'Custom'}
                         </div>
                         {idx===1?<div className="month-tag">/month</div>:null}
                       </div>
@@ -138,14 +143,18 @@ const PlansAndPrices = ({userInfo, httpLoading, setHttpLoading}) => {
                   <Row>
                     <Col span={24} className="price-btn">
                       {payment.packageType===1?
-                      <Tooltip title="Not available for now.">
-                        <Button type="primary" block>
-                        Upgrade Now</Button>
+                      <Tooltip>
+                        <Button type="primary" block disabled>
+                        Actived</Button>
                       </Tooltip>:
                       payment.packageType===2?
-                      <Button type="primary" block onClick={()=>setpayModalVisible(true)}>Upgrade Now</Button>:
                       <Button type="primary" block onClick={()=>{
-                        selectPayment(idx);
+                        setpayModalVisible(true);
+                        setpayRadio(true);
+                        setcurrent(payment);
+                      }}>Upgrade Now</Button>:
+                      <Button type="primary" block onClick={()=>{
+                        history.push('/contactUs');
                       }}>Contact Sales</Button>
                       }
                     </Col>
@@ -156,43 +165,79 @@ const PlansAndPrices = ({userInfo, httpLoading, setHttpLoading}) => {
           </div>
         </div>
       </Content>
-      <Footers/>
-      <Modal visible={payModalVisible} footer={null} width={776} onCancel={()=>setpayModalVisible(false)}>
-        <p style={{
-          fontSize: 24,
-          fontWeight: 600,
-          paddingLeft: 44,
-          marginTop: 36,
-        }}>Subscribe to Affinity Analyst Paid</p>
-        <p style={{
-          paddingLeft: 44,
-        }}
-        >Up to 300 Affinity Tags +Monthly industry newsletter </p>
-        <div style={{
-          height: 40,
-          lineHeight: '40px',
-          paddingLeft: 44,
-          marginTop: 56,
-        }}>
-          <div style={{float: 'left'}}>Payment Method:</div>
-          <div className="pay-pal"></div>
-        </div>
-        <div style={{
-          height: 40,
-          lineHeight: '40px',
-          marginTop: 24,
-          paddingLeft: 44,
-        }}>Payment Amount: $400</div>
-        <div style={{marginTop: 48, paddingLeft: 44}}>
-          <Checkbox>I have read and agreed to the <a href="">Payment Policy.</a></Checkbox>
-        </div>
-        <div style={{marginLeft: 350, marginTop: 72}}>
-          <Button style={{width: 174, height: 48}}>Cancel</Button>
-          <Button
-            style={{width: 174, height: 48, marginLeft: 14}} type="primary" onClick={()=>pay(12)}>Pay Now</Button>
-        </div>
+      <Modal visible={payModalVisible}
+        footer={null} width={776} onCancel={()=>setpayModalVisible(false)} maskClosable={false}>
+        <Spin spinning={payLoading}>
+          <p style={{
+            fontSize: 24,
+            fontWeight: 600,
+            paddingLeft: 44,
+            marginTop: 36,
+          }}>Subscribe to Affinity Analyst Paid</p>
+          <p style={{
+            paddingLeft: 44,
+          }}
+          >Up to 300 Affinity Tags + Monthly industry newsletter </p>
+          <div style={{
+            height: 40,
+            lineHeight: '40px',
+            paddingLeft: 44,
+            marginTop: 56,
+          }}>
+            <div style={{float: 'left'}}>Payment Method:</div>
+            <div className="pay-pal"></div>
+          </div>
+          <div style={{
+            height: 40,
+            lineHeight: '40px',
+            marginTop: 24,
+            paddingLeft: 44,
+          }}>Payment Amount: <span style={{fontSize: 24, paddingLeft: 16}}>${current.price}</span></div>
+          <div style={{marginTop: 48, paddingLeft: 44}}>
+            <Checkbox checked={payRadio} onChange={(e)=>{
+              setpayRadio(!payRadio);
+            }}>I have read and agreed to the <a href="" onClick={(e)=>{
+                e.preventDefault();
+                history.push('/privacyPolicy?type=4');
+              }}>Payment Policy.</a></Checkbox>
+          </div>
+          {payRadio?null:<div style={{paddingLeft: 44, color: '#E92C3A'}}>You should accept the payment policy.</div>}
+          <div style={{marginLeft: 350, marginTop: 72}}>
+            <Button style={{width: 174, height: 48}}>Cancel</Button>
+            <Button
+              style={{width: 174, height: 48, marginLeft: 14}}
+              type="primary"
+              onClick={()=>pay(12)}
+              disabled={!payRadio}>Pay Now</Button>
+          </div>
+        </Spin>
       </Modal>
       <Modal visible={statusModalVisible} footer={null} width={740} onCancel={()=>setstatusModalVisible(false)}>
+        {payStatus?<Result
+          status="success"
+          title="Payment Successful"
+          extra={[
+            <Button key="back" style={{width: 152, height: 48}} onClick={()=>setstatusModalVisible(false)}>
+              Back
+            </Button>,
+            <Button key="start" type="primary" style={{width: 152, height: 48}}>Get Started</Button>,
+          ]}
+        />:
+        <Result
+          status="error"
+          title="Payment failed. Please try again."
+          extra={[
+            <Button key="back" style={{width: 152, height: 48}} onClick={()=>setstatusModalVisible(false)}>
+              Cancel
+            </Button>,
+            <Button key="start" type="primary" style={{width: 152, height: 48}}
+              onClick={()=>{
+                setstatusModalVisible(false);
+                setpayModalVisible(true);
+              }}
+            >Resatrt</Button>,
+          ]}
+        />}
       </Modal>
       <a href={payUrl} ref={magicRef} target="_self" rel="noreferrer">&nbsp;</a>
     </Layout>
