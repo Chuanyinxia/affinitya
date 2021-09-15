@@ -35,11 +35,12 @@ const Menus = ({history, activeKey, openKeys}) => {
         openKeys={['dashboard']}
         onClick={(item)=>onClick(item)}
       >
+        <div className="menus_group">KEYWORD ANALYSIS</div>
         <SubMenu
           key="dashboard"
-          title=" Dashboard"
+          title="Dashboard"
           className="menus_title"
-          icon={<img src={dashboard}/>}
+          icon={<img src={dashboard} style={{marginRight: 10}}/>}
           onTitleClick={()=>onOpenChange(['dashboard'])}>
           <Menu.Item key="audienceGenerator" className="menus_subTitle">
             <Link to="/dashboard/audienceGenerator">
@@ -57,6 +58,7 @@ const Menus = ({history, activeKey, openKeys}) => {
             </Link>
           </Menu.Item>
         </SubMenu>
+        <div className="menus_group">GENERAL INFO</div>
         <Menu.Item key="plansAndPrices" icon={<img src={plans}/>} className="menus_title">
           <Link to="/plansAndPrices">Plans & Pricing</Link>
         </Menu.Item>

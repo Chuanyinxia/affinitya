@@ -27,7 +27,7 @@ const Headers=()=>{
             </Col>
           </Row>
         </Col>
-        <Col xl={24} lg={0} md={0} sm={0} xs={0}>
+        <Col offset={1} xl={22} lg={0} md={0} sm={0} xs={0}>
           <Row className="content-home paddingL16 paddingR16" >
             <Col span={8}>
               <div className="text-left">
@@ -36,9 +36,9 @@ const Headers=()=>{
             </Col>
             <Col span={16} className="text-right">
               <Space size="large">
-                <Link to='/' className="navs">Product</Link>
-                <Link to='/dashboard/audienceGenerator'
-                  className="navs">About</Link>
+                <Link to='/' className="navs">Home</Link>
+                {/* <Link to='/dashboard/audienceGenerator'*/}
+                {/*  className="navs">About</Link>*/}
                 <Link to='/plansPricing' className="navs">Plans & Pricing</Link>
                 <Link to='/contactUs' className="navs">Contact Sales</Link>
                 <span className="navs">|</span>
