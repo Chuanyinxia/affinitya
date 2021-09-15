@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {Col, Layout, Row, message, Button, Divider, Card, Tooltip} from 'antd';
+import {Col, Layout, Row, message, Button, Divider, Card} from 'antd';
 import {
   CheckCircleFilled,
 } from '@ant-design/icons';
@@ -112,16 +112,12 @@ const PlansPricing = ({userInfo, httpLoading, setHttpLoading}) => {
                   <Row>
                     <Col span={24} className="price-btn">
                       {payment.packageType===1?
-                      <Tooltip title="Not available for now.">
-                        <Button type="primary" block>
-                        Upgrade Now</Button>
-                      </Tooltip>:
+                        <Button type="primary" block onClick={()=>selectPayment(idx)}>
+                        Sign up Now</Button>:
                       payment.packageType===2?
+                      <Button type="primary" block onClick={()=>selectPayment(idx)}>Sign up Now</Button>:
                       <Button type="primary" block onClick={()=>{
-                        selectPayment(idx);
-                      }}>Sign up Now</Button>:
-                      <Button type="primary" block onClick={()=>{
-                        selectPayment(idx);
+                        history.push('/contactUs');
                       }}>Contact Sales</Button>
                       }
                     </Col>

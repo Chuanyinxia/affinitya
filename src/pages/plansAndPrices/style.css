@@ -34,9 +34,16 @@
 .price-card:hover .month-tag{
   color:#fff
 }
+.price-card:hover .divider-box .ant-divider{
+  border-color:#fff;
+}
+
 .price-card{
   margin: 0 auto;
   cursor: pointer;
+}
+.ant-checkbox-inner{
+  border-radius: 4px;
 }
 @media only screen and (max-width: 768px){
   .PPContent {
