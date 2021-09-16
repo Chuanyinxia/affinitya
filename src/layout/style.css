@@ -44,3 +44,35 @@
   color: #999999;
   line-height: 16px;
 }
+.icon{
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+.earphone{
+  background-image: url(../assets/earphone.png);
+}
+.faq{
+  background-image: url(../assets/faq.png);
+}
+.bell{
+  background-image: url(../assets/bell.png);
+  position: relative;
+}
+.bell-dot{
+  height: 16px;
+  width: 16px;
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background-color: #E92C3A;
+  border-radius: 8px;
+}
+.userImg{
+  width: 36px;
+  height: 36px;
+  background-color: #ccc;
+}
+.userName{
+  cursor: pointer;
+}

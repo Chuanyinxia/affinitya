@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {Link, withRouter} from 'react-router-dom';
-import {Avatar, Badge, Button, Dropdown, Layout, Menu, Space, Popover, message, List, Row, Col} from 'antd';
+import {Avatar, Badge, Button, Dropdown, Layout, Menu, Space, Popover, message, List, Row, Col, Tooltip} from 'antd';
 import {AlertOutlined, UserOutlined} from '@ant-design/icons';
 import Router from '../routers';
 import Menus from '../components/menus';
@@ -157,21 +157,47 @@ const Customlayout = ({history, activeKey, setLogged}) => {
 
             <div className="text-right">
               <Space size="large">
-                <span className="text-black">{userInfo ? userInfo.nickName : 'Admin'}</span>
-                <Dropdown overlay={menu} placement="bottomCenter">
-                  <Avatar icon={<UserOutlined/>} size={26}/>
-                </Dropdown>
-                <Badge dot={dotShow}>
-                  <Popover content={content} trigger="click" placement="bottomRight">
-                    <AlertOutlined style={{fontSize: 16}}/>
-                  </Popover>
-                </Badge>
-                {!isPayUser&&( <Button type="primary" className="btn-md" onClick={() => {
-                  store.dispatch(setMenusData('plansAndPrices', ''));
-                }} >
-                  <Link to='/plansAndPrices' >Upgrade Now</Link>
-                </Button>)}
-                {isPayUser&&( <Button type="primary" disabled>Paid</Button>)}
+                <Tooltip title="Contact Sales">
+                  <div className="icon earphone" onClick={()=>{
+                    isPayUser?history.push('/contactSales'):history.push('/contactUs');
+                  }}></div>
+                </Tooltip>
+                <Tooltip title="Tech Help">
+                  <div className="icon faq"></div>
+                </Tooltip>
+                <div className="icon bell">
+                  <div className="bell-dot"></div>
+                </div>
+                <div className="userImg"></div>
+                <div className="userName">
+                  <Dropdown overlay={menu} placement="bottomCenter">
+                    <span>{userInfo ? userInfo.nickName : 'Admin'}</span>
+                  </Dropdown>
+                </div>
+                <div>
+                  {!isPayUser?( <Button type="primary" style={{height: 44}} onClick={() => {
+                    store.dispatch(setMenusData('plansAndPrices', ''));
+                  }} >
+                    <Link to='/plansAndPrices' >Upgrade Now</Link>
+                  </Button>):<span style={{color: '#B23730'}}>Current Plan:Paid</span>}
+                </div>
+                <div style={{display: 'none'}}>
+                  <span className="text-black">{userInfo ? userInfo.nickName : 'Admin'}</span>
+                  <Dropdown overlay={menu} placement="bottomCenter">
+                    <Avatar icon={<UserOutlined/>} size={26}/>
+                  </Dropdown>
+                  <Badge dot={dotShow}>
+                    <Popover content={content} trigger="click" placement="bottomRight">
+                      <AlertOutlined style={{fontSize: 16}}/>
+                    </Popover>
+                  </Badge>
+                  {!isPayUser&&( <Button type="primary" className="btn-md" onClick={() => {
+                    store.dispatch(setMenusData('plansAndPrices', ''));
+                  }} >
+                    <Link to='/plansAndPrices' >Upgrade Now</Link>
+                  </Button>)}
+                  {isPayUser&&( <Button type="primary" disabled>Paid</Button>)}
+                </div>
               </Space>
             </div>
           </Header>
