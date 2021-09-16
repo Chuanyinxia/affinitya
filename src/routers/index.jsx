@@ -12,6 +12,7 @@ import ErrorPage from '../pages/ErrorPage';
 import ChangePassword from '@/pages/changePassword';
 import Profile from '@/pages/profile';
 import Subscribe from '@/pages/subscribe';
+import ContactSales from '@/pages/contactSales';
 const Router = () => {
   return (
     <Switch>
@@ -22,6 +23,7 @@ const Router = () => {
       <Route path="/access/users" component={Users} />
       <Route path="/access/roles" component={Roles} />
       <Route path="/plansAndPrices" component={PlansAndPrices} />
+      <Route path="/contactSales" component={ContactSales} />
       <Route path="/transactions" component={Transactions} />
       <Route path="/result" component={ResultPage} />
       <Route path="/changePassword" component={ChangePassword} />
