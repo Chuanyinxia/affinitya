@@ -216,9 +216,7 @@ h4{
   color: #4E4B66;
 
 }
-.ant-input:focus, .ant-input-focused {
-  box-shadow: 0 0 0 1px rgb(18 0 67 / 20%);
-}
+
 
 .ant-select,
 .ant-select:not(.ant-select-customize-input) .ant-select-selector {
@@ -226,4 +224,35 @@ h4{
   height: 64px;
   background-color: #EFF0F7;
   border-radius: 16px;
+  line-height: 28px;
+}
+
+.ant-select-multiple .ant-select-selection-item {
+  background: #F1FCFF;
+  border-radius: 30px;
+  border: none;
+  height: 34px;
+  line-height: 34px;
+  font-size: 13px;
+  color: #0096B7;
+  padding-left: 16px;
+  padding-right:16px;
+  margin-right: 16px;
+}
+.ant-select-single .ant-select-selector .ant-select-selection-item,
+.ant-select-single .ant-select-selector .ant-select-selection-placeholder{
+  line-height: 64px;
+}
+
+.ant-input:focus,
+.ant-input-focused,
+.ant-select:focus,
+.ant-select-focused,
+.ant-input-number-input:focus,
+.ant-select-multiple:focus .ant-select-selector,
+.ant-select-focused .ant-select-selector,
+.ant-select-open .ant-select-selector,
+.ant-select-show-search:focus .ant-select-selector{
+  box-shadow: 0 0 0 2px #120043;
+  background-color: #FFFFFF!important;
 }
