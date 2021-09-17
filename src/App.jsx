@@ -41,7 +41,6 @@ const App = ({history, logged, setLogged, setUserInfo}) => {
   return (
     <div className="App">
       <Switch>
-
         <Route path="/home" component={Home} />
         <Route path="/privacyPolicy" component={PrivacyPolicy} />
         <Route path="/termsService" component={TermsService} />
