@@ -2,13 +2,28 @@ import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {httpLoading} from '@/store/actions';
-import {Button, Card, Col, Divider, Form, Input, InputNumber, message, Radio, Row, Select, Space, Spin} from 'antd';
+import {
+  Button,
+  Card,
+  Col,
+  Divider,
+  Form,
+  Input,
+  InputNumber,
+  message,
+  Modal,
+  Radio,
+  Row,
+  Select,
+  Space,
+  Spin,
+} from 'antd';
 import './style.css';
 
-import {InfoCircleOutlined, PlusOutlined} from '@ant-design/icons';
+import {InfoCircleOutlined, LockOutlined, PlusOutlined} from '@ant-design/icons';
 import {Countrys} from '@/components/plugin/Country';
 import {get, post} from '@/utils/request';
-import {GETAUDIENCEID, ISPAID} from '@/api';
+import {GETAUDIENCEID, ISPAID, SEARCHAUID, SEARCHKW} from '@/api';
 
 
 const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
@@ -17,13 +32,17 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
   const [audienceIdItem, setAudienceIdItem] = useState([]);
   const [isPayUser, setIsPayUser] = useState(false);
   const [searchType, setSearchType] = useState(1);
+  const [read, setRead] = useState(true);
+  const [modalShow, setModalShow] = useState(false);
+
   // new
+  const [creatJobForm] = Form.useForm();
   const [startForm] = Form.useForm();
   const [baseForm] = Form.useForm();
   const [baseFormRadio] = Form.useForm();
   const [keyWordForm] = Form.useForm();
   const [lookalikeForm] = Form.useForm();
-
+  const [searchData, setSearchData] = useState(null);
 
   const addItem = () => {
     if (audienceID) {
@@ -61,7 +80,6 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
       });
     }
   };
-
   const isPay = () => {
     get(ISPAID, userInfo.token).then((res) => {
       setIsPayUser(res.data === 2);
@@ -75,9 +93,100 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
     setSearchType(e.target.value);
   };
 
+  const startFormFinish = (value) => {
+    console.log(value);
+  };
+
+  const toAddJob = () => {
+    setModalShow(true);
+    startForm.validateFields().catch(() => {
+      return false;
+    });
+    baseForm.validateFields().catch(() => {
+      return false;
+    });
+    let data = {
+      ...startForm.getFieldValue(),
+      ...baseForm.getFieldValue(),
+      ...baseFormRadio.getFieldValue(),
+      age: baseForm.getFieldValue().age.min + ',' + baseForm.getFieldValue().age.max,
+    };
+    if (searchType === 1) {
+      keyWordForm.validateFields().then((value) => {
+        data = {
+          ...value,
+          ...data,
+        };
+        setSearchData(data);
+        setModalShow(true);
+      }).catch(() => {
+        return false;
+      });
+    } else {
+      lookalikeForm.validateFields().then((value) => {
+        data = {
+          ...value,
+          ...data,
+        };
+        setModalShow(true);
+        setSearchData(data);
+      }).catch(() => {
+        return false;
+      });
+    }
+  };
+  const onResetAll = () => {
+    startForm.setFieldsValue({
+      adAccountId: '',
+      accessToken: '',
+    });
+    baseForm.setFieldsValue({
+      country: ['US'],
+    });
+    baseFormRadio.setFieldsValue({
+      gender: '1,2',
+      language: 'en_US',
+      os: 'na',
+      platform: 'all',
+    });
+    keyWordForm.resetFields();
+    lookalikeForm.resetFields();
+  };
+
+  const onFinish=(value)=>{
+    const data={
+      ...value,
+      ...searchData,
+    };
+    console.log(data);
+    if (searchType===1) {
+      post(SEARCHKW, data, {
+        // eslint-disable-next-line no-tabs
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'token': userInfo.token,
+      }).then((res) => {
+        console.log(res);
+      }).catch((error) => {
+        message.error({
+          content: error.toString(), key: 'netError', duration: 2,
+        });
+      });
+    } else {
+      post(SEARCHAUID, data, {
+        // eslint-disable-next-line no-tabs
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'token': userInfo.token,
+      }).then((res) => {
+        console.log(res);
+      }).catch((error) => {
+        message.error({
+          content: error.toString(), key: 'netError', duration: 2,
+        });
+      });
+    }
+  };
 
   useEffect(() => {
-    setLoading(false);
     isPay();
     if (userInfo.adAccountId && userInfo.accessToken && userInfo.myAppId && userInfo.myAppSecret) {
       const sdata = {
@@ -86,6 +195,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
         myAppId: userInfo.myAppId,
         myAppSecret: userInfo.myAppSecret,
       };
+      setLoading(true);
       post(GETAUDIENCEID, sdata, {
         'token': userInfo.token,
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -97,40 +207,74 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
         });
       });
     }
+    setTimeout(() => {
+      setRead(false);
+    }, 500);
   },
   []);
   const keywords = ['Basketball', 'Tennis', 'Dancing', 'Assemblage', 'Real Estate', 'Urna', 'Bibendum', 'Pellentesque'];
   return (
-    <div className="padding32">
+    <div className="padding32 Audience">
       <Spin spinning={loading}>
 
         <Row gutter={40}>
           <Col xl={17} md={17} xs={24} sm={24}>
             <h1>Audience Generator</h1>
             <h4 className="marginB32">
-              Affinity Analayst extends high correlation audiences from your custom
+              Affinity Analyst extends high correlation audiences from your custom
               audiences</h4>
             <Card className="marginB32 padding64" hoverable>
               <h2>1.Start with your FB</h2>
               <h4 className="marginB64">Fill in the following required Facebook information below.</h4>
-              <Form form={startForm} name="accountInfo" layout="vertical">
+              <Form
+                form={startForm}
+                name="accountInfo"
+                layout="vertical"
+                onFinish={startFormFinish}
+                initialValues={{
+                  adAccountId: '',
+                  accessToken: '',
+                }}
+                autocomplete="nope"
+                Autocomplete="nope">
                 <Form.Item
                   name="adAccountId"
                   label="Facebook AD ID"
+                  readOnly={read}
+                  autocomplete="nope"
+                  Autocomplete="nope"
+                  rules={[{required: true, message: 'Please input facebook AD ID!'}]}
                   tooltip={{
                     title: 'Tooltip with customize icon',
                     icon: <InfoCircleOutlined/>,
                   }}>
-                  <Input/>
+                  <Input
+                    readOnly={read}
+                    placeholder="Copy & paste your Facebook AD ID here..."
+                    autocomplete="nope"
+                    Autocomplete="nope"
+                    maxLength={100}
+                  />
                 </Form.Item>
                 <Form.Item
                   name="accessToken"
                   label="Access Token"
+                  readOnly={read}
+                  autocomplete="nope"
+                  Autocomplete="nope"
+                  rules={[{required: true, message: 'Please input access token!'}]}
                   tooltip={{
                     title: 'Tooltip with customize icon',
                     icon: <InfoCircleOutlined/>,
                   }}>
-                  <Input/>
+                  <Input.Password
+                    placeholder="Copy & paste your Access Token here..."
+                    readOnly={read}
+                    autocomplete="nope"
+                    Autocomplete="nope"
+                    maxLength={255}
+                    iconRender={() => (<LockOutlined/>)}
+                  />
                 </Form.Item>
               </Form>
             </Card>
@@ -142,6 +286,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
                   name="country"
                   label="Country"
                   initialValue={['US']}
+                  rules={[{required: true, message: 'Please select country!'}]}
                 >
                   <Select
                     mode="multiple"
@@ -164,7 +309,11 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
                 <Form.Item label="Age">
                   <Row>
                     <Col span={10}>
-                      <Form.Item name={['age', 'min']} initialValue={13}>
+                      <Form.Item
+                        name={['age', 'min']}
+                        initialValue={13}
+                        rules={[{required: true, message: 'Please input min age!'}]}
+                      >
                         <InputNumber className="width40"
                           min={13}
                           max={65}
@@ -173,7 +322,9 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
                     </Col>
                     <Col span={4} className="ages text-center">-</Col>
                     <Col span={10}>
-                      <Form.Item name={['age', 'max']} initialValue={65}>
+                      <Form.Item name={['age', 'max']} initialValue={65}
+                        rules={[{required: true, message: 'Please input max age!'}]}
+                      >
                         <InputNumber className="width40" min={13}
                           max={65}
                           decimalSeparator={0}/>
@@ -238,7 +389,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
               <Form form={keyWordForm} name="keywords" className={searchType === 1 ? 'show' : 'hide'}>
                 <Form.Item name="keyWord" rules={[{required: true, message: 'Please input keyword!'}]}>
                   <Select
-                    placeholder="Input keywords....."
+                    placeholder="Input keywords..."
                     mode="tags"
                     open={false}
                     tokenSeparators={[',']}/>
@@ -254,23 +405,25 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
                   <Col span={12}>
                     <Form.Item
                       label="App ID"
+                      name="myAppId"
                       rules={[{required: true, message: 'Please input App ID!'}]}
                       tooltip={{
                         title: 'Tooltip with customize icon',
                         icon: <InfoCircleOutlined/>,
                       }}>
-                      <Input/>
+                      <Input placeholder="Input App ID..." maxLength={255}/>
                     </Form.Item>
                   </Col>
                   <Col span={12}>
                     <Form.Item
                       label="App Secret"
+                      name="myAppSecret"
                       rules={[{required: true, message: 'Please input App secret!'}]}
                       tooltip={{
                         title: 'Tooltip with customize icon',
                         icon: <InfoCircleOutlined/>,
                       }}>
-                      <Input/>
+                      <Input placeholder="Input App secret..." maxLength={100}/>
                     </Form.Item>
                   </Col>
                 </Row>
@@ -284,7 +437,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
                   name="audienceId"
                 >
                   <Select
-                    placeholder="Custom Audience ID"
+                    placeholder="Custom Audience ID..."
                     dropdownRender={(menu) => (
                       <div>
                         {menu}
@@ -330,12 +483,38 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
         <Row>
           <Col span={24} className="text-center">
             <Space size="large">
-              <Button className="btn-xl">Reset All</Button>
-              <Button type="primary" className="btn-xl">Generate Audience</Button>
+              <Button className="btn-xl" onClick={onResetAll}>Reset All</Button>
+              <Button type="primary" className="btn-xl" onClick={toAddJob}>Generate Audience</Button>
             </Space>
           </Col>
         </Row>
-
+        <Modal
+          title={null}
+          visible={modalShow}
+          footer={null}
+          width={650}
+          onCancel={()=> {
+            setModalShow(false);
+            setSearchData(null);
+          }}>
+          <h2>Create Job</h2>
+          <p className="marginB32">Name your audience for identification in Job & Audience Manager</p>
+          <Form name="creatJob" form={creatJobForm} onFinish={onFinish}>
+            <Form.Item name="jobName" rules={[{required: true, message: 'Please input job name!'}]}>
+              <Input placeholder="Input job name, ex: game name, audience/keyword, etc. " maxLength={255}/>
+            </Form.Item>
+            <Form.Item className="text-right">
+              <Button
+                className="btn-lg marginR32 marginT32"
+                onClick={()=> {
+                  setModalShow(false);
+                  setSearchData(null);
+                  creatJobForm.resetFields();
+                }}>Cancel</Button>
+              <Button type="primary" className="btn-lg" htmlType="submit">Save</Button>
+            </Form.Item>
+          </Form>
+        </Modal>
       </Spin>
     </div>
   );

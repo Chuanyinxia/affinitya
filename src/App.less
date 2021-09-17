@@ -204,6 +204,19 @@ h4{
   color: #4E4B66;
   margin: 0;
 }
+#accountInfo_accessToken{
+  box-shadow:none!important;
+  background: transparent!important;
+}
+.ant-form-item-has-error .ant-input-affix-wrapper,
+.ant-form-item-has-error .ant-input ,
+.ant-form-item-has-error .ant-input-number-input,
+.ant-form-item-has-error .ant-input-number,
+.ant-form-item-has-error .ant-select-selector{
+  box-shadow: 0 0 0 2px #E92C3A;
+  background-color:#FFFFFF;
+}
+.ant-input-affix-wrapper,
 .ant-input ,
 .ant-input-number-input,
 .ant-input-number {
@@ -217,6 +230,9 @@ h4{
 
 }
 
+.ant-input-affix-wrapper > input.ant-input{
+  margin-top:-3px;
+}
 
 .ant-select,
 .ant-select:not(.ant-select-customize-input) .ant-select-selector {
@@ -243,7 +259,10 @@ h4{
 .ant-select-single .ant-select-selector .ant-select-selection-placeholder{
   line-height: 64px;
 }
-
+.ant-input-affix-wrapper:focus, .ant-input-affix-wrapper-focused{
+box-shadow: 0 0 0 2px #120043!important;
+  background-color: #FFFFFF!important;
+}
 .ant-input:focus,
 .ant-input-focused,
 .ant-select:focus,

@@ -24,3 +24,12 @@ span.ant-radio + *{
 .hide{
   display: none;
 }
+.Audience .ant-form-item-label > label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::before{
+  content: none;
+}
+.marginT32{
+  margin-top: 32px;
+}
+.marginR32{
+  margin-right: 32px;
+}
