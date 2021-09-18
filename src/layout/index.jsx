@@ -201,7 +201,7 @@ const Customlayout = ({history, activeKey, setLogged}) => {
               </Space>
             </div>
           </Header>
-          <Content>
+          <Content style={{margin: 0}}>
             <div className="site-layout-background" style={{minHeight: 'calc(100vh - 89px)'}}>
               <Router/>
             </div>

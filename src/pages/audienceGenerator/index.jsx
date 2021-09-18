@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {httpLoading} from '@/store/actions';
+import {httpLoading, setMenusData} from '@/store/actions';
 import {
   Button,
   Card,
@@ -23,10 +23,15 @@ import './style.css';
 import {InfoCircleOutlined, LockOutlined, PlusOutlined} from '@ant-design/icons';
 import {Countrys} from '@/components/plugin/Country';
 import {get, post} from '@/utils/request';
-import {GETAUDIENCEID, ISPAID, SEARCHAUID, SEARCHKW} from '@/api';
+import {GETAUDIENCEID,
+  ISPAID, SEARCHAUID, SEARCHKW, SAVEAUDIENCEID, GETAUDIENCEIDLIST} from '@/api';
+import {useHistory} from 'react-router-dom';
+import store from '@/store';
 
 
 const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
+  const history = useHistory();
+
   const [loading, setLoading] = useState(false);
   const [audienceID, setAudienceID] = useState('');
   const [audienceIdItem, setAudienceIdItem] = useState([]);
@@ -34,7 +39,8 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
   const [searchType, setSearchType] = useState(1);
   const [read, setRead] = useState(true);
   const [modalShow, setModalShow] = useState(false);
-
+  const [addItemLoading, setAddItemLoading]=useState(false);
+  const [accessToken, setAccessToken] = useState(null);
   // new
   const [creatJobForm] = Form.useForm();
   const [startForm] = Form.useForm();
@@ -46,14 +52,25 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
 
   const addItem = () => {
     if (audienceID) {
-      audienceIdItem.push({audienceId: audienceID});
-      setAudienceIdItem(audienceIdItem);
-      setAudienceID(null);
+      setAddItemLoading(true);
+      post(SAVEAUDIENCEID, {audienceId: audienceID}, {
+        'token': userInfo.token,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      }).then((res)=>{
+        audienceIdItem.push({audienceId: audienceID, audienceParams: audienceID});
+        setAudienceIdItem(audienceIdItem);
+        setAudienceID(null);
+      }).catch((error)=>{
+        message.error({
+          content: error.toString(), key: 'netError', duration: 2,
+        });
+      }).finally(()=>{
+        setAddItemLoading(false);
+      });
     }
   };
   const onLKSearchChange = (changedValues, allValues) => {
     const adAccountId = allValues.adAccountId;
-    const accessToken = allValues.accessToken;
     const myAppId = allValues.myAppId;
     const myAppSecret = allValues.myAppSecret;
     if (Object.keys(changedValues) !== 'audienceId' &&
@@ -74,9 +91,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
       }).then((res) => {
         setAudienceIdItem(res.data);
       }).catch((error) => {
-        message.error({
-          content: error.toString(), key: 'netError', duration: 2,
-        });
+        console.log(error);
       });
     }
   };
@@ -158,7 +173,6 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
       ...value,
       ...searchData,
     };
-    console.log(data);
     if (searchType===1) {
       post(SEARCHKW, data, {
         // eslint-disable-next-line no-tabs
@@ -166,6 +180,8 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
         'token': userInfo.token,
       }).then((res) => {
         console.log(res);
+        store.dispatch(setMenusData('jobManager', 'dashboard'));
+        history.push('/dashboard/jobManager');
       }).catch((error) => {
         message.error({
           content: error.toString(), key: 'netError', duration: 2,
@@ -178,6 +194,8 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
         'token': userInfo.token,
       }).then((res) => {
         console.log(res);
+        store.dispatch(setMenusData('jobManager', 'dashboard'));
+        history.push('/dashboard/jobManager');
       }).catch((error) => {
         message.error({
           content: error.toString(), key: 'netError', duration: 2,
@@ -188,6 +206,14 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
 
   useEffect(() => {
     isPay();
+    setLoading(true);
+    get(GETAUDIENCEIDLIST, userInfo.token).then((res)=>{
+      setAudienceIdItem(res.data);
+    }).catch((error)=>{
+      console.log(error);
+    }).finally(()=>{
+      setLoading(false);
+    });
     if (userInfo.adAccountId && userInfo.accessToken && userInfo.myAppId && userInfo.myAppSecret) {
       const sdata = {
         adAccountId: userInfo.adAccountId,
@@ -202,9 +228,9 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
       }).then((res) => {
         setAudienceIdItem(res.data);
       }).catch((error) => {
-        message.error({
-          content: error.toString(), key: 'netError', duration: 2,
-        });
+        console.log(error);
+      }).finally(()=>{
+        setLoading(false);
       });
     }
     setTimeout(() => {
@@ -272,6 +298,9 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
                     readOnly={read}
                     autocomplete="nope"
                     Autocomplete="nope"
+                    onChange={(e)=>{
+                      setAccessToken(e.target.value);
+                    }}
                     maxLength={255}
                     iconRender={() => (<LockOutlined/>)}
                   />
@@ -442,24 +471,31 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
                       <div>
                         {menu}
                         <Divider style={{margin: '4px 0'}}/>
-                        <div style={{display: 'flex', flexWrap: 'nowrap', padding: 8}}>
-                          <Input
-                            style={{flex: 'auto'}}
-                            value={audienceID}
-                            onChange={(e) => setAudienceID(e.target.value)}
-                            maxLength={255}/>
-                          <a
-                            style={{flex: 'none', padding: '8px', display: 'block', cursor: 'pointer'}}
-                            onClick={addItem}
-                          >
-                            <PlusOutlined/> Add item
-                          </a>
-                        </div>
+                        <Row className="padding16">
+                          <Col flex={4} >
+                            <Input
+                              size="small"
+                              value={audienceID}
+                              onChange={(e) => setAudienceID(e.target.value)}
+                              maxLength={255}/>
+                          </Col>
+                          <Col flex={1} className="text-center">
+                            <Button
+                              className="btn-sm"
+                              type="primary"
+                              ghost
+                              loading={addItemLoading}
+                              onClick={addItem}
+                            >
+                              <PlusOutlined/> Add item
+                            </Button>
+                          </Col>
+                        </Row>
                       </div>
                     )}
                   >
                     {audienceIdItem.map((item) => (
-                      <Select.Option key={item.audienceId}>{item.audienceId}</Select.Option>
+                      <Select.Option key={item.audienceId}>{item.audienceParams}</Select.Option>
                     ))}
                   </Select>
                 </Form.Item>
