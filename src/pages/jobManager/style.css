@@ -25,6 +25,7 @@
 .ant-input-sm {
   height: 38px;
   margin-top: 0 !important;
+  font-size: 14px;
 }
 
 .ant-table-tbody > tr > td {
@@ -69,7 +70,7 @@
 }
 .ant-tag-green{
   background: #F2FFFB;
-color:#00BA88;
+  color:#00BA88;
 }
 .ant-tag-red {
   color: #E92C3A;

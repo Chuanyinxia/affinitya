@@ -3,8 +3,8 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {httpLoading, setMenusData} from '@/store/actions';
 import './style.css';
-import {CANCELJOB, EXPORTDETAIL, GETJOBDETAIL, GETJOBMANAGER, ISPAID, RESTARTJOB} from '@/api';
-import {get, post} from '@/utils/request';
+import {CANCELJOB, EXPORTDETAIL, GETJOBDETAIL, GETJOBMANAGER, ISPAID, RESTARTJOB, UPDATEJOBTITLE} from '@/api';
+import {get, post, update} from '@/utils/request';
 import {Alert, Button, Form, Input, message, Modal, Space, Table, Tabs, Tag, Tooltip} from 'antd';
 import {EyeOutlined, SearchOutlined} from '@ant-design/icons';
 import {useHistory} from 'react-router-dom';
@@ -36,9 +36,28 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
   const onFinish = (value) => {
     const data = {
       ...value,
-      ...editData,
+      id: editData.id,
     };
-    console.log(data);
+    // console.log(data);
+    update(UPDATEJOBTITLE, data, {
+      // eslint-disable-next-line no-tabs
+      'Content-Type':	'application/x-www-form-urlencoded',
+      'token': userInfo.token,
+    }).then((res)=>{
+      setModalShow(false);
+      message.success('Success');
+      creatJobForm.resetFields();
+      getJobList({
+        ...pagination,
+        pageNum: pagination.current,
+        type: jobType === false ? '' : jobType,
+      });
+      setEditData(null);
+    }).catch((error)=>{
+      message.error({
+        content: error.toString(), key: 'netError', duration: 2,
+      });
+    });
   };
 
   const [creatJobForm] = Form.useForm();
@@ -227,6 +246,9 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
               <Button type="text" className="btn-xs btn-red-link" onClick={() => {
                 setEditData(record);
                 setModalShow(true);
+                creatJobForm.setFieldsValue({
+                  jobTitle: record.title,
+                });
               }}>Edit</Button>
               {(record.jobStatus === 1 || record.jobStatus === 5) ? (
                 <Button
@@ -269,9 +291,9 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
           <p className="marginB32">Name your audience for identification in Job & Audience Manager</p>
           <Form name="creatJob" form={creatJobForm} onFinish={onFinish}>
             <Form.Item
-              name="jobName"
+              name="jobTitle"
               rules={[{required: true, message: 'Please input job name!'}]}
-              initialValue={editData?editData.title:''}>
+            >
               <Input placeholder="Input job name, ex: game name, audience/keyword, etc. " maxLength={255}/>
             </Form.Item>
             <Form.Item className="text-right">
