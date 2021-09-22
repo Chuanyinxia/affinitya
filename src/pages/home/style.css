@@ -353,18 +353,27 @@
 .btn-xl{
   height: 58px;
   min-width: 200px;
+  padding-top: 0;
+  line-height: 58px;
 }
 .btn-lg{
   height: 40px;
   min-width: 160px;
+  line-height: 40px;
+  padding-top: 0;
 }
-.btn-md{
+.btn-md,
+.btn-md span{
   height:  36px;
   min-width: 112px;
   font-size: 13px;
+  line-height: 36px;
+  padding-top: 0;
 }
 .btn-sm{
   height: 32px;
   min-width: 84px;
   font-size: 12px;
+  line-height: 32px;
+  padding-top: 0;
 }

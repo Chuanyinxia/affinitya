@@ -3,25 +3,26 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {httpLoading, setMenusData} from '@/store/actions';
 import './style.css';
-import {CANCELJOB, EXPORTDETAIL, GETJOBDETAIL, GETJOBMANAGER, ISPAID, RESTARTJOB, UPDATEJOBTITLE} from '@/api';
+import {CANCELJOB, GETJOBDETAIL, GETJOBMANAGER, ISPAID, RESTARTJOB, UPDATEJOBTITLE} from '@/api';
 import {get, post, update} from '@/utils/request';
-import {Alert, Button, Form, Input, message, Modal, Space, Table, Tabs, Tag, Tooltip} from 'antd';
+import {Alert, Button, Form, Input, message, Modal, Space, Table, Tabs, Tag} from 'antd';
 import {EyeOutlined, SearchOutlined} from '@ant-design/icons';
 import {useHistory} from 'react-router-dom';
 import store from '@/store';
 import {type} from '@/components/plugin/Searchdata';
-import ResultTable from '@/components/Table/ResultTable';
+// import ResultTable from '@/components/Table/ResultTable';
+import KeyWordSearchDetails from '@/components/Table/KeyWordSearchDetails';
 
 const jobMangerText = {
   title: 'Unsaved audience will be deleted after 30 days.',
 };
 const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
   const history = useHistory();
-  const [isPayUser, setIsPayUser] = useState(false);
+  const [, setIsPayUser] = useState(false);
   const [viewDetail, setViewDetail] = useState([]);
   const [viewModal, setViewModal] = useState(false);
-  const [lookID, setLookID] = useState(null);
-  const [lookType, setLookType] = useState(null);
+  const [, setLookID] = useState(null);
+  const [, setLookType] = useState(null);
   const [jobList, setJobList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [jobType, setJobType] = useState(type() ?? 0);
@@ -32,6 +33,8 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
     pageSize: 10,
     total: 0,
     type: jobType,
+    size: 'small',
+    hideOnSinglePage: true,
   });
   const onFinish = (value) => {
     const data = {
@@ -76,6 +79,7 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
         }).then((res)=>{
       setJobList(res.data.items);
       setPagination({
+        ...pagination,
         current: res.data.pageNum,
         pageSize: res.data.pageSize,
         total: (res.data.pageSize*res.data.totalPage)??0,
@@ -114,11 +118,11 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
   };
   const getJobDetails=(id)=>{
     get(GETJOBDETAIL+id, userInfo.token).then((res)=>{
-      console.log(res);
-      setViewModal(true);
+      console.log(res.data.kwResultVoList);
       setLookID(res.data.kwResultVoList[0].id);
       setLookType(2);
-      setViewDetail(res.data.kwResultVoList[0].searchDetails??[]);
+      setViewDetail(res.data.kwResultVoList);
+      setViewModal(true);
     }).catch((error)=>{
       message.error({
         content: error.toString(), key: 'netError', duration: 2,
@@ -143,12 +147,12 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
       });
     });
   };
-  const addIndex=(data)=>{
-    const tableData=data.map((item, index)=>{
-      return {...item, index: index+1};
-    })??[];
-    return tableData;
-  };
+  // const addIndex=(data)=>{
+  //   const tableData=data.map((item, index)=>{
+  //     return {...item, index: index+1};
+  //   })??[];
+  //   return tableData;
+  // };
   const isPay=()=>{
     get(ISPAID, userInfo.token).then((res)=>{
       setIsPayUser(res.data===2);
@@ -158,6 +162,7 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
       });
     });
   };
+
   useEffect(() => {
     getJobList({
       pageNum: 1,
@@ -170,6 +175,7 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
       onView();
     }
   }, []);
+
   const onView = (record) => {
     if (record.type === 3) {
       return (<a type="link" onClick={() => getJobDetails(record.id)}><EyeOutlined/></a>);
@@ -208,7 +214,7 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
             });
           }}
         >
-          <Tabs.TabPane tab="All" key={0}/>
+          <Tabs.TabPane tab="All" key={0} style={{width: 60}}/>
           <Tabs.TabPane tab="Keyword" key={1}/>
           <Tabs.TabPane tab="Lookalike Audience" key={2}/>
           <Tabs.TabPane tab="Extend" key={3}/>
@@ -260,7 +266,7 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
               ) : (record.jobStatus === 2) ?
                 (<Button
                   onClick={() => {
-                    viewDetails(record.id, record.type);
+                    getJobDetails(record.id);
                   }}
                   type="link"
                   className="btn-xs btn-red-link">
@@ -309,7 +315,7 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
           </Form>
         </Modal>
         <Modal
-          title="Details"
+          title={null}
           width={1200}
           visible={viewModal}
           className="height900"
@@ -323,26 +329,7 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
             setViewModal(false);
           }}>
           <div >
-            <div className="text-right marginB16">
-              <Space>
-                {isPayUser ? (<Button
-                  download
-                  href={`${EXPORTDETAIL}${lookID}/${lookType}/${userInfo.token}`}
-                  disabled={!isPayUser}>
-                    Export to CSV
-                </Button>) :
-                  (<Tooltip title="Pls upgrade to use this function.">
-                    <Button
-                      download
-                      href={`${EXPORTDETAIL}${lookID}/${lookType}/${userInfo.token}`}
-                      disabled={!isPayUser}>
-                      Export to CSV
-                    </Button>
-                  </Tooltip>)
-                }
-              </Space>
-            </div>
-            {<ResultTable TableData={addIndex(viewDetail)}/>}
+            {<KeyWordSearchDetails searchData={viewDetail}/>}
           </div>
 
         </Modal>

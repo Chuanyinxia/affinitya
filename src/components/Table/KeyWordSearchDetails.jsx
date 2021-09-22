@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {httpLoading} from '@/store/actions';
 import './style.css';
-import {Button, Card, Empty, Input, message, Modal, Space, Tabs, Tooltip} from 'antd';
+import {Button, Card, Empty, Input, message, Modal, Space, Tabs, Tooltip, Row, Col} from 'antd';
 import ResultTable from '@/components/Table/ResultTable';
 import {get, post} from '@/utils/request';
 import {EXPORTCVS, ISPAID, SAVESEARCHMESSAGE} from '@/api';
@@ -15,6 +15,7 @@ const KeyWordSearchDetails = ({userInfo, searchData, saveName, saveStatus, setSa
   const [saveModal, setSaveModal]=useState(false);
   const [audienceName, setAudienceName]=useState(saveName);
   const [isPayUser, setIsPayUser] = useState(false);
+  console.log(searchData);
   const id = searchData ? searchData[0].searchId : '';
   const tableData = (tableData) => {
     const data = tableData.map((item, index) => {
@@ -58,15 +59,28 @@ const KeyWordSearchDetails = ({userInfo, searchData, saveName, saveStatus, setSa
       if (parseInt(saveStatus)===1) {
         return (
           <Tooltip title="You have saved this result.">
-            <Button disabled>Save Audience</Button>
+            <Button
+              disabled
+              type="primary"
+              className="btn-md"
+            >
+              Save for Testing
+            </Button>
           </Tooltip>);
       }
       return (<Button
+        type="primary"
+        className="btn-md"
         onClick={()=>setSaveModal(true)}
-      >Save Audience</Button>);
+      >Save for Testing</Button>);
     }
     return (<Tooltip title="Pls upgrade to use this function.">
-      <Button disabled>Save Audience</Button>
+      <Button
+        disabled
+        type="primary"
+        className="btn-md"
+      >Save for Testing
+      </Button>
     </Tooltip>);
   };
 
@@ -74,12 +88,13 @@ const KeyWordSearchDetails = ({userInfo, searchData, saveName, saveStatus, setSa
     if (isPayUser) {
       if (searchData.length<1) {
         return ( <Tooltip title="The search result is empty and cannot be exported.">
-          <Button disabled>
+          <Button disabled className="btn-md">
             Export to CSV
           </Button>
         </Tooltip>);
       }
       return (<Button
+        className="btn-md"
         download
         href={`${EXPORTCVS}${id}/${userInfo.token}`}
         disabled={!isPayUser}>
@@ -88,29 +103,38 @@ const KeyWordSearchDetails = ({userInfo, searchData, saveName, saveStatus, setSa
     }
     return (
       <Tooltip title="Pls upgrade to use this function.">
-        <Button disabled>
+        <Button disabled className="btn-md">
           Export to CSV
         </Button>
       </Tooltip>);
+  };
+
+  const copyKeyword = ()=>{
+    return (
+      <Button disabled className="btn-md">
+        Copy Keyword
+      </Button>);
   };
   useEffect(()=>{
     isPay();
   }, [isPayUser]);
   return (
     <div>
-      <h2 className="search-content">
-        From your custom audiences, Affinity Analyst extends high correlation audiences, organized in high relation
-        groups for optimal audience sets and ranked per affinity data.</h2>
-      <div className="text-right marginB16">
-        <Space>
-          {saveAudienceButton()}
-          {downloadButton()}
-        </Space>
-      </div>
+      <Row>
+        <Col span={6}><h2 className="search-content">
+          Tennis</h2></Col>
+        <Col span={18} className="text-right marginB16 paddingR32">
+          <Space>
+            {saveAudienceButton()}
+            {copyKeyword()}
+            {downloadButton()}
+          </Space>
+        </Col>
+      </Row>
       <Card>
-        {searchData?(<Tabs defaultActiveKey={searchData[0].id}>
+        {searchData?(<Tabs defaultActiveKey={searchData[0].id} >
           {searchData.map((item)=>(
-            <TabPane tab={`group${item.groupId}`} key={item.id} >
+            <TabPane tab={`Group ${item.groupId} (${item.searchDetails.length})`} key={item.id} >
               <ResultTable TableData={tableData(item.searchDetails??[])}/>
             </TabPane>))}
         </Tabs>):(<Empty />)
