@@ -3,18 +3,21 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {httpLoading} from '@/store/actions';
 import './style.css';
-import {Button, Card, Empty, Input, message, Modal, Space, Tabs, Tooltip} from 'antd';
+import {Button, Card, Col, Empty, message, Row, Space, Tabs, Tooltip} from 'antd';
 import ResultTable from '@/components/Table/ResultTable';
 import {get, post} from '@/utils/request';
-import {EXPORTCVS, ISPAID, SAVESEARCHMESSAGE} from '@/api';
+import {EXPORTCVS, ISPAID, SAVESEARCHMESSAGE, SAVESEARCHMESSAGEBYGROUP} from '@/api';
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 const {TabPane} = Tabs;
 
 
-const KeyWordSearchDetails = ({userInfo, searchData, saveName, saveStatus, setSaveStatus}) => {
-  const [saveModal, setSaveModal]=useState(false);
-  const [audienceName, setAudienceName]=useState(saveName);
+const KeyWordSearchDetails = ({userInfo, searchData}) => {
+  const [saveStatus, setSaveStatus] = useState(false);
   const [isPayUser, setIsPayUser] = useState(false);
+  const [selectKeys, setSelectKeys]= useState([]);
+  const [copyValue, setCopyValues] = useState('');
+  const [groupId, setGroupId]=useState(null);
   const id = searchData ? searchData[0].searchId : '';
   const tableData = (tableData) => {
     const data = tableData.map((item, index) => {
@@ -22,28 +25,50 @@ const KeyWordSearchDetails = ({userInfo, searchData, saveName, saveStatus, setSa
     });
     return data;
   };
-  const saveAudience=()=> {
-    if (searchData.length<1) {
-      message.warn('The search result is empty and cannot be saved.');
-      return false;
-    }
-    post(SAVESEARCHMESSAGE,
-        {searchId: id, audienceName: audienceName !== '' ? audienceName : saveName},
-        {
+  const saveAudience = () => {
+    setSaveStatus(true);
+    if (groupId) {
+      post(SAVESEARCHMESSAGEBYGROUP,
+          {searchId: id,
+            saveGroup: {
+              groupId,
+              ids: selectKeys,
+            },
+          },
+          {
           // eslint-disable-next-line no-tabs
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'token': userInfo.token,
-        }).then((res) => {
-      message.success(res.msg);
-      setSaveStatus(1);
-      setSaveModal(false);
-      setAudienceName('');
-    }).catch((error) => {
-      message.error({
-        content: error.toString(), key: 'netError', duration: 2,
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'token': userInfo.token,
+          }).then((res) => {
+        message.success(res.msg);
+        setSaveStatus(1);
+      }).catch((error) => {
+        message.error({
+          content: error.toString(), key: 'netError', duration: 2,
+        });
+      }).finally(() => {
+        setSaveStatus(false);
       });
-    });
+    } else {
+      post(SAVESEARCHMESSAGE,
+          {searchId: id},
+          {
+          // eslint-disable-next-line no-tabs
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'token': userInfo.token,
+          }).then((res) => {
+        message.success(res.msg);
+        setSaveStatus(1);
+      }).catch((error) => {
+        message.error({
+          content: error.toString(), key: 'netError', duration: 2,
+        });
+      }).finally(() => {
+        setSaveStatus(false);
+      });
+    }
   };
+
   const isPay=()=>{
     get(ISPAID, userInfo.token).then((res)=>{
       setIsPayUser(res.data===2);
@@ -58,15 +83,32 @@ const KeyWordSearchDetails = ({userInfo, searchData, saveName, saveStatus, setSa
       if (parseInt(saveStatus)===1) {
         return (
           <Tooltip title="You have saved this result.">
-            <Button disabled>Save Audience</Button>
+            <Button
+              disabled
+              type="primary"
+              className="btn-md"
+            >
+              Save for Testing
+            </Button>
           </Tooltip>);
       }
-      return (<Button
-        onClick={()=>setSaveModal(true)}
-      >Save Audience</Button>);
+
+      return (
+        <Tooltip placement="top" title="If you don't choose any keyword, we will save all for you.">
+          <Button
+            type="primary"
+            className="btn-md"
+            onClick={saveAudience}
+          >Save for Testing</Button>
+        </Tooltip>);
     }
     return (<Tooltip title="Pls upgrade to use this function.">
-      <Button disabled>Save Audience</Button>
+      <Button
+        disabled
+        type="primary"
+        className="btn-md"
+      >Save for Testing
+      </Button>
     </Tooltip>);
   };
 
@@ -74,12 +116,13 @@ const KeyWordSearchDetails = ({userInfo, searchData, saveName, saveStatus, setSa
     if (isPayUser) {
       if (searchData.length<1) {
         return ( <Tooltip title="The search result is empty and cannot be exported.">
-          <Button disabled>
+          <Button disabled className="btn-md">
             Export to CSV
           </Button>
         </Tooltip>);
       }
       return (<Button
+        className="btn-md"
         download
         href={`${EXPORTCVS}${id}/${userInfo.token}`}
         disabled={!isPayUser}>
@@ -88,48 +131,73 @@ const KeyWordSearchDetails = ({userInfo, searchData, saveName, saveStatus, setSa
     }
     return (
       <Tooltip title="Pls upgrade to use this function.">
-        <Button disabled>
+        <Button disabled className="btn-md">
           Export to CSV
         </Button>
       </Tooltip>);
   };
-  useEffect(()=>{
+  const onCopy=()=>{
+    message.success('copy');
+  };
+  const copyKeyword = () => {
+    return (
+      <CopyToClipboard text={copyValue} onCopy={onCopy}>
+        <Button size="md" className="btn-md" >
+            Copy Keyword
+        </Button>
+      </CopyToClipboard>
+    );
+  };
+
+  const onSelect = (key, value, groupId) => {
+    setSelectKeys(key);
+    setGroupId(groupId);
+  };
+
+  useEffect(() => {
     isPay();
-  }, [isPayUser]);
+  }, []);
+  useEffect(()=>{
+    if (searchData) {
+      let str='Group\tId\tKeyword\tSize\tpath\n';
+      searchData.forEach((item)=>{
+        item.searchDetails.forEach((data)=>{
+          str+=`${item.groupId}\t${data.id}\t${data.keyword}\t${data.size}\t${data.path}\n`;
+        });
+      });
+      setCopyValues(str);
+    }
+    console.log(copyValue);
+  }, [searchData]);
   return (
     <div>
-      <h2 className="search-content">
-        From your custom audiences, Affinity Analyst extends high correlation audiences, organized in high relation
-        groups for optimal audience sets and ranked per affinity data.</h2>
-      <div className="text-right marginB16">
-        <Space>
-          {saveAudienceButton()}
-          {downloadButton()}
-        </Space>
-      </div>
+      <Row>
+        <Col span={6}><h2 className="search-content">
+          Tennis</h2></Col>
+        <Col span={18} className="text-right marginB16 paddingR32">
+          <Space>
+            {saveAudienceButton()}
+            {copyKeyword()}
+            {downloadButton()}
+          </Space>
+        </Col>
+      </Row>
       <Card>
-        {searchData?(<Tabs defaultActiveKey={searchData[0].id}>
+        {searchData?(<Tabs defaultActiveKey={searchData[0].id} destroyInactiveTabPane onChange={()=>{
+          setGroupId(null);
+          setSelectKeys([]);
+        }}>
           {searchData.map((item)=>(
-            <TabPane tab={`group${item.groupId}`} key={item.id} >
-              <ResultTable TableData={tableData(item.searchDetails??[])}/>
+            <TabPane tab={`Group ${item.groupId} (${item.searchDetails.length})`} key={item.id} >
+              <ResultTable
+                TableData={tableData(item.searchDetails ?? [])}
+                onSelect={onSelect} groupId={item.groupId}
+              />
             </TabPane>))}
         </Tabs>):(<Empty />)
         }
       </Card>
-      <Modal
-        title="Save Audience"
-        visible={saveModal}
-        onOk={saveAudience}
-        onCancel={()=>{
-          setSaveModal(false);
-          setAudienceName('');
-        }}>
-        <Input
-          maxLength={100}
-          defaultValue={saveName}
-          placeholder="Audience Name"
-          onChange={(e)=>setAudienceName(e.target.value)}/>
-      </Modal>
+
     </div>
 
   );
@@ -151,9 +219,6 @@ const mapDispatchToProps = (dispatch) => {
 KeyWordSearchDetails.propTypes = {
   userInfo: PropTypes.object.isRequired,
   searchData: PropTypes.object.isRequired,
-  saveName: PropTypes.string.isRequired,
-  saveStatus: PropTypes.string.isRequired,
-  setSaveStatus: PropTypes.func.isRequired,
 };
 
 export default connect(

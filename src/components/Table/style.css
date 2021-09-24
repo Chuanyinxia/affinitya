@@ -1,0 +1,8 @@
+.ant-table-tbody > tr.ant-table-row-selected > td {
+  background: rgba(123, 117, 130, 0.2);
+
+}
+.ant-table-row-selected:hover {
+  background: rgba(123, 117, 130, 0.4);
+
+}
