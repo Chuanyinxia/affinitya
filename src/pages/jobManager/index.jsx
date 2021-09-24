@@ -1,18 +1,18 @@
 import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {httpLoading, setMenusData} from '@/store/actions';
+import {httpLoading} from '@/store/actions';
 import './style.css';
 import {CANCELJOB, GETJOBDETAIL, GETJOBMANAGER, ISPAID, RESTARTJOB, UPDATEJOBTITLE} from '@/api';
 import {get, post, update} from '@/utils/request';
 import {Alert, Button, Form, Input, message, Modal, Space, Table, Tabs, Tag} from 'antd';
-import {EyeOutlined, SearchOutlined} from '@ant-design/icons';
+import {SearchOutlined} from '@ant-design/icons';
 import {useHistory} from 'react-router-dom';
-import store from '@/store';
+// import store from '@/store';
 import {type} from '@/components/plugin/Searchdata';
 // import ResultTable from '@/components/Table/ResultTable';
 import KeyWordSearchDetails from '@/components/Table/KeyWordSearchDetails';
-
+import qs from 'querystring';
 const jobMangerText = {
   title: 'Unsaved audience will be deleted after 30 days.',
 };
@@ -53,6 +53,7 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
       getJobList({
         ...pagination,
         pageNum: pagination.current,
+        title: searchTitle,
         type: jobType === false ? '' : jobType,
       });
       setEditData(null);
@@ -62,9 +63,9 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
       });
     });
   };
-
+  const [newID, setNewID]=useState(null);
   const [creatJobForm] = Form.useForm();
-
+  const [searchTitle, setSearchTitle]=useState(null);
   const getJobList = (page) => {
     setLoading(true);
     const data = {...page};
@@ -103,6 +104,7 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
       getJobList({
         pageNum: 1,
         pageSize: 10,
+        title: searchTitle,
         type: jobType,
       });
     }).catch((error)=>{
@@ -111,11 +113,11 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
       });
     });
   };
-  const viewDetails=(id, type)=>{
-    // type=>1 keyword
-    history.push('/dashboard/audienceGenerator?id='+id+'&type='+type);
-    store.dispatch(setMenusData('audienceGenerator', 'dashboard'));
-  };
+  // const viewDetails=(id, type)=>{
+  //   // type=>1 keyword
+  //   history.push('/dashboard/audienceGenerator?id='+id+'&type='+type);
+  //   store.dispatch(setMenusData('audienceGenerator', 'dashboard'));
+  // };
   const getJobDetails=(id)=>{
     get(GETJOBDETAIL+id, userInfo.token).then((res)=>{
       console.log(res.data.kwResultVoList);
@@ -139,6 +141,7 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
       getJobList({
         pageNum: 1,
         pageSize: 10,
+        title: searchTitle,
         type: jobType,
       });
     }).catch((error)=>{
@@ -162,42 +165,56 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
       });
     });
   };
-
-  useEffect(() => {
+  const onSearch=(e)=>{
+    setSearchTitle(e.target.value.trim()??'');
     getJobList({
       pageNum: 1,
       pageSize: 10,
+      title: e.target.value.trim()??'',
+      type: jobType,
+    });
+    console.log();
+  };
+  useEffect(() => {
+    const data=history.location.search.split('?');
+    getJobList({
+      pageNum: 1,
+      pageSize: 10,
+      title: '',
       type: jobType === false ? '' : jobType,
     });
     isPay();
     // eslint-disable-next-line no-constant-condition
-    if (false) {
-      onView();
+    if (data.length>1) {
+      const search=qs.parse(data[1]);
+      if (search.newID) {
+        setNewID(search.newID);
+        console.log(newID);
+      }
+      console.log(newID);
     }
   }, []);
 
-  const onView = (record) => {
-    if (record.type === 3) {
-      return (<a type="link" onClick={() => getJobDetails(record.id)}><EyeOutlined/></a>);
-    }
-    return (<a onClick={() => viewDetails(record.id, record.type)} type="link">
-      <EyeOutlined/>
-    </a>);
-  };
+
   const OperationsSlot = {
     left: null,
     right: <div style={{marginRight: 3}}>
-      <Input size="small" style={{height: 40, width: 300}} placeholder="Search" prefix={<SearchOutlined/>}/>
+      <Input
+        size="small"
+        style={{height: 40, width: 300}}
+        placeholder="Search"
+        onPressEnter={onSearch}
+        prefix={<SearchOutlined/>}
+      />
     </div>,
   };
 
   return (
     <div className="margin_16">
-      <Alert
+      {newID&&( <Alert
         message={<p className="text-white text-center margin0">Job running has been successfully generated.</p>}
         banner type="success"
-        closable/>
-
+        closable/>)}
       <div className="paddingL32 paddingR32">
         <h1>Job Manager</h1>
         <h4 className="search-info marginB32">{jobMangerText.title}</h4>
@@ -210,6 +227,7 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
             getJobList({
               pageNum: 1,
               pageSize: 10,
+              title: searchTitle,
               type: key,
             });
           }}
@@ -223,10 +241,22 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
           loading={loading}
           dataSource={jobList}
           pagination={pagination}
-          onChange={(pagination) => getJobList({...pagination, pageNum: pagination.current, type: jobType})}
+          onChange={(pagination) =>
+            getJobList({
+              ...pagination,
+              pageNum: pagination.current,
+              title: searchTitle,
+              type: jobType,
+            })}
         >
           {/* <Table.Column title="Job Name" dataIndex="id" key="Job ID"/>*/}
-          <Table.Column title="Job Name" dataIndex="title" key="Job Title"/>
+          <Table.Column
+            title="Job Name"
+            dataIndex="title" key="Job Title"
+            render={(title, record)=>{
+              return parseInt(record.id)===parseInt(newID)?
+                (<span><span className="text-red">*</span>{title}</span>):title;
+            }}/>
           <Table.Column title="Type" dataIndex="type" key="Type" render={(type) => {
             return type === 1 ? 'Keyword' : type === 2 ? 'Lookalike Audience' : 'Extend';
           }}/>

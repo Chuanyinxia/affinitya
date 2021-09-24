@@ -33,3 +33,6 @@ span.ant-radio + *{
 .marginR32{
   margin-right: 32px;
 }
+.text-red{
+  color:#e92c3a;
+}

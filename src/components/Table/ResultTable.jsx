@@ -5,10 +5,11 @@ import {httpLoading} from '@/store/actions';
 import './style.css';
 import {Table} from 'antd';
 
-const ResultTable = ({userInfo, TableData}) => {
+const ResultTable = ({userInfo, TableData, onSelect, groupId}) => {
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
-      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+      onSelect(selectedRowKeys, selectedRows, groupId);
+      // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
     },
     getCheckboxProps: (record) => ({
       disabled: record.name === 'Disabled User',
@@ -55,6 +56,8 @@ const mapDispatchToProps = (dispatch) => {
 ResultTable.propTypes = {
   userInfo: PropTypes.object.isRequired,
   TableData: PropTypes.array.isRequired,
+  onSelect: PropTypes.func.isRequired,
+  groupId: PropTypes.number.isRequired,
 };
 
 export default connect(

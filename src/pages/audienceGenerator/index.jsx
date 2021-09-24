@@ -181,7 +181,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
       }).then((res) => {
         console.log(res);
         store.dispatch(setMenusData('jobManager', 'dashboard'));
-        history.push('/dashboard/jobManager');
+        history.push('/dashboard/jobManager?newID='+res.data);
       }).catch((error) => {
         message.error({
           content: error.toString(), key: 'netError', duration: 2,
@@ -195,7 +195,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
       }).then((res) => {
         console.log(res);
         store.dispatch(setMenusData('jobManager', 'dashboard'));
-        history.push('/dashboard/jobManager');
+        history.push('/dashboard/jobManager?newID='+res.data);
       }).catch((error) => {
         message.error({
           content: error.toString(), key: 'netError', duration: 2,
