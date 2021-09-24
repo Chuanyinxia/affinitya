@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {Link, withRouter} from 'react-router-dom';
 import {Avatar, Badge, Button, Dropdown, Layout, Menu, Space, Popover, message, List, Row, Col, Tooltip} from 'antd';
-import {AlertOutlined, UserOutlined} from '@ant-design/icons';
+import {AlertOutlined, UserOutlined, CloseOutlined} from '@ant-design/icons';
 import Router from '../routers';
 import Menus from '../components/menus';
 import {login, setMenusData, sider} from '@/store/actions';
@@ -23,6 +23,7 @@ const Customlayout = ({history, activeKey, setLogged}) => {
   const [noticeMsg, seNoticeMsg]= useState([]);
   const [loading, setLoading] =useState(false);
   const [dotShow, setDotShow] = useState(false);
+  const [menuVisible, setmenuVisible] = useState(false);
   const getNoticeMsg=()=>{
     setLoading(true);
     get(GETNOTICEMSG, userInfo.token).then((res)=>{
@@ -50,7 +51,7 @@ const Customlayout = ({history, activeKey, setLogged}) => {
     history.push('/login');
   };
   const menu = (
-    <Menu>
+    <Menu inlineCollapsed={false}>
       <Menu.Item>
         <Link to="/profile" onClick={() => {
           store.dispatch(setMenusData('', ''));
@@ -141,20 +142,28 @@ const Customlayout = ({history, activeKey, setLogged}) => {
   }, [activeKey]);
   return (
     <div>
+      {menuVisible?<div className="small-menu">
+        <div className="small-menu-close" onClick={()=>setmenuVisible(false)}><CloseOutlined /></div>
+        <Menus/>
+      </div>:null}
       <Layout style={{minHeight: '100vh'}}>
-        <Sider
+        <div className="sider-wrapper"><Sider
           width={230}
           breakpoint="lg"
           trigger={null}
+          // collapsible={false}
+          collapsedWidth={0}
+          style={{minHeight: '100vh'}}
         >
           <div className="logoBox">
             <a href="/"><img src={logo} width={168}/></a>
           </div>
           <Menus/>
         </Sider>
+        </div>
         <Layout>
           <Header className="login-header">
-
+            <div className="menu-icon" onClick={()=>setmenuVisible(true)}></div>
             <div className="text-right">
               <Space size="large">
                 <Tooltip title="Contact Sales">

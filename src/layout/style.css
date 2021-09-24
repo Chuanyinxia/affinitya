@@ -76,3 +76,43 @@
 .userName{
   cursor: pointer;
 }
+.sider-wrapper{
+  height: 100vh;
+}
+@media only screen and (max-width: 986px){
+  .sider-wrapper{
+    display: none;
+  }
+  .menu-icon{
+    background-image: url(../assets/menu_icon.png);
+    width: 20px;
+    height: 16px;
+    background-size: 100%;
+    float: left;
+    margin-top: 26px;
+    cursor: pointer;
+  }
+  .small-menu{
+    height: 730px;
+    width: 252px;
+    background-color: #120043;
+    position:absolute;
+    z-index: 999;
+  }
+  .small-menu-close{
+    color:#fff;
+    cursor: pointer;
+    margin-left: 224px;
+    margin-top: 8px;
+    font-size: 18px;
+  }
+}
+@media only screen and (min-width: 986px){
+  .sider-wrapper{
+    display: block;
+  }
+  .small-menu{
+    display: none;
+  }
+}
+
