@@ -28,13 +28,14 @@ const KeyWordSearchDetails = ({userInfo, searchData}) => {
   const saveAudience = () => {
     setSaveStatus(true);
     if (groupId) {
-      post(SAVESEARCHMESSAGEBYGROUP,
-          {searchId: id,
-            saveGroup: {
-              groupId,
-              ids: selectKeys,
-            },
-          },
+      const data={
+        searchId: id,
+        saveGroup: [{
+          groupId,
+          ids: selectKeys.join(','),
+        }]};
+      console.log(data);
+      post(SAVESEARCHMESSAGEBYGROUP, data,
           {
           // eslint-disable-next-line no-tabs
             'Content-Type': 'application/x-www-form-urlencoded',
