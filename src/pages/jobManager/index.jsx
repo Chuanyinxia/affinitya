@@ -18,6 +18,7 @@ const jobMangerText = {
 };
 const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
   const history = useHistory();
+  const [jobName, setJobName]=useState('');
   const [, setIsPayUser] = useState(false);
   const [viewDetail, setViewDetail] = useState([]);
   const [viewModal, setViewModal] = useState(false);
@@ -51,7 +52,8 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
       message.success('Success');
       creatJobForm.resetFields();
       getJobList({
-        ...pagination,
+
+        pageSize: 10,
         pageNum: pagination.current,
         title: searchTitle,
         type: jobType === false ? '' : jobType,
@@ -65,7 +67,7 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
   };
   const [newID, setNewID]=useState(null);
   const [creatJobForm] = Form.useForm();
-  const [searchTitle, setSearchTitle]=useState(null);
+  const [searchTitle, setSearchTitle]=useState('');
   const getJobList = (page) => {
     setLoading(true);
     const data = {...page};
@@ -189,6 +191,7 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
       const search=qs.parse(data[1]);
       if (search.newID) {
         setNewID(search.newID);
+        setJobName(search.jobName);
         console.log(newID);
       }
       console.log(newID);
@@ -212,7 +215,9 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
   return (
     <div className="margin_16">
       {newID&&( <Alert
-        message={<p className="text-white text-center margin0">Job running has been successfully generated.</p>}
+        message={<p className="text-white text-center margin0">
+          Job {jobName} running has been successfully generated.
+        </p>}
         banner type="success"
         closable/>)}
       <div className="paddingL32 paddingR32">

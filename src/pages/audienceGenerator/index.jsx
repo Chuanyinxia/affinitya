@@ -31,16 +31,15 @@ import store from '@/store';
 
 const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
   const history = useHistory();
-
   const [loading, setLoading] = useState(false);
   const [audienceID, setAudienceID] = useState('');
   const [audienceIdItem, setAudienceIdItem] = useState([]);
   const [isPayUser, setIsPayUser] = useState(false);
   const [searchType, setSearchType] = useState(1);
-  const [read, setRead] = useState(true);
+  const [read, setRead] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [addItemLoading, setAddItemLoading]=useState(false);
-  const [accessToken, setAccessToken] = useState(null);
+  // const [accessToken, setAccessToken] = useState(null);
   // new
   const [creatJobForm] = Form.useForm();
   const [startForm] = Form.useForm();
@@ -73,11 +72,11 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
     const adAccountId = allValues.adAccountId;
     const myAppId = allValues.myAppId;
     const myAppSecret = allValues.myAppSecret;
-    if (Object.keys(changedValues) !== 'audienceId' &&
-      adAccountId &&
+    const accessToken= allValues.accessToken;
+    if (adAccountId &&
       myAppSecret &&
       myAppId &&
-      myAppSecret
+      accessToken
     ) {
       const data = {
         adAccountId: adAccountId,
@@ -108,18 +107,24 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
     setSearchType(e.target.value);
   };
 
-  const startFormFinish = (value) => {
-    console.log(value);
-  };
 
   const toAddJob = () => {
-    setModalShow(true);
     startForm.validateFields().catch(() => {
       return false;
     });
     baseForm.validateFields().catch(() => {
       return false;
     });
+    if (searchType === 1) {
+      keyWordForm.validateFields().catch(() => {
+        return false;
+      });
+    } else {
+      lookalikeForm.validateFields().catch(() => {
+        return false;
+      });
+    }
+    console.log(searchType);
     let data = {
       ...startForm.getFieldValue(),
       ...baseForm.getFieldValue(),
@@ -127,26 +132,30 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
       age: baseForm.getFieldValue().age.min + ',' + baseForm.getFieldValue().age.max,
     };
     if (searchType === 1) {
-      keyWordForm.validateFields().then((value) => {
-        data = {
-          ...value,
-          ...data,
-        };
-        setSearchData(data);
-        setModalShow(true);
-      }).catch(() => {
+      keyWordForm.validateFields().catch(() => {
         return false;
+      }).then((value) => {
+        if (value.keyWord) {
+          data = {
+            ...value,
+            ...data,
+          };
+          setSearchData(data);
+          setModalShow(true);
+        }
       });
     } else {
-      lookalikeForm.validateFields().then((value) => {
-        data = {
-          ...value,
-          ...data,
-        };
-        setModalShow(true);
-        setSearchData(data);
-      }).catch(() => {
+      lookalikeForm.validateFields().catch(() => {
         return false;
+      }).then((value) => {
+        if (value.audienceId) {
+          data = {
+            ...value,
+            ...data,
+          };
+          setModalShow(true);
+          setSearchData(data);
+        }
       });
     }
   };
@@ -181,7 +190,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
       }).then((res) => {
         console.log(res);
         store.dispatch(setMenusData('jobManager', 'dashboard'));
-        history.push('/dashboard/jobManager?newID='+res.data);
+        history.push('/dashboard/jobManager?newID='+res.data+'&jobName='+value.jobName);
       }).catch((error) => {
         message.error({
           content: error.toString(), key: 'netError', duration: 2,
@@ -251,15 +260,17 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
               audiences</h4>
             <Card className="marginB32 padding64" hoverable>
               <h2>1.Start with your FB</h2>
-              <h4 className="marginB64">Fill in the following required Facebook information below.</h4>
+              <h4 className="marginB32">Fill in the following required Facebook information below.</h4>
               <Form
                 form={startForm}
                 name="accountInfo"
                 layout="vertical"
-                onFinish={startFormFinish}
+                onValuesChange={onLKSearchChange}
                 initialValues={{
-                  adAccountId: '',
-                  accessToken: '',
+                  adAccountId: userInfo?.adAccountId,
+                  accessToken: userInfo?.accessToken,
+                  myAppId: userInfo?.myAppId,
+                  myAppSecret: userInfo?.myAppSecret,
                 }}
                 autocomplete="nope"
                 Autocomplete="nope">
@@ -298,18 +309,41 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
                     readOnly={read}
                     autocomplete="nope"
                     Autocomplete="nope"
-                    onChange={(e)=>{
-                      setAccessToken(e.target.value);
-                    }}
                     maxLength={255}
                     iconRender={() => (<LockOutlined/>)}
                   />
                 </Form.Item>
+                <Row gutter={32}>
+                  <Col span={12}>
+                    <Form.Item
+                      label="App ID"
+                      name="myAppId"
+                      rules={[{required: true, message: 'Please input App ID!'}]}
+                      tooltip={{
+                        title: 'Tooltip with customize icon',
+                        icon: <InfoCircleOutlined/>,
+                      }}>
+                      <Input placeholder="Input App ID..." maxLength={255}/>
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item
+                      label="App Secret"
+                      name="myAppSecret"
+                      rules={[{required: true, message: 'Please input App secret!'}]}
+                      tooltip={{
+                        title: 'Tooltip with customize icon',
+                        icon: <InfoCircleOutlined/>,
+                      }}>
+                      <Input placeholder="Input App secret..." maxLength={100}/>
+                    </Form.Item>
+                  </Col>
+                </Row>
               </Form>
             </Card>
             <Card className="marginB32 padding64" hoverable>
               <h2>2. Fill in your audiences segments</h2>
-              <h4 className="marginB64">Fill in from existing successful campaigns, or try new parameters.</h4>
+              <h4 className="marginB32">Fill in from existing successful campaigns, or try new parameters.</h4>
               <Form form={baseForm} name="segmentsInfo" layout="vertical">
                 <Form.Item
                   name="country"
@@ -410,7 +444,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
             </Card>
             <Card className="marginB32 padding64" hoverable>
               <h2>3. Last small step to get your generated keywords</h2>
-              <h4 className="marginB64">Input one or more keywords, it is suggested to try different combinations.</h4>
+              <h4 className="marginB32">Fill in the corresponding Facebook Lookalike Audience information.</h4>
               <Radio.Group onChange={onSearchTypeChange} value={searchType} className="marginB32">
                 <Radio value={1} >Keyword Search</Radio>
                 <Radio value={2} className="paddingL32" disabled={!isPayUser}>Lookalike Audience Search</Radio>
@@ -428,34 +462,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
                 form={lookalikeForm}
                 name="lookalike"
                 layout="vertical"
-                onValuesChange={onLKSearchChange}
                 className={searchType === 2 ? 'show' : 'hide'}>
-                <Row gutter={32}>
-                  <Col span={12}>
-                    <Form.Item
-                      label="App ID"
-                      name="myAppId"
-                      rules={[{required: true, message: 'Please input App ID!'}]}
-                      tooltip={{
-                        title: 'Tooltip with customize icon',
-                        icon: <InfoCircleOutlined/>,
-                      }}>
-                      <Input placeholder="Input App ID..." maxLength={255}/>
-                    </Form.Item>
-                  </Col>
-                  <Col span={12}>
-                    <Form.Item
-                      label="App Secret"
-                      name="myAppSecret"
-                      rules={[{required: true, message: 'Please input App secret!'}]}
-                      tooltip={{
-                        title: 'Tooltip with customize icon',
-                        icon: <InfoCircleOutlined/>,
-                      }}>
-                      <Input placeholder="Input App secret..." maxLength={100}/>
-                    </Form.Item>
-                  </Col>
-                </Row>
                 <Form.Item
                   label="Lookalike Audience ID"
                   rules={[{required: true, message: 'Please input lookalike audience ID!'}]}
