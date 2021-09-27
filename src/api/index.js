@@ -35,3 +35,4 @@ export const MEMBERSUBSCRIBEMSG='/api/memberSubscribeMsg';
 export const DOWNLOADINVOICE='/api/downloadInvoiceBatch/';
 export const UPDATEJOBTITLE = '/api/updateJobTitle';
 export const SAVESEARCHMESSAGEBYGROUP='/api/saveSearchMessageByGroup';
+export const GETNEWMESSAGECOUNT='/api/getNewMessageCount';
