@@ -71,7 +71,8 @@
 .userImg{
   width: 36px;
   height: 36px;
-  background-color: #ccc;
+  line-height: 44px;
+  text-align: left;
 }
 .userName{
   cursor: pointer;

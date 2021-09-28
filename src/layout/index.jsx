@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {Link, withRouter} from 'react-router-dom';
@@ -18,6 +18,8 @@ import msg2 from '@/assets/msg02.png';
 
 const Customlayout = ({history, activeKey, setLogged}) => {
   const {Header, Content, Sider} = Layout;
+  const messageTimer = useRef();
+  const [hasMessage, sethasMessage] = useState(false);
   const [isPayUser, setIsPayUser] =useState(false);
   const [userInfo] = useState(storage.getData('userInfo') ?? null);
   const [noticeMsg, seNoticeMsg]= useState([]);
@@ -140,6 +142,21 @@ const Customlayout = ({history, activeKey, setLogged}) => {
   useEffect(() => {
     getNoticeMsg();
   }, [activeKey]);
+  useEffect(() => {
+    messageTimer.current = setInterval(() => {
+      get(GETNOTICEMSG, userInfo.token).then((res) => {
+        sethasMessage(res.data.some((item)=>item.readStatus===1));
+      }).catch((error) => {
+        message.error({
+          content: error.toString(), key: 'netError', duration: 2,
+        });
+      }).finally(()=>{
+      });
+    }, 5000);
+    return ()=>{
+      clearInterval(messageTimer.current);
+    };
+  }, []);
   return (
     <div>
       {menuVisible?<div className="small-menu">
@@ -175,9 +192,14 @@ const Customlayout = ({history, activeKey, setLogged}) => {
                   <div className="icon faq"></div>
                 </Tooltip>
                 <div className="icon bell">
-                  <div className="bell-dot"></div>
+                  {hasMessage?
+                  <Popover content={content} trigger="click" placement="bottomRight">
+                    <div className="bell-dot"></div>
+                  </Popover>:null}
                 </div>
-                <div className="userImg"></div>
+                <div className="userImg">
+                  <UserOutlined style={{fontSize: 22}}/>
+                </div>
                 <div className="userName">
                   <Dropdown overlay={menu} placement="bottomCenter">
                     <span>{userInfo ? userInfo.nickName : 'Admin'}</span>

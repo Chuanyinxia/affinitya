@@ -198,8 +198,8 @@ const PlansAndPrices = ({userInfo, httpLoading, setHttpLoading}) => {
         <div style={{marginTop: 48, paddingLeft: 44}}>
           <Checkbox checked={payRadio} onChange={(e)=>{
             setpayRadio(!payRadio);
-          }}>I have read and agreed to the <a href="" onClick={(e)=>{
-              e.preventDefault();
+          }}>I have read and agreed to the <a href="/privacyPolicy?type=4" target="_blank" onClick={(e)=>{
+              // e.preventDefault();
               history.push('/privacyPolicy?type=4');
             }}>Payment Policy.</a></Checkbox>
         </div>

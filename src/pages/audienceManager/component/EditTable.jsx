@@ -17,7 +17,7 @@ import {
 import {get, post} from '@/utils/request';
 import {SAVESEARCHRESULT, GETEXTENDBYAUDI, RESTARTJOB, EXPORTDETAIL, ISPAID, CANCELJOB} from '@/api/index';
 import ResultTable from '@/components/Table/ResultTable';
-
+import './style.css';
 
 const EditableCell = ({
   // eslint-disable-next-line react/prop-types
