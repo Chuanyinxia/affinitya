@@ -41,6 +41,7 @@ display: none;
   top:11px;
   font-size: 12px;
   border-radius: 9px;
-  line-height: 8px;
+  line-height: 6px;
   color:#fff;
+  text-align: center;
 }

@@ -192,9 +192,14 @@ const Customlayout = ({history, activeKey, setLogged}) => {
                   <div className="icon faq"></div>
                 </Tooltip>
                 <div className="icon bell">
-                  {hasMessage?<div className="bell-dot"></div>:null}
+                  {hasMessage?
+                  <Popover content={content} trigger="click" placement="bottomRight">
+                    <div className="bell-dot"></div>
+                  </Popover>:null}
                 </div>
-                <div className="userImg"></div>
+                <div className="userImg">
+                  <UserOutlined style={{fontSize: 22}}/>
+                </div>
                 <div className="userName">
                   <Dropdown overlay={menu} placement="bottomCenter">
                     <span>{userInfo ? userInfo.nickName : 'Admin'}</span>

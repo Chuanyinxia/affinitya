@@ -30,9 +30,8 @@ const ContactUS = ({userInfo, httpLoading, setHttpLoading}) => {
       <Headers/>
       <Content>
         <div className="contact-us" style={{
-          marginTop: 90,
           minHeight: 'calc(100vh - 180px )',
-          paddingTop: 'calc((100vh - 548px )/2)',
+          paddingTop: 'calc((100vh - 748px )/2)',
           paddingBottom: 80,
         }}>
           <Row>
@@ -51,7 +50,7 @@ const ContactUS = ({userInfo, httpLoading, setHttpLoading}) => {
                 textAlign: 'center',
                 width: '100%',
                 marginBottom: 52,
-              }}>Fill out the form below to contact sales</div>
+              }}>Fill out the form below to contact sales team</div>
             </Col>
           </Row>
           <Row>

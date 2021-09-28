@@ -36,3 +36,6 @@ export const DOWNLOADINVOICE='/api/downloadInvoiceBatch/';
 export const UPDATEJOBTITLE = '/api/updateJobTitle';
 export const SAVESEARCHMESSAGEBYGROUP='/api/saveSearchMessageByGroup';
 export const GETNEWMESSAGECOUNT='/api/getNewMessageCount';
+export const GETARCHIVELIST='/api/getArchiveList';
+export const UPDATEWINNERLIST='/api/updateSearchResultStatus';
+export const GETWINNERLIST='/api/getWinnerList';
