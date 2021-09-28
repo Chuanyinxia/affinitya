@@ -36,3 +36,22 @@ span.ant-radio + *{
 .text-red{
   color:#e92c3a;
 }
+.hover {
+  opacity: 0.5;
+}
+.hover:hover{
+  opacity: 1;
+}
+.ant-select-dropdown{
+  background: #EFF0F7;
+  max-width: 710px;
+}
+.ant-select-dropdown .ant-input{
+  background: #ffffff;
+  border-radius: 8px;
+}
+.ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+  color: #14142B;
+  font-weight: 600;
+  background: rgba(76 ,63, 113,.1 )
+}

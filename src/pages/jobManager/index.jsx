@@ -24,6 +24,7 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
   const [viewModal, setViewModal] = useState(false);
   const [, setLookID] = useState(null);
   const [, setLookType] = useState(null);
+  const [saveStatusType, setSaveStatusType]=useState(0);
   const [jobList, setJobList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [jobType, setJobType] = useState(type() ?? 0);
@@ -122,10 +123,10 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
   // };
   const getJobDetails=(id)=>{
     get(GETJOBDETAIL+id, userInfo.token).then((res)=>{
-      console.log(res.data.kwResultVoList);
       setLookID(res.data.kwResultVoList[0].id);
       setLookType(2);
       setViewDetail(res.data.kwResultVoList);
+      setSaveStatusType(res.data.status);
       setViewModal(true);
     }).catch((error)=>{
       message.error({
@@ -216,7 +217,7 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
     <div className="margin_16">
       {newID&&( <Alert
         message={<p className="text-white text-center margin0">
-          Job {jobName} running has been successfully generated.
+          Job {jobName} has been successfully generated.
         </p>}
         banner type="success"
         closable/>)}
@@ -364,7 +365,7 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
             setViewModal(false);
           }}>
           <div >
-            {<KeyWordSearchDetails searchData={viewDetail}/>}
+            {<KeyWordSearchDetails searchData={viewDetail} statusType={saveStatusType}/>}
           </div>
 
         </Modal>

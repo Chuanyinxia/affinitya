@@ -12,12 +12,12 @@ import {CopyToClipboard} from 'react-copy-to-clipboard';
 const {TabPane} = Tabs;
 
 
-const KeyWordSearchDetails = ({userInfo, searchData}) => {
+const KeyWordSearchDetails = ({userInfo, searchData, statusType}) => {
   const [saveStatus, setSaveStatus] = useState(false);
   const [isPayUser, setIsPayUser] = useState(false);
-  const [selectKeys, setSelectKeys]= useState([]);
+  const [selectKeys, setSelectKeys] = useState([]);
   const [copyValue, setCopyValues] = useState('');
-  const [groupId, setGroupId]=useState(null);
+  const [groupId, setGroupId] = useState(null);
   const id = searchData ? searchData[0].searchId : '';
   const tableData = (tableData) => {
     const data = tableData.map((item, index) => {
@@ -26,19 +26,17 @@ const KeyWordSearchDetails = ({userInfo, searchData}) => {
     return data;
   };
   const saveAudience = () => {
-    setSaveStatus(true);
-    if (groupId) {
-      const data={
-        searchId: id,
-        saveGroup: [{
-          groupId,
-          ids: selectKeys.join(','),
-        }]};
-      console.log(data);
+    if (groupId === 0 || groupId) {
+      const data = {
+        'searchId': id,
+        'saveGroup': [{
+          'groupId': groupId,
+          'ids': selectKeys.join(','),
+        }],
+      };
       post(SAVESEARCHMESSAGEBYGROUP, data,
           {
-          // eslint-disable-next-line no-tabs
-            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Type': 'application/json',
             'token': userInfo.token,
           }).then((res) => {
         message.success(res.msg);
@@ -81,7 +79,7 @@ const KeyWordSearchDetails = ({userInfo, searchData}) => {
   };
   const saveAudienceButton=()=>{
     if (isPayUser) {
-      if (parseInt(saveStatus)===1) {
+      if (statusType === 1) {
         return (
           <Tooltip title="You have saved this result.">
             <Button
@@ -99,6 +97,7 @@ const KeyWordSearchDetails = ({userInfo, searchData}) => {
           <Button
             type="primary"
             className="btn-md"
+            loading={saveStatus}
             onClick={saveAudience}
           >Save for Testing</Button>
         </Tooltip>);
@@ -125,6 +124,7 @@ const KeyWordSearchDetails = ({userInfo, searchData}) => {
       return (<Button
         className="btn-md"
         download
+        target="_blank"
         href={`${EXPORTCVS}${id}/${userInfo.token}`}
         disabled={!isPayUser}>
         Export to CSV
@@ -151,6 +151,7 @@ const KeyWordSearchDetails = ({userInfo, searchData}) => {
   };
 
   const onSelect = (key, value, groupId) => {
+    console.log(key, value, groupId);
     setSelectKeys(key);
     setGroupId(groupId);
   };
@@ -160,12 +161,28 @@ const KeyWordSearchDetails = ({userInfo, searchData}) => {
   }, []);
   useEffect(()=>{
     if (searchData) {
-      let str='Group\tId\tKeyword\tSize\tpath\n';
-      searchData.forEach((item)=>{
-        item.searchDetails.forEach((data)=>{
-          str+=`${item.groupId}\t${data.id}\t${data.keyword}\t${data.size}\t${data.path}\n`;
+      let str = `<table>
+                    <thead>
+                    <tr>
+                        <th>Group</th>
+                        <th>Id</th>
+                        <th>Keyword</th>
+                        <th>Size</th>
+                        <th>path</th>
+                    </tr>
+                </thead><tbody>`;
+      searchData.forEach((item) => {
+        item.searchDetails.forEach((data) => {
+          str += `<tr>
+                    <td>${item.groupId}</td>
+                    <td>`+`'`+`${data.id}</td>
+                    <td>${data.keyword}</td>
+                    <td>${data.size}</td>
+                    <td>${data.path}</td>
+                </tr>`;
         });
       });
+      str += `</tbody></table>`;
       setCopyValues(str);
     }
     console.log(copyValue);
@@ -192,13 +209,13 @@ const KeyWordSearchDetails = ({userInfo, searchData}) => {
             <TabPane tab={`Group ${item.groupId} (${item.searchDetails.length})`} key={item.id} >
               <ResultTable
                 TableData={tableData(item.searchDetails ?? [])}
-                onSelect={onSelect} groupId={item.groupId}
+                onSelect={onSelect}
+                groupId={item.groupId}
               />
             </TabPane>))}
         </Tabs>):(<Empty />)
         }
       </Card>
-
     </div>
 
   );
@@ -220,9 +237,11 @@ const mapDispatchToProps = (dispatch) => {
 KeyWordSearchDetails.propTypes = {
   userInfo: PropTypes.object.isRequired,
   searchData: PropTypes.object.isRequired,
+  statusType: PropTypes.string.isRequired,
 };
 
 export default connect(
     mapStateToProps,
     mapDispatchToProps,
 )(KeyWordSearchDetails);
+
