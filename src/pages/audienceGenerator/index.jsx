@@ -19,13 +19,22 @@ import {
   Spin,
 } from 'antd';
 import './style.css';
+import PDF from '@/assets/Guide to get App ID, Token(1).pdf';
 
-import {InfoCircleOutlined, LockOutlined, PlusOutlined} from '@ant-design/icons';
+import {DeleteOutlined, InfoCircleOutlined, LockOutlined, PlusOutlined} from '@ant-design/icons';
 import {Countrys} from '@/components/plugin/Country';
-import {get, post} from '@/utils/request';
-import {GETAUDIENCEID,
-  ISPAID, SEARCHAUID, SEARCHKW, SAVEAUDIENCEID, GETAUDIENCEIDLIST} from '@/api';
-import {useHistory} from 'react-router-dom';
+import {get, post, remove} from '@/utils/request';
+import {
+  DELETEAUDIENCEID,
+  GETAUDIENCEID,
+  GETAUDIENCEIDLIST,
+  GETAUDIENCELIST,
+  ISPAID,
+  SAVEAUDIENCEID,
+  SEARCHAUID,
+  SEARCHKW,
+} from '@/api';
+import {Link, useHistory} from 'react-router-dom';
 import store from '@/store';
 
 
@@ -39,7 +48,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
   const [read, setRead] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [addItemLoading, setAddItemLoading]=useState(false);
-  // const [accessToken, setAccessToken] = useState(null);
+  const [audienceWords, setAudienceWords]=useState([]);
   // new
   const [creatJobForm] = Form.useForm();
   const [startForm] = Form.useForm();
@@ -50,29 +59,42 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
   const [searchData, setSearchData] = useState(null);
 
   const addItem = () => {
-    if (audienceID) {
+    if (audienceID.trim()) {
       setAddItemLoading(true);
       post(SAVEAUDIENCEID, {audienceId: audienceID}, {
         'token': userInfo.token,
         'Content-Type': 'application/x-www-form-urlencoded',
-      }).then((res)=>{
-        audienceIdItem.push({audienceId: audienceID, audienceParams: audienceID});
+      }).then((res) => {
+        audienceIdItem.unshift({audienceId: '', audienceParams: audienceID});
         setAudienceIdItem(audienceIdItem);
         setAudienceID(null);
-      }).catch((error)=>{
+      }).catch((error) => {
         message.error({
           content: error.toString(), key: 'netError', duration: 2,
         });
-      }).finally(()=>{
+      }).finally(() => {
         setAddItemLoading(false);
       });
+    } else {
+      message.error('Please input lookalike audience!');
     }
+  };
+  const deleteOption = (e, id) => {
+    e.stopPropagation();
+    remove(DELETEAUDIENCEID + id, userInfo.token).then((res) => {
+      message.success(res.msg);
+      setAudienceIdItem(audienceIdItem.filter((item) => item.audienceId !== id));
+    }).catch((error) => {
+      message.error({
+        content: error.toString(), key: 'netError', duration: 2,
+      });
+    });
   };
   const onLKSearchChange = (changedValues, allValues) => {
     const adAccountId = allValues.adAccountId;
     const myAppId = allValues.myAppId;
     const myAppSecret = allValues.myAppSecret;
-    const accessToken= allValues.accessToken;
+    const accessToken = allValues.accessToken;
     if (adAccountId &&
       myAppSecret &&
       myAppId &&
@@ -107,6 +129,18 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
     setSearchType(e.target.value);
   };
 
+  const addKeywords=(word)=>{
+    if (keyWordForm.getFieldValue().keyWord) {
+      keyWordForm.setFieldsValue({
+        keyWord: [...keyWordForm.getFieldValue().keyWord, word],
+      });
+    } else {
+      keyWordForm.setFieldsValue({
+        keyWord: [word],
+      });
+    }
+    console.log(keyWordForm.getFieldValue().keyWord);
+  };
 
   const toAddJob = () => {
     startForm.validateFields().catch(() => {
@@ -204,7 +238,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
       }).then((res) => {
         console.log(res);
         store.dispatch(setMenusData('jobManager', 'dashboard'));
-        history.push('/dashboard/jobManager?newID='+res.data);
+        history.push('/dashboard/jobManager?newID=' + res.data);
       }).catch((error) => {
         message.error({
           content: error.toString(), key: 'netError', duration: 2,
@@ -213,14 +247,22 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
     }
   };
 
+  const getAudienceList = () => {
+    get(GETAUDIENCELIST).then((res) => {
+      setAudienceWords(res.data);
+    }).catch((error) => {
+      console.log(error);
+    });
+  };
+
   useEffect(() => {
     isPay();
     setLoading(true);
-    get(GETAUDIENCEIDLIST, userInfo.token).then((res)=>{
+    get(GETAUDIENCEIDLIST, userInfo.token).then((res) => {
       setAudienceIdItem(res.data);
-    }).catch((error)=>{
+    }).catch((error) => {
       console.log(error);
-    }).finally(()=>{
+    }).finally(() => {
       setLoading(false);
     });
     if (userInfo.adAccountId && userInfo.accessToken && userInfo.myAppId && userInfo.myAppSecret) {
@@ -245,9 +287,10 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
     setTimeout(() => {
       setRead(false);
     }, 500);
+    getAudienceList();
   },
   []);
-  const keywords = ['Basketball', 'Tennis', 'Dancing', 'Assemblage', 'Real Estate', 'Urna', 'Bibendum', 'Pellentesque'];
+
   return (
     <div className="padding32 Audience">
       <Spin spinning={loading}>
@@ -258,7 +301,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
             <h4 className="marginB32">
               Affinity Analyst extends high correlation audiences from your custom
               audiences</h4>
-            <Card className="marginB32 padding64" hoverable>
+            <Card className="marginB32 padding64 hover" hoverable>
               <h2>1.Start with your FB</h2>
               <h4 className="marginB32">Fill in the following required Facebook information below.</h4>
               <Form
@@ -341,7 +384,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
                 </Row>
               </Form>
             </Card>
-            <Card className="marginB32 padding64" hoverable>
+            <Card className="marginB32 padding64 hover" hoverable>
               <h2>2. Fill in your audiences segments</h2>
               <h4 className="marginB32">Fill in from existing successful campaigns, or try new parameters.</h4>
               <Form form={baseForm} name="segmentsInfo" layout="vertical">
@@ -442,15 +485,40 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
                 </Form.Item>
               </Form>
             </Card>
-            <Card className="marginB32 padding64" hoverable>
+            <Card className="marginB32 padding64 hover" hoverable>
               <h2>3. Last small step to get your generated keywords</h2>
-              <h4 className="marginB32">Fill in the corresponding Facebook Lookalike Audience information.</h4>
+              {searchType === 1&&(<h4 className="marginB32">
+                Input one or more keywords, it is suggested to try different
+                combinations.</h4>)}
+              {searchType === 2&&(<h4 className="marginB32">
+                Fill in the corresponding Facebook Lookalike Audience information.
+              </h4>)}
               <Radio.Group onChange={onSearchTypeChange} value={searchType} className="marginB32">
-                <Radio value={1} >Keyword Search</Radio>
+                <Radio value={1}>Keyword Search</Radio>
                 <Radio value={2} className="paddingL32" disabled={!isPayUser}>Lookalike Audience Search</Radio>
               </Radio.Group>
-              <Form form={keyWordForm} name="keywords" className={searchType === 1 ? 'show' : 'hide'}>
-                <Form.Item name="keyWord" rules={[{required: true, message: 'Please input keyword!'}]}>
+              <Form
+                layout="vertical"
+                form={keyWordForm}
+                name="keywords"
+                className={searchType === 1 ? 'show' : 'hide'}
+              >
+                {!isPayUser&&(
+                  <h4 className="marginB32">
+                Access to 40 keywords is free. Need access to all 300 of your custom keyword audience?
+                    <Link to="/plansAndPrices" className="target" onClick={() => {
+                      store.dispatch(setMenusData('plansAndPrices', 'dashboard'));
+                    }}> Upgrade now!</Link>
+                  </h4>
+                )}
+                <Form.Item
+                  label="Keyword"
+                  name="keyWord"
+                  tooltip={{
+                    title: 'One word only for free user, premium users are able add up to 10 keywords in one search.',
+                    icon: <InfoCircleOutlined/>,
+                  }}
+                  rules={[{required: true, message: 'Please input keyword!'}]}>
                   <Select
                     placeholder="Input keywords..."
                     mode="tags"
@@ -473,36 +541,54 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
                   name="audienceId"
                 >
                   <Select
+                    menuItemSelectedIcon={null}
+                    maxTagCount={6}
+                    maxTagTextLength={30}
+                    mode="tags"
+                    allowClear
                     placeholder="Custom Audience ID..."
                     dropdownRender={(menu) => (
                       <div>
                         {menu}
                         <Divider style={{margin: '4px 0'}}/>
-                        <Row className="padding16">
-                          <Col flex={4} >
-                            <Input
-                              size="small"
-                              value={audienceID}
-                              onChange={(e) => setAudienceID(e.target.value)}
-                              maxLength={255}/>
-                          </Col>
-                          <Col flex={1} className="text-center">
-                            <Button
-                              className="btn-sm"
-                              type="primary"
-                              ghost
-                              loading={addItemLoading}
-                              onClick={addItem}
-                            >
-                              <PlusOutlined/> Add item
-                            </Button>
-                          </Col>
-                        </Row>
+                        <div className="padding16">
+                          <Row className="margin16">
+                            <Col flex={4}>
+                              <Input
+                                size="small"
+                                value={audienceID}
+                                onChange={(e) => setAudienceID(e.target.value)}
+                                maxLength={255}/>
+                            </Col>
+                            <Col flex={1} className="text-center padding16">
+                              <Button
+                                type="link"
+                                ghost
+                                loading={addItemLoading}
+                                onClick={addItem}
+                              >
+                                <PlusOutlined/>Lookalike Audience
+                              </Button>
+                            </Col>
+                          </Row>
+                        </div>
+
                       </div>
                     )}
                   >
                     {audienceIdItem.map((item) => (
-                      <Select.Option key={item.audienceId}>{item.audienceParams}</Select.Option>
+                      <Select.Option key={item.audienceId} className="padding16">
+                        <Row>
+                          <Col flex="auto" className="paddingL16">
+                            {item.audienceId}
+                            {item.audienceId&&(<span>&nbsp;&nbsp;</span>)}
+                            {item.audienceParams}
+                          </Col>
+                          <Col flex="80px" className="text-right paddingR16">
+                            <DeleteOutlined onClick={(e) => deleteOption(e, item.audienceId)}/>
+                          </Col>
+                        </Row>
+                      </Select.Option>
                     ))}
                   </Select>
                 </Form.Item>
@@ -513,13 +599,18 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
             <h3>Trending Audience</h3>
             <p className="marginB64">These words is using for SLG...</p>
             <Space wrap>
-              {keywords.map((item) => (
-                <Button key={item} type="link">{item}</Button>
+              {audienceWords.map((item) => (
+                <a key={item.id} type="link" onClick={()=>addKeywords(item.name)}>{item.name}</a>
               ))}
             </Space>
             <Divider/>
             <h3>Tips</h3>
-            <a>Full guide to retrieve token </a>
+            {/* eslint-disable-next-line react/jsx-no-target-blank */}
+            <a
+              href={PDF}
+              target="_blank">
+              Full guide to retrieve token
+            </a>
           </Col>
         </Row>
 

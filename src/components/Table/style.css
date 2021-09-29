@@ -6,3 +6,10 @@
   background: rgba(123, 117, 130, 0.4);
 
 }
+
+#copy {
+  z-index: -99;
+  position: absolute;
+  left: -2000px;
+  top: -2000px;
+}
