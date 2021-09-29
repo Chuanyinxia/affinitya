@@ -6,7 +6,17 @@ import './style.css';
 import {GETSEARCHDETAIL, GETARCHIVELIST, UPDATEWINNERLIST, GETWINNERLIST} from '@/api/index';
 import {get, post, update} from '@/utils/request';
 import {Spin, Row, Col, Input, Tree, message, Button, Menu, Dropdown} from 'antd';
-import {SearchOutlined, ClockCircleOutlined, MoreOutlined, FilterOutlined, LineHeightOutlined} from '@ant-design/icons';
+import {
+  SearchOutlined,
+  ClockCircleOutlined,
+  MoreOutlined,
+  FilterOutlined,
+  LineHeightOutlined,
+  CrownOutlined,
+  ExperimentOutlined,
+  SaveOutlined,
+  CloseOutlined,
+} from '@ant-design/icons';
 
 // import TaskItem from '@/pages/audienceManager/component/TaskItem';
 // import TaskCol from '@/pages/audienceManager/component/TaskCol';
@@ -36,6 +46,8 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
   const [tabType, settabType] = useState(1);
   const [winnerList, setwinnerList] = useState([]);
   const [selectedTreeData, setselectedTreeData] = useState({});
+  const [current, setcurrent] = useState({});
+  const [tableVisible, settableVisible] = useState(false);
   // const [searchWord, setSearchWord] = useState('');
   // const getAudienceManager = () => {
   //   post(GETAUDIENCEMANAGER, {pageNum: 1, pageSize: 10000}, {
@@ -63,22 +75,43 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
   const menu = (
     <Menu>
       <Menu.Item>
-        <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
+        <a rel="noopener noreferrer" href="javascript:void(0)"
+          onClick={()=>null}
+        >
           View List
         </a>
       </Menu.Item>
       <Menu.Item>
-        <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com">
+        <a rel="noopener noreferrer" href="javascript:void(0)"
+          onClick={()=>null}
+        >
           Rename
         </a>
       </Menu.Item>
       <Menu.Item>
-        <a target="_blank" rel="noopener noreferrer" href="https://www.luohanacademy.com">
+        <a rel="noopener noreferrer" href="javascript:void(0)"
+          onClick={(e)=>{
+            e.preventDefault();
+            e.stopPropagation();
+            setTimeout(()=>{
+              updateWiner(3, [], current);
+            }, 200);
+            // console.log(current);
+          }}
+        >
           Archive
         </a>
       </Menu.Item>
       <Menu.Item>
-        <a target="_blank" rel="noopener noreferrer" href="https://www.luohanacademy.com">
+        <a rel="noopener noreferrer" href="javascript:void(0)"
+          onClick={(e)=>{
+            e.preventDefault();
+            e.stopPropagation();
+            setTimeout(()=>{
+              updateWiner(1, [], current);
+            }, 200);
+          }}
+        >
           Delete
         </a>
       </Menu.Item>
@@ -105,18 +138,29 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
       setHttpLoading(false);
     });
   };
-  const selectWiner = (checkList, pageSize, pageNum)=>{
-    const data = checkList.filter((item)=>!(item.children)).map((item)=>item.key.split('-')[1]);
+  const updateWiner = (type, checkList, c)=>{
+    let data;
+    if (checkList.length>0) {
+      data = checkList.filter((item)=>!(item.children)).map((item)=>item.key.split('-')[1]);
+    } else {
+      if (Array.isArray(c)) {
+        data = c.map((item)=>item.searchResultId).join(',');
+      } else {
+        data = c.searchResultId;
+      }
+      // data = current;
+    }
     update(UPDATEWINNERLIST,
         {
           searchResultIds: data,
-          status: 2,
+          status: type,
         }, {
           'Content-Type': 'application/x-www-form-urlencoded',
           'token': userInfo.token,
         }).then((res) => {
-      console.log(res);
-      getWinnerList('', 99, 1);
+      // setcurrent('');
+      if (type===2) getWinnerList('', 99, 1);
+      else getArchiveList(tabType, '', 99, 1);
     }).catch((error) => {
       message.error({
         content: error.toString(), key: 'netError', duration: 2,
@@ -141,12 +185,13 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
       Object.keys(data).forEach((key)=>{
         tree.push({
           title: (
-            <div style={{width: 476}}>{key}
-              <span className="more-icon" onClick={(e)=>{
-                e.stopPropagation();
-              }}>
+            <div style={{width: 476}}>{data[key].length>0?data[key][0].jobName:'error'}
+              <span className="more-icon">
                 <Dropdown overlay={menu} arrow trigger={['click']} placement="bottomLeft">
-                  <MoreOutlined />
+                  <MoreOutlined onClick={(e)=>{
+                    e.stopPropagation();
+                    setcurrent(data[key]);
+                  }}/>
                 </Dropdown>
               </span>
             </div>
@@ -158,11 +203,12 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
               arr.push({
                 title: (
                   <div style={{width: 452}}>{item.groupName}
-                    <span className="more-icon" onClick={(e)=>{
-                      e.stopPropagation();
-                    }}>
+                    <span className="more-icon">
                       <Dropdown overlay={menu} arrow trigger={['click']} placement="bottomLeft">
-                        <MoreOutlined />
+                        <MoreOutlined onClick={(e)=>{
+                          e.stopPropagation();
+                          setcurrent(item);
+                        }}/>
                       </Dropdown>
                     </span>
                   </div>
@@ -188,6 +234,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
     get(GETSEARCHDETAIL + id, userInfo.token).then((res) => {
       setDetails(res.data);
       setEditId(id);
+      settableVisible(true);
     }).catch((error) => {
       message.error({
         content: error.toString(), key: 'netError', duration: 2,
@@ -215,17 +262,22 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                     getArchiveList(1, '', 99, 1);
                     settabType(1);
                     setwinnerList([]);
-                  }}>Testing</div>
+                  }}><ExperimentOutlined style={{marginRight: 12}}/>Testing</div>
                   <div className={tabType===2?'tab-title active':'tab-title'} onClick={()=>{
                     getArchiveList(2, '', 99, 1);
                     settabType(2);
                     setwinnerList([]);
-                  }}>Archive</div>
+                  }}><SaveOutlined style={{marginRight: 12}}/>Archive</div>
                 </div>
               </div>
               <div className="box-wrapper">
                 <div className="search-box">
-                  <Input prefix={<SearchOutlined />} placeholder="search"></Input>
+                  <Input prefix={<SearchOutlined />} placeholder="search" allowClear
+                    onChange={(e)=>{
+                      if (e.target.value==='') getArchiveList(tabType, '', 99, 1);
+                    }}
+                    onPressEnter={(e)=>getArchiveList(tabType, e.target.value, 99, 1)}
+                  ></Input>
                 </div>
               </div>
               <div className="data-tree-box">
@@ -234,12 +286,21 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                   onCheck={(checkedKeys, info)=>setselectedTreeData(info)}
                   treeData={treeData}
                   selectable={false}
+                  // onSelect={(selectedKeys, info)=>{
+                  //   let data;
+                  //   if (info.node.children) {
+                  //     data = info.node.children.map((item)=>item.key.split('-')[1]).join(',');
+                  //   } else {
+                  //     data = info.node.key.split('-')[1];
+                  //   }
+                  //   setcurrent(data);
+                  // }}
                 />
               </div>
               <div className="save-btn-box">
                 <Button className="save-btn" onClick={
-                  ()=>selectWiner(selectedTreeData.checkedNodes, 99, 1)
-                }>Save as Winner</Button>
+                  ()=>updateWiner(2, selectedTreeData.checkedNodes)
+                }><CrownOutlined/>Save as Winner</Button>
               </div>
             </div>
           </Col>
@@ -247,7 +308,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
             <div className="winner-box">
               <div className="box-wrapper">
                 <div className="winner-title-box">
-                  <div className="winner-title">Winner</div>
+                  <div className="winner-title"><CrownOutlined style={{marginRight: 12}}/>Winner</div>
                   <div className="winner-icon" style={{marginRight: 24}}><LineHeightOutlined /></div>
                   <div className="winner-icon"><FilterOutlined /></div>
                   <div className="winner-icon"><SearchOutlined /></div>
@@ -256,7 +317,9 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
               <div className="box-wrapper">
                 <div className="card-group">
                   {winnerList.map((item, index)=>(
-                    <div className={item.check?'card-item active':'card-item'} key={item.searchId} onClick={()=>{
+                    <div className={item.check?'card-item active':
+                    item.saveStatus===1?'card-item':
+                    'card-item edited'} key={item.searchId} onClick={()=>{
                       const data = [...winnerList];
                       data.forEach((item)=>item.check=false);
                       data[index].check = true;
@@ -316,11 +379,27 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
             </div>
           </Col>
         </Row>
-        <Row>
+        {/* <Row>
           <Col span={24} className="edit-box">
             <EditTable details={details} id={editId} saveFunc={getDetails}/>
           </Col>
-        </Row>
+        </Row> */}
+        {tableVisible?<div style={{width: '84.5%', padding: '0px 50px', position: 'fixed', bottom: 0}}>
+          <div style={{padding: '20px 40px', background: '#fff', borderRadius: '16px'}}>
+            <div style={{overflow: 'hidden', marginBottom: 24}}>
+              <div style={{float: 'left'}}>GroupName</div>
+              <div style={{float: 'right', cursor: 'pointer'}}>
+                <CloseOutlined style={{fontSize: 20}} onClick={()=>{
+                  const data = [...winnerList];
+                  data.forEach((item)=>item.check=false);
+                  setwinnerList(data);
+                  settableVisible(false);
+                }}/>
+              </div>
+            </div>
+            <EditTable details={details} id={editId} saveFunc={getDetails} style={{marginTop: 24}}/>
+          </div>
+        </div>:null}
       </Spin>
     </div>
 
