@@ -22,8 +22,6 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
   const [, setIsPayUser] = useState(false);
   const [viewDetail, setViewDetail] = useState([]);
   const [viewModal, setViewModal] = useState(false);
-  const [, setLookID] = useState(null);
-  const [, setLookType] = useState(null);
   const [saveStatusType, setSaveStatusType]=useState(0);
   const [jobList, setJobList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -123,8 +121,6 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
   // };
   const getJobDetails=(id)=>{
     get(GETJOBDETAIL+id, userInfo.token).then((res)=>{
-      setLookID(res.data.kwResultVoList[0].id);
-      setLookType(2);
       setViewDetail(res.data.kwResultVoList);
       setSaveStatusType(res.data.status);
       setViewModal(true);
@@ -223,7 +219,7 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
         closable/>)}
       <div className="paddingL32 paddingR32">
         <h1>Job Manager</h1>
-        <h4 className="search-info marginB32">{jobMangerText.title}</h4>
+        <h4 className="search-info marginB16">{jobMangerText.title}</h4>
 
         <Tabs
           tabBarExtraContent={OperationsSlot}

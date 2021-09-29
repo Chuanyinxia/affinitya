@@ -24,7 +24,16 @@ import PDF from '@/assets/Guide to get App ID, Token(1).pdf';
 import {DeleteOutlined, InfoCircleOutlined, LockOutlined, PlusOutlined} from '@ant-design/icons';
 import {Countrys} from '@/components/plugin/Country';
 import {get, post, remove} from '@/utils/request';
-import {DELETEAUDIENCEID, GETAUDIENCEID, GETAUDIENCEIDLIST, ISPAID, SAVEAUDIENCEID, SEARCHAUID, SEARCHKW} from '@/api';
+import {
+  DELETEAUDIENCEID,
+  GETAUDIENCEID,
+  GETAUDIENCEIDLIST,
+  GETAUDIENCELIST,
+  ISPAID,
+  SAVEAUDIENCEID,
+  SEARCHAUID,
+  SEARCHKW,
+} from '@/api';
 import {Link, useHistory} from 'react-router-dom';
 import store from '@/store';
 
@@ -39,7 +48,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
   const [read, setRead] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [addItemLoading, setAddItemLoading]=useState(false);
-  // const [accessToken, setAccessToken] = useState(null);
+  const [audienceWords, setAudienceWords]=useState([]);
   // new
   const [creatJobForm] = Form.useForm();
   const [startForm] = Form.useForm();
@@ -217,7 +226,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
       }).then((res) => {
         console.log(res);
         store.dispatch(setMenusData('jobManager', 'dashboard'));
-        history.push('/dashboard/jobManager?newID='+res.data);
+        history.push('/dashboard/jobManager?newID=' + res.data);
       }).catch((error) => {
         message.error({
           content: error.toString(), key: 'netError', duration: 2,
@@ -226,14 +235,22 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
     }
   };
 
+  const getAudienceList = () => {
+    get(GETAUDIENCELIST).then((res) => {
+      setAudienceWords(res.data);
+    }).catch((error) => {
+      console.log(error);
+    });
+  };
+
   useEffect(() => {
     isPay();
     setLoading(true);
-    get(GETAUDIENCEIDLIST, userInfo.token).then((res)=>{
+    get(GETAUDIENCEIDLIST, userInfo.token).then((res) => {
       setAudienceIdItem(res.data);
-    }).catch((error)=>{
+    }).catch((error) => {
       console.log(error);
-    }).finally(()=>{
+    }).finally(() => {
       setLoading(false);
     });
     if (userInfo.adAccountId && userInfo.accessToken && userInfo.myAppId && userInfo.myAppSecret) {
@@ -258,9 +275,10 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
     setTimeout(() => {
       setRead(false);
     }, 500);
+    getAudienceList();
   },
   []);
-  const keywords = ['Basketball', 'Tennis', 'Dancing', 'Assemblage', 'Real Estate', 'Urna', 'Bibendum', 'Pellentesque'];
+
   return (
     <div className="padding32 Audience">
       <Spin spinning={loading}>
@@ -521,35 +539,38 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
                       <div>
                         {menu}
                         <Divider style={{margin: '4px 0'}}/>
-                        <Row className="padding16">
-                          <Col flex={4}>
-                            <Input
-                              size="small"
-                              value={audienceID}
-                              onChange={(e) => setAudienceID(e.target.value)}
-                              maxLength={255}/>
-                          </Col>
-                          <Col flex={1} className="text-center">
-                            <Button
-                              type="link"
-                              ghost
-                              loading={addItemLoading}
-                              onClick={addItem}
-                            >
-                              <PlusOutlined/>Lookalike Audience
-                            </Button>
-                          </Col>
-                        </Row>
+                        <div className="padding16">
+                          <Row className="margin16">
+                            <Col flex={4}>
+                              <Input
+                                size="small"
+                                value={audienceID}
+                                onChange={(e) => setAudienceID(e.target.value)}
+                                maxLength={255}/>
+                            </Col>
+                            <Col flex={1} className="text-center padding16">
+                              <Button
+                                type="link"
+                                ghost
+                                loading={addItemLoading}
+                                onClick={addItem}
+                              >
+                                <PlusOutlined/>Lookalike Audience
+                              </Button>
+                            </Col>
+                          </Row>
+                        </div>
+
                       </div>
                     )}
                   >
                     {audienceIdItem.map((item) => (
                       <Select.Option key={item.audienceId} className="padding16">
                         <Row>
-                          <Col flex="auto">
+                          <Col flex="auto" className="paddingL16">
                             {item.audienceParams}{item.audienceId}
                           </Col>
-                          <Col flex="80px" className="text-right">
+                          <Col flex="80px" className="text-right paddingR16">
                             <DeleteOutlined onClick={(e) => deleteOption(e, item.audienceId)}/>
                           </Col>
                         </Row>
@@ -564,8 +585,8 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
             <h3>Trending Audience</h3>
             <p className="marginB64">These words is using for SLG...</p>
             <Space wrap>
-              {keywords.map((item) => (
-                <Button key={item} type="link">{item}</Button>
+              {audienceWords.map((item) => (
+                <a key={item.id} type="link">{item.name}</a>
               ))}
             </Space>
             <Divider/>

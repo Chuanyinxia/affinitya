@@ -41,3 +41,6 @@
 .marginT40{
   margin-top: 40px;
 }
+#loginForm_password{
+  margin-top: -5px;
+}

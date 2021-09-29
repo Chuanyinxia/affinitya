@@ -7,18 +7,20 @@ import {Button, Card, Col, Empty, message, Row, Space, Tabs, Tooltip} from 'antd
 import ResultTable from '@/components/Table/ResultTable';
 import {get, post} from '@/utils/request';
 import {EXPORTCVS, ISPAID, SAVESEARCHMESSAGE, SAVESEARCHMESSAGEBYGROUP} from '@/api';
-import {CopyToClipboard} from 'react-copy-to-clipboard';
+// import {CopyToClipboard} from 'react-copy-to-clipboard';
+// import ClipboardJS from 'clipboard';
 
+import ReactClipboard from 'react-clipboardjs-copy';
 const {TabPane} = Tabs;
 
 
 const KeyWordSearchDetails = ({userInfo, searchData, statusType}) => {
-  const [saveStatus, setSaveStatus] = useState(false);
+  const [saveStatus, setSaveStatus] = useState(0);
   const [isPayUser, setIsPayUser] = useState(false);
   const [selectKeys, setSelectKeys] = useState([]);
   const [copyValue, setCopyValues] = useState('');
   const [groupId, setGroupId] = useState(null);
-  const id = searchData ? searchData[0].searchId : '';
+  const id = searchData ? searchData[0]?.searchId : '';
   const tableData = (tableData) => {
     const data = tableData.map((item, index) => {
       return {...item, index: index + 1};
@@ -45,8 +47,6 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType}) => {
         message.error({
           content: error.toString(), key: 'netError', duration: 2,
         });
-      }).finally(() => {
-        setSaveStatus(false);
       });
     } else {
       post(SAVESEARCHMESSAGE,
@@ -56,14 +56,13 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType}) => {
             'Content-Type': 'application/x-www-form-urlencoded',
             'token': userInfo.token,
           }).then((res) => {
-        message.success(res.msg);
         setSaveStatus(1);
+        console.log(saveStatus);
+        message.success(res.msg);
       }).catch((error) => {
         message.error({
           content: error.toString(), key: 'netError', duration: 2,
         });
-      }).finally(() => {
-        setSaveStatus(false);
       });
     }
   };
@@ -76,40 +75,6 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType}) => {
         content: error.toString(), key: 'netError', duration: 2,
       });
     });
-  };
-  const saveAudienceButton=()=>{
-    if (isPayUser) {
-      if (statusType === 1) {
-        return (
-          <Tooltip title="You have saved this result.">
-            <Button
-              disabled
-              type="primary"
-              className="btn-md"
-            >
-              Save for Testing
-            </Button>
-          </Tooltip>);
-      }
-
-      return (
-        <Tooltip placement="top" title="If you don't choose any keyword, we will save all for you.">
-          <Button
-            type="primary"
-            className="btn-md"
-            loading={saveStatus}
-            onClick={saveAudience}
-          >Save for Testing</Button>
-        </Tooltip>);
-    }
-    return (<Tooltip title="Pls upgrade to use this function.">
-      <Button
-        disabled
-        type="primary"
-        className="btn-md"
-      >Save for Testing
-      </Button>
-    </Tooltip>);
   };
 
   const downloadButton=()=>{
@@ -137,21 +102,56 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType}) => {
         </Button>
       </Tooltip>);
   };
-  const onCopy=()=>{
-    message.success('copy');
-  };
+  // const onCopy=()=>{
+  //   // const clipboard = new ClipboardJS('#copyBtn', {
+  //   //   text: () => copyValue,
+  //   // });
+  //   // clipboard.on('success', function(e) {
+  //   //   console.log('复制成功');
+  //   //   clipboard.destroy();
+  //   // });
+  //   //
+  //   // message.success('copy');
+  //   // console.log(copyValue);
+  //   // const copy=document.getElementById('copy');
+  //   // // copy.innerHTML=str;
+  //   // // console.log(copy);
+  //   // // // window.clipboardData.clearData('text');
+  //   // // if (window.clipboardData.setData('text', str)) {
+  //   // //   message.success('copy');
+  //   // // } else {
+  //   // //   message.error('copy');
+  //   // // }
+  //   // const range=document.createRange();
+  //   // range.selectNodeContents(copy);
+  //   // window.getSelection().addRange(range);
+  //   // document.execCommand('Copy');
+  //   // const tag=document.execCommand('Copy');
+  //   // if (tag) {
+  //   //   message.success('copy');
+  //   // }
+  // };
+  // const toCopy=()=>{
+  //
+  // };
   const copyKeyword = () => {
     return (
-      <CopyToClipboard text={copyValue} onCopy={onCopy}>
+      <ReactClipboard
+        target={'#copy'}
+        onSuccess={() => message.success('Copy success!')}
+        onError={() => message.success('Copy error!')}>
         <Button size="md" className="btn-md" >
-            Copy Keyword
+          Copy Keyword
         </Button>
-      </CopyToClipboard>
+      </ReactClipboard>
+
+
+    // </CopyToClipboard>
     );
   };
 
   const onSelect = (key, value, groupId) => {
-    console.log(key, value, groupId);
+    // console.log(key, value, groupId);
     setSelectKeys(key);
     setGroupId(groupId);
   };
@@ -160,51 +160,105 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType}) => {
     isPay();
   }, []);
   useEffect(()=>{
+    let str='';
+    setCopyValues('');
     if (searchData) {
-      let str = `<table>
-                    <thead>
-                    <tr>
-                        <th>Group</th>
-                        <th>Id</th>
-                        <th>Keyword</th>
-                        <th>Size</th>
-                        <th>path</th>
-                    </tr>
-                </thead><tbody>`;
+      // str=`Group&nbsp;Id&nbsp;Keyword&nbsp;Size&nbsp;Path<br/>`;
+      // searchData.forEach((item)=>{
+      //   item.searchDetails.forEach((data)=>{
+      //     str+=`${item.groupId}&nbsp;&nbsp;
+      //           ${data.id}&nbsp;&nbsp;
+      //           ${data.keyword}&nbsp;&nbsp;
+      //           ${data.size}&nbsp;&nbsp;
+      //           ${data.path}<br/>`;
+      //   });
+      str = `<table>
+                      <thead>
+                      <tr>
+                          <th>Group</th>
+                          <th>Id</th>
+                          <th>Keyword</th>
+                          <th>Size</th>
+                          <th>path</th>
+                      </tr>
+                  </thead><tbody>`;
       searchData.forEach((item) => {
         item.searchDetails.forEach((data) => {
           str += `<tr>
-                    <td>${item.groupId}</td>
-                    <td>`+`'`+`${data.id}</td>
-                    <td>${data.keyword}</td>
-                    <td>${data.size}</td>
-                    <td>${data.path}</td>
-                </tr>`;
+                      <td>${item.groupId}</td>
+                      <td>${data.id}</td>
+                      <td>${data.keyword}</td>
+                      <td>${data.size}</td>
+                      <td>${data.path}</td>
+                  </tr>`;
         });
       });
       str += `</tbody></table>`;
+      // str=`Group\r
+      //           ID\r
+      //           Keyword\r
+      //           Size\r
+      //           Path\n\t`;
+      // searchData.forEach((item)=>{
+      //   item.searchDetails.forEach((data)=>{
+      //     str+=`${item.groupId}\t
+      //           ${data.id}\t
+      //           ${data.keyword}\t
+      //           ${data.size}\t
+      //           ${data.path}\r\t`;
+      //   });
+      // });
       setCopyValues(str);
+    } else {
+      setCopyValues('');
     }
-    console.log(copyValue);
   }, [searchData]);
+
   return (
     <div>
+      <div id="copy" dangerouslySetInnerHTML={{__html: copyValue}}/>
       <Row>
-        <Col span={6}><h2 className="search-content">
-          Tennis</h2></Col>
+        <Col span={6}>
+          <h2 className="search-content">
+          Tennis
+          </h2>
+        </Col>
         <Col span={18} className="text-right marginB16 paddingR32">
           <Space>
-            {saveAudienceButton()}
+            {isPayUser&&(
+              <Tooltip
+                placement="top"
+                title={(saveStatus === 1|| parseInt(statusType)===1)?
+                         'You have saved this result.':
+              'If you don\'t choose any keyword, we will save all for you.'}>
+                <Button
+                  type="primary"
+                  className="btn-md"
+                  disabled={(saveStatus === 1|| statusType===1||!id)?true:false}
+                  onClick={saveAudience}
+                >Save for Testing</Button>
+              </Tooltip>)
+            }
+            {!isPayUser&& (<Tooltip title="Pls upgrade to use this function.">
+              <Button
+                disabled
+                type="primary"
+                className="btn-md"
+              >Save for Testing
+              </Button>
+            </Tooltip>)}
             {copyKeyword()}
             {downloadButton()}
           </Space>
         </Col>
       </Row>
       <Card>
-        {searchData?(<Tabs defaultActiveKey={searchData[0].id} destroyInactiveTabPane onChange={()=>{
-          setGroupId(null);
-          setSelectKeys([]);
-        }}>
+        {searchData.length>0?(<Tabs
+          defaultActiveKey={searchData[0]?.id}
+          destroyInactiveTabPane onChange={()=>{
+            setGroupId(null);
+            setSelectKeys([]);
+          }}>
           {searchData.map((item)=>(
             <TabPane tab={`Group ${item.groupId} (${item.searchDetails.length})`} key={item.id} >
               <ResultTable
