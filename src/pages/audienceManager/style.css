@@ -8,6 +8,21 @@
   border-radius: 32px;
   margin-left: 52px;
   position:relative;
+  overflow-y: auto;
+}
+.text-box .ant-tree-checkbox-inner{
+  border-radius: 0;
+}
+.ant-dropdown-menu-item-active:first-child{
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+.ant-dropdown-menu-item-active:last-child{
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+.ant-tree-node-selected{
+  background: none !important;;
 }
 /* .ant-dropdown {
   left: 804px!important;
@@ -18,6 +33,7 @@
   border-radius: 32px;
   background-color: #fff;
   margin-left: 40px;
+  overflow-y: auto;
 }
 .tab-box{
   height: 74px;
@@ -123,6 +139,7 @@
   padding: 40px;
   background-color: #fff;
   border-radius: 32px;
+  margin: 0 50px;
 }
 .edit-box .ant-input-number{
   height: 32px;
@@ -133,11 +150,11 @@
 @media only screen and (min-width: 1440px){
   .text-box{
     width: 570px;
-    height: 1056px;
+    height: 756px;
   }
   .winner-box{
     width: 920px;
-    height: 1056px;
+    height: 756px;
   }
   .card-item{
     width: 388px;

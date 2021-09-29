@@ -153,6 +153,7 @@ const Customlayout = ({history, activeKey, setLogged}) => {
       }).finally(()=>{
       });
     }, 5000);
+    clearInterval(messageTimer.current);
     return ()=>{
       clearInterval(messageTimer.current);
     };
@@ -165,7 +166,7 @@ const Customlayout = ({history, activeKey, setLogged}) => {
       </div>:null}
       <Layout style={{minHeight: '100vh'}}>
         <div className="sider-wrapper"><Sider
-          width={230}
+          width={284}
           breakpoint="lg"
           trigger={null}
           // collapsible={false}
