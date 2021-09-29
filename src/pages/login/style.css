@@ -41,6 +41,8 @@
 .marginT40{
   margin-top: 40px;
 }
-#loginForm_password{
+#loginForm_password,
+#singForm_password,
+#singForm_verificationCode{
   margin-top: -5px;
 }

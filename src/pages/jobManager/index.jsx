@@ -217,8 +217,8 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
         </p>}
         banner type="success"
         closable/>)}
-      <div className="paddingL32 paddingR32">
-        <h1>Job Manager</h1>
+      <div className="padding32">
+        <h1 >Job Manager</h1>
         <h4 className="search-info marginB16">{jobMangerText.title}</h4>
 
         <Tabs

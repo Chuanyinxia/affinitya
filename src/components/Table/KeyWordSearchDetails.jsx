@@ -163,7 +163,7 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType}) => {
     let str='';
     setCopyValues('');
     if (searchData) {
-      // str=`Group&nbsp;Id&nbsp;Keyword&nbsp;Size&nbsp;Path<br/>`;
+      // str=`Audience&nbsp;Id&nbsp;Keyword&nbsp;Size&nbsp;Path<br/>`;
       // searchData.forEach((item)=>{
       //   item.searchDetails.forEach((data)=>{
       //     str+=`${item.groupId}&nbsp;&nbsp;
@@ -175,18 +175,18 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType}) => {
       str = `<table>
                       <thead>
                       <tr>
-                          <th>Group</th>
-                          <th>Id</th>
+                          <th>Audience</th>
+                          <th>ID</th>
                           <th>Keyword</th>
                           <th>Size</th>
-                          <th>path</th>
+                          <th>Path</th>
                       </tr>
                   </thead><tbody>`;
       searchData.forEach((item) => {
-        item.searchDetails.forEach((data) => {
+        item.searchDetails.forEach((data, index) => {
           str += `<tr>
                       <td>${item.groupId}</td>
-                      <td>${data.id}</td>
+                      <td>${index+1}</td>
                       <td>${data.keyword}</td>
                       <td>${data.size}</td>
                       <td>${data.path}</td>
@@ -194,7 +194,7 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType}) => {
         });
       });
       str += `</tbody></table>`;
-      // str=`Group\r
+      // str=`Audience\r
       //           ID\r
       //           Keyword\r
       //           Size\r
@@ -260,7 +260,7 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType}) => {
             setSelectKeys([]);
           }}>
           {searchData.map((item)=>(
-            <TabPane tab={`Group ${item.groupId} (${item.searchDetails.length})`} key={item.id} >
+            <TabPane tab={`Audience ${item.groupId} (${item.searchDetails.length})`} key={item.id} >
               <ResultTable
                 TableData={tableData(item.searchDetails ?? [])}
                 onSelect={onSelect}

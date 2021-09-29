@@ -65,7 +65,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
         'token': userInfo.token,
         'Content-Type': 'application/x-www-form-urlencoded',
       }).then((res) => {
-        audienceIdItem.unshift({audienceId: audienceID, audienceParams: audienceID});
+        audienceIdItem.unshift({audienceId: '', audienceParams: audienceID});
         setAudienceIdItem(audienceIdItem);
         setAudienceID(null);
       }).catch((error) => {
@@ -129,6 +129,18 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
     setSearchType(e.target.value);
   };
 
+  const addKeywords=(word)=>{
+    if (keyWordForm.getFieldValue().keyWord) {
+      keyWordForm.setFieldsValue({
+        keyWord: [...keyWordForm.getFieldValue().keyWord, word],
+      });
+    } else {
+      keyWordForm.setFieldsValue({
+        keyWord: [word],
+      });
+    }
+    console.log(keyWordForm.getFieldValue().keyWord);
+  };
 
   const toAddJob = () => {
     startForm.validateFields().catch(() => {
@@ -568,7 +580,9 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
                       <Select.Option key={item.audienceId} className="padding16">
                         <Row>
                           <Col flex="auto" className="paddingL16">
-                            {item.audienceParams}{item.audienceId}
+                            {item.audienceId}
+                            {item.audienceId&&(<span>&nbsp;&nbsp;</span>)}
+                            {item.audienceParams}
                           </Col>
                           <Col flex="80px" className="text-right paddingR16">
                             <DeleteOutlined onClick={(e) => deleteOption(e, item.audienceId)}/>
@@ -586,7 +600,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
             <p className="marginB64">These words is using for SLG...</p>
             <Space wrap>
               {audienceWords.map((item) => (
-                <a key={item.id} type="link">{item.name}</a>
+                <a key={item.id} type="link" onClick={()=>addKeywords(item.name)}>{item.name}</a>
               ))}
             </Space>
             <Divider/>
