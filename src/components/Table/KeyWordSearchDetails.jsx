@@ -14,7 +14,7 @@ import ReactClipboard from 'react-clipboardjs-copy';
 const {TabPane} = Tabs;
 
 
-const KeyWordSearchDetails = ({userInfo, searchData, statusType}) => {
+const KeyWordSearchDetails = ({userInfo, searchData, statusType, hideFirstButton}) => {
   console.log(searchData);
   const [saveStatus, setSaveStatus] = useState(0);
   const [isPayUser, setIsPayUser] = useState(false);
@@ -204,7 +204,7 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType}) => {
         </Col>
         <Col span={18} className="text-right marginB16 paddingR32">
           <Space>
-            {isPayUser&&(
+            {(isPayUser&&!hideFirstButton)&&(
               <Tooltip
                 placement="top"
                 title={(saveStatus === 1|| parseInt(statusType)===1)?
@@ -218,7 +218,7 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType}) => {
                 >Save for Testing</Button>
               </Tooltip>)
             }
-            {!isPayUser&& (<Tooltip title="Pls upgrade to use this function.">
+            {(!isPayUser&&!hideFirstButton)&& (<Tooltip title="Pls upgrade to use this function.">
               <Button
                 disabled
                 type="primary"
@@ -271,6 +271,7 @@ KeyWordSearchDetails.propTypes = {
   userInfo: PropTypes.object.isRequired,
   searchData: PropTypes.object.isRequired,
   statusType: PropTypes.string.isRequired,
+  hideFirstButton: PropTypes.bool,
 };
 
 export default connect(
