@@ -3,9 +3,17 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {httpLoading} from '@/store/actions';
 import './style.css';
-import {GETSEARCHDETAIL, GETARCHIVELIST, UPDATEWINNERLIST, GETWINNERLIST} from '@/api/index';
+import {
+  GETSEARCHDETAIL,
+  GETARCHIVELIST,
+  UPDATEWINNERLIST,
+  GETWINNERLIST,
+  ISPAID,
+  EXPORTDETAIL,
+  GETARCHIVEDETAIL,
+} from '@/api/index';
 import {get, post, update} from '@/utils/request';
-import {Spin, Row, Col, Input, Tree, message, Button, Menu, Dropdown} from 'antd';
+import {Spin, Row, Col, Input, Tree, message, Button, Menu, Dropdown, Modal, Space, Tooltip} from 'antd';
 import {
   SearchOutlined,
   ClockCircleOutlined,
@@ -21,7 +29,8 @@ import {
 // import TaskItem from '@/pages/audienceManager/component/TaskItem';
 // import TaskCol from '@/pages/audienceManager/component/TaskCol';
 import EditTable from '@/pages/audienceManager/component/EditTable';
-
+import ResultTable from '@/components/Table/ResultTable';
+import KeyWordSearchDetails from '@/components/Table/KeyWordSearchDetails';
 // const STATUS_CODE = {
 //   STATUS_GENERATED: 'Generated',
 //   STATUS_TEST: 'Test',
@@ -48,6 +57,13 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
   const [selectedTreeData, setselectedTreeData] = useState({});
   // const [current, setcurrent] = useState('');
   const [tableVisible, settableVisible] = useState(false);
+  const [viewModal, setViewModal] = useState(false);
+  const [viewDetails, setViewDetails] = useState([]);
+  const [isPayUser, setIsPayUser] =useState(false);
+  const [lookID, setLookID]=useState(null);
+  const [lookType, setLookType]=useState(null);
+  const [archiveDetailModal, setArchiveDetailModal] = useState(false);
+  const [archiveDetail, setarchiveDetail] = useState([]);
   const c = useRef();
   // const [searchWord, setSearchWord] = useState('');
   // const getAudienceManager = () => {
@@ -73,11 +89,16 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
   //     setHttpLoading(false);
   //   });
   // };
-  const menu = (
+  const topMenu = (
     <Menu>
       <Menu.Item>
         <a rel="noopener noreferrer" href="javascript:void(0)"
-          onClick={()=>null}
+          onClick={(e)=>{
+            e.preventDefault();
+            e.stopPropagation();
+            getArchiveDetails(c.current);
+            setArchiveDetailModal(true);
+          }}
         >
           View List
         </a>
@@ -95,7 +116,6 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
             e.preventDefault();
             e.stopPropagation();
             updateWiner(3, []);
-            // console.log(current);
           }}
         >
           Archive
@@ -114,6 +134,174 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
       </Menu.Item>
     </Menu>
   );
+  const archiveMenu = (
+    <Menu>
+      <Menu.Item>
+        <a rel="noopener noreferrer" href="javascript:void(0)"
+          onClick={(e)=>{
+            e.preventDefault();
+            e.stopPropagation();
+            getDetails(c.current);
+            setLookID(c.current);
+            setLookType(1);
+            setViewModal(true);
+          }}
+        >
+          View List
+        </a>
+      </Menu.Item>
+      <Menu.Item>
+        <a rel="noopener noreferrer" href="javascript:void(0)"
+          onClick={()=>null}
+        >
+          Rename
+        </a>
+      </Menu.Item>
+      <Menu.Item>
+        <a rel="noopener noreferrer" href="javascript:void(0)"
+          onClick={(e)=>{
+            e.preventDefault();
+            e.stopPropagation();
+            updateWiner(1, []);
+          }}
+        >
+          Testing
+        </a>
+      </Menu.Item>
+      <Menu.Item>
+        <a rel="noopener noreferrer" href="javascript:void(0)"
+          onClick={(e)=>{
+            e.preventDefault();
+            e.stopPropagation();
+            updateWiner(4, []);
+          }}
+        >
+          Delete
+        </a>
+      </Menu.Item>
+    </Menu>
+  );
+  const testMenu = (
+    <Menu>
+      <Menu.Item>
+        <a rel="noopener noreferrer" href="javascript:void(0)"
+          onClick={(e)=>{
+            e.preventDefault();
+            e.stopPropagation();
+            getDetails(c.current);
+            setLookID(c.current);
+            setLookType(1);
+          }}
+        >
+          View List
+        </a>
+      </Menu.Item>
+      <Menu.Item>
+        <a rel="noopener noreferrer" href="javascript:void(0)"
+          onClick={()=>null}
+        >
+          Rename
+        </a>
+      </Menu.Item>
+      <Menu.Item>
+        <a rel="noopener noreferrer" href="javascript:void(0)"
+          onClick={(e)=>{
+            e.preventDefault();
+            e.stopPropagation();
+            updateWiner(3, []);
+          }}
+        >
+          Archive
+        </a>
+      </Menu.Item>
+      <Menu.Item>
+        <a rel="noopener noreferrer" href="javascript:void(0)"
+          onClick={(e)=>{
+            e.preventDefault();
+            e.stopPropagation();
+            updateWiner(4, []);
+          }}
+        >
+          Delete
+        </a>
+      </Menu.Item>
+    </Menu>
+  );
+  const winnerMenu = (
+    <Menu>
+      <Menu.Item>
+        <a rel="noopener noreferrer" href="javascript:void(0)"
+          onClick={(e)=>{
+            e.preventDefault();
+            e.stopPropagation();
+            getDetails(c.current);
+            setLookID(c.current);
+            setLookType(1);
+          }}
+        >
+          View List
+        </a>
+      </Menu.Item>
+      <Menu.Item>
+        <a rel="noopener noreferrer" href="javascript:void(0)"
+          onClick={()=>null}
+        >
+          Rename
+        </a>
+      </Menu.Item>
+      <Menu.Item>
+        <a rel="noopener noreferrer" href="javascript:void(0)"
+          onClick={(e)=>{
+            e.preventDefault();
+            e.stopPropagation();
+            updateWiner(3, []);
+          }}
+        >
+          Archive
+        </a>
+      </Menu.Item>
+      <Menu.Item>
+        <a rel="noopener noreferrer" href="javascript:void(0)"
+          onClick={(e)=>{
+            e.preventDefault();
+            e.stopPropagation();
+            updateWiner(1, []);
+          }}
+        >
+          Testing
+        </a>
+      </Menu.Item>
+      <Menu.Item>
+        <a rel="noopener noreferrer" href="javascript:void(0)"
+          onClick={(e)=>{
+            e.preventDefault();
+            e.stopPropagation();
+            updateWiner(4, []);
+          }}
+        >
+          Delete
+        </a>
+      </Menu.Item>
+    </Menu>
+  );
+  const addIndex=(data)=>{
+    const tableData=data.map((item, index)=>{
+      return {...item, index: index+1};
+    })??[];
+    return tableData;
+  };
+  const isPay=()=>{
+    get(ISPAID, userInfo.token).then((res)=>{
+      setIsPayUser(res.data===2);
+    }).catch((error)=>{
+      message.error({
+        content: error.toString(), key: 'netError', duration: 2,
+      });
+    });
+  };
+  useEffect(()=>{
+    isPay();
+  }, [isPayUser]);
   const getWinnerList = (groupName, pageSize, pageNum)=>{
     const data = {
       groupName: groupName,
@@ -186,7 +374,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
           title: (
             <div style={{width: 476}}>{data[key].length>0?data[key][0].jobName:'error'}
               <span className="more-icon">
-                <Dropdown overlay={menu} arrow trigger={['click']} placement="bottomLeft">
+                <Dropdown overlay={topMenu} arrow trigger={['click']} placement="bottomLeft">
                   <MoreOutlined onClick={(e)=>{
                   }}/>
                 </Dropdown>
@@ -197,6 +385,12 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
           children: (()=>{
             const arr = [];
             data[key].forEach((item)=>{
+              let menu;
+              if (tabType===1) {
+                menu = testMenu;
+              } else if (tabType===3) {
+                menu = archiveMenu;
+              }
               arr.push({
                 title: (
                   <div style={{width: 452}}>{item.groupName}
@@ -224,12 +418,24 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
       setHttpLoading(false);
     });
   };
+  const getArchiveDetails = (ids) => {
+    setHttpLoading(true);
+    get(GETARCHIVEDETAIL +'/'+ ids, userInfo.token).then((res) => {
+      console.log(res);
+    }).catch((error) => {
+      message.error({
+        content: error.toString(), key: 'netError', duration: 2,
+      });
+    }).finally(()=>{
+      setHttpLoading(false);
+    });
+  };
   const getDetails = (id) => {
     setHttpLoading(true);
     get(GETSEARCHDETAIL + id, userInfo.token).then((res) => {
       setDetails(res.data);
+      setViewDetails(res.data);
       setEditId(id);
-      settableVisible(true);
     }).catch((error) => {
       message.error({
         content: error.toString(), key: 'netError', duration: 2,
@@ -240,9 +446,67 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
   };
   useEffect(() => {
     getArchiveList(1, '', 99, 1);
+    getWinnerList('', 99, 1);
   }, []);
   return (
     <div className="paddingB16">
+      <Modal
+        title={null}
+        width={1200}
+        visible={archiveDetailModal}
+        className="height900"
+        footer={null}
+        onOk={() => {
+          // setViewDetail([]);
+          setArchiveDetailModal(false);
+        }}
+        onCancel={()=>{
+          // setViewDetail([]);
+          setArchiveDetailModal(false);
+        }}>
+        <div >
+          {<KeyWordSearchDetails searchData={archiveDetail} statusType={saveStatusType}/>}
+        </div>
+
+      </Modal>
+      <Modal
+        title="Details"
+        width={1200}
+        visible={viewModal}
+        className="height900"
+        footer={null}
+        onOk={()=>{
+          setViewDetails([]);
+          setViewModal(false);
+        }}
+        onCancel={()=>{
+          setViewDetails([]);
+          setViewModal(false);
+        }}>
+        <div >
+          <div className="text-right marginB16">
+            <Space>
+              {isPayUser?(<Button
+                download
+                href={`${EXPORTDETAIL}${lookID}/${lookType}/${userInfo.token}`}
+                disabled={!isPayUser}>
+                  Export to CSV
+              </Button>):
+                (<Tooltip title="Pls upgrade to use this function.">
+                  <Button
+                    download
+                    href={`${EXPORTDETAIL}${lookID}/${lookType}/${userInfo.token}`}
+                    disabled={!isPayUser}>
+                    Export to CSV
+                  </Button>
+                </Tooltip>)
+              }
+            </Space>
+          </div>
+          {<ResultTable TableData={addIndex(viewDetails)}/>}
+        </div>
+      </Modal>
+      archiveDetailModal
       <Spin spinning={httpLoading}>
         <h1 style={{paddingLeft: 32, paddingTop: 12}}>Audience Manager</h1>
         <h4 style={{paddingLeft: 32, marginBottom: 28}}>
@@ -325,7 +589,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                       >{item.groupName}</div>
                       <div
                         style={{color: '#4E4B66', fontSize: 12, height: 30, lineHeight: '30px', marginTop: 8}}
-                      >desc</div>
+                      >{item.jobName}</div>
                       <div
                         style={{color: '#4E4B66', fontSize: 12, height: 30, lineHeight: '30px', marginTop: 20}}>
                         <ClockCircleOutlined style={{fontSize: 20, fontWeight: '600', float: 'left', marginTop: 5}}/>
@@ -338,7 +602,14 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                           fontSize: 32,
                           fontWeight: '600',
                         }}
-                        >...</div>
+                        onClick={(e)=>{
+                          e.stopPropagation();
+                        }}
+                        >
+                          <Dropdown overlay={winnerMenu} arrow trigger={['click']} placement="bottomLeft">
+                            <span>...</span>
+                          </Dropdown>
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -378,7 +649,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
             <EditTable details={details} id={editId} saveFunc={getDetails}/>
           </Col>
         </Row> */}
-        {tableVisible?<div style={{width: '84.5%', padding: '0px 50px', position: 'fixed', bottom: 0}}>
+        {tableVisible?<div style={{width: '79.1%', padding: '0px 32px', position: 'fixed', bottom: 0}}>
           <div style={{padding: '20px 40px', background: '#fff', borderRadius: '16px'}}>
             <div style={{overflow: 'hidden', marginBottom: 24}}>
               <div style={{float: 'left'}}>GroupName</div>
@@ -391,12 +662,14 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                 }}/>
               </div>
             </div>
-            <EditTable details={details} id={editId} saveFunc={getDetails} style={{marginTop: 24}}/>
+            <EditTable details={details} id={editId} saveFunc={()=>{
+              settableVisible(true);
+              getDetails();
+            }} style={{marginTop: 24}}/>
           </div>
         </div>:null}
       </Spin>
     </div>
-
   );
 };
 

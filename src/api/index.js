@@ -43,3 +43,4 @@ export const UPDATEWINNERLIST='/api/updateSearchResultStatus';
 export const GETWINNERLIST='/api/getWinnerList';
 export const DELETEAUDIENCEID='/api/deleteAudienceId/';
 export const GETAUDIENCELIST='/api/getAudienceList';
+export const GETARCHIVEDETAIL='/api/getArchiveDetail/';

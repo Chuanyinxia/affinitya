@@ -2,7 +2,7 @@ import React, {useState, useEffect, useRef} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {Link, withRouter} from 'react-router-dom';
-import {Menu, message} from 'antd';
+import {Menu} from 'antd';
 import './style.css';
 import store from '../../store';
 import {get} from '@/utils/request';
@@ -34,12 +34,12 @@ const Menus = ({userInfo, history, activeKey, openKeys}) => {
       get(GETNEWMESSAGECOUNT, userInfo.token).then((res) => {
         setmessageCounter(res.data);
       }).catch((error) => {
-        message.error({
-          content: error.toString(), key: 'netError', duration: 2,
-        });
+        // message.error({
+        //   content: error.toString(), key: 'netError', duration: 2,
+        // });
       }).finally(()=>{
       });
-    }, 5000);
+    }, 60000);
     // clearInterval(messageTimer.current);
     return ()=>{
       clearInterval(messageTimer.current);

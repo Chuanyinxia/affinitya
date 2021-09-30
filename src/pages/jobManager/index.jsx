@@ -51,7 +51,6 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
       message.success('Success');
       creatJobForm.resetFields();
       getJobList({
-
         pageSize: 10,
         pageNum: pagination.current,
         title: searchTitle,
@@ -95,7 +94,6 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
     });
   };
   const killJob=(id)=>{
-    console.log(id);
     post(CANCELJOB+id, '', {
       // eslint-disable-next-line no-tabs
       'Content-Type':	'application/x-www-form-urlencoded',
