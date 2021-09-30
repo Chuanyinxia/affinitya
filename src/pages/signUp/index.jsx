@@ -7,9 +7,10 @@ import {httpLoading, login, userInfo} from '@/store/actions';
 import {get, post} from '@/utils/request';
 import {GETAGREEMENT, GETVERIFICATIONCODE, REGISTER} from '@/api';
 import './style.css';
-import bg from '@/assets/login/bg.png';
+import bg from '@/assets/singup.png';
 import {Email} from '@/components/plugin/Searchdata';
 import {storage} from '@/utils/storage';
+import logo from '@/assets/login/sm-logo.png';
 
 const SignUp = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) => {
   const [read, setRead] = useState(true);
@@ -92,6 +93,9 @@ const SignUp = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) 
 
   return (
     <div>
+      <div className="padding32">
+        <a href="/home" ><img src={logo}/></a>
+      </div>
       <Spin spinning={httpLoading}>
         <Row className="login-content">
           <Col span={12}>

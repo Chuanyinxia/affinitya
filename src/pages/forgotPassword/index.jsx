@@ -8,7 +8,8 @@ import {httpLoading, login, userInfo} from '@/store/actions';
 import {post} from '@/utils/request';
 import {FORGETPASSWORD, GETVERIFICATIONCODE} from '@/api';
 import './style.css';
-import bg from '@/assets/login/bg.png';
+import bg from '@/assets/singup.png';
+import logo from '@/assets/login/sm-logo.png';
 
 const ForgotPassword = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) => {
   // eslint-disable-next-line new-cap
@@ -60,6 +61,9 @@ const ForgotPassword = ({history, httpLoading, setHttpLoading, setLogged, setUse
 
   return (
     <div>
+      <div className="padding32">
+        <a href="/home" ><img src={logo}/></a>
+      </div>
       <Spin spinning={httpLoading}>
         <Row className="login-content">
           <Col span={12}>

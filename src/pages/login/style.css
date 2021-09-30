@@ -1,7 +1,11 @@
 .login-content{
   width: 1280px;
   margin: 0 auto ;
-  padding-top: 200px;
+  min-height: 800px;
+  height: calc( 100vh - 500px);
+  padding-top: 160px;
+  padding-bottom: 200px;
+
 
 }
 .paddingL36{
@@ -47,4 +51,10 @@
 #loginForm_verificationCode,
 #loginForm_password{
   margin-top: -5px;
+
+}
+.footer-fix{
+  position: fixed;
+  bottom: 0;
+  left: 0;
 }
