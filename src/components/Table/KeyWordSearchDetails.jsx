@@ -15,6 +15,7 @@ const {TabPane} = Tabs;
 
 
 const KeyWordSearchDetails = ({userInfo, searchData, statusType}) => {
+  console.log(searchData);
   const [saveStatus, setSaveStatus] = useState(0);
   const [isPayUser, setIsPayUser] = useState(false);
   const [selectKeys, setSelectKeys] = useState([]);
@@ -162,7 +163,8 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType}) => {
   useEffect(()=>{
     let str='';
     setCopyValues('');
-    if (searchData) {
+    if (searchData.length>0) {
+      console.log(searchData);
       str = `<table>
                       <thead>
                       <tr>
