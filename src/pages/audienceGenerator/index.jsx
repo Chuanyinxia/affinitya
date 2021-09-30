@@ -547,8 +547,8 @@ const AudienceGenerator = ({userInfo}) => {
                   >
                     <Select
                       menuItemSelectedIcon={null}
-                      maxTagCount={6}
-                      maxTagTextLength={30}
+                      maxTagCount={3}
+                      maxTagTextLength={10}
                       mode="tags"
                       allowClear
                       placeholder="Custom Audience ID..."
