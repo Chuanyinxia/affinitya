@@ -147,12 +147,12 @@ const Customlayout = ({history, activeKey, setLogged}) => {
       get(GETNOTICEMSG, userInfo.token).then((res) => {
         sethasMessage(res.data.some((item)=>item.readStatus===1));
       }).catch((error) => {
-        message.error({
-          content: error.toString(), key: 'netError', duration: 2,
-        });
+        // message.error({
+        //   content: error.toString(), key: 'netError', duration: 2,
+        // });
       }).finally(()=>{
       });
-    }, 5000);
+    }, 60000);
     // clearInterval(messageTimer.current);
     return ()=>{
       clearInterval(messageTimer.current);
@@ -192,12 +192,12 @@ const Customlayout = ({history, activeKey, setLogged}) => {
                 <Tooltip title="Tech Help">
                   <div className="icon faq"></div>
                 </Tooltip>
-                <div className="icon bell">
-                  {hasMessage?
+                {hasMessage?
                   <Popover content={content} trigger="click" placement="bottomRight">
-                    <div className="bell-dot"></div>
-                  </Popover>:null}
-                </div>
+                    <div className="icon bell">
+                      <div className="bell-dot"></div>
+                    </div>
+                  </Popover>:<div className="icon bell"></div>}
                 <div className="userImg">
                   <UserOutlined style={{fontSize: 22}}/>
                 </div>
