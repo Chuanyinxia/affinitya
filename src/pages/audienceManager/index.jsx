@@ -509,7 +509,6 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
           {<ResultTable TableData={addIndex(viewDetails)}/>}
         </div>
       </Modal>
-      archiveDetailModal
       <Spin spinning={httpLoading}>
         <h1 style={{paddingLeft: 32, paddingTop: 12}}>Audience Manager</h1>
         <h4 style={{paddingLeft: 32, marginBottom: 28}}>
