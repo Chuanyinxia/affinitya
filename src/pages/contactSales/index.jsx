@@ -1,25 +1,14 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {Col, Layout, Row, Form, Input, Button} from 'antd';
+import {Col, Layout, Row} from 'antd';
 import {httpLoading} from '@/store/actions';
 import './style.css';
+import ContactUsForm from '@/components/ContactUs';
 
 const {Content} = Layout;
 
 const ContactSales = ({userInfo, httpLoading, setHttpLoading}) => {
-  // const submit = (values)=>{
-  //   setHttpLoading(true);
-  //   post(CONTACTUS, values, {
-  //     'Content-Type': 'application/x-www-form-urlencoded',
-  //   }).then((res)=>{
-  //     message.success('Send success，thank you for your inquiry!');
-  //   }).catch((error)=>{
-  //     message.error({
-  //       content: error.toString(), key: 'netError', duration: 2,
-  //     });
-  //   }).finally(()=>setHttpLoading(false));
-  // };
   return (
     <Layout className="layout Home">
       <Content>
@@ -54,37 +43,7 @@ const ContactSales = ({userInfo, httpLoading, setHttpLoading}) => {
             </Col> */}
             <Col sm={24} md={24}>
               <div className="contact-form-box" style={{margin: '0 auto'}}>
-                <Form layout="vertical">
-                  <Form.Item label={<span>Name <i className="require-mark">*</i></span>}>
-                    <Input></Input>
-                  </Form.Item>
-                  <Form.Item label={<span>Email Address <i className="require-mark">*</i></span>}>
-                    <Input></Input>
-                  </Form.Item>
-                  <Form.Item label={<span>Phone Number <i className="require-mark">*</i></span>}>
-                    <Input></Input>
-                  </Form.Item>
-                  <Form.Item label={<span>Company Name <i className="require-mark">*</i></span>}>
-                    <Input></Input>
-                  </Form.Item>
-                  <Form.Item label={<span>Title</span>}>
-                    <Input></Input>
-                  </Form.Item>
-                  <Form.Item label={<span>Leave your messages <i className="require-mark">*</i></span>}>
-                    <Input.TextArea rows={4} style={{
-                      resize: 'none',
-                      background: '#EFF0F7',
-                      border: 'none',
-                    }}></Input.TextArea>
-                  </Form.Item>
-                  <Form.Item>
-                    <Button type="primary" block style={{
-                      height: 58,
-                      lineHeight: '58px',
-                      marginTop: 28,
-                    }}>Submit</Button>
-                  </Form.Item>
-                </Form>
+                <ContactUsForm/>
               </div>
             </Col>
           </Row>
