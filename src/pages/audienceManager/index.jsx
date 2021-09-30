@@ -64,7 +64,10 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
   const [lookID, setLookID]=useState(null);
   const [lookType, setLookType]=useState(null);
   const [archiveDetailModal, setArchiveDetailModal] = useState(false);
+  // const [archiveDetail, setarchiveDetail] = useState([]);
+  const [renameModal, setrenameModal] = useState(false);
   const [archiveDetail, setArchiveDetail] = useState([]);
+  const [checkedKeys, setCheckedKeys] = useState([]);
   const c = useRef();
   // const [searchWord, setSearchWord] = useState('');
   // const getAudienceManager = () => {
@@ -590,7 +593,10 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
               <div className="data-tree-box">
                 <Tree
                   checkable
-                  onCheck={(checkedKeys, info)=>setselectedTreeData(info)}
+                  onCheck={(checkedKeys, info)=>{
+                    setCheckedKeys(checkedKeys);
+                    setselectedTreeData(info);
+                  }}
                   treeData={treeData}
                   // selectable={false}
                   onSelect={(selectedKeys, info)=>{
@@ -618,7 +624,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
               <div className="save-btn-box">
                 <Button className="save-btn" onClick={
                   ()=>updateWiner(2, selectedTreeData.checkedNodes)
-                }><CrownOutlined/>Save as Winner</Button>
+                } disabled={checkedKeys.length===0}><CrownOutlined/>Save as Winner</Button>
               </div>
             </div>
           </Col>
