@@ -36,7 +36,7 @@ const Headers=()=>{
             </Col>
             <Col span={16} className="text-right">
               <Space size="large">
-                <Link to='/' className="navs">Home</Link>
+                <a href='/home#top' className="navs">Home</a>
                 {/* <Link to='/dashboard/audienceGenerator'*/}
                 {/*  className="navs">About</Link>*/}
                 <Link to='/plansPricing' className="navs">Plans & Pricing</Link>
