@@ -28,7 +28,11 @@ const Menus = ({userInfo, history, activeKey, openKeys}) => {
     update(READJOBMANGER, '', {
       'token': userInfo.token,
     }).then((res)=>{
-      console.log(res);
+      get(GETNEWMESSAGECOUNT, userInfo.token).then((res) => {
+        setmessageCounter(res.data);
+      }).catch((error) => {
+        console.log(error);
+      });
     }).catch((error)=>{
       console.log(error);
     });
@@ -46,7 +50,6 @@ const Menus = ({userInfo, history, activeKey, openKeys}) => {
         // message.error({
         //   content: error.toString(), key: 'netError', duration: 2,
         // });
-      }).finally(()=>{
       });
     }, 60000);
     // clearInterval(messageTimer.current);
