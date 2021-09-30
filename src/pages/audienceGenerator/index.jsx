@@ -239,7 +239,7 @@ const AudienceGenerator = ({userInfo}) => {
       }).then((res) => {
         console.log(res);
         store.dispatch(setMenusData('jobManager', 'dashboard'));
-        history.push('/dashboard/jobManager?newID=' + res.data);
+        history.push('/dashboard/jobManager?newID=' + res.data+'&jobName='+value.jobName);
       }).catch((error) => {
         message.error({
           content: error.toString(), key: 'netError', duration: 2,
@@ -580,13 +580,13 @@ const AudienceGenerator = ({userInfo}) => {
                       )}
                     >
                       {audienceIdItem.map((item) => (
-                        <Select.Option key={item.audienceId} className="padding16">
+                        <Select.Option key={item.audienceParams} className="padding16">
                           <Row>
                             <Col flex="auto" className="paddingL16">
                               {item.audienceParams}
                             </Col>
                             <Col flex="80px" className="text-right paddingR16">
-                              <DeleteOutlined onClick={(e) => deleteOption(e, item.audienceId)}/>
+                              <DeleteOutlined onClick={(e) => deleteOption(e, item.audienceParams)}/>
                             </Col>
                           </Row>
                         </Select.Option>
