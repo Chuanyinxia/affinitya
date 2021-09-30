@@ -421,7 +421,9 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
   const getArchiveDetails = (ids) => {
     setHttpLoading(true);
     get(GETARCHIVEDETAIL +'/'+ ids, userInfo.token).then((res) => {
-      console.log(res);
+      setarchiveDetail({
+        kwResultVoList: res.data,
+      });
     }).catch((error) => {
       message.error({
         content: error.toString(), key: 'netError', duration: 2,
@@ -465,7 +467,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
           setArchiveDetailModal(false);
         }}>
         <div >
-          {<KeyWordSearchDetails searchData={archiveDetail} statusType={saveStatusType}/>}
+          {<KeyWordSearchDetails searchData={archiveDetail}/>}
         </div>
 
       </Modal>
