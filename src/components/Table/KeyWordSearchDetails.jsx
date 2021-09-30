@@ -187,9 +187,9 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType}) => {
           str += `<tr>
                       <td>${item.groupId}</td>
                       <td>${index+1}</td>
-                      <td>${data.keyword}</td>
-                      <td>${data.size}</td>
-                      <td>${data.path}</td>
+                      <td>${data.keyword??''}</td>
+                      <td>${data.size??''}</td>
+                      <td>${data.path??''}</td>
                   </tr>`;
         });
       });

@@ -32,7 +32,6 @@
 
   height: 36px;
   font-size: 30px;
-  font-family: Futura_Medium, Futura_Book_BT;
   font-weight: 500;
   color: #1F1F1F;
   line-height: 36px;
@@ -43,6 +42,9 @@
 }
 #loginForm_password,
 #singForm_password,
-#singForm_verificationCode{
+#singForm_verificationCode,
+#loginForm_confirmPassword,
+#loginForm_verificationCode,
+#loginForm_password{
   margin-top: -5px;
 }
