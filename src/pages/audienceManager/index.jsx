@@ -11,9 +11,10 @@ import {
   ISPAID,
   EXPORTDETAIL,
   GETARCHIVEDETAIL,
+  UPDATEGROUPNAME,
 } from '@/api/index';
 import {get, post, update} from '@/utils/request';
-import {Spin, Row, Col, Input, Tree, message, Button, Menu, Dropdown, Modal, Space, Tooltip} from 'antd';
+import {Spin, Row, Col, Input, Tree, message, Button, Menu, Dropdown, Modal, Space, Tooltip, Form} from 'antd';
 import {
   SearchOutlined,
   ClockCircleOutlined,
@@ -96,7 +97,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
           onClick={(e)=>{
             e.preventDefault();
             e.stopPropagation();
-            getArchiveDetails(c.current);
+            getArchiveDetails(c.current.id);
             setArchiveDetailModal(true);
           }}
         >
@@ -105,7 +106,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
       </Menu.Item>
       <Menu.Item>
         <a rel="noopener noreferrer" href="javascript:void(0)"
-          onClick={()=>null}
+          onClick={()=>setrenameModal(true)}
         >
           Rename
         </a>
@@ -141,8 +142,8 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
           onClick={(e)=>{
             e.preventDefault();
             e.stopPropagation();
-            getDetails(c.current);
-            setLookID(c.current);
+            getDetails(c.current.id);
+            setLookID(c.current.id);
             setLookType(1);
             setViewModal(true);
           }}
@@ -152,7 +153,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
       </Menu.Item>
       <Menu.Item>
         <a rel="noopener noreferrer" href="javascript:void(0)"
-          onClick={()=>null}
+          onClick={()=>setrenameModal(true)}
         >
           Rename
         </a>
@@ -188,8 +189,8 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
           onClick={(e)=>{
             e.preventDefault();
             e.stopPropagation();
-            getDetails(c.current);
-            setLookID(c.current);
+            getDetails(c.current.id);
+            setLookID(c.current.id);
             setLookType(1);
           }}
         >
@@ -198,7 +199,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
       </Menu.Item>
       <Menu.Item>
         <a rel="noopener noreferrer" href="javascript:void(0)"
-          onClick={()=>null}
+          onClick={()=>setrenameModal(true)}
         >
           Rename
         </a>
@@ -234,8 +235,8 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
           onClick={(e)=>{
             e.preventDefault();
             e.stopPropagation();
-            getDetails(c.current);
-            setLookID(c.current);
+            getDetails(c.current.id);
+            setLookID(c.current.id);
             setLookType(1);
           }}
         >
@@ -244,7 +245,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
       </Menu.Item>
       <Menu.Item>
         <a rel="noopener noreferrer" href="javascript:void(0)"
-          onClick={()=>null}
+          onClick={()=>setrenameModal(true)}
         >
           Rename
         </a>
@@ -284,6 +285,26 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
       </Menu.Item>
     </Menu>
   );
+  const updateGroupName = (title, type, id)=>{
+    update(UPDATEGROUPNAME,
+        {
+          title: title,
+          type: type,
+          id: id,
+        }, {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'token': userInfo.token,
+        }).then((res) => {
+      setrenameModal(false);
+      getArchiveList(tabType===1?3:1, '', 99, 1);
+    }).catch((error) => {
+      message.error({
+        content: error.toString(), key: 'netError', duration: 2,
+      });
+    }).finally(()=>{
+      setHttpLoading(false);
+    });
+  };
   const addIndex=(data)=>{
     const tableData=data.map((item, index)=>{
       return {...item, index: index+1};
@@ -333,7 +354,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
       // } else {
       //   data = current.searchResultId;
       // }
-      data = c.current;
+      data = c.current.id;
     }
     update(UPDATEWINNERLIST,
         {
@@ -343,11 +364,11 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
           'Content-Type': 'application/x-www-form-urlencoded',
           'token': userInfo.token,
         }).then((res) => {
-      if (type===2) {
-        getWinnerList('', 99, 1);
-      } else {
-        getArchiveList(tabType, '', 99, 1);
-      }
+      // if (type===2) {
+      getWinnerList('', 999, 1);
+      // } else {
+      getArchiveList(tabType===3?1:3, '', 999, 1);
+      // }
     }).catch((error) => {
       message.error({
         content: error.toString(), key: 'netError', duration: 2,
@@ -448,11 +469,38 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
     });
   };
   useEffect(() => {
-    getArchiveList(1, '', 99, 1);
-    getWinnerList('', 99, 1);
+    getArchiveList(1, '', 999, 1);
+    getWinnerList('', 999, 1);
   }, []);
   return (
     <div className="paddingB16">
+      <Modal
+        title="Rename"
+        width={600}
+        visible={renameModal}
+        className="height900"
+        footer={null}
+        destroyOnClose
+        onOk={() => {
+          // setViewDetail([]);
+          setrenameModal(false);
+        }}
+        onCancel={()=>{
+          // setViewDetail([]);
+          setrenameModal(false);
+        }}>
+        <Form onFinish={(values)=>updateGroupName(values.title, c.current.type, c.current.jobId)}>
+          <Form.Item rules={[{required: true, message: 'Please input job/audience name'}]} name="title">
+            <Input placeholder="Input job/audience name"></Input>
+          </Form.Item>
+          <Form.Item className="text-right">
+            <Space>
+              <Button htmlType="submit" type="primary" size="large">Save</Button>
+              <Button size="large">Cancel</Button>
+            </Space>
+          </Form.Item>
+        </Form>
+      </Modal>
       <Modal
         title={null}
         width={1200}
@@ -470,7 +518,6 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
         <div >
           <KeyWordSearchDetails searchData={archiveDetail} statusType={0}/>
         </div>
-
       </Modal>
       <Modal
         title="Details"
@@ -534,9 +581,9 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                 <div className="search-box">
                   <Input prefix={<SearchOutlined />} placeholder="search" allowClear
                     onChange={(e)=>{
-                      if (e.target.value==='') getArchiveList(tabType, '', 99, 1);
+                      if (e.target.value==='') getArchiveList(tabType===1?3:1, '', 99, 1);
                     }}
-                    onPressEnter={(e)=>getArchiveList(tabType, e.target.value, 99, 1)}
+                    onPressEnter={(e)=>getArchiveList(tabType===1?3:1, e.target.value, 99, 1)}
                   ></Input>
                 </div>
               </div>
@@ -548,12 +595,23 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                   // selectable={false}
                   onSelect={(selectedKeys, info)=>{
                     let data;
+                    let type;
+                    let jobId = info.node.key;
+                    const name = info.node.title.props.children[0];
                     if (info.node.children) {
                       data = info.node.children.map((item)=>item.key.split('-')[1]).join(',');
+                      type = 1;
                     } else {
                       data = info.node.key.split('-')[1];
+                      type = 2;
                     }
-                    c.current = data;
+                    if (jobId.includes('-')) jobId = jobId.split('-')[1];
+                    c.current = {
+                      id: data,
+                      name: name,
+                      type: type,
+                      jobId: jobId,
+                    };
                   }}
                 />
               </div>
@@ -606,6 +664,9 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                         }}
                         onClick={(e)=>{
                           e.stopPropagation();
+                          c.current = {
+                            id: item.searchResultId,
+                          };
                         }}
                         >
                           <Dropdown overlay={winnerMenu} arrow trigger={['click']} placement="bottomLeft">
@@ -666,7 +727,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
             </div>
             <EditTable details={details} id={editId} saveFunc={()=>{
               settableVisible(true);
-              getDetails();
+              getDetails(c.current.id);
             }} style={{marginTop: 24}}/>
           </div>
         </div>:null}
