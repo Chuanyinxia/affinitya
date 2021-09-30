@@ -163,15 +163,6 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType}) => {
     let str='';
     setCopyValues('');
     if (searchData) {
-      // str=`Audience&nbsp;Id&nbsp;Keyword&nbsp;Size&nbsp;Path<br/>`;
-      // searchData.forEach((item)=>{
-      //   item.searchDetails.forEach((data)=>{
-      //     str+=`${item.groupId}&nbsp;&nbsp;
-      //           ${data.id}&nbsp;&nbsp;
-      //           ${data.keyword}&nbsp;&nbsp;
-      //           ${data.size}&nbsp;&nbsp;
-      //           ${data.path}<br/>`;
-      //   });
       str = `<table>
                       <thead>
                       <tr>
@@ -194,20 +185,6 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType}) => {
         });
       });
       str += `</tbody></table>`;
-      // str=`Audience\r
-      //           ID\r
-      //           Keyword\r
-      //           Size\r
-      //           Path\n\t`;
-      // searchData.forEach((item)=>{
-      //   item.searchDetails.forEach((data)=>{
-      //     str+=`${item.groupId}\t
-      //           ${data.id}\t
-      //           ${data.keyword}\t
-      //           ${data.size}\t
-      //           ${data.path}\r\t`;
-      //   });
-      // });
       setCopyValues(str);
     } else {
       setCopyValues('');

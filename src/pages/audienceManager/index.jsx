@@ -63,7 +63,8 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
   const [lookID, setLookID]=useState(null);
   const [lookType, setLookType]=useState(null);
   const [archiveDetailModal, setArchiveDetailModal] = useState(false);
-  const [archiveDetail, setarchiveDetail] = useState([]);
+  const [archiveDetail] = useState([]);
+  const [saveStatusType]=useState(0);
   const c = useRef();
   // const [searchWord, setSearchWord] = useState('');
   // const getAudienceManager = () => {
