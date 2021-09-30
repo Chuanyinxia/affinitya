@@ -5,11 +5,11 @@ import {Link, withRouter} from 'react-router-dom';
 import {Menu} from 'antd';
 import './style.css';
 import store from '../../store';
-import {get} from '@/utils/request';
+import {get, update} from '@/utils/request';
 import {setMenusData} from '../../store/actions';
 import dashboard from '../../assets/Dashboard.png';
 import plans from '../../assets/Dollar.png';
-import {GETNEWMESSAGECOUNT} from '@/api/index';
+import {GETNEWMESSAGECOUNT, READJOBMANGER} from '@/api/index';
 
 // const {SubMenu} = Menu;
 
@@ -24,6 +24,19 @@ const Menus = ({userInfo, history, activeKey, openKeys}) => {
   const onOpenChange = (keys) => {
     store.dispatch(setMenusData(activeKey, keys[0] ));
   };
+  const jobReader=()=>{
+    update(READJOBMANGER, '', {
+      'token': userInfo.token,
+    }).then((res)=>{
+      get(GETNEWMESSAGECOUNT, userInfo.token).then((res) => {
+        setmessageCounter(res.data);
+      }).catch((error) => {
+        console.log(error);
+      });
+    }).catch((error)=>{
+      console.log(error);
+    });
+  };
   const messageTimer = useRef();
   useEffect(() => {
     const array=history.location.pathname.split('/');
@@ -37,7 +50,6 @@ const Menus = ({userInfo, history, activeKey, openKeys}) => {
         // message.error({
         //   content: error.toString(), key: 'netError', duration: 2,
         // });
-      }).finally(()=>{
       });
     }, 60000);
     // clearInterval(messageTimer.current);
@@ -75,7 +87,7 @@ const Menus = ({userInfo, history, activeKey, openKeys}) => {
         </Menu.Item>
         <Menu.Item key="jobManager" className="menus_subTitle">
           {messageCounter!==0?<div className="job-dot">{messageCounter}</div>:null}
-          <Link to="/dashboard/jobManager">
+          <Link to="/dashboard/jobManager" onClick={jobReader}>
             Job Manager
           </Link>
         </Menu.Item>

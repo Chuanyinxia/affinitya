@@ -64,8 +64,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
   const [lookID, setLookID]=useState(null);
   const [lookType, setLookType]=useState(null);
   const [archiveDetailModal, setArchiveDetailModal] = useState(false);
-  const [archiveDetail, setarchiveDetail] = useState([]);
-  const [renameModal, setrenameModal] = useState(false);
+  const [archiveDetail, setArchiveDetail] = useState([]);
   const c = useRef();
   // const [searchWord, setSearchWord] = useState('');
   // const getAudienceManager = () => {
@@ -443,7 +442,10 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
   const getArchiveDetails = (ids) => {
     setHttpLoading(true);
     get(GETARCHIVEDETAIL +'/'+ ids, userInfo.token).then((res) => {
-      setarchiveDetail(res.data);
+      console.log(res.data);
+      const data=res.data;
+      setArchiveDetail(data);
+      console.log(archiveDetail);
     }).catch((error) => {
       message.error({
         content: error.toString(), key: 'netError', duration: 2,
@@ -514,7 +516,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
           setArchiveDetailModal(false);
         }}>
         <div >
-          {<KeyWordSearchDetails searchData={archiveDetail}/>}
+          <KeyWordSearchDetails searchData={archiveDetail} statusType={0}/>
         </div>
       </Modal>
       <Modal
@@ -634,8 +636,8 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                 <div className="card-group">
                   {winnerList.map((item, index)=>(
                     <div className={item.check?'card-item active':
-                    item.saveStatus===1?'card-item':
-                    'card-item edited'} key={item.searchId} onClick={()=>{
+                      item.saveStatus===1?'card-item':
+                        'card-item edited'} key={item.searchId} onClick={()=>{
                       const data = [...winnerList];
                       data.forEach((item)=>item.check=false);
                       data[index].check = true;

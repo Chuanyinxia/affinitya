@@ -98,7 +98,7 @@ const PlansPricing = ({userInfo, httpLoading, setHttpLoading}) => {
                     <Divider/>
                   </div>
                   <Row>
-                    <Col className="price-fun"span={24}>
+                    <Col className="price-fun" span={24}>
                       {payment.functionList.map((fun, index)=>(
                         <div key={`fun_${index}`}>
                           <div style={{float: 'left'}}>

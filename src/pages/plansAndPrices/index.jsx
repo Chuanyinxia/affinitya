@@ -7,12 +7,13 @@ import {
 } from '@ant-design/icons';
 
 import {httpLoading} from '@/store/actions';
-import {GETPAYMENTLIST, PAY} from '@/api/index';
+import {GETPAYMENTLIST, ISPAID, PAY} from '@/api/index';
 import {get, post} from '@/utils/request';
 import './style.css';
 import {useHistory} from 'react-router-dom';
 const {Content} = Layout;
 const PlansAndPrices = ({userInfo, httpLoading, setHttpLoading}) => {
+  const [isPayUser, setIsPayUser] = useState(false);
   const history = useHistory();
   const [paymentList, setPaymentList] = useState([]);
   const [payModalVisible, setpayModalVisible] = useState(false);
@@ -68,8 +69,18 @@ const PlansAndPrices = ({userInfo, httpLoading, setHttpLoading}) => {
           encodeURI(sVar).replace(/[.+*]/g, '\\$&') +
           '(?:\\=([^&]*))?)?.*$', 'i'), '$1'));
   };
+  const isPay=()=>{
+    get(ISPAID, userInfo.token).then((res)=>{
+      setIsPayUser(res.data===2);
+    }).catch((error)=>{
+      message.error({
+        content: error.toString(), key: 'netError', duration: 2,
+      });
+    });
+  };
   useEffect(() => {
     getPaymentList();
+    isPay();
   }, []);
   useEffect(() => {
     setpayStatus(loadPageVar('payStatus')==='success');
@@ -147,14 +158,19 @@ const PlansAndPrices = ({userInfo, httpLoading, setHttpLoading}) => {
                         {payment.packageType===1?
                         <Tooltip>
                           <Button type="primary" block disabled>
-                          Actived</Button>
+                            {isPayUser?'Free Plan':'Current Plan'}
+                          </Button>
                         </Tooltip>:
                         payment.packageType===2?
-                        <Button type="primary" block onClick={()=>{
-                          setpayModalVisible(true);
-                          setpayRadio(true);
-                          setcurrent(payment);
-                        }}>Upgrade Now</Button>:
+                        <Button
+                          type="primary"
+                          block
+                          disabled={isPayUser}
+                          onClick={()=>{
+                            setpayModalVisible(true);
+                            setpayRadio(true);
+                            setcurrent(payment);
+                          }}> {isPayUser?'Current Plan':'Upgrade Now'}</Button>:
                         <Button type="primary" block onClick={()=>{
                           history.push('/contactSales');
                         }}>Contact Sales</Button>
@@ -196,12 +212,13 @@ const PlansAndPrices = ({userInfo, httpLoading, setHttpLoading}) => {
           paddingLeft: 44,
         }}>Payment Amount: <span style={{fontSize: 24, paddingLeft: 16}}>${current.price}</span></div>
         <div style={{marginTop: 48, paddingLeft: 44}}>
-          <Checkbox checked={payRadio} onChange={(e)=>{
+          <Checkbox checked={payRadio} onChange={()=>{
             setpayRadio(!payRadio);
-          }}>I have read and agreed to the <a href="/privacyPolicy?type=4" target="_blank" onClick={(e)=>{
-              // e.preventDefault();
-              history.push('/privacyPolicy?type=4');
-            }}>Payment Policy.</a></Checkbox>
+          }}>I have read and agreed to the&nbsp;&nbsp;
+            <a href="/privacyPolicy?type=4" target="_blank">
+              Payment Policy.
+            </a>
+          </Checkbox>
         </div>
         {payRadio?null:<div style={{paddingLeft: 44, color: '#E92C3A'}}>You should accept the payment policy.</div>}
         <div style={{marginLeft: 350, marginTop: 72}}>

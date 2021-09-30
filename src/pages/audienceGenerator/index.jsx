@@ -36,6 +36,7 @@ import {
 } from '@/api';
 import {Link, useHistory} from 'react-router-dom';
 import store from '@/store';
+import {storage} from '@/utils/storage';
 
 
 const AudienceGenerator = ({userInfo}) => {
@@ -84,7 +85,7 @@ const AudienceGenerator = ({userInfo}) => {
     e.stopPropagation();
     remove(DELETEAUDIENCEID + id, userInfo.token).then((res) => {
       message.success(res.msg);
-      setAudienceIdItem(audienceIdItem.filter((item) => item.audienceId !== id));
+      setAudienceIdItem(audienceIdItem.filter((item) => item.audienceParams !== id));
     }).catch((error) => {
       message.error({
         content: error.toString(), key: 'netError', duration: 2,
@@ -259,7 +260,8 @@ const AudienceGenerator = ({userInfo}) => {
   useEffect(() => {
     isPay();
     setLoading(true);
-    get(GETAUDIENCEIDLIST, userInfo.token).then((res) => {
+    const token=userInfo.token??storage.getData('userInfo').token;
+    get(GETAUDIENCEIDLIST, token).then((res) => {
       setAudienceIdItem(res.data);
     }).catch((error) => {
       console.log(error);
@@ -545,8 +547,8 @@ const AudienceGenerator = ({userInfo}) => {
                   >
                     <Select
                       menuItemSelectedIcon={null}
-                      maxTagCount={6}
-                      maxTagTextLength={30}
+                      maxTagCount={3}
+                      maxTagTextLength={10}
                       mode="tags"
                       allowClear
                       placeholder="Custom Audience ID..."

@@ -114,8 +114,9 @@ const Home = ({userInfo, httpLoading, setHttpLoading}) => {
   return (
     <Layout className="layout Home">
       <Headers/>
+      <div id="top"/>
       <Content className="marginTop90 banner">
-        <Row className="home-content paddingT90">
+        <Row className="home-content paddingT90" >
           <Col lg={14} xs={12} sm={12} md={12}>
             <h1 className="homeBannerText">{homeText.banner.title}</h1>
             <p className="banner-info">{homeText.banner.describe}</p>

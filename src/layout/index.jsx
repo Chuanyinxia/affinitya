@@ -161,24 +161,30 @@ const Customlayout = ({history, activeKey, setLogged}) => {
   return (
     <div>
       {menuVisible?<div className="small-menu">
-        <div className="small-menu-close" onClick={()=>setmenuVisible(false)}><CloseOutlined /></div>
+        <div className="small-menu-close"
+          onClick={()=>setmenuVisible(false)}>
+          <CloseOutlined />
+        </div>
         <Menus/>
       </div>:null}
-      <Layout style={{minHeight: '100vh'}}>
-        <div className="sider-wrapper"><Sider
+      <Layout>
+
+        <Sider
           width={284}
           breakpoint="lg"
           trigger={null}
           // collapsible={false}
           collapsedWidth={0}
-          style={{minHeight: '100vh'}}
+          // style={{height: '100vh'}}
         >
           <div className="logoBox">
-            <a href="/"><img src={logo} width={168}/></a>
+            <a href="/home">
+              <img src={logo} width={168}/>
+            </a>
           </div>
           <Menus/>
         </Sider>
-        </div>
+
         <Layout>
           <Header className="login-header">
             <div className="menu-icon" onClick={()=>setmenuVisible(true)}></div>
