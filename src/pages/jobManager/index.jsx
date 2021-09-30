@@ -234,7 +234,7 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
             });
           }}
         >
-          <Tabs.TabPane tab="All" key={0} style={{width: 60}}/>
+          <Tabs.TabPane tab="&nbsp;&nbsp;All&nbsp;&nbsp;" key={0}/>
           <Tabs.TabPane tab="Keyword" key={1}/>
           <Tabs.TabPane tab="Lookalike Audience" key={2}/>
           <Tabs.TabPane tab="Extend" key={3}/>
@@ -351,6 +351,7 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
           width={1200}
           visible={viewModal}
           className="height900"
+          destroyAll
           footer={null}
           onOk={() => {
             setViewDetail([]);
