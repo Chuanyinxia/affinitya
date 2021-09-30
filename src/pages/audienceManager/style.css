@@ -100,7 +100,7 @@
   margin: 16px 0;
 }
 .card-group{
-  padding: 0 42px;
+  padding: 0 42px 20px 42px;
   overflow: hidden;
 }
 .card-item{
