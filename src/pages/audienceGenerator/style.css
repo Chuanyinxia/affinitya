@@ -55,3 +55,6 @@ span.ant-radio + *{
   font-weight: 600;
   background: rgba(76 ,63, 113,.1 )
 }
+.break{
+  word-wrap:break-word;
+}

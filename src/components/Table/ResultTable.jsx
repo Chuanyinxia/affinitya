@@ -26,7 +26,7 @@ const ResultTable = ({userInfo, TableData, onSelect, groupId}) => {
       dataSource={TableData}
       rowKey={(record)=> record.id}
       pagination={{
-        pageSize: 10,
+        pageSize: 100,
         showSizeChanger: false,
         size: 'small',
         hideOnSinglePage: true,
