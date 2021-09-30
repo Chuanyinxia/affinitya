@@ -45,6 +45,10 @@
 .ant-checkbox-inner{
   border-radius: 4px;
 }
+.require-mark{
+  color: #ff4d4f;
+  font-family: SimSun,sans-serif;
+}
 @media only screen and (max-width: 768px){
   .PPContent {
     margin: 0 auto;

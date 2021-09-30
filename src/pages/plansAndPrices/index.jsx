@@ -209,7 +209,7 @@ const PlansAndPrices = ({userInfo, httpLoading, setHttpLoading}) => {
           <Button
             style={{width: 174, height: 48, marginLeft: 14}}
             type="primary"
-            onClick={()=>pay(12)}
+            onClick={()=>pay(current.id)}
             disabled={!payRadio}>Pay Now</Button>
         </div>
       </Modal>

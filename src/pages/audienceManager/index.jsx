@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {httpLoading} from '@/store/actions';
@@ -43,11 +43,12 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
   const [details, setDetails] = useState(null);
   const [editId, setEditId] = useState(null);
   const [treeData, settreeData] = useState([]);
-  const [tabType, settabType] = useState(1);
+  const [tabType, settabType] = useState(3);
   const [winnerList, setwinnerList] = useState([]);
   const [selectedTreeData, setselectedTreeData] = useState({});
-  const [current, setcurrent] = useState({});
+  // const [current, setcurrent] = useState('');
   const [tableVisible, settableVisible] = useState(false);
+  const c = useRef();
   // const [searchWord, setSearchWord] = useState('');
   // const getAudienceManager = () => {
   //   post(GETAUDIENCEMANAGER, {pageNum: 1, pageSize: 10000}, {
@@ -93,9 +94,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
           onClick={(e)=>{
             e.preventDefault();
             e.stopPropagation();
-            setTimeout(()=>{
-              updateWiner(3, [], current);
-            }, 200);
+            updateWiner(3, []);
             // console.log(current);
           }}
         >
@@ -107,9 +106,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
           onClick={(e)=>{
             e.preventDefault();
             e.stopPropagation();
-            setTimeout(()=>{
-              updateWiner(1, [], current);
-            }, 200);
+            updateWiner(1, []);
           }}
         >
           Delete
@@ -138,17 +135,17 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
       setHttpLoading(false);
     });
   };
-  const updateWiner = (type, checkList, c)=>{
+  const updateWiner = (type, checkList)=>{
     let data;
     if (checkList.length>0) {
       data = checkList.filter((item)=>!(item.children)).map((item)=>item.key.split('-')[1]);
     } else {
-      if (Array.isArray(c)) {
-        data = c.map((item)=>item.searchResultId).join(',');
-      } else {
-        data = c.searchResultId;
-      }
-      // data = current;
+      // if (Array.isArray(current)) {
+      //   data = current.map((item)=>item.searchResultId).join(',');
+      // } else {
+      //   data = current.searchResultId;
+      // }
+      data = c.current;
     }
     update(UPDATEWINNERLIST,
         {
@@ -158,9 +155,11 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
           'Content-Type': 'application/x-www-form-urlencoded',
           'token': userInfo.token,
         }).then((res) => {
-      // setcurrent('');
-      if (type===2) getWinnerList('', 99, 1);
-      else getArchiveList(tabType, '', 99, 1);
+      if (type===2) {
+        getWinnerList('', 99, 1);
+      } else {
+        getArchiveList(tabType, '', 99, 1);
+      }
     }).catch((error) => {
       message.error({
         content: error.toString(), key: 'netError', duration: 2,
@@ -189,8 +188,6 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
               <span className="more-icon">
                 <Dropdown overlay={menu} arrow trigger={['click']} placement="bottomLeft">
                   <MoreOutlined onClick={(e)=>{
-                    e.stopPropagation();
-                    setcurrent(data[key]);
                   }}/>
                 </Dropdown>
               </span>
@@ -206,8 +203,6 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                     <span className="more-icon">
                       <Dropdown overlay={menu} arrow trigger={['click']} placement="bottomLeft">
                         <MoreOutlined onClick={(e)=>{
-                          e.stopPropagation();
-                          setcurrent(item);
                         }}/>
                       </Dropdown>
                     </span>
@@ -244,29 +239,28 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
     });
   };
   useEffect(() => {
-    // getAudienceManager();
     getArchiveList(1, '', 99, 1);
   }, []);
   return (
     <div className="paddingB16">
       <Spin spinning={httpLoading}>
-        <h2 style={{paddingLeft: 46}}>Audience Manager</h2>
-        <p style={{paddingLeft: 46}}>
-          Manage and edit the audiences you are testing. Record the performance of the Winning audiences.</p>
+        <h1 style={{paddingLeft: 32, paddingTop: 12}}>Audience Manager</h1>
+        <h4 style={{paddingLeft: 32, marginBottom: 28}}>
+          Manage and edit the audiences you are testing. Record the performance of the Winning audiences.</h4>
         <Row>
           <Col sm={24} md={9}>
             <div className="text-box">
               <div className="box-wrapper">
                 <div className="tab-box">
-                  <div className={tabType===1?'tab-title active':'tab-title'} onClick={()=>{
+                  <div className={tabType===3?'tab-title active':'tab-title'} onClick={()=>{
+                    settabType(3);
                     getArchiveList(1, '', 99, 1);
-                    settabType(1);
-                    setwinnerList([]);
+                    // setwinnerList([]);
                   }}><ExperimentOutlined style={{marginRight: 12}}/>Testing</div>
-                  <div className={tabType===2?'tab-title active':'tab-title'} onClick={()=>{
-                    getArchiveList(2, '', 99, 1);
-                    settabType(2);
-                    setwinnerList([]);
+                  <div className={tabType===1?'tab-title active':'tab-title'} onClick={()=>{
+                    settabType(1);
+                    getArchiveList(3, '', 99, 1);
+                    // setwinnerList([]);
                   }}><SaveOutlined style={{marginRight: 12}}/>Archive</div>
                 </div>
               </div>
@@ -285,16 +279,16 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                   checkable
                   onCheck={(checkedKeys, info)=>setselectedTreeData(info)}
                   treeData={treeData}
-                  selectable={false}
-                  // onSelect={(selectedKeys, info)=>{
-                  //   let data;
-                  //   if (info.node.children) {
-                  //     data = info.node.children.map((item)=>item.key.split('-')[1]).join(',');
-                  //   } else {
-                  //     data = info.node.key.split('-')[1];
-                  //   }
-                  //   setcurrent(data);
-                  // }}
+                  // selectable={false}
+                  onSelect={(selectedKeys, info)=>{
+                    let data;
+                    if (info.node.children) {
+                      data = info.node.children.map((item)=>item.key.split('-')[1]).join(',');
+                    } else {
+                      data = info.node.key.split('-')[1];
+                    }
+                    c.current = data;
+                  }}
                 />
               </div>
               <div className="save-btn-box">
