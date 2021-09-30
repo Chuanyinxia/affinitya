@@ -63,8 +63,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
   const [lookID, setLookID]=useState(null);
   const [lookType, setLookType]=useState(null);
   const [archiveDetailModal, setArchiveDetailModal] = useState(false);
-  const [archiveDetail] = useState([]);
-  const [saveStatusType]=useState(0);
+  const [archiveDetail, setarchiveDetail] = useState([]);
   const c = useRef();
   // const [searchWord, setSearchWord] = useState('');
   // const getAudienceManager = () => {
@@ -578,8 +577,8 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                 <div className="card-group">
                   {winnerList.map((item, index)=>(
                     <div className={item.check?'card-item active':
-                    item.saveStatus===1?'card-item':
-                    'card-item edited'} key={item.searchId} onClick={()=>{
+                      item.saveStatus===1?'card-item':
+                        'card-item edited'} key={item.searchId} onClick={()=>{
                       const data = [...winnerList];
                       data.forEach((item)=>item.check=false);
                       data[index].check = true;
