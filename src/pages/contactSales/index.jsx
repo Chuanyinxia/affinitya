@@ -55,22 +55,22 @@ const ContactSales = ({userInfo, httpLoading, setHttpLoading}) => {
             <Col sm={24} md={24}>
               <div className="contact-form-box" style={{margin: '0 auto'}}>
                 <Form layout="vertical">
-                  <Form.Item label="Name">
+                  <Form.Item label={<span>Name <i className="require-mark">*</i></span>}>
                     <Input></Input>
                   </Form.Item>
-                  <Form.Item label="Email address">
+                  <Form.Item label={<span>Email Address <i className="require-mark">*</i></span>}>
                     <Input></Input>
                   </Form.Item>
-                  <Form.Item label="Phone number">
+                  <Form.Item label={<span>Phone Number <i className="require-mark">*</i></span>}>
                     <Input></Input>
                   </Form.Item>
-                  <Form.Item label="Company name">
+                  <Form.Item label={<span>Company Name <i className="require-mark">*</i></span>}>
                     <Input></Input>
                   </Form.Item>
-                  <Form.Item label="title">
+                  <Form.Item label={<span>Title</span>}>
                     <Input></Input>
                   </Form.Item>
-                  <Form.Item label="title">
+                  <Form.Item label={<span>Leave your messages <i className="require-mark">*</i></span>}>
                     <Input.TextArea rows={4} style={{
                       resize: 'none',
                       background: '#EFF0F7',

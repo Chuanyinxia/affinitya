@@ -40,7 +40,7 @@ const Menus = ({userInfo, history, activeKey, openKeys}) => {
       }).finally(()=>{
       });
     }, 5000);
-    clearInterval(messageTimer.current);
+    // clearInterval(messageTimer.current);
     return ()=>{
       clearInterval(messageTimer.current);
     };
