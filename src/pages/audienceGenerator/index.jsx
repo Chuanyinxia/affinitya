@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {httpLoading, setMenusData} from '@/store/actions';
+import {setMenusData} from '@/store/actions';
 import {
   Button,
   Card,
@@ -38,11 +38,12 @@ import {Link, useHistory} from 'react-router-dom';
 import store from '@/store';
 
 
-const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
+const AudienceGenerator = ({userInfo}) => {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
   const [audienceID, setAudienceID] = useState('');
   const [audienceIdItem, setAudienceIdItem] = useState([]);
+  const [userAudienceIdItem, setUserAudienceIdItem] = useState([]);
   const [isPayUser, setIsPayUser] = useState(false);
   const [searchType, setSearchType] = useState(1);
   const [read, setRead] = useState(false);
@@ -65,7 +66,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
         'token': userInfo.token,
         'Content-Type': 'application/x-www-form-urlencoded',
       }).then((res) => {
-        audienceIdItem.unshift({audienceId: '', audienceParams: audienceID});
+        audienceIdItem.unshift({audienceId: audienceID, audienceParams: audienceID});
         setAudienceIdItem(audienceIdItem);
         setAudienceID(null);
       }).catch((error) => {
@@ -110,7 +111,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
         'token': userInfo.token,
         'Content-Type': 'application/x-www-form-urlencoded',
       }).then((res) => {
-        setAudienceIdItem(res.data);
+        setUserAudienceIdItem(res.data);
       }).catch((error) => {
         console.log(error);
       });
@@ -265,6 +266,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
     }).finally(() => {
       setLoading(false);
     });
+
     if (userInfo.adAccountId && userInfo.accessToken && userInfo.myAppId && userInfo.myAppSecret) {
       const sdata = {
         adAccountId: userInfo.adAccountId,
@@ -277,7 +279,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
         'token': userInfo.token,
         'Content-Type': 'application/x-www-form-urlencoded',
       }).then((res) => {
-        setAudienceIdItem(res.data);
+        setUserAudienceIdItem(res.data);
       }).catch((error) => {
         console.log(error);
       }).finally(()=>{
@@ -580,8 +582,6 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
                       <Select.Option key={item.audienceId} className="padding16">
                         <Row>
                           <Col flex="auto" className="paddingL16">
-                            {item.audienceId}
-                            {item.audienceId&&(<span>&nbsp;&nbsp;</span>)}
                             {item.audienceParams}
                           </Col>
                           <Col flex="80px" className="text-right paddingR16">
@@ -590,6 +590,17 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
                         </Row>
                       </Select.Option>
                     ))}
+                    {userAudienceIdItem.map((item) => (
+                      <Select.Option key={item.audienceId} className="padding16">
+                        <Row>
+                          <Col flex="auto" className="paddingL16 break">
+                            {item.audienceId&&(<span>&nbsp;&nbsp;</span>)}
+                            {item.audienceParams}
+                          </Col>
+                        </Row>
+                      </Select.Option>
+                    ))}
+
                   </Select>
                 </Form.Item>
               </Form>
@@ -656,7 +667,6 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
 
 const mapStateToProps = (state) => {
   return {
-    httpLoading: state.toggleHttpLoading.loading,
     userInfo: state.getUserInfo.info,
   };
 };
@@ -664,14 +674,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setHttpLoading: (f) => dispatch(httpLoading(f)),
   };
 };
 
 AudienceGenerator.propTypes = {
   userInfo: PropTypes.object.isRequired,
-  httpLoading: PropTypes.bool.isRequired,
-  setHttpLoading: PropTypes.func.isRequired,
 };
 
 export default connect(
