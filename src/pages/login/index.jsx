@@ -28,6 +28,7 @@ import cookie from 'react-cookies';
 import logo from '@/assets/login/sm-logo.png';
 import './style.css';
 import {Email, isEmail} from '@/components/plugin/Searchdata';
+import Footers from '@/components/Footers';
 // import Footers from '@/components/Footers';
 
 const Login = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) => {
@@ -63,10 +64,12 @@ const Login = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) =
     <div>
       <Spin spinning={httpLoading}>
         <div className="padding32">
-          <a href="/home" ><img src={logo}/></a>
+          <a href="/home" >
+            <img src={logo} alt="logo"/>
+          </a>
         </div>
-        <Row className="login-content">
-          <Col span={12}>
+        <Row className="login-content paddingT32 paddingB90">
+          <Col span={12} className="paddingT90">
             <img src={bg} style={{width: '100%'}} alt="bg"/>
           </Col>
           <Col span={12} className="paddingL36 paddingR36">
@@ -83,6 +86,7 @@ const Login = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) =
             >
               <Form.Item
                 name="email"
+                label="Email"
                 rules={[
                   {required: true, message: 'Please input your email!'},
                   {type: 'email', message: 'Please input a valid email!'},
@@ -91,18 +95,17 @@ const Login = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) =
                 <Input
                   bordered={false}
                   size="large"
-                  className="borderB"
-                  placeholder="Email" />
+                  placeholder="Please enter your email" />
               </Form.Item>
               <Form.Item
                 name="password"
+                label="Password"
                 rules={[{required: true, message: 'Please input your password!'}]}
               >
                 <Input.Password
                   bordered={false}
                   size="large"
-                  className="borderB"
-                  placeholder="Password"
+                  placeholder="Please enter your password"
                   // iconRender={(visible) => (visible ? null : null)}
                 />
               </Form.Item>
@@ -128,6 +131,7 @@ const Login = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) =
             </Form>
           </Col>
         </Row>
+        <Footers/>
       </Spin>
     </div>
 

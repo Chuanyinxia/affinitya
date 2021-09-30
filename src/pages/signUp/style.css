@@ -1,3 +1,18 @@
 .paddingL0{
   padding-left: 0.5em;
 }
+.login-content .ant-form-item-label > label {
+  font-family: Poppins;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 28px;
+  /* identical to box height, or 175% */
+
+  color: #14142A;
+
+  mix-blend-mode: normal;
+}
+.login-content .ant-form-item-label > label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::before{
+  content:'';
+}
