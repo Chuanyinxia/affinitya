@@ -208,8 +208,9 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType, hideFirstButton
               <Tooltip
                 placement="top"
                 title={(saveStatus === 1|| parseInt(statusType)===1)?
-                         'You have saved this result.':
-              'If you don\'t choose any keyword, we will save all for you.'}>
+                         'You have saved this result.':(
+                           selectKeys.length>0?'': 'If you don\'t choose any keyword, we will save all for you.')
+                }>
                 <Button
                   type="primary"
                   className="btn-md"

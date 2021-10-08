@@ -5,14 +5,7 @@ import {Button, Col, Form, Input, Layout, message, Row} from 'antd';
 import {httpLoading} from '@/store/actions';
 import {useHistory} from 'react-router-dom';
 import './style.css';
-import banner from '@/assets/home/banner.webp';
-import info1 from '@/assets/home/info1.webp';
-import info2 from '@/assets/home/info2.webp';
-import info3 from '@/assets/home/info3.webp';
-import logo1 from '@/assets/home/logo1.webp';
-import logo2 from '@/assets/home/logo2.webp';
-import logo3 from '@/assets/home/logo3.webp';
-import logo4 from '@/assets/home/logo4.webp';
+
 import {get} from '@/utils/request';
 import {ISEXISTED} from '@/api';
 import Headers from '@/components/Headers';

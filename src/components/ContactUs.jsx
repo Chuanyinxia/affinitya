@@ -1,10 +1,10 @@
 import React, {} from 'react';
 // import PropTypes from 'prop-types';
-import {Button, Form, Input} from 'antd';
+import {Button, Form, Input, Card} from 'antd';
 
 const ContactUsForm = () => {
   return (
-    <div>
+    <Card hoverable className="marginL16 marginT16 padding32">
       <Form layout="vertical">
         <Form.Item label={<span>Name <i className="require-mark">*</i></span>}>
           <Input/>
@@ -26,7 +26,7 @@ const ContactUsForm = () => {
             resize: 'none',
             background: '#EFF0F7',
             border: 'none',
-          }}></Input.TextArea>
+          }}/>
         </Form.Item>
         <Form.Item>
           <Button type="primary" block style={{
@@ -36,7 +36,7 @@ const ContactUsForm = () => {
           }}>Submit</Button>
         </Form.Item>
       </Form>
-    </div>
+    </Card>
   );
 };
 

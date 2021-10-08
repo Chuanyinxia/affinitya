@@ -12,6 +12,9 @@ const ContactSales = ({userInfo, httpLoading, setHttpLoading}) => {
   return (
     <Layout className="layout Home">
       <Content>
+        <div style={{textAlign: 'center', fontSize: 24, fontWeight: 600}}>Contact Sales</div>
+        <div style={{textAlign: 'center', fontSize: 14, color: '#6E7191', marginTop: 8}}>
+          Fill out the form below to contact sales team</div>
         <div className="contact-us" style={{
           minHeight: 'calc(100vh - 180px )',
           paddingTop: 40,
@@ -36,15 +39,9 @@ const ContactSales = ({userInfo, httpLoading, setHttpLoading}) => {
             </Col>
           </Row> */}
           <Row>
-            {/* <Col sm={24} md={12}>
-              <div className="contact-log-box">
-                <div className="contact-log"></div>
-              </div>
-            </Col> */}
-            <Col sm={24} md={24}>
-              <div className="contact-form-box" style={{margin: '0 auto'}}>
-                <ContactUsForm/>
-              </div>
+            <Col md={6}/>
+            <Col sm={24} md={12} className="marginB32">
+              <ContactUsForm/>
             </Col>
           </Row>
         </div>

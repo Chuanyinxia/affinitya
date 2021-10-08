@@ -134,7 +134,6 @@
   width: calc(100% - 80px - 80px);
 }
 .bannerBg{
-  background: url("../../assets/home/banner.webp") no-repeat center right;
   padding-top:80px ;
   height: 580px;
 }
