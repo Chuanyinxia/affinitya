@@ -36,11 +36,12 @@ const Subscribe = ({userInfo, httpLoading, setHttpLoading}) => {
     getSubscribeMsg();
   }, []);
   return (
-    <Spin spinning={httpLoading}>
-      <h2 className="mangerTitle">Subscribe</h2>
-      <Card>
-        <Row>
-          {memberSubscribeMsg ?
+    <div className="padding16 margin16">
+      <Spin spinning={httpLoading} >
+        <h2 className="mangerTitle">Subscribe</h2>
+        <Card>
+          <Row>
+            {memberSubscribeMsg ?
           (memberSubscribeMsg.paymentState===2? <Col span={10}>
             <h3 className="subscribe-title">{memberSubscribeMsg.name}</h3>
             <Statistic
@@ -78,9 +79,10 @@ const Subscribe = ({userInfo, httpLoading, setHttpLoading}) => {
               </div>
             ):(<div>You haven&apos;t subscribed to any packages yet.</div>)}
           </Col>}
-        </Row>
-      </Card>
-    </Spin>
+          </Row>
+        </Card>
+      </Spin>
+    </div>
   );
 };
 

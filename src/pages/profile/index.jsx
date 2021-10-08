@@ -55,42 +55,44 @@ const Profile = ({userInfo, httpLoading, setHttpLoading, setUserInfo}) => {
   }, []);
 
   return (
-    <Spin spinning={httpLoading}>
-      <h2 className="mangerTitle">Profile</h2>
-      <Card>
-        <Row>
-          <Col span={10}>
-            <Form onFinish={onChangePassword} layout="vertical" form={form}>
-              <Form.Item
-                label="Email"
-                name="email"
-              >
-                <Input disabled/>
-              </Form.Item>
-              <Form.Item
-                label="Nickname"
-                name="nickName"
-                rules={[{required: true, message: 'Please input nickname!'}]}
-              >
-                <Input/>
-              </Form.Item>
-              <Form.Item
-                label="Company Name"
-                name="companyName"
-                rules={[{required: true, message: 'Please input company name!'}]}
-              >
-                <Input/>
-              </Form.Item>
-              <Form.Item className="marginT90">
-                <Button type="primary" size="large" htmlType="submit" style={{width: '260px'}}>
-                  Save
-                </Button>
-              </Form.Item>
-            </Form>
-          </Col>
-        </Row>
-      </Card>
-    </Spin>
+    <div className="padding16 margin16">
+      <Spin spinning={httpLoading} >
+        <h2 className="mangerTitle">Profile</h2>
+        <Card>
+          <Row>
+            <Col span={10}>
+              <Form onFinish={onChangePassword} layout="vertical" form={form}>
+                <Form.Item
+                  label="Email"
+                  name="email"
+                >
+                  <Input disabled/>
+                </Form.Item>
+                <Form.Item
+                  label="Nickname"
+                  name="nickName"
+                  rules={[{required: true, message: 'Please input nickname!'}]}
+                >
+                  <Input/>
+                </Form.Item>
+                <Form.Item
+                  label="Company Name"
+                  name="companyName"
+                  rules={[{required: true, message: 'Please input company name!'}]}
+                >
+                  <Input/>
+                </Form.Item>
+                <Form.Item className="marginT90">
+                  <Button type="primary" size="large" htmlType="submit" style={{width: '260px'}}>
+                    Save
+                  </Button>
+                </Form.Item>
+              </Form>
+            </Col>
+          </Row>
+        </Card>
+      </Spin>
+    </div>
   );
 };
 

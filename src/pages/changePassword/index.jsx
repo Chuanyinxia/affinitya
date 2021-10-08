@@ -28,47 +28,49 @@ const ChangePassword = ({userInfo, httpLoading, setHttpLoading}) => {
     });
   };
   return (
-    <Spin spinning={httpLoading}>
-      <h2 className="mangerTitle">Change Password</h2>
-      <Card>
-        <Row>
-          <Col span={10}>
-            <Form onFinish={onChangePassword} layout="vertical" form={form}>
-              <Form.Item
-                label="New Password"
-                name="password"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please input new password!',
-                  },
-                ]}
-              >
-                <Input.Password/>
-              </Form.Item>
-              <Form.Item
-                label="Confirm Password"
-                name="confirmPassword"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please input confirm password!',
-                  },
-                ]}
-              >
-                <Input.Password/>
-              </Form.Item>
-              <Form.Item className="marginT90">
-                <Button type="primary" size="large" htmlType="submit">
+    <div className="padding16 margin16">
+      <Spin spinning={httpLoading}>
+        <h2 className="mangerTitle">Change Password</h2>
+        <Card>
+          <Row>
+            <Col span={10}>
+              <Form onFinish={onChangePassword} layout="vertical" form={form}>
+                <Form.Item
+                  label="New Password"
+                  name="password"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please input new password!',
+                    },
+                  ]}
+                >
+                  <Input.Password/>
+                </Form.Item>
+                <Form.Item
+                  label="Confirm Password"
+                  name="confirmPassword"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please input confirm password!',
+                    },
+                  ]}
+                >
+                  <Input.Password/>
+                </Form.Item>
+                <Form.Item className="marginT90">
+                  <Button type="primary" size="large" htmlType="submit">
                   Change Password
-                </Button>
-              </Form.Item>
-            </Form>
-          </Col>
-        </Row>
+                  </Button>
+                </Form.Item>
+              </Form>
+            </Col>
+          </Row>
 
-      </Card>
-    </Spin>
+        </Card>
+      </Spin>
+    </div>
   );
 };
 
