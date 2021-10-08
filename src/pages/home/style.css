@@ -57,6 +57,10 @@
   text-align: center;
   color: #FFFFFF;
 }
+.activeNav{
+  padding-bottom: 30px;
+  border-bottom: 3px solid #ffffff ;
+}
 .navs:hover{
   color: #BCA4FF;
 }
