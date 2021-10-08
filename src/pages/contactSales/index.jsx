@@ -19,25 +19,6 @@ const ContactSales = ({userInfo, httpLoading, setHttpLoading}) => {
           minHeight: 'calc(100vh - 180px )',
           paddingTop: 40,
         }}>
-          {/* <Row>
-            <Col span={24}>
-              <div style={{
-                color: '#14142A',
-                fontSize: '24px',
-                fontWeight: 600,
-                textAlign: 'center',
-                width: '100%',
-                marginTop: 52,
-              }}>Contact Sales</div>
-              <div style={{
-                color: '#6E7191',
-                fontSize: '14px',
-                textAlign: 'center',
-                width: '100%',
-                marginBottom: 52,
-              }}>Fill out the form below to contact sales</div>
-            </Col>
-          </Row> */}
           <Row>
             <Col md={6}/>
             <Col sm={24} md={12} className="marginB32">
