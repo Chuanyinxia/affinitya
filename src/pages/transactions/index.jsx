@@ -92,7 +92,7 @@ const Transactions = ({userInfo, httpLoading, setHttpLoading}) => {
     getTransaction(1);
   }, []);
   return (
-    <div className="content">
+    <div className="margin16">
       <Row>
         <Col span={8}>
           <Space>

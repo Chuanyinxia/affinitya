@@ -47,7 +47,7 @@ const AudienceGenerator = ({userInfo}) => {
   const [userAudienceIdItem, setUserAudienceIdItem] = useState([]);
   const [isPayUser, setIsPayUser] = useState(false);
   const [searchType, setSearchType] = useState(1);
-  const [read, setRead] = useState(false);
+  const [read, setRead] = useState(true);
   const [modalShow, setModalShow] = useState(false);
   const [addItemLoading, setAddItemLoading]=useState(false);
   const [audienceWords, setAudienceWords]=useState([]);

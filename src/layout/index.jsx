@@ -187,16 +187,17 @@ const Customlayout = ({history, activeKey, setLogged}) => {
 
         <Layout>
           <Header className="login-header">
-            <div className="menu-icon" onClick={()=>setmenuVisible(true)}></div>
+            <div className="menu-icon" onClick={()=>setmenuVisible(true)}/>
             <div className="text-right">
               <Space size="large">
                 <Tooltip title="Contact Sales">
                   <div className="icon earphone" onClick={()=>{
+                    store.dispatch(setMenusData('', ''));
                     isPayUser?history.push('/contactSales'):history.push('/contactUs');
-                  }}></div>
+                  }}/>
                 </Tooltip>
                 <Tooltip title="Tech Help">
-                  <div className="icon faq"></div>
+                  <div className="icon faq"/>
                 </Tooltip>
                 {hasMessage?
                   <Popover content={content} trigger="click" placement="bottomRight">

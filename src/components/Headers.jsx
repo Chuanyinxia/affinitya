@@ -1,12 +1,18 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Col, Layout, Row, Space, Button, Drawer} from 'antd';
 import logo from '@/assets/lettering-logo.webp';
-import {Link} from 'react-router-dom';
+import {Link, useHistory} from 'react-router-dom';
 import {UnorderedListOutlined} from '@ant-design/icons';
-//
+
 // const {SubMenu} = Menu;
 const {Header} = Layout;
 const Headers=()=>{
+  const [key, setKey]=useState('home');
+  const history = useHistory().location.pathname.split('/');
+  useEffect(()=>{
+    console.log(history);
+    setKey(history[1]);
+  }, []);
   const [menusShow, setMenusShow]=useState(false);
   return (
 
@@ -16,7 +22,7 @@ const Headers=()=>{
           <Row className="content ">
             <Col span={8} className="paddingL32">
               <div className="text-left">
-                <img alt="logo" src={logo} width={189}/>
+                <img alt="logo" src={logo} width={188}/>
               </div>
             </Col>
             <Col span={16} className="text-right paddingR32">
@@ -31,18 +37,20 @@ const Headers=()=>{
           <Row className="content-home paddingL16 paddingR16" >
             <Col span={8}>
               <div className="text-left">
-                <img alt="logo" src={logo} width={189}/>
+                <img alt="logo" src={logo} width={188}/>
               </div>
             </Col>
             <Col span={16} className="text-right">
               <Space size="large">
-                <a href='/home#top' className="navs">Home</a>
+                <a href='/home#top' className={key==='home'?'navs activeNav':'navs'}>Home</a>
                 {/* <Link to='/dashboard/audienceGenerator'*/}
                 {/*  className="navs">About</Link>*/}
-                <Link to='/plansPricing' className="navs">Plans & Pricing</Link>
-                <Link to='/contactUs' className="navs">Contact Sales</Link>
+                <Link to='/plansPricing'
+                  className={key==='plansPricing'?'navs activeNav':'navs'}
+                >Plans & Pricing</Link>
+                <Link to='/contactUs' className={key==='contactUs'?'navs activeNav':'navs '}>Contact Sales</Link>
                 <span className="navs">|</span>
-                <Link to='/login' className="navs">Login</Link>
+                <Link to='/login' className={key==='login'?'navs activeNav':'navs'}>Login</Link>
                 <Button href="/signUp" className="navButton">Sign Up</Button>
               </Space>
             </Col>

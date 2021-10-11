@@ -6,7 +6,7 @@
   height: 100%;
   background: #f5f5f5;
   min-width: 768px;
-  min-height: 100vh;
+  min-height: 900px;
   letter-spacing: 1px;
 }
 
@@ -266,7 +266,15 @@ h4{
 .ant-select-single .ant-select-selector .ant-select-selection-placeholder{
   line-height: 64px;
 }
-.ant-input-affix-wrapper:focus, .ant-input-affix-wrapper-focused{
+
+.ant-form-item-control-input-content #loginForm_verificationCode,
+.ant-form-item-control-input-content .ant-input-suffix .ant-btn{
+  background-color: transparent!important;
+}
+#loginForm_email:hover,
+.ant-input-affix-wrapper:hover,
+.ant-input-affix-wrapper:focus,
+.ant-input-affix-wrapper-focused{
 box-shadow: 0 0 0 2px #120043!important;
   background-color: #FFFFFF!important;
 }
@@ -291,4 +299,11 @@ box-shadow: 0 0 0 2px #120043!important;
 }
 .ant-tooltip{
   max-width: 900px;
+}
+#loginForm_confirmPassword,
+#singForm_password,
+#singForm_verificationCode,
+#loginForm_password,
+#loginForm_verificationCode{
+  box-shadow:none!important;
 }

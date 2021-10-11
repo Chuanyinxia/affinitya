@@ -8,7 +8,9 @@ import {httpLoading, login, userInfo} from '@/store/actions';
 import {post} from '@/utils/request';
 import {FORGETPASSWORD, GETVERIFICATIONCODE} from '@/api';
 import './style.css';
-import bg from '@/assets/login/bg.png';
+import bg from '@/assets/singup.png';
+import logo from '@/assets/login/sm-logo.png';
+import Footers from '@/components/Footers';
 
 const ForgotPassword = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) => {
   // eslint-disable-next-line new-cap
@@ -60,9 +62,12 @@ const ForgotPassword = ({history, httpLoading, setHttpLoading, setLogged, setUse
 
   return (
     <div>
+      <div className="padding32">
+        <a href="/home" ><img src={logo}/></a>
+      </div>
       <Spin spinning={httpLoading}>
-        <Row className="login-content">
-          <Col span={12}>
+        <Row className="login-content  paddingT32 paddingB64">
+          <Col span={12} className="paddingT90">
             <img src={bg} style={{width: '100%'}} alt="bg"/>
           </Col>
           <Col span={12} className="paddingL36 paddingR36">
@@ -75,6 +80,7 @@ const ForgotPassword = ({history, httpLoading, setHttpLoading, setLogged, setUse
             >
               <Form.Item
                 name="email"
+                label="Email"
                 rules={[
                   {required: true, message: 'Please input your email!'},
                   {type: 'email', message: 'Please input a valid email!'},
@@ -84,23 +90,24 @@ const ForgotPassword = ({history, httpLoading, setHttpLoading, setLogged, setUse
                   bordered={false}
                   onChange={onEmailChange}
                   size="large"
-                  className="borderB"
-                  placeholder="Email"/>
+                  placeholder="Please enter your email"
+                />
               </Form.Item>
               <Form.Item
                 name="password"
+                label="Password"
                 rules={[{required: true, message: 'Please input your new password!'}]}
               >
                 <Input.Password
                   bordered={false}
                   size="large"
-                  className="borderB"
-                  placeholder="New Password"
+                  placeholder="Please enter your new password"
                   // iconRender={(visible) => (visible ? null : null)}
                 />
               </Form.Item>
               <Form.Item
                 name="confirmPassword"
+                label="Confirm Password"
                 rules={[{required: true, message: 'Please confirm your password!'},
                   ({getFieldValue}) => ({
                     validator(_, value) {
@@ -114,19 +121,18 @@ const ForgotPassword = ({history, httpLoading, setHttpLoading, setLogged, setUse
                 <Input.Password
                   bordered={false}
                   size="large"
-                  className="borderB"
-                  placeholder="Confirm Password"
+                  placeholder="Please confirm your password"
                   // iconRender={(visible) => (visible ? null : null)}
                 />
               </Form.Item>
               <Form.Item
                 name="verificationCode"
+                label="Verification Code"
                 rules={[{required: true, message: 'Please input verification code!'}]}
               >
                 <Input
                   bordered={false}
                   size="large"
-                  className="borderB"
                   placeholder="Verification Code"
                   suffix={(
                     <Tooltip title="Please input your email first">
@@ -152,7 +158,7 @@ const ForgotPassword = ({history, httpLoading, setHttpLoading, setLogged, setUse
             </Form>
           </Col>
         </Row>
-
+        <Footers/>
       </Spin>
     </div>
 

@@ -7,9 +7,11 @@ import {httpLoading, login, userInfo} from '@/store/actions';
 import {get, post} from '@/utils/request';
 import {GETAGREEMENT, GETVERIFICATIONCODE, REGISTER} from '@/api';
 import './style.css';
-import bg from '@/assets/login/bg.png';
+import bg from '@/assets/singup.png';
 import {Email} from '@/components/plugin/Searchdata';
 import {storage} from '@/utils/storage';
+import logo from '@/assets/login/sm-logo.png';
+import Footers from '@/components/Footers';
 
 const SignUp = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) => {
   const [read, setRead] = useState(true);
@@ -92,9 +94,12 @@ const SignUp = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) 
 
   return (
     <div>
+      <div className="padding32">
+        <a href="/home" ><img src={logo}/></a>
+      </div>
       <Spin spinning={httpLoading}>
-        <Row className="login-content">
-          <Col span={12}>
+        <Row className="login-content paddingT32 paddingB64">
+          <Col span={12} className="paddingT90">
             <img src={bg} style={{width: '100%'}} alt="bg"/>
           </Col>
           <Col span={12} className="paddingL36 paddingR36">
@@ -114,6 +119,7 @@ const SignUp = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) 
             >
               <Form.Item
                 name="email"
+                label="Email"
                 rules={[
                   {required: true, message: 'Please input your email!'},
                   {type: 'email', message: 'Please input a valid email!'},
@@ -126,11 +132,11 @@ const SignUp = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) 
                   size="large"
                   readOnly={read}
                   autoComplete="off"
-                  className="borderB"
-                  placeholder="Email"/>
+                  placeholder="Please enter your email"/>
               </Form.Item>
               <Form.Item
                 name="password"
+                label="Password"
                 rules={[{required: true, message: 'Please input your password!'}]}
               >
                 <Input.Password
@@ -138,19 +144,18 @@ const SignUp = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) 
                   readOnly={read}
                   autoComplete="off"
                   size="large"
-                  className="borderB"
-                  placeholder="Password"
+                  placeholder="Please enter your password"
                   // iconRender={(visible) => (visible ? null : null)}
                 />
               </Form.Item>
               <Form.Item
                 name="verificationCode"
+                label="Verification Code"
                 rules={[{required: true, message: 'Please input verification code!'}]}
               >
                 <Input
                   bordered={false}
                   size="large"
-                  className="borderB"
                   placeholder="Verification Code"
                   suffix={(
                     <Tooltip title="Please input your email first">
@@ -196,7 +201,7 @@ const SignUp = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) 
             </Form>
           </Col>
         </Row>
-
+        <Footers/>
       </Spin>
       <Modal
         title="Privacy Clause"

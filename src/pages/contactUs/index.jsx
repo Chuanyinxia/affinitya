@@ -47,17 +47,15 @@ const ContactUS = () => {
             </Col>
           </Row>
           <Row>
-            <Col sm={24} md={12}>
+            <Col sm={24} md={11}>
               <div className="contact-log-box">
-                <div className="contact-log"></div>
+                <div className="contact-log"/>
               </div>
             </Col>
-            <Col sm={24} md={12}>
-              <div className="padding32">
-                <div className="contact-form-box ">
-                  <ContactUsForm/>
-                </div>
-              </div>
+            <Col sm={24} md={13}>
+
+              <ContactUsForm/>
+
             </Col>
           </Row>
         </div>

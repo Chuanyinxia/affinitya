@@ -1,4 +1,6 @@
 import axios from 'axios';
+import {Modal} from 'antd';
+let isLogin=false;
 // import {storage} from '@/utils/storage';
 axios.defaults.timeout = 20000;
 axios.interceptors.request.use((config) => {
@@ -8,19 +10,29 @@ axios.interceptors.request.use((config) => {
 });
 
 axios.interceptors.response.use((response) => {
+  if (!isLogin&&response.data.code === 401) {
+    isLogin = true;
+    Modal.error({
+      title: 'Notice',
+      content: 'Token has expired or user is not exist, please log in again.',
+      okText: 'Log In',
+      onOk() {
+        window.location.replace('/login');
+      },
+    });
+    return false;
+  }
   switch (response.data.code) {
     case 200:
       return response.data;
     // check token
     case 401:
-      // storage.clearData();
-      // window.location.reload();
-      return Promise.reject(new Error('The token has expired, please login again!'));
+      return false;
     case 314:
       return Promise.reject(response.data.msg);
     default:
       return Promise.reject(new Error(response.data.msg ??
-        'Network error'));
+          'Network error'));
   }
 }, (error) => {
   const msg=error.toString()==='Error: timeout of 20000ms exceeded'?

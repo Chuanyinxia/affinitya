@@ -5,7 +5,7 @@ import {httpLoading} from '@/store/actions';
 import './style.css';
 import {CANCELJOB, GETJOBDETAIL, GETJOBMANAGER, ISPAID, RESTARTJOB, UPDATEJOBTITLE} from '@/api';
 import {get, post, update} from '@/utils/request';
-import {Alert, Button, Form, Input, message, Modal, Space, Table, Tabs, Tag} from 'antd';
+import {Alert, Button, Form, Input, message, Modal, Space, Table, Tabs, Tag, Tooltip} from 'antd';
 import {SearchOutlined} from '@ant-design/icons';
 import {useHistory} from 'react-router-dom';
 // import store from '@/store';
@@ -268,12 +268,14 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
             render={(endTime, record) => {
               return (endTime && (record.jobStatus === 1 || record.jobStatus === 5)) ? endTime + `(Estimate)` : endTime;
             }}/>
-          <Table.Column title="Status" dataIndex="jobStatus" key="Status" render={(jobStatus) => (
+          <Table.Column title="Status" dataIndex="jobStatus" key="Status" render={(jobStatus, record) => (
             <Space>
               {(jobStatus === 1) ? (<Tag color="gold" className="no-border lg-tag">Running</Tag>) :
                 (jobStatus === 2) ? (<Tag color="green" className="no-border lg-tag">Completed</Tag>) :
                   (jobStatus === 3) ? (<Tag color="purple" className="no-border lg-tag">Canceled</Tag>) :
-                    (jobStatus === 4) ? (<Tag color="red" className="no-border lg-tag">Failed</Tag>) :
+                    (jobStatus === 4) ? ( <Tooltip title={record.failReason}>
+                      <Tag color="red" className="no-border lg-tag">Failed</Tag>
+                    </Tooltip>) :
                       (<Tag color="lime" className="no-border lg-tag">Waiting</Tag>)}
             </Space>
           )}/>
