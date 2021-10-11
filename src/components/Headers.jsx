@@ -1,19 +1,32 @@
 import React, {useState, useEffect} from 'react';
+import PropTypes from 'prop-types';
 import {Col, Layout, Row, Space, Button, Drawer} from 'antd';
 import logo from '@/assets/lettering-logo.webp';
-import {Link, useHistory} from 'react-router-dom';
+import {Link, useHistory, withRouter} from 'react-router-dom';
 import {UnorderedListOutlined} from '@ant-design/icons';
+import {connect} from 'react-redux';
+import {login, userInfo} from '@/store/actions';
+import {storage} from '@/utils/storage';
 
 // const {SubMenu} = Menu;
 const {Header} = Layout;
-const Headers=()=>{
+const Headers=({logged, setLogged, setUserInfo})=>{
   const [key, setKey]=useState('home');
   const history = useHistory().location.pathname.split('/');
   useEffect(()=>{
     console.log(history);
-    setKey(history[1]);
+    if (history[1]) {
+      setKey(history[1]);
+    }
   }, []);
   const [menusShow, setMenusShow]=useState(false);
+
+  const logout=()=>{
+    storage.clearData();
+    setLogged(false);
+    setUserInfo({});
+  };
+
   return (
 
     <Header className="padding0 text-center bg-header">
@@ -42,7 +55,9 @@ const Headers=()=>{
             </Col>
             <Col span={16} className="text-right">
               <Space size="large">
-                <a href='/home#top' className={key==='home'?'navs activeNav':'navs'}>Home</a>
+                {key==='home'?
+                  (<a href='/home#top' className="navs activeNav">Home</a>):
+                  (<Link to='/home' className="navs">Home</Link>)}
                 {/* <Link to='/dashboard/audienceGenerator'*/}
                 {/*  className="navs">About</Link>*/}
                 <Link to='/plansPricing'
@@ -50,11 +65,15 @@ const Headers=()=>{
                 >Plans & Pricing</Link>
                 <Link to='/contactUs' className={key==='contactUs'?'navs activeNav':'navs '}>Contact Sales</Link>
                 <span className="navs">|</span>
-                <Link to='/login' className={key==='login'?'navs activeNav':'navs'}>Login</Link>
-                <Button href="/signUp" className="navButton">Sign Up</Button>
+                {logged?(<Link to='/dashboard/audienceGenerator' className="navs">Dashboard</Link>):
+                  ( <Link to='/login' className={key==='login'?'navs activeNav':'navs'}>Login</Link>)}
+
+                {logged?(<Button onClick={logout} href="/home" className="navButton">Logout</Button>):
+                  (<Button href="/signUp" className="navButton">Sign Up</Button>)}
               </Space>
             </Col>
-          </Row></Col>
+          </Row>
+        </Col>
       </Row>
       <Drawer
         placement="right"
@@ -84,8 +103,26 @@ const Headers=()=>{
 
   );
 };
+const mapStateToProps = (state) => {
+  return {
+    logged: state.toggleLogin.logged,
+  };
+};
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setLogged: (f)=>dispatch(login(f)),
+    setUserInfo: (f)=>dispatch(userInfo(f)),
+  };
+};
 
-Headers.propTypes = {};
+Headers.propTypes = {
+  logged: PropTypes.bool.isRequired,
+  setLogged: PropTypes.func.isRequired,
+  setUserInfo: PropTypes.func.isRequired,
+};
 
-export default Headers;
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)(withRouter(Headers));

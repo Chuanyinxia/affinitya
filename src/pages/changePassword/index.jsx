@@ -28,12 +28,12 @@ const ChangePassword = ({userInfo, httpLoading, setHttpLoading}) => {
     });
   };
   return (
-    <div className="padding16 margin16">
+    <div className="padding32 paddingT16">
       <Spin spinning={httpLoading}>
-        <h2 className="mangerTitle">Change Password</h2>
-        <Card>
+        <h1>Change Password</h1>
+        <Card hoverable>
           <Row>
-            <Col span={10}>
+            <Col lg={12} xs={24}>
               <Form onFinish={onChangePassword} layout="vertical" form={form}>
                 <Form.Item
                   label="New Password"
@@ -60,7 +60,7 @@ const ChangePassword = ({userInfo, httpLoading, setHttpLoading}) => {
                   <Input.Password/>
                 </Form.Item>
                 <Form.Item className="marginT90">
-                  <Button type="primary" size="large" htmlType="submit">
+                  <Button type="primary" size="large" className="btn-xl" htmlType="submit">
                   Change Password
                   </Button>
                 </Form.Item>

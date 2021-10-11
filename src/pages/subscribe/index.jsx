@@ -36,13 +36,13 @@ const Subscribe = ({userInfo, httpLoading, setHttpLoading}) => {
     getSubscribeMsg();
   }, []);
   return (
-    <div className="padding16 margin16">
+    <div className="padding32 paddingT16">
       <Spin spinning={httpLoading} >
-        <h2 className="mangerTitle">Subscribe</h2>
-        <Card>
+        <h1 >Subscribe</h1>
+        <Card hoverable>
           <Row>
             {memberSubscribeMsg ?
-          (memberSubscribeMsg.paymentState===2? <Col span={10}>
+          (memberSubscribeMsg.paymentState===2? <Col lg={12} xs={24}>
             <h3 className="subscribe-title">{memberSubscribeMsg.name}</h3>
             <Statistic
               className="marginB30 marginT30"

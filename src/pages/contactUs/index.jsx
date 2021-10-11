@@ -47,12 +47,12 @@ const ContactUS = () => {
             </Col>
           </Row>
           <Row>
-            <Col sm={24} md={11}>
+            <Col xs={24} lg={11}>
               <div className="contact-log-box">
                 <div className="contact-log"/>
               </div>
             </Col>
-            <Col sm={24} md={13}>
+            <Col xs={24} lg={13}>
 
               <ContactUsForm/>
 

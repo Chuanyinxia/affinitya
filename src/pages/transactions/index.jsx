@@ -92,9 +92,9 @@ const Transactions = ({userInfo, httpLoading, setHttpLoading}) => {
     getTransaction(1);
   }, []);
   return (
-    <div className="margin16">
+    <div className="padding32">
       <Row>
-        <Col span={8}>
+        <Col lg={12} xs={24}>
           <Space>
             <Radio.Group
               options={options}
