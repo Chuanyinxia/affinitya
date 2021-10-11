@@ -53,7 +53,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
   const [details, setDetails] = useState(null);
   const [editId, setEditId] = useState(null);
   const [treeData, settreeData] = useState([]);
-  const [tabType, settabType] = useState(3);
+  const [tabType, settabType] = useState(1);
   const [winnerList, setwinnerList] = useState([]);
   const [selectedTreeData, setselectedTreeData] = useState({});
   // const [current, setcurrent] = useState('');
@@ -68,6 +68,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
   const [renameModal, setrenameModal] = useState(false);
   const [archiveDetail, setArchiveDetail] = useState([]);
   const [checkedKeys, setCheckedKeys] = useState([]);
+  const [currentName, setcurrentName] = useState('');
   const c = useRef();
   // const [searchWord, setSearchWord] = useState('');
   // const getAudienceManager = () => {
@@ -93,6 +94,51 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
   //     setHttpLoading(false);
   //   });
   // };
+  const topMenuTwo = (
+    <Menu>
+      <Menu.Item>
+        <a rel="noopener noreferrer" href="javascript:void(0)"
+          onClick={(e)=>{
+            e.preventDefault();
+            e.stopPropagation();
+            getArchiveDetails(c.current.id);
+            setArchiveDetailModal(true);
+          }}
+        >
+          View List
+        </a>
+      </Menu.Item>
+      <Menu.Item>
+        <a rel="noopener noreferrer" href="javascript:void(0)"
+          onClick={()=>setrenameModal(true)}
+        >
+          Rename
+        </a>
+      </Menu.Item>
+      <Menu.Item>
+        <a rel="noopener noreferrer" href="javascript:void(0)"
+          onClick={(e)=>{
+            e.preventDefault();
+            e.stopPropagation();
+            updateWiner(1, []);
+          }}
+        >
+          Testing
+        </a>
+      </Menu.Item>
+      <Menu.Item>
+        <a rel="noopener noreferrer" href="javascript:void(0)"
+          onClick={(e)=>{
+            e.preventDefault();
+            e.stopPropagation();
+            updateWiner(1, []);
+          }}
+        >
+          Delete
+        </a>
+      </Menu.Item>
+    </Menu>
+  );
   const topMenu = (
     <Menu>
       <Menu.Item>
@@ -148,7 +194,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
             getDetails(c.current.id);
             setLookID(c.current.id);
             setLookType(1);
-            setViewModal(true);
+            setArchiveDetailModal(true);
           }}
         >
           View List
@@ -195,6 +241,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
             getDetails(c.current.id);
             setLookID(c.current.id);
             setLookType(1);
+            setArchiveDetailModal(true);
           }}
         >
           View List
@@ -241,6 +288,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
             getDetails(c.current.id);
             setLookID(c.current.id);
             setLookType(1);
+            setArchiveDetailModal(true);
           }}
         >
           View List
@@ -288,7 +336,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
       </Menu.Item>
     </Menu>
   );
-  const updateGroupName = (title, type, id)=>{
+  const updateGroupName = (title, type=2, id)=>{
     update(UPDATEGROUPNAME,
         {
           title: title,
@@ -299,7 +347,8 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
           'token': userInfo.token,
         }).then((res) => {
       setrenameModal(false);
-      getArchiveList(tabType===1?3:1, '', 99, 1);
+      getArchiveList(tabType, '', 99, 1);
+      getWinnerList('', 999, 1);
     }).catch((error) => {
       message.error({
         content: error.toString(), key: 'netError', duration: 2,
@@ -370,7 +419,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
       // if (type===2) {
       getWinnerList('', 999, 1);
       // } else {
-      getArchiveList(tabType===3?1:3, '', 999, 1);
+      getArchiveList(tabType, '', 999, 1);
       // }
     }).catch((error) => {
       message.error({
@@ -394,11 +443,18 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
       const data = {...res.data.items};
       const tree = [];
       Object.keys(data).forEach((key)=>{
+        let menu;
+        if (tabType===1) {
+          menu = topMenu;
+        } else if (tabType===3) {
+          menu = topMenuTwo;
+        }
         tree.push({
           title: (
-            <div style={{width: 476}}>{data[key].length>0?data[key][0].jobName:'error'}
+            <div style={{width: 476}}>
+              <span className="tree-title">{data[key].length>0?data[key][0].jobName:'error'}</span>
               <span className="more-icon">
-                <Dropdown overlay={topMenu} arrow trigger={['click']} placement="bottomLeft">
+                <Dropdown overlay={menu} arrow trigger={['click']} placement="bottomLeft" onVisibleChange>
                   <MoreOutlined onClick={(e)=>{
                   }}/>
                 </Dropdown>
@@ -417,9 +473,10 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
               }
               arr.push({
                 title: (
-                  <div style={{width: 452}}>{item.groupName}
+                  <div style={{width: 452}}>
+                    <span className="tree-title">{item.groupName}</span>
                     <span className="more-icon">
-                      <Dropdown overlay={menu} arrow trigger={['click']} placement="bottomLeft">
+                      <Dropdown overlay={menu} arrow trigger={['click']} placement="bottomLeft" onVisibleChange>
                         <MoreOutlined onClick={(e)=>{
                         }}/>
                       </Dropdown>
@@ -445,10 +502,8 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
   const getArchiveDetails = (ids) => {
     setHttpLoading(true);
     get(GETARCHIVEDETAIL +'/'+ ids, userInfo.token).then((res) => {
-      console.log(res.data);
       const data=res.data;
       setArchiveDetail(data);
-      console.log(archiveDetail);
     }).catch((error) => {
       message.error({
         content: error.toString(), key: 'netError', duration: 2,
@@ -494,12 +549,12 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
         }}>
         <Form onFinish={(values)=>updateGroupName(values.title, c.current.type, c.current.jobId)}>
           <Form.Item rules={[{required: true, message: 'Please input job/audience name'}]} name="title">
-            <Input placeholder="Input job/audience name"></Input>
+            <Input placeholder="Input job/audience name" maxLength="50"></Input>
           </Form.Item>
           <Form.Item className="text-right">
             <Space>
+              <Button size="large" onClick={()=>setrenameModal(false)}>Cancel</Button>
               <Button htmlType="submit" type="primary" size="large">Save</Button>
-              <Button size="large">Cancel</Button>
             </Space>
           </Form.Item>
         </Form>
@@ -568,13 +623,13 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
             <div className="text-box">
               <div className="box-wrapper">
                 <div className="tab-box">
-                  <div className={tabType===3?'tab-title active':'tab-title'} onClick={()=>{
-                    settabType(3);
+                  <div className={tabType===1?'tab-title active':'tab-title'} onClick={()=>{
+                    settabType(1);
                     getArchiveList(1, '', 99, 1);
                     // setwinnerList([]);
                   }}><ExperimentOutlined style={{marginRight: 12}}/>Testing</div>
-                  <div className={tabType===1?'tab-title active':'tab-title'} onClick={()=>{
-                    settabType(1);
+                  <div className={tabType===3?'tab-title active':'tab-title'} onClick={()=>{
+                    settabType(3);
                     getArchiveList(3, '', 99, 1);
                     // setwinnerList([]);
                   }}><SaveOutlined style={{marginRight: 12}}/>Archive</div>
@@ -642,13 +697,18 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                 <div className="card-group">
                   {winnerList.map((item, index)=>(
                     <div className={item.check?'card-item active':
-                      item.saveStatus===1?'card-item':
+                      item.saveStatus===0?'card-item':
                         'card-item edited'} key={item.searchId} onClick={()=>{
                       const data = [...winnerList];
                       data.forEach((item)=>item.check=false);
                       data[index].check = true;
                       setwinnerList(data);
                       getDetails(item.searchResultId);
+                      c.current = {
+                        id: item.searchResultId,
+                      };
+                      setcurrentName(item.groupName);
+                      settableVisible(true);
                     }}>
                       <div
                         style={{color: '#4E4B66', fontSize: 16, height: 48, lineHeight: '48px', fontWeight: '600'}}
@@ -672,10 +732,12 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                           e.stopPropagation();
                           c.current = {
                             id: item.searchResultId,
+                            jobId: item.searchResultId,
                           };
                         }}
                         >
-                          <Dropdown overlay={winnerMenu} arrow trigger={['click']} placement="bottomLeft">
+                          <Dropdown onVisibleChange
+                            overlay={winnerMenu} arrow trigger={['click']} placement="bottomLeft">
                             <span>...</span>
                           </Dropdown>
                         </div>
@@ -718,10 +780,10 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
             <EditTable details={details} id={editId} saveFunc={getDetails}/>
           </Col>
         </Row> */}
-        {tableVisible?<div style={{width: '79.1%', padding: '0px 32px', position: 'fixed', bottom: 0}}>
+        {tableVisible?<div style={{width: '83.6%', padding: '0px 32px', position: 'fixed', bottom: 0}}>
           <div style={{padding: '20px 40px', background: '#fff', borderRadius: '16px'}}>
             <div style={{overflow: 'hidden', marginBottom: 24}}>
-              <div style={{float: 'left'}}>GroupName</div>
+              <div style={{float: 'left'}}>{currentName}</div>
               <div style={{float: 'right', cursor: 'pointer'}}>
                 <CloseOutlined style={{fontSize: 20}} onClick={()=>{
                   const data = [...winnerList];
@@ -731,7 +793,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                 }}/>
               </div>
             </div>
-            <EditTable details={details} id={editId} saveFunc={()=>{
+            <EditTable details={details} id={editId} hideFirstButton={true} saveFunc={()=>{
               settableVisible(true);
               getDetails(c.current.id);
             }} style={{marginTop: 24}}/>
