@@ -93,6 +93,9 @@
   margin-left: 18px;
   cursor: pointer;
 }
+.ant-dropdown{
+  z-index: 999;
+}
 .card-group-title{
   padding: 0 42px;
   height: 32px;
@@ -146,6 +149,12 @@
 }
 .edit-box input{
   height: 32px;
+}
+.tree-title{
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 400px;
 }
 @media only screen and (min-width: 1440px){
   .text-box{

@@ -187,7 +187,7 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
 
   const columns = [
     {
-      title: 'Group ID',
+      title: 'Audience ID',
       width: '150px',
       dataIndex: 'groupId',
     },

@@ -238,7 +238,8 @@ const PlansAndPrices = ({userInfo, httpLoading, setHttpLoading}) => {
             <Button key="back" style={{width: 152, height: 48}} onClick={()=>setstatusModalVisible(false)}>
               Back
             </Button>,
-            <Button key="start" type="primary" style={{width: 152, height: 48}}>Get Started</Button>,
+            <Button key="start" type="primary" style={{width: 152, height: 48}}
+              onClick={()=>history.push('/dashboard/audienceGenerator')}>Get Started</Button>,
           ]}
         />:
         <Result
