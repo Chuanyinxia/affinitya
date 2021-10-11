@@ -99,10 +99,10 @@ const SignUp = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) 
       </div>
       <Spin spinning={httpLoading}>
         <Row className="login-content paddingT32 paddingB64">
-          <Col span={12} className="paddingT90">
+          <Col lg={12} xs={0} className="paddingT90">
             <img src={bg} style={{width: '100%'}} alt="bg"/>
           </Col>
-          <Col span={12} className="paddingL36 paddingR36">
+          <Col lg={12} xs={24} className="paddingL36 paddingR36">
             <h1 className="login-title" >Sign Up</h1>
             <Form
               name="singForm"

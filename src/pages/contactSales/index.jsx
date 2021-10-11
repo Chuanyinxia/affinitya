@@ -20,8 +20,8 @@ const ContactSales = ({userInfo, httpLoading, setHttpLoading}) => {
           paddingTop: 40,
         }}>
           <Row>
-            <Col md={6}/>
-            <Col sm={24} md={12} className="marginB32">
+            <Col lg={6}/>
+            <Col xs={24} lg={12} className="marginB32">
               <ContactUsForm/>
             </Col>
           </Row>

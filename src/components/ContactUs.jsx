@@ -4,7 +4,7 @@ import {Button, Form, Input, Card} from 'antd';
 
 const ContactUsForm = () => {
   return (
-    <Card hoverable className="marginL16 marginT16 padding32">
+    <Card hoverable className="margin16 padding32">
       <Form layout="vertical">
         <Form.Item label={<span>Name <i className="require-mark">*</i></span>}>
           <Input/>

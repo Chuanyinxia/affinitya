@@ -88,13 +88,17 @@ const Headers=({logged, setLogged, setUserInfo})=>{
                 className="navs">About</Link>
               <Link to='/plansPricing' className="navs">Plans & Pricing</Link>
               <Link to='/contactUs' className="navs">Contact Sales</Link>
+              {logged&&(<Link to='/dashboard/audienceGenerator' className="navs">Dashboard</Link>)}
             </Space>
           </div>
           <div className="smMenus-bottom">
-            <Space size="large">
+            {!logged&&(<Space size="large">
               <Link to='/login' className="navs">Login</Link>
               <Button href="/signUp" className="navButton">Sign Up</Button>
-            </Space>
+            </Space>)}
+            {logged&&(<div className="text-center">
+              <Button onClick={logout} href="/home" className="navButton">Logout</Button>
+            </div>)}
           </div>
         </div>
       </Drawer>
