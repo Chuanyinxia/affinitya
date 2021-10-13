@@ -199,12 +199,11 @@ const Customlayout = ({history, activeKey, setLogged}) => {
                 <Tooltip title="Tech Help">
                   <div className="icon faq"/>
                 </Tooltip>
-                {hasMessage?
-                  <Popover content={content} trigger="click" placement="bottomRight">
-                    <div className="icon bell">
-                      <div className="bell-dot"></div>
-                    </div>
-                  </Popover>:<div className="icon bell"></div>}
+                <Popover content={content} trigger="click" placement="bottomRight">
+                  <div className="icon bell">
+                    {hasMessage?<div className="bell-dot"></div>:null}
+                  </div>
+                </Popover>
                 <div className="userImg">
                   <UserOutlined style={{fontSize: 22}}/>
                 </div>
