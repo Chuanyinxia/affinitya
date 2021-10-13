@@ -75,8 +75,8 @@ const Menus = ({userInfo, history, activeKey, openKeys}) => {
           onTitleClick={()=>onOpenChange(['dashboard'])}> */}
         <Menu.Item key="dashboard" className="menus_title"
           icon={<img src={dashboard} style={{marginRight: 10}}/>}
-          onClick={()=>onOpenChange(['dashboard'])}>
-          <Link to="/dashboard/audienceGenerator">
+          onClick={()=>onOpenChange(['welcome'])}>
+          <Link to="/dashboard">
           Dashboard
           </Link>
         </Menu.Item>

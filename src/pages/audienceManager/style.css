@@ -154,7 +154,30 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  max-width: 400px;
+  width: 400px;
+  display: block;
+}
+.winner-search-box{
+  height: 32px;
+  width: 200px;
+  float: right;
+  line-height: 32px;
+  margin-top: 21px
+}
+.winner-title-box .ant-input-affix-wrapper{
+  height: 32px;
+  background-color: #EFF0F7!important;
+}
+.winner-title-box .ant-input-affix-wrapper-focused{
+  background-color: #EFF0F7!important;
+}
+.winner-title-box input{
+  height: 32px;
+  font-size: 14px;
+  background-color: #EFF0F7!important;
+}
+.winner-title-box input:focus{
+  background-color: #EFF0F7!important;
 }
 @media only screen and (min-width: 1440px){
   .text-box{

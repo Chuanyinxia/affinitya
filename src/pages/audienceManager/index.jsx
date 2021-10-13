@@ -9,330 +9,223 @@ import {
   UPDATEWINNERLIST,
   GETWINNERLIST,
   ISPAID,
-  EXPORTDETAIL,
+  // EXPORTDETAIL,
   GETARCHIVEDETAIL,
   UPDATEGROUPNAME,
 } from '@/api/index';
 import {get, post, update} from '@/utils/request';
-import {Spin, Row, Col, Input, Tree, message, Button, Menu, Dropdown, Modal, Space, Tooltip, Form} from 'antd';
+import {
+  Spin,
+  Row,
+  Col,
+  Input,
+  Tree,
+  message,
+  Button,
+  Menu,
+  Dropdown,
+  Modal,
+  Space,
+  // Tooltip,
+  Form,
+} from 'antd';
 import {
   SearchOutlined,
   ClockCircleOutlined,
   MoreOutlined,
   FilterOutlined,
-  LineHeightOutlined,
   CrownOutlined,
   ExperimentOutlined,
   SaveOutlined,
   CloseOutlined,
+  LineHeightOutlined,
 } from '@ant-design/icons';
-
-// import TaskItem from '@/pages/audienceManager/component/TaskItem';
-// import TaskCol from '@/pages/audienceManager/component/TaskCol';
 import EditTable from '@/pages/audienceManager/component/EditTable';
 import ResultTable from '@/components/Table/ResultTable';
 import KeyWordSearchDetails from '@/components/Table/KeyWordSearchDetails';
-// const STATUS_CODE = {
-//   STATUS_GENERATED: 'Generated',
-//   STATUS_TEST: 'Test',
-//   STATUS_WINNER: 'Winner',
-//   STATUS_ARCHIVE: 'Archive',
-// };
-// const STATUS_GENERATED = 'STATUS_GENERATED';
-// const STATUS_TEST = 'STATUS_TEST';
-// const STATUS_WINNER = 'STATUS_WINNER';
-// const STATUS_ARCHIVE = 'STATUS_ARCHIVE';
-// const aduienceMangerText = {
-//   title: 'Organize your custom audience sets here.',
-//   subtitle: '',
-//   info: '',
-// };
 const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
-  // const [tasks, setTasks] = useState(null);
-  // const [activeId, setActiveId] = useState(null);
   const [details, setDetails] = useState(null);
   const [editId, setEditId] = useState(null);
   const [treeData, settreeData] = useState([]);
   const [tabType, settabType] = useState(1);
   const [winnerList, setwinnerList] = useState([]);
   const [selectedTreeData, setselectedTreeData] = useState({});
-  // const [current, setcurrent] = useState('');
   const [tableVisible, settableVisible] = useState(false);
   const [viewModal, setViewModal] = useState(false);
   const [viewDetails, setViewDetails] = useState([]);
   const [isPayUser, setIsPayUser] =useState(false);
-  const [lookID, setLookID]=useState(null);
-  const [lookType, setLookType]=useState(null);
+  // const [lookID, setLookID]=useState(null);
+  // const [lookType, setLookType]=useState(null);
   const [archiveDetailModal, setArchiveDetailModal] = useState(false);
-  // const [archiveDetail, setarchiveDetail] = useState([]);
   const [renameModal, setrenameModal] = useState(false);
   const [archiveDetail, setArchiveDetail] = useState([]);
   const [checkedKeys, setCheckedKeys] = useState([]);
   const [currentName, setcurrentName] = useState('');
   const c = useRef();
-  // const [searchWord, setSearchWord] = useState('');
-  // const getAudienceManager = () => {
-  //   post(GETAUDIENCEMANAGER, {pageNum: 1, pageSize: 10000}, {
-  //     // eslint-disable-next-line no-tabs
-  //     'Content-Type': 'application/x-www-form-urlencoded',
-  //     'token': userInfo.token,
-  //   }).then((res) => {
-  //     setTasks(res.data.map((item) => {
-  //       return {
-  //         ...item,
-  //         status: item.status === 1 ? STATUS_GENERATED :
-  //           item.status === 2 ? STATUS_TEST :
-  //             item.status === 3 ? STATUS_WINNER : STATUS_ARCHIVE,
-  //         type: item.type === 1 ? 'Keyword' :'Lookalike',
-  //       };
-  //     }));
-  //   }).catch((error) => {
-  //     message.error({
-  //       content: error.toString(), key: 'netError', duration: 2,
-  //     });
-  //   }).finally(()=>{
-  //     setHttpLoading(false);
-  //   });
-  // };
-  const topMenuTwo = (
+  const renameLink = (
+    <a rel="noopener noreferrer" href="javascript:void(0)"
+      onClick={(e)=>{
+        e.preventDefault();
+        e.stopPropagation();
+        setrenameModal(true);
+      }}
+    >
+      Rename
+    </a>
+  );
+  const viewListLink = (
+    <a rel="noopener noreferrer" href="javascript:void(0)"
+      onClick={(e)=>{
+        e.preventDefault();
+        e.stopPropagation();
+        getArchiveDetails(c.current.id);
+        setArchiveDetailModal(true);
+      }}
+    >
+      View List
+    </a>
+  );
+  const testingLink = (
+    <a rel="noopener noreferrer" href="javascript:void(0)"
+      onClick={(e)=>{
+        e.preventDefault();
+        e.stopPropagation();
+        updateWiner(1, []);
+      }}
+    >
+      Testing
+    </a>
+  );
+  const archiveLink = (
+    <a rel="noopener noreferrer" href="javascript:void(0)"
+      onClick={(e)=>{
+        e.preventDefault();
+        e.stopPropagation();
+        updateWiner(3, []);
+      }}
+    >
+      Archive
+    </a>
+  );
+  const deleteLink = (
+    <a rel="noopener noreferrer" href="javascript:void(0)"
+      onClick={(e)=>{
+        e.preventDefault();
+        e.stopPropagation();
+        updateWiner(1, []);
+      }}
+    >
+      Delete
+    </a>
+  );
+  const sortMenu = (
     <Menu>
       <Menu.Item>
-        <a rel="noopener noreferrer" href="javascript:void(0)"
-          onClick={(e)=>{
-            e.preventDefault();
-            e.stopPropagation();
-            getArchiveDetails(c.current.id);
-            setArchiveDetailModal(true);
-          }}
-        >
-          View List
-        </a>
+        <span>
+          by time
+        </span>
       </Menu.Item>
       <Menu.Item>
-        <a rel="noopener noreferrer" href="javascript:void(0)"
-          onClick={()=>setrenameModal(true)}
-        >
-          Rename
-        </a>
-      </Menu.Item>
-      <Menu.Item>
-        <a rel="noopener noreferrer" href="javascript:void(0)"
-          onClick={(e)=>{
-            e.preventDefault();
-            e.stopPropagation();
-            updateWiner(1, []);
-          }}
-        >
-          Testing
-        </a>
-      </Menu.Item>
-      <Menu.Item>
-        <a rel="noopener noreferrer" href="javascript:void(0)"
-          onClick={(e)=>{
-            e.preventDefault();
-            e.stopPropagation();
-            updateWiner(1, []);
-          }}
-        >
-          Delete
-        </a>
+        <span>
+          by country
+        </span>
       </Menu.Item>
     </Menu>
   );
-  const topMenu = (
+  const filterMenu = (
     <Menu>
       <Menu.Item>
-        <a rel="noopener noreferrer" href="javascript:void(0)"
-          onClick={(e)=>{
-            e.preventDefault();
-            e.stopPropagation();
-            getArchiveDetails(c.current.id);
-            setArchiveDetailModal(true);
-          }}
-        >
-          View List
-        </a>
+        <span>
+          looklike audience
+        </span>
       </Menu.Item>
       <Menu.Item>
-        <a rel="noopener noreferrer" href="javascript:void(0)"
-          onClick={()=>setrenameModal(true)}
-        >
-          Rename
-        </a>
+        <span>
+          keyword
+        </span>
+      </Menu.Item>
+    </Menu>
+  );
+  const archiveTopMenu = (
+    <Menu>
+      <Menu.Item>
+        {viewListLink}
       </Menu.Item>
       <Menu.Item>
-        <a rel="noopener noreferrer" href="javascript:void(0)"
-          onClick={(e)=>{
-            e.preventDefault();
-            e.stopPropagation();
-            updateWiner(3, []);
-          }}
-        >
-          Archive
-        </a>
+        {renameLink}
       </Menu.Item>
       <Menu.Item>
-        <a rel="noopener noreferrer" href="javascript:void(0)"
-          onClick={(e)=>{
-            e.preventDefault();
-            e.stopPropagation();
-            updateWiner(1, []);
-          }}
-        >
-          Delete
-        </a>
+        {testingLink}
+      </Menu.Item>
+      <Menu.Item>
+        {deleteLink}
+      </Menu.Item>
+    </Menu>
+  );
+  const testingToppMenu = (
+    <Menu>
+      <Menu.Item>
+        {viewListLink}
+      </Menu.Item>
+      <Menu.Item>
+        {renameLink}
+      </Menu.Item>
+      <Menu.Item>
+        {archiveLink}
+      </Menu.Item>
+      <Menu.Item>
+        {deleteLink}
       </Menu.Item>
     </Menu>
   );
   const archiveMenu = (
     <Menu>
       <Menu.Item>
-        <a rel="noopener noreferrer" href="javascript:void(0)"
-          onClick={(e)=>{
-            e.preventDefault();
-            e.stopPropagation();
-            getDetails(c.current.id);
-            setLookID(c.current.id);
-            setLookType(1);
-            setArchiveDetailModal(true);
-          }}
-        >
-          View List
-        </a>
+        {viewListLink}
       </Menu.Item>
       <Menu.Item>
-        <a rel="noopener noreferrer" href="javascript:void(0)"
-          onClick={()=>setrenameModal(true)}
-        >
-          Rename
-        </a>
+        {renameLink}
       </Menu.Item>
       <Menu.Item>
-        <a rel="noopener noreferrer" href="javascript:void(0)"
-          onClick={(e)=>{
-            e.preventDefault();
-            e.stopPropagation();
-            updateWiner(1, []);
-          }}
-        >
-          Testing
-        </a>
+        {testingLink}
       </Menu.Item>
       <Menu.Item>
-        <a rel="noopener noreferrer" href="javascript:void(0)"
-          onClick={(e)=>{
-            e.preventDefault();
-            e.stopPropagation();
-            updateWiner(4, []);
-          }}
-        >
-          Delete
-        </a>
+        {deleteLink}
       </Menu.Item>
     </Menu>
   );
   const testMenu = (
     <Menu>
       <Menu.Item>
-        <a rel="noopener noreferrer" href="javascript:void(0)"
-          onClick={(e)=>{
-            e.preventDefault();
-            e.stopPropagation();
-            getDetails(c.current.id);
-            setLookID(c.current.id);
-            setLookType(1);
-            setArchiveDetailModal(true);
-          }}
-        >
-          View List
-        </a>
+        {viewListLink}
       </Menu.Item>
       <Menu.Item>
-        <a rel="noopener noreferrer" href="javascript:void(0)"
-          onClick={()=>setrenameModal(true)}
-        >
-          Rename
-        </a>
+        {renameLink}
       </Menu.Item>
       <Menu.Item>
-        <a rel="noopener noreferrer" href="javascript:void(0)"
-          onClick={(e)=>{
-            e.preventDefault();
-            e.stopPropagation();
-            updateWiner(3, []);
-          }}
-        >
-          Archive
-        </a>
+        {archiveLink}
       </Menu.Item>
       <Menu.Item>
-        <a rel="noopener noreferrer" href="javascript:void(0)"
-          onClick={(e)=>{
-            e.preventDefault();
-            e.stopPropagation();
-            updateWiner(4, []);
-          }}
-        >
-          Delete
-        </a>
+        {deleteLink}
       </Menu.Item>
     </Menu>
   );
   const winnerMenu = (
     <Menu>
       <Menu.Item>
-        <a rel="noopener noreferrer" href="javascript:void(0)"
-          onClick={(e)=>{
-            e.preventDefault();
-            e.stopPropagation();
-            getDetails(c.current.id);
-            setLookID(c.current.id);
-            setLookType(1);
-            setArchiveDetailModal(true);
-          }}
-        >
-          View List
-        </a>
+        {viewListLink}
       </Menu.Item>
       <Menu.Item>
-        <a rel="noopener noreferrer" href="javascript:void(0)"
-          onClick={()=>setrenameModal(true)}
-        >
-          Rename
-        </a>
+        {renameLink}
       </Menu.Item>
       <Menu.Item>
-        <a rel="noopener noreferrer" href="javascript:void(0)"
-          onClick={(e)=>{
-            e.preventDefault();
-            e.stopPropagation();
-            updateWiner(3, []);
-          }}
-        >
-          Archive
-        </a>
+        {archiveLink}
       </Menu.Item>
       <Menu.Item>
-        <a rel="noopener noreferrer" href="javascript:void(0)"
-          onClick={(e)=>{
-            e.preventDefault();
-            e.stopPropagation();
-            updateWiner(1, []);
-          }}
-        >
-          Testing
-        </a>
+        {testingLink}
       </Menu.Item>
       <Menu.Item>
-        <a rel="noopener noreferrer" href="javascript:void(0)"
-          onClick={(e)=>{
-            e.preventDefault();
-            e.stopPropagation();
-            updateWiner(4, []);
-          }}
-        >
-          Delete
-        </a>
+        {deleteLink}
       </Menu.Item>
     </Menu>
   );
@@ -375,9 +268,9 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
   useEffect(()=>{
     isPay();
   }, [isPayUser]);
-  const getWinnerList = (groupName, pageSize, pageNum)=>{
+  const getWinnerList = (name, pageSize, pageNum)=>{
     const data = {
-      groupName: groupName,
+      name: name,
       pageSize: pageSize,
       pageNum: pageNum,
     };
@@ -401,11 +294,6 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
     if (checkList.length>0) {
       data = checkList.filter((item)=>!(item.children)).map((item)=>item.key.split('-')[1]);
     } else {
-      // if (Array.isArray(current)) {
-      //   data = current.map((item)=>item.searchResultId).join(',');
-      // } else {
-      //   data = current.searchResultId;
-      // }
       data = c.current.id;
     }
     update(UPDATEWINNERLIST,
@@ -416,11 +304,8 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
           'Content-Type': 'application/x-www-form-urlencoded',
           'token': userInfo.token,
         }).then((res) => {
-      // if (type===2) {
       getWinnerList('', 999, 1);
-      // } else {
-      getArchiveList(tabType, '', 999, 1);
-      // }
+      getArchiveList(type===1?3:1, '', 999, 1);
     }).catch((error) => {
       message.error({
         content: error.toString(), key: 'netError', duration: 2,
@@ -442,17 +327,19 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
         }).then((res) => {
       const data = {...res.data.items};
       const tree = [];
+      let menu;
+      if (status===1) {
+        menu = testingToppMenu;
+      } else if (status===3) {
+        menu = archiveTopMenu;
+      }
       Object.keys(data).forEach((key)=>{
-        let menu;
-        if (tabType===1) {
-          menu = topMenu;
-        } else if (tabType===3) {
-          menu = topMenuTwo;
-        }
         tree.push({
           title: (
             <div style={{width: 476}}>
-              <span className="tree-title">{data[key].length>0?data[key][0].jobName:'error'}</span>
+              <span className="tree-title">
+                {data[key].length>0?data[key][0].jobName:'error'}
+              </span>
               <span className="more-icon">
                 <Dropdown overlay={menu} arrow trigger={['click']} placement="bottomLeft" onVisibleChange>
                   <MoreOutlined onClick={(e)=>{
@@ -466,15 +353,17 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
             const arr = [];
             data[key].forEach((item)=>{
               let menu;
-              if (tabType===1) {
+              if (status===1) {
                 menu = testMenu;
-              } else if (tabType===3) {
+              } else if (status===3) {
                 menu = archiveMenu;
               }
               arr.push({
                 title: (
                   <div style={{width: 452}}>
-                    <span className="tree-title">{item.groupName}</span>
+                    <span className="tree-title" title={item.groupName}>
+                      {item.groupName}
+                    </span>
                     <span className="more-icon">
                       <Dropdown overlay={menu} arrow trigger={['click']} placement="bottomLeft" onVisibleChange>
                         <MoreOutlined onClick={(e)=>{
@@ -540,11 +429,9 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
         footer={null}
         destroyOnClose
         onOk={() => {
-          // setViewDetail([]);
           setrenameModal(false);
         }}
         onCancel={()=>{
-          // setViewDetail([]);
           setrenameModal(false);
         }}>
         <Form onFinish={(values)=>updateGroupName(values.title, c.current.type, c.current.jobId)}>
@@ -566,11 +453,9 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
         className="height900"
         footer={null}
         onOk={() => {
-          // setViewDetail([]);
           setArchiveDetailModal(false);
         }}
         onCancel={()=>{
-          // setViewDetail([]);
           setArchiveDetailModal(false);
         }}>
         <div >
@@ -593,7 +478,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
         }}>
         <div >
           <div className="text-right marginB16">
-            <Space>
+            {/* <Space>
               {isPayUser?(<Button
                 download
                 href={`${EXPORTDETAIL}${lookID}/${lookType}/${userInfo.token}`}
@@ -609,7 +494,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                   </Button>
                 </Tooltip>)
               }
-            </Space>
+            </Space> */}
           </div>
           {<ResultTable TableData={addIndex(viewDetails)}/>}
         </div>
@@ -626,12 +511,10 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                   <div className={tabType===1?'tab-title active':'tab-title'} onClick={()=>{
                     settabType(1);
                     getArchiveList(1, '', 99, 1);
-                    // setwinnerList([]);
                   }}><ExperimentOutlined style={{marginRight: 12}}/>Testing</div>
                   <div className={tabType===3?'tab-title active':'tab-title'} onClick={()=>{
                     settabType(3);
                     getArchiveList(3, '', 99, 1);
-                    // setwinnerList([]);
                   }}><SaveOutlined style={{marginRight: 12}}/>Archive</div>
                 </div>
               </div>
@@ -688,9 +571,31 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
               <div className="box-wrapper">
                 <div className="winner-title-box">
                   <div className="winner-title"><CrownOutlined style={{marginRight: 12}}/>Winner</div>
-                  <div className="winner-icon" style={{marginRight: 24}}><LineHeightOutlined /></div>
-                  <div className="winner-icon"><FilterOutlined /></div>
-                  <div className="winner-icon"><SearchOutlined /></div>
+                  <div className="winner-icon" style={{marginRight: 24}}>
+                    <Dropdown overlay={sortMenu} arrow trigger={['click']} placement="bottomLeft" onVisibleChange>
+                      <LineHeightOutlined />
+                    </Dropdown>
+                  </div>
+                  <div className="winner-icon">
+                    <Dropdown overlay={filterMenu} arrow trigger={['click']} placement="bottomLeft" onVisibleChange>
+                      <FilterOutlined />
+                    </Dropdown>
+                  </div>
+                  {/* <div className="winner-icon"><SearchOutlined /></div> */}
+                  <div className="winner-search-box">
+                    <Input
+                      prefix={<SearchOutlined />}
+                      placeholder="search"
+                      allowClear
+                      onChange={(e)=>{
+                        if (e.target.value==='') {
+                          getWinnerList('', 999, 1);
+                        }
+                      }}
+                      onPressEnter={(e)=>getWinnerList(e.target.value, 999, 1)}
+                      className="winner-search-input"
+                    />
+                  </div>
                 </div>
               </div>
               <div className="box-wrapper">

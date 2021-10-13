@@ -379,7 +379,7 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
           rowKey={(record) => record.id}
           rowClassName="editable-row"
           pagination={false}
-          className="marginT16"
+          className="marginT16 amTable"
           loading={httpLoading}
         />
       </Form>

@@ -1,5 +1,6 @@
 import React, {useEffect} from 'react';
 import {Route, Switch} from 'react-router-dom';
+import Welcome from '@/pages/welcome';
 import AudienceGenerator from '@/pages/audienceGenerator';
 import JobManger from '@/pages/jobManager';
 import AudienceManger from '@/pages/audienceManager';
@@ -13,6 +14,7 @@ import ChangePassword from '@/pages/changePassword';
 import Profile from '@/pages/profile';
 import Subscribe from '@/pages/subscribe';
 import ContactSales from '@/pages/contactSales';
+import Blogs from '@/pages/blogs';
 import {storage} from '@/utils/storage';
 const Router = () => {
   const userInfo = storage.getData('userInfo');
@@ -26,7 +28,8 @@ const Router = () => {
   }, []);
   return (
     <Switch>
-      <Route path="/dashboard" exact component={AudienceGenerator} />
+      <Route path="/dashboard" exact component={Welcome} />
+      <Route path="/blogs" exact component={Blogs} />
       <Route path="/dashboard/audienceGenerator" component={AudienceGenerator} />
       <Route path="/dashboard/jobManager" component={JobManger} />
       <Route path="/dashboard/audienceManager" component={AudienceManger} />
