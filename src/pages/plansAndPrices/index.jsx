@@ -6,11 +6,12 @@ import {
   CheckCircleFilled,
 } from '@ant-design/icons';
 
-import {httpLoading} from '@/store/actions';
+import {httpLoading, setMenusData} from '@/store/actions';
 import {GETPAYMENTLIST, ISPAID, PAY} from '@/api/index';
 import {get, post} from '@/utils/request';
 import './style.css';
 import {useHistory} from 'react-router-dom';
+import store from '@/store';
 const {Content} = Layout;
 const PlansAndPrices = ({userInfo, httpLoading, setHttpLoading}) => {
   const [isPayUser, setIsPayUser] = useState(false);
@@ -172,6 +173,7 @@ const PlansAndPrices = ({userInfo, httpLoading, setHttpLoading}) => {
                             setcurrent(payment);
                           }}> {isPayUser?'Current Plan':'Upgrade Now'}</Button>:
                         <Button type="primary" block onClick={()=>{
+                          store.dispatch(setMenusData('', ''));
                           history.push('/contactSales');
                         }}>Contact Sales</Button>
                         }

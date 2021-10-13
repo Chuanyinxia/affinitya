@@ -66,8 +66,9 @@ const Subscribe = ({userInfo, httpLoading, setHttpLoading}) => {
               You haven&apos;t paid for the order yet.
               The order will be cancelled automatically after&nbsp;
               <span style={{color: '#ff4d4f'}}>
-                {15 - moment(new Date()).minute() + moment(memberSubscribeMsg.payCreateTime).minute()}</span>&nbsp;
-              minutes.&nbsp;
+                {(15 - moment(new Date()).minute() + moment(memberSubscribeMsg.payCreateTime).minute())>0?
+                  (15 - moment(new Date()).minute() + moment(memberSubscribeMsg.payCreateTime).minute()):0
+                }</span>&nbsp;minutes.&nbsp;
               <a href={memberSubscribeMsg.payUrl} target="_self">Pay now</a>
             </p>
           </Col>):

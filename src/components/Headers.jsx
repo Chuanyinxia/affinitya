@@ -21,10 +21,11 @@ const Headers=({logged, setLogged, setUserInfo})=>{
   }, []);
   const [menusShow, setMenusShow]=useState(false);
 
-  const logout=()=>{
+  const logout=(e)=>{
     storage.clearData();
     setLogged(false);
     setUserInfo({});
+    e.stopPropagation();
   };
 
   return (
@@ -65,10 +66,10 @@ const Headers=({logged, setLogged, setUserInfo})=>{
                 >Plans & Pricing</Link>
                 <Link to='/contactUs' className={key==='contactUs'?'navs activeNav':'navs '}>Contact Sales</Link>
                 <span className="navs">|</span>
-                {logged?(<Link to='/dashboard/audienceGenerator' className="navs">Dashboard</Link>):
+                {logged?(<Link to='/login' onClick={logout} className="navs">Logout</Link>):
                   ( <Link to='/login' className={key==='login'?'navs activeNav':'navs'}>Login</Link>)}
 
-                {logged?(<Button onClick={logout} href="/home" className="navButton">Logout</Button>):
+                {logged?(<Button href="/dashboard/audienceGenerator" className="navButton">Dashboard</Button>):
                   (<Button href="/signUp" className="navButton">Sign Up</Button>)}
               </Space>
             </Col>

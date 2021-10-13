@@ -111,6 +111,7 @@ const Customlayout = ({history, activeKey, setLogged}) => {
     });
     readMsg(ids);
   };
+
   const content=(
     <List
       style={{width: 500}}
@@ -136,6 +137,7 @@ const Customlayout = ({history, activeKey, setLogged}) => {
       )}
     />
   );
+
   useEffect(() => {
     isPay();
   }, []);
