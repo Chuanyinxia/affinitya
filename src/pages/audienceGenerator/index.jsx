@@ -296,7 +296,7 @@ const AudienceGenerator = ({userInfo}) => {
   []);
 
   return (
-    <div className="margin_16">
+    <div>
       <div className="padding32">
         <Spin spinning={loading}>
           <Row gutter={40}>
@@ -324,7 +324,7 @@ const AudienceGenerator = ({userInfo}) => {
                   Autocomplete="nope">
                   <Form.Item
                     name="adAccountId"
-                    label="Facebook AD ID"
+                    label="Facebook AD Account ID"
                     readOnly={read}
                     autocomplete="nope"
                     Autocomplete="nope"

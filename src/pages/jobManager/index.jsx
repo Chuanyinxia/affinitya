@@ -347,10 +347,10 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
           </Form>
         </Modal>
         <Modal
+          className="hideOverFlow"
           title={null}
           width={1200}
           visible={viewModal}
-          className="height900"
           destroyAll
           footer={null}
           onOk={() => {

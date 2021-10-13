@@ -5,3 +5,13 @@
 #confirmPassword{
   box-shadow: none
 }
+.ant-input-password:hover #password,
+.ant-input-password:hover #confirmPassword,
+.ant-input-password:hover #loginForm_password,
+.ant-input-password:hover #loginForm_confirmPassword,
+#password:hover,
+#confirmPassword:hover{
+  box-shadow: none;
+  background: transparent;
+}
+

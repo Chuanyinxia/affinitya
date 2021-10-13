@@ -91,3 +91,6 @@
   font-size: 12px;
   line-height: 24px;
 }
+.ant-modal-wrap{
+  overflow-y: hidden;
+}

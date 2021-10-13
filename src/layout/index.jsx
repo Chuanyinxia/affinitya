@@ -192,6 +192,7 @@ const Customlayout = ({history, activeKey, setLogged}) => {
             <div className="menu-icon" onClick={()=>setmenuVisible(true)}/>
             <div className="text-right">
               <Space size="large">
+                <span>{userInfo ? userInfo.nickName : 'Admin'}</span>
                 <Tooltip title="Contact Sales">
                   <div className="icon earphone" onClick={()=>{
                     store.dispatch(setMenusData('', ''));
@@ -207,12 +208,12 @@ const Customlayout = ({history, activeKey, setLogged}) => {
                       <div className="bell-dot"></div>
                     </div>
                   </Popover>:<div className="icon bell"></div>}
-                <div className="userImg">
-                  <UserOutlined style={{fontSize: 22}}/>
-                </div>
+
                 <div className="userName">
                   <Dropdown overlay={menu} placement="bottomCenter">
-                    <span>{userInfo ? userInfo.nickName : 'Admin'}</span>
+                    <div className="userImg">
+                      <UserOutlined style={{fontSize: 22}}/>
+                    </div>
                   </Dropdown>
                 </div>
                 <div>

@@ -12,6 +12,16 @@ import {storage} from '@/utils/storage';
 const Profile = ({userInfo, httpLoading, setHttpLoading, setUserInfo}) => {
   const [form] = Form.useForm();
   const onChangePassword = (value) => {
+    value.nickName=value.nickName.trim();
+    value.companyName=value.companyName.trim();
+    if (value.nickName.length<1) {
+      message.warn('Please input nickname!');
+      return false;
+    }
+    if (value.companyName.length<1) {
+      message.warn('Please input company name!');
+      return false;
+    }
     setHttpLoading(true);
     post(IMPROVEPROFILE, value, {
       // eslint-disable-next-line no-tabs
@@ -56,7 +66,7 @@ const Profile = ({userInfo, httpLoading, setHttpLoading, setUserInfo}) => {
 
   return (
     <div className="padding32 paddingT16">
-      <Spin spinning={httpLoading} >
+      <Spin spinning={false} >
         <h1>Profile</h1>
         <Card hoverable>
           <Row>
@@ -83,7 +93,7 @@ const Profile = ({userInfo, httpLoading, setHttpLoading, setUserInfo}) => {
                   <Input/>
                 </Form.Item>
                 <Form.Item className="marginT90">
-                  <Button type="primary" size="large" className="btn-xl" htmlType="submit">
+                  <Button type="primary" size="large" className="btn-xl" htmlType="submit" loading={httpLoading}>
                     Save
                   </Button>
                 </Form.Item>
