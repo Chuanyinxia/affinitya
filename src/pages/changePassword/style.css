@@ -1,3 +1,7 @@
 .marginT90{
   margin-top: 90px;
 }
+#password,
+#confirmPassword{
+  box-shadow: none
+}

@@ -55,12 +55,12 @@ const Profile = ({userInfo, httpLoading, setHttpLoading, setUserInfo}) => {
   }, []);
 
   return (
-    <div className="padding16 margin16">
+    <div className="padding32 paddingT16">
       <Spin spinning={httpLoading} >
-        <h2 className="mangerTitle">Profile</h2>
-        <Card>
+        <h1>Profile</h1>
+        <Card hoverable>
           <Row>
-            <Col span={10}>
+            <Col lg={12} xs={24}>
               <Form onFinish={onChangePassword} layout="vertical" form={form}>
                 <Form.Item
                   label="Email"
@@ -83,7 +83,7 @@ const Profile = ({userInfo, httpLoading, setHttpLoading, setUserInfo}) => {
                   <Input/>
                 </Form.Item>
                 <Form.Item className="marginT90">
-                  <Button type="primary" size="large" htmlType="submit" style={{width: '260px'}}>
+                  <Button type="primary" size="large" className="btn-xl" htmlType="submit">
                     Save
                   </Button>
                 </Form.Item>

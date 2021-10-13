@@ -36,13 +36,13 @@ const Subscribe = ({userInfo, httpLoading, setHttpLoading}) => {
     getSubscribeMsg();
   }, []);
   return (
-    <div className="padding16 margin16">
+    <div className="padding32 paddingT16">
       <Spin spinning={httpLoading} >
-        <h2 className="mangerTitle">Subscribe</h2>
-        <Card>
+        <h1 >Subscribe</h1>
+        <Card hoverable>
           <Row>
             {memberSubscribeMsg ?
-          (memberSubscribeMsg.paymentState===2? <Col span={10}>
+          (memberSubscribeMsg.paymentState===2? <Col lg={12} xs={24}>
             <h3 className="subscribe-title">{memberSubscribeMsg.name}</h3>
             <Statistic
               className="marginB30 marginT30"
@@ -66,8 +66,9 @@ const Subscribe = ({userInfo, httpLoading, setHttpLoading}) => {
               You haven&apos;t paid for the order yet.
               The order will be cancelled automatically after&nbsp;
               <span style={{color: '#ff4d4f'}}>
-                {15 - moment(new Date()).minute() + moment(memberSubscribeMsg.payCreateTime).minute()}</span>&nbsp;
-              minutes.&nbsp;
+                {(15 - moment(new Date()).minute() + moment(memberSubscribeMsg.payCreateTime).minute())>0?
+                  (15 - moment(new Date()).minute() + moment(memberSubscribeMsg.payCreateTime).minute()):0
+                }</span>&nbsp;minutes.&nbsp;
               <a href={memberSubscribeMsg.payUrl} target="_self">Pay now</a>
             </p>
           </Col>):

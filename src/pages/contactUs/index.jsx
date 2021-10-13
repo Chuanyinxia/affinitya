@@ -30,7 +30,7 @@ const ContactUS = () => {
     <Layout className="layout Home">
       <Headers/>
       <Content>
-        <div className="PPContent" style={{
+        <div className="login-content" style={{
           minHeight: 'calc(100vh - 180px)',
           paddingTop: 130,
           paddingBottom: 80,
@@ -47,15 +47,13 @@ const ContactUS = () => {
             </Col>
           </Row>
           <Row>
-            <Col sm={24} md={11}>
+            <Col xs={0} lg={12}>
               <div className="contact-log-box">
                 <div className="contact-log"/>
               </div>
             </Col>
-            <Col sm={24} md={13}>
-
+            <Col xs={24} lg={12}>
               <ContactUsForm/>
-
             </Col>
           </Row>
         </div>

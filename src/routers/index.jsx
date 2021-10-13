@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Route, Switch} from 'react-router-dom';
 import Welcome from '@/pages/welcome';
 import AudienceGenerator from '@/pages/audienceGenerator';
@@ -15,7 +15,17 @@ import Profile from '@/pages/profile';
 import Subscribe from '@/pages/subscribe';
 import ContactSales from '@/pages/contactSales';
 import Blogs from '@/pages/blogs';
+import {storage} from '@/utils/storage';
 const Router = () => {
+  const userInfo = storage.getData('userInfo');
+  const checkLogin = ()=>{
+    if (!userInfo) {
+      history.push('login');
+    }
+  };
+  useEffect(() => {
+    checkLogin();
+  }, []);
   return (
     <Switch>
       <Route path="/dashboard" exact component={Welcome} />

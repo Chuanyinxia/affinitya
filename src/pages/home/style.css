@@ -134,8 +134,15 @@
 
 
 .content{
-  margin:0 auto;
-  width: calc(100% - 80px - 80px);
+  margin:0 auto ;
+  width: calc(100% - 160px);
+}
+.content-text{
+  margin:32px auto;
+  padding: 32px;
+  border-radius: 16px;
+  background: #ffffff;
+  width: calc(100% - 160px);
 }
 .bannerBg{
   padding-top:80px ;
@@ -145,7 +152,9 @@
   .bannerBg{
     background-size:50% ;
   }
-
+  .login-content{
+    width: 100%;
+  }
 }
 
 .homeBanner{
@@ -338,9 +347,10 @@
     width: 100%;
     padding: 0 32px
   }
-  .content{
+  .content, .content-text{
     min-width: 100%;
   }
+
   .Home .homeBannerText{
     font-size: 24px;
     line-height: 38px;
