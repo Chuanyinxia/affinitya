@@ -14,8 +14,7 @@ import ReactClipboard from 'react-clipboardjs-copy';
 const {TabPane} = Tabs;
 
 
-const KeyWordSearchDetails = ({userInfo, searchData, statusType, hideFirstButton}) => {
-  console.log(searchData);
+const KeyWordSearchDetails = ({userInfo, searchData, statusType, hideFirstButton, jobSave, jobName}) => {
   const [saveStatus, setSaveStatus] = useState(0);
   const [isPayUser, setIsPayUser] = useState(false);
   const [selectKeys, setSelectKeys] = useState([]);
@@ -43,6 +42,10 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType, hideFirstButton
             'token': userInfo.token,
           }).then((res) => {
         message.success(res.msg);
+        jobSave({
+          'searchId': id,
+          'groupId': groupId,
+        });
         setSaveStatus(1);
       }).catch((error) => {
         message.error({
@@ -58,7 +61,9 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType, hideFirstButton
             'token': userInfo.token,
           }).then((res) => {
         setSaveStatus(1);
-        console.log(saveStatus);
+        jobSave({
+          'searchId': id,
+        });
         message.success(res.msg);
       }).catch((error) => {
         message.error({
@@ -158,6 +163,7 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType, hideFirstButton
   };
 
   useEffect(() => {
+    console.log(searchData);
     isPay();
   }, []);
   useEffect(()=>{
@@ -199,7 +205,7 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType, hideFirstButton
       <Row>
         <Col span={6}>
           <h2 className="search-content">
-          Tennis
+            {jobName}
           </h2>
         </Col>
         <Col span={18} className="text-right marginB16 paddingR32">
@@ -273,6 +279,8 @@ KeyWordSearchDetails.propTypes = {
   searchData: PropTypes.object.isRequired,
   statusType: PropTypes.string.isRequired,
   hideFirstButton: PropTypes.bool,
+  jobSave: PropTypes.func.isRequired,
+  jobName: PropTypes.string.isRequired,
 };
 
 export default connect(

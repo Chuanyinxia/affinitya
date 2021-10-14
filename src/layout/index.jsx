@@ -191,56 +191,111 @@ const Customlayout = ({history, activeKey, setLogged}) => {
           <Header className="login-header">
             <div className="menu-icon" onClick={()=>setmenuVisible(true)}/>
             <div className="text-right">
-              <Space size="large">
-                <span>{userInfo ? userInfo.nickName : 'Admin'}</span>
-                <Tooltip title="Contact Sales">
-                  <div className="icon earphone" onClick={()=>{
-                    store.dispatch(setMenusData('', ''));
-                    isPayUser?history.push('/contactSales'):history.push('/contactUs');
-                  }}/>
-                </Tooltip>
-                <Tooltip title="Tech Help">
-                  <div className="icon faq"/>
-                </Tooltip>
-                {hasMessage?
-                  <Popover content={content} trigger="click" placement="bottomRight">
-                    <div className="icon bell">
-                      <div className="bell-dot"></div>
-                    </div>
-                  </Popover>:<div className="icon bell"></div>}
-
-                <div className="userName">
-                  <Dropdown overlay={menu} placement="bottomCenter">
-                    <div className="userImg">
-                      <UserOutlined style={{fontSize: 22}}/>
-                    </div>
-                  </Dropdown>
-                </div>
-                <div>
-                  {!isPayUser?( <Button type="primary" style={{height: 44}} onClick={() => {
-                    store.dispatch(setMenusData('plansAndPrices', ''));
-                  }} >
-                    <Link to='/plansAndPrices' >Upgrade Now</Link>
-                  </Button>):<span style={{color: '#B23730'}}>Current Plan:Paid</span>}
-                </div>
-                <div style={{display: 'none'}}>
-                  <span className="text-black">{userInfo ? userInfo.nickName : 'Admin'}</span>
-                  <Dropdown overlay={menu} placement="bottomCenter">
-                    <Avatar icon={<UserOutlined/>} size={26}/>
-                  </Dropdown>
-                  <Badge dot={dotShow}>
+              <Row>
+                <Col xs={24} lg={0}>
+                  <Space size="large">
+                    <Tooltip title="Contact Sales">
+                      <div className="icon earphone" onClick={()=>{
+                        store.dispatch(setMenusData('', ''));
+                      isPayUser?history.push('/contactSales'):history.push('/contactUs');
+                      }}/>
+                    </Tooltip>
+                    <Tooltip title="Tech Help">
+                      <div className="icon faq"/>
+                    </Tooltip>
+                    {hasMessage?
                     <Popover content={content} trigger="click" placement="bottomRight">
-                      <AlertOutlined style={{fontSize: 16}}/>
-                    </Popover>
-                  </Badge>
-                  {!isPayUser&&( <Button type="primary" className="btn-md" onClick={() => {
-                    store.dispatch(setMenusData('plansAndPrices', ''));
-                  }} >
-                    <Link to='/plansAndPrices' >Upgrade Now</Link>
-                  </Button>)}
-                  {isPayUser&&( <Button type="primary" disabled>Paid</Button>)}
-                </div>
-              </Space>
+                      <div className="icon bell">
+                        <div className="bell-dot"/>
+                      </div>
+                    </Popover>:<div className="icon bell"/>}
+
+                    <div className="userName">
+                      <Dropdown overlay={menu} placement="bottomCenter">
+                        <div className="userImg">
+                          <UserOutlined style={{fontSize: 22}}/>
+                        </div>
+                      </Dropdown>
+                    </div>
+                    <div>
+                      {!isPayUser?( <Button type="primary" style={{height: 44}} onClick={() => {
+                        store.dispatch(setMenusData('plansAndPrices', ''));
+                      }} >
+                        <Link to='/plansAndPrices' >Upgrade Now</Link>
+                      </Button>):<span style={{color: '#B23730'}}>Current Plan:Paid</span>}
+                    </div>
+                    <div style={{display: 'none'}}>
+                      <span className="text-black">{userInfo ? userInfo.nickName : 'Admin'}</span>
+                      <Dropdown overlay={menu} placement="bottomCenter">
+                        <Avatar icon={<UserOutlined/>} size={26}/>
+                      </Dropdown>
+                      <Badge dot={dotShow}>
+                        <Popover content={content} trigger="click" placement="bottomRight">
+                          <AlertOutlined style={{fontSize: 16}}/>
+                        </Popover>
+                      </Badge>
+                      {!isPayUser&&( <Button type="primary" className="btn-md" onClick={() => {
+                        store.dispatch(setMenusData('plansAndPrices', ''));
+                      }} >
+                        <Link to='/plansAndPrices' >Upgrade Now</Link>
+                      </Button>)}
+                      {isPayUser&&( <Button type="primary" disabled>Paid</Button>)}
+                    </div>
+                  </Space></Col>
+                <Col xs={0} lg={24}>
+                  <Space size="large">
+                    <span>{userInfo ? userInfo.nickName : 'Admin'}</span>
+                    <Tooltip title="Contact Sales">
+                      <div className="icon earphone" onClick={()=>{
+                        store.dispatch(setMenusData('', ''));
+                      isPayUser?history.push('/contactSales'):history.push('/contactUs');
+                      }}/>
+                    </Tooltip>
+                    <Tooltip title="Tech Help">
+                      <div className="icon faq"/>
+                    </Tooltip>
+                    {hasMessage?
+                    <Popover content={content} trigger="click" placement="bottomRight">
+                      <div className="icon bell">
+                        <div className="bell-dot"/>
+                      </div>
+                    </Popover>:<div className="icon bell"/>}
+
+                    <div className="userName">
+                      <Dropdown overlay={menu} placement="bottomCenter">
+                        <div className="userImg">
+                          <UserOutlined style={{fontSize: 22}}/>
+                        </div>
+                      </Dropdown>
+                    </div>
+                    <div>
+                      {!isPayUser?( <Button type="primary" style={{height: 44}} onClick={() => {
+                        store.dispatch(setMenusData('plansAndPrices', ''));
+                      }} >
+                        <Link to='/plansAndPrices' >Upgrade Now</Link>
+                      </Button>):<span style={{color: '#B23730'}}>Current Plan:Paid</span>}
+                    </div>
+                    <div style={{display: 'none'}}>
+                      <span className="text-black">{userInfo ? userInfo.nickName : 'Admin'}</span>
+                      <Dropdown overlay={menu} placement="bottomCenter">
+                        <Avatar icon={<UserOutlined/>} size={26}/>
+                      </Dropdown>
+                      <Badge dot={dotShow}>
+                        <Popover content={content} trigger="click" placement="bottomRight">
+                          <AlertOutlined style={{fontSize: 16}}/>
+                        </Popover>
+                      </Badge>
+                      {!isPayUser&&( <Button type="primary" className="btn-md" onClick={() => {
+                        store.dispatch(setMenusData('plansAndPrices', ''));
+                      }} >
+                        <Link to='/plansAndPrices' >Upgrade Now</Link>
+                      </Button>)}
+                      {isPayUser&&( <Button type="primary" disabled>Paid</Button>)}
+                    </div>
+                  </Space>
+                </Col>
+              </Row>
+
             </div>
           </Header>
           <Content style={{margin: 0}}>

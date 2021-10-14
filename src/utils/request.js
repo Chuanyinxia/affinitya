@@ -22,9 +22,12 @@ axios.interceptors.response.use((response) => {
     });
     return false;
   }
+  console.log(response.data.code);
   switch (response.data.code) {
     case 200:
       return response.data;
+    case 371:
+      return Promise.reject(response.data);
     // check token
     case 401:
       return false;
