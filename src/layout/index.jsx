@@ -197,7 +197,7 @@ const Customlayout = ({history, activeKey, setLogged}) => {
                     <Tooltip title="Contact Sales">
                       <div className="icon earphone" onClick={()=>{
                         store.dispatch(setMenusData('', ''));
-                      isPayUser?history.push('/contactSales'):history.push('/contactUs');
+                        history.push('/contactSales');
                       }}/>
                     </Tooltip>
                     <Tooltip title="Tech Help">
@@ -248,7 +248,7 @@ const Customlayout = ({history, activeKey, setLogged}) => {
                     <Tooltip title="Contact Sales">
                       <div className="icon earphone" onClick={()=>{
                         store.dispatch(setMenusData('', ''));
-                      isPayUser?history.push('/contactSales'):history.push('/contactUs');
+                        history.push('/contactSales');
                       }}/>
                     </Tooltip>
                     <Tooltip title="Tech Help">

@@ -5,6 +5,7 @@ import {
   USERINFO,
   CANDOAS,
   GET_MENUS_DATA,
+  GET_MANAGER_COUNTS,
 } from './actionTypes';
 
 export const httpLoading = (f)=>{
@@ -46,4 +47,9 @@ export const setMenusData = (activeKey, openKeys) => ({
   type: GET_MENUS_DATA,
   activeKey,
   openKeys,
+});
+
+export const getMangerCounts = (managerCounts)=>({
+  type: GET_MANAGER_COUNTS,
+  managerCounts,
 });

@@ -118,11 +118,6 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
       });
     });
   };
-  // const viewDetails=(id, type)=>{
-  //   // type=>1 keyword
-  //   history.push('/dashboard/audienceGenerator?id='+id+'&type='+type);
-  //   store.dispatch(setMenusData('audienceGenerator', 'dashboard'));
-  // };
   const getJobDetails=(id)=>{
     get(GETJOBDETAIL+id, userInfo.token).then((res)=>{
       setViewDetail(res.data.kwResultVoList);
@@ -153,12 +148,6 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
       });
     });
   };
-  // const addIndex=(data)=>{
-  //   const tableData=data.map((item, index)=>{
-  //     return {...item, index: index+1};
-  //   })??[];
-  //   return tableData;
-  // };
   const isPay=()=>{
     get(ISPAID, userInfo.token).then((res)=>{
       setIsPayUser(res.data===2);

@@ -35,7 +35,9 @@ const Profile = ({userInfo, httpLoading, setHttpLoading, setUserInfo}) => {
       message.success(res.msg);
       storage.saveData('session', 'userInfo', userData);
       setUserInfo(userData);
-      window.location.reload();
+      setTimeout(()=>{
+        window.location.reload();
+      }, 2000);
     }).catch((error) => {
       message.error({
         content: error.toString(), key: 'netError', duration: 2,

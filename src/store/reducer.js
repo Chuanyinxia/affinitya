@@ -45,12 +45,18 @@ const toggleAdvancedSearch = (state = {can: false}, action) => {
       return state;
   }
 };
-const menus=(state={activeKey: 'home',
-  openKeys: 'home'}, action)=> {
+const menus=(state={
+  activeKey: 'home',
+  openKeys: 'home',
+  managerCounts: storage.getData('mangerCounts'),
+}, action)=> {
   switch (action.type) {
     case 'layout/menus-path-data':
-      return {activeKey: (action.activeKey !== null) ? action.activeKey : state.activeKey,
+      return {...state, activeKey: (action.activeKey !== null) ? action.activeKey : state.activeKey,
         openKeys: action.openKeys};
+
+    case 'get_manager_counts':
+      return {...state, managerCounts: action.managerCounts};
     default:
       return state;
   }

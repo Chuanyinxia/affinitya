@@ -53,7 +53,7 @@ const ContactUS = () => {
               </div>
             </Col>
             <Col xs={24} lg={12}>
-              <ContactUsForm/>
+              <ContactUsForm type={'notLogin'}/>
             </Col>
           </Row>
         </div>

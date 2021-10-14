@@ -26,10 +26,13 @@ const PrivacyPolicy = ({userInfo, httpLoading, setHttpLoading}) => {
     getAgreement();
   }, []);
   return (
-    <Layout className="layout Home">
+    <Layout className="layout  Home">
       <Headers/>
-      <Content className="marginTop90 home-content">
-        <div className="content-text" dangerouslySetInnerHTML={{__html: agreement}}/>
+      <Content >
+        <div className="marginTop90 content-text">
+          <div className="content-text" dangerouslySetInnerHTML={{__html: agreement}}/>
+        </div>
+
       </Content>
       <Footers/>
     </Layout>
