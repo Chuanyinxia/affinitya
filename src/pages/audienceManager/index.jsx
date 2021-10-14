@@ -39,6 +39,8 @@ import {
   SaveOutlined,
   CloseOutlined,
   LineHeightOutlined,
+  ArrowUpOutlined,
+  ArrowDownOutlined,
 } from '@ant-design/icons';
 import EditTable from '@/pages/audienceManager/component/EditTable';
 import ResultTable from '@/components/Table/ResultTable';
@@ -61,6 +63,9 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
   const [archiveDetail, setArchiveDetail] = useState([]);
   const [checkedKeys, setCheckedKeys] = useState([]);
   const [currentName, setcurrentName] = useState('');
+  const [sortType, setsortType] = useState(1);
+  const [filterType, setfilterType] = useState(2);
+  const [sortedWinnerList, setsortedWinnerList] = useState([]);
   const c = useRef();
   const renameLink = (
     <a rel="noopener noreferrer" href="javascript:void(0)"
@@ -118,28 +123,78 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
       Delete
     </a>
   );
-  const sortMenu = (
+  const initWinnerList = ()=>{
+    const data = [...sortedWinnerList];
+    data.forEach((item)=>item.check = false);
+    setsortedWinnerList(data);
+    settableVisible(false);
+  };
+  const sortMenuByT = (
     <Menu>
-      <Menu.Item>
+      <Menu.Item danger>
         <span>
           by time
         </span>
       </Menu.Item>
-      <Menu.Item>
+      <Menu.Item onClick={()=>{
+        setsortType(2);
+        setsortedWinnerList(winnerList.sort((a, b)=>new Date(a.createTime).getTime()-new Date(b.createTime).getTime()));
+        initWinnerList();
+      }}>
         <span>
           by country
         </span>
       </Menu.Item>
     </Menu>
   );
-  const filterMenu = (
+  const sortMenuByC = (
     <Menu>
-      <Menu.Item>
+      <Menu.Item onClick={()=>{
+        setsortType(1);
+        setsortedWinnerList(winnerList.sort((a, b)=>a.source.localeCompare(b.source)));
+        initWinnerList();
+      }}>
+        <span>
+          by time
+        </span>
+      </Menu.Item>
+      <Menu.Item danger>
+        <span>
+          by country
+        </span>
+      </Menu.Item>
+    </Menu>
+  );
+  const filterMenuByA = (
+    <Menu>
+      <Menu.Item danger>
         <span>
           looklike audience
         </span>
       </Menu.Item>
-      <Menu.Item>
+      <Menu.Item onClick={()=>{
+        setfilterType(2);
+        setsortedWinnerList(winnerList.filter((item)=>item.type===2));
+        initWinnerList();
+      }}>
+        <span>
+          keyword
+        </span>
+      </Menu.Item>
+    </Menu>
+  );
+  const filterMenuByk = (
+    <Menu>
+      <Menu.Item onClick={()=>{
+        setfilterType(1);
+        setsortedWinnerList(winnerList.filter((item)=>item.type===1));
+        initWinnerList();
+      }}>
+        <span>
+          looklike audience
+        </span>
+      </Menu.Item>
+      <Menu.Item danger>
         <span>
           keyword
         </span>
@@ -281,6 +336,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
           'token': userInfo.token,
         }).then((res) => {
       setwinnerList(res.data.items);
+      setsortedWinnerList(res.data.items);
     }).catch((error) => {
       message.error({
         content: error.toString(), key: 'netError', duration: 2,
@@ -305,7 +361,8 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
           'token': userInfo.token,
         }).then((res) => {
       getWinnerList('', 999, 1);
-      getArchiveList(type===1?3:1, '', 999, 1);
+      getArchiveList(tabType, '', 999, 1);
+      setCheckedKeys([]);
     }).catch((error) => {
       message.error({
         content: error.toString(), key: 'netError', duration: 2,
@@ -337,9 +394,11 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
         tree.push({
           title: (
             <div style={{width: 476}}>
-              <span className="tree-title">
-                {data[key].length>0?data[key][0].jobName:'error'}
-              </span>
+              <div className="tree-title">
+                {data[key].length>0?
+                (<span>{data[key][0].readStatus===0?<i className="read-mark">* </i>:null}{data[key][0].jobName}</span>):
+                'error'}
+              </div>
               <span className="more-icon">
                 <Dropdown overlay={menu} arrow trigger={['click']} placement="bottomLeft" onVisibleChange>
                   <MoreOutlined onClick={(e)=>{
@@ -361,9 +420,9 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
               arr.push({
                 title: (
                   <div style={{width: 452}}>
-                    <span className="tree-title" title={item.groupName}>
+                    <div className="tree-title" title={item.groupName}>
                       {item.groupName}
-                    </span>
+                    </div>
                     <span className="more-icon">
                       <Dropdown overlay={menu} arrow trigger={['click']} placement="bottomLeft" onVisibleChange>
                         <MoreOutlined onClick={(e)=>{
@@ -572,12 +631,20 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                 <div className="winner-title-box">
                   <div className="winner-title"><CrownOutlined style={{marginRight: 12}}/>Winner</div>
                   <div className="winner-icon" style={{marginRight: 24}}>
-                    <Dropdown overlay={sortMenu} arrow trigger={['click']} placement="bottomLeft" onVisibleChange>
+                    <Dropdown
+                      overlay={sortType===1?sortMenuByT:sortMenuByC}
+                      arrow trigger={['click']}
+                      placement="bottomLeft"
+                      onVisibleChange>
                       <LineHeightOutlined />
                     </Dropdown>
                   </div>
                   <div className="winner-icon">
-                    <Dropdown overlay={filterMenu} arrow trigger={['click']} placement="bottomLeft" onVisibleChange>
+                    <Dropdown overlay={filterType===1?filterMenuByA:filterMenuByk}
+                      arrow
+                      trigger={['click']}
+                      placement="bottomLeft"
+                      onVisibleChange>
                       <FilterOutlined />
                     </Dropdown>
                   </div>
@@ -600,14 +667,14 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
               </div>
               <div className="box-wrapper">
                 <div className="card-group">
-                  {winnerList.map((item, index)=>(
+                  {sortedWinnerList.map((item, index)=>(
                     <div className={item.check?'card-item active':
                       item.saveStatus===0?'card-item':
                         'card-item edited'} key={item.searchId} onClick={()=>{
-                      const data = [...winnerList];
+                      const data = [...sortedWinnerList];
                       data.forEach((item)=>item.check=false);
                       data[index].check = true;
-                      setwinnerList(data);
+                      setsortedWinnerList(data);
                       getDetails(item.searchResultId);
                       c.current = {
                         id: item.searchResultId,
@@ -616,7 +683,16 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                       settableVisible(true);
                     }}>
                       <div
-                        style={{color: '#4E4B66', fontSize: 16, height: 48, lineHeight: '48px', fontWeight: '600'}}
+                        style={{
+                          color: '#4E4B66',
+                          fontSize: 16,
+                          height: 48,
+                          lineHeight: '48px',
+                          fontWeight: '600',
+                          overflow: 'hidden',
+                          whiteSpace: 'nowrap',
+                          textOverflow: 'ellipsis',
+                        }}
                       >{item.groupName}</div>
                       <div
                         style={{color: '#4E4B66', fontSize: 12, height: 30, lineHeight: '30px', marginTop: 8}}
@@ -691,12 +767,30 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
               <div style={{float: 'left'}}>{currentName}</div>
               <div style={{float: 'right', cursor: 'pointer'}}>
                 <CloseOutlined style={{fontSize: 20}} onClick={()=>{
-                  const data = [...winnerList];
+                  const data = [...sortedWinnerList];
                   data.forEach((item)=>item.check=false);
-                  setwinnerList(data);
+                  setsortedWinnerList(data);
                   settableVisible(false);
                 }}/>
               </div>
+              <div style={{float: 'right', cursor: 'pointer', marginRight: 16}} onClick={()=>{
+                const data = [...sortedWinnerList];
+                const index = data.findIndex((item)=>item.check===true);
+                if (index>=0&&index<data.length-1) {
+                  data.forEach((item)=>item.check=false);
+                  data[index+1].check=true;
+                  setsortedWinnerList(data);
+                }
+              }}><ArrowDownOutlined /></div>
+              <div style={{float: 'right', cursor: 'pointer', marginRight: 16}} onClick={()=>{
+                const data = [...sortedWinnerList];
+                const index = data.findIndex((item)=>item.check===true);
+                if (index>0&&index<=data.length-1) {
+                  data.forEach((item)=>item.check=false);
+                  data[index-1].check=true;
+                  setsortedWinnerList(data);
+                }
+              }}><ArrowUpOutlined /></div>
             </div>
             <EditTable details={details} id={editId} hideFirstButton={true} saveFunc={()=>{
               settableVisible(true);
