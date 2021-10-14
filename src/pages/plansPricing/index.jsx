@@ -44,7 +44,7 @@ const PlansPricing = ({userInfo, httpLoading, setHttpLoading}) => {
     getPaymentList();
   }, []);
   return (
-    <Layout className="layout Home">
+    <Layout className="layout">
       <Headers/>
       <Content>
         <div className="marginTop90 PPContent" style={{minHeight: 'calc(100vh - 180px)', paddingTop: 30}}>

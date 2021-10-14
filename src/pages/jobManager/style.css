@@ -91,3 +91,15 @@
   font-size: 12px;
   line-height: 24px;
 }
+.ant-modal-wrap{
+  overflow-y: hidden;
+}
+.ant-table-cell{
+  word-break:break-all;
+}
+.alertFixed{
+  position: fixed;
+  right: 0;
+  width: calc(100% - 284px);
+  z-index: 1000;
+}

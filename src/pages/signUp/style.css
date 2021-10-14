@@ -16,3 +16,7 @@
 .login-content .ant-form-item-label > label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::before{
   content:'';
 }
+#text:hover{
+  box-shadow: 0 0 0 2px #120043;
+  background-color: #FFFFFF!important;
+}

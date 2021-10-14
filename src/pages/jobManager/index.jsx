@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {httpLoading} from '@/store/actions';
+import {httpLoading, setMenusData} from '@/store/actions';
 import './style.css';
 import {CANCELJOB, GETJOBDETAIL, GETJOBMANAGER, ISPAID, RESTARTJOB, UPDATEJOBTITLE} from '@/api';
 import {get, post, update} from '@/utils/request';
@@ -12,7 +12,10 @@ import {useHistory} from 'react-router-dom';
 import {type} from '@/components/plugin/Searchdata';
 // import ResultTable from '@/components/Table/ResultTable';
 import KeyWordSearchDetails from '@/components/Table/KeyWordSearchDetails';
+import {Link} from 'react-router-dom';
 import qs from 'querystring';
+import store from '@/store';
+
 const jobMangerText = {
   title: 'Unsaved audience will be deleted after 30 days.',
 };
@@ -36,6 +39,12 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
     size: 'small',
     hideOnSinglePage: true,
   });
+  const [newID, setNewID]=useState(null);
+  const [creatJobForm] = Form.useForm();
+  const [searchTitle, setSearchTitle]=useState('');
+  const [saveManger, setSaveManger]= useState(null);
+
+
   const onFinish = (value) => {
     const data = {
       ...value,
@@ -63,9 +72,6 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
       });
     });
   };
-  const [newID, setNewID]=useState(null);
-  const [creatJobForm] = Form.useForm();
-  const [searchTitle, setSearchTitle]=useState('');
   const getJobList = (page) => {
     setLoading(true);
     const data = {...page};
@@ -112,11 +118,6 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
       });
     });
   };
-  // const viewDetails=(id, type)=>{
-  //   // type=>1 keyword
-  //   history.push('/dashboard/audienceGenerator?id='+id+'&type='+type);
-  //   store.dispatch(setMenusData('audienceGenerator', 'dashboard'));
-  // };
   const getJobDetails=(id)=>{
     get(GETJOBDETAIL+id, userInfo.token).then((res)=>{
       setViewDetail(res.data.kwResultVoList);
@@ -147,12 +148,6 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
       });
     });
   };
-  // const addIndex=(data)=>{
-  //   const tableData=data.map((item, index)=>{
-  //     return {...item, index: index+1};
-  //   })??[];
-  //   return tableData;
-  // };
   const isPay=()=>{
     get(ISPAID, userInfo.token).then((res)=>{
       setIsPayUser(res.data===2);
@@ -170,16 +165,14 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
       title: e.target.value.trim()??'',
       type: jobType,
     });
-    console.log();
   };
+
   useEffect(() => {
     const data=history.location.search.split('?');
-    getJobList({
-      pageNum: 1,
+    const params={pageNum: 1,
       pageSize: 10,
       title: '',
-      type: jobType === false ? '' : jobType,
-    });
+      type: jobType === false ? '' : jobType};
     isPay();
     // eslint-disable-next-line no-constant-condition
     if (data.length>1) {
@@ -187,10 +180,13 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
       if (search.newID) {
         setNewID(search.newID);
         setJobName(search.jobName);
-        console.log(newID);
       }
-      console.log(newID);
+      if (search.searchID) {
+        params.id=search.searchID;
+        setSearchTitle(search.jobName);
+      }
     }
+    getJobList(params);
   }, []);
 
 
@@ -201,6 +197,8 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
         size="small"
         style={{height: 40, width: 300}}
         placeholder="Search"
+        value={searchTitle}
+        onChange={(e)=>setSearchTitle(e.target.value)}
         onPressEnter={onSearch}
         prefix={<SearchOutlined/>}
       />
@@ -212,6 +210,24 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
       {newID&&( <Alert
         message={<p className="text-white text-center margin0">
           Job {jobName} has been successfully generated.
+        </p>}
+        banner type="success"
+        closable/>)}
+      {saveManger&&( <Alert
+        onClose={()=> {
+          setSaveManger(null);
+          setJobName('');
+        }}
+        className="alertFixed"
+        message={<p className="text-white text-center margin0">
+          <Link
+            onClick={()=>{
+              store.dispatch(setMenusData('audienceManager', 'dashboard'));
+            }}
+            to={`/dashboard/audienceManager?searchId=${saveManger.searchId}${saveManger.groupId?
+              '&groupId='+saveManger.groupId:''}` }>
+            {jobName} has been added to Audience Manager for testing.
+          </Link>
         </p>}
         banner type="success"
         closable/>)}
@@ -252,7 +268,9 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
           {/* <Table.Column title="Job Name" dataIndex="id" key="Job ID"/>*/}
           <Table.Column
             title="Job Name"
-            dataIndex="title" key="Job Title"
+            dataIndex="title"
+            key="Job Title"
+            style={{wordBreak: 'break-all'}}
             render={(title, record)=>{
               return parseInt(record.id)===parseInt(newID)?
                 (<span><span className="text-red">*</span>{title}</span>):title;
@@ -299,6 +317,7 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
                 (<Button
                   onClick={() => {
                     getJobDetails(record.id);
+                    setJobName(record.title);
                   }}
                   type="link"
                   className="btn-xs btn-red-link">
@@ -347,10 +366,10 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
           </Form>
         </Modal>
         <Modal
+          className="hideOverFlow"
           title={null}
           width={1200}
           visible={viewModal}
-          className="height900"
           destroyAll
           footer={null}
           onOk={() => {
@@ -362,7 +381,12 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
             setViewModal(false);
           }}>
           <div >
-            {<KeyWordSearchDetails searchData={viewDetail} statusType={saveStatusType}/>}
+            {<KeyWordSearchDetails
+              searchData={viewDetail}
+              statusType={saveStatusType}
+              jobSave={setSaveManger}
+              jobName={jobName}
+            />}
           </div>
 
         </Modal>

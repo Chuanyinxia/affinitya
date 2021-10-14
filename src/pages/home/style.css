@@ -143,6 +143,8 @@
   border-radius: 16px;
   background: #ffffff;
   width: calc(100% - 160px);
+  height: auto;
+  overflow: unset;
 }
 .bannerBg{
   padding-top:80px ;
@@ -345,7 +347,8 @@
   @media screen and (max-width: 1040px)  {
   .home-content{
     width: 100%;
-    padding: 0 32px
+    padding: 0 32px;
+    margin: 0 auto;
   }
   .content, .content-text{
     min-width: 100%;

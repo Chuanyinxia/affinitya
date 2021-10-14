@@ -228,6 +228,16 @@ const AudienceGenerator = ({userInfo}) => {
         store.dispatch(setMenusData('jobManager', 'dashboard'));
         history.push('/dashboard/jobManager?newID='+res.data+'&jobName='+value.jobName);
       }).catch((error) => {
+        console.log(error);
+        if (error.code===371) {
+          message.error({
+            content: 'You have searched the content, Job name is '+error.data.title,
+            key: 'netError',
+            duration: 2,
+          });
+          store.dispatch(setMenusData('jobManager', 'dashboard'));
+          history.push('/dashboard/jobManager?searchID='+error.data.jobId+'&jobName='+error.data.title);
+        }
         message.error({
           content: error.toString(), key: 'netError', duration: 2,
         });
@@ -296,7 +306,7 @@ const AudienceGenerator = ({userInfo}) => {
   []);
 
   return (
-    <div className="margin_16">
+    <div>
       <div className="padding32">
         <Spin spinning={loading}>
           <Row gutter={40}>
@@ -324,7 +334,7 @@ const AudienceGenerator = ({userInfo}) => {
                   Autocomplete="nope">
                   <Form.Item
                     name="adAccountId"
-                    label="Facebook AD ID"
+                    label="Facebook AD Account ID"
                     readOnly={read}
                     autocomplete="nope"
                     Autocomplete="nope"

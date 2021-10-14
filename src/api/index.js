@@ -47,3 +47,5 @@ export const GETARCHIVEDETAIL='/api/getArchiveDetail/';
 export const UPDATEGROUPNAME='/api/updateJobOrGroupName';
 
 export const READJOBMANGER='/api/readJobManger';
+export const SAVECONTACTUS='/api/saveContactUs';
+export const GETNOREADAUDIENCE='/api/getNoReadAudience';

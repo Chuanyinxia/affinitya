@@ -1,21 +1,22 @@
 import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {httpLoading} from '@/store/actions';
+import {httpLoading, getMangerCounts} from '@/store/actions';
 import './style.css';
 import {Button, Card, Col, Empty, message, Row, Space, Tabs, Tooltip} from 'antd';
 import ResultTable from '@/components/Table/ResultTable';
 import {get, post} from '@/utils/request';
-import {EXPORTCVS, ISPAID, SAVESEARCHMESSAGE, SAVESEARCHMESSAGEBYGROUP} from '@/api';
+import {EXPORTCVS, ISPAID, SAVESEARCHMESSAGE, SAVESEARCHMESSAGEBYGROUP, GETNOREADAUDIENCE} from '@/api';
 // import {CopyToClipboard} from 'react-copy-to-clipboard';
 // import ClipboardJS from 'clipboard';
 
 import ReactClipboard from 'react-clipboardjs-copy';
+import store from '@/store';
+import {storage} from '@/utils/storage';
 const {TabPane} = Tabs;
 
 
-const KeyWordSearchDetails = ({userInfo, searchData, statusType, hideFirstButton}) => {
-  console.log(searchData);
+const KeyWordSearchDetails = ({userInfo, searchData, statusType, hideFirstButton, jobSave, jobName}) => {
   const [saveStatus, setSaveStatus] = useState(0);
   const [isPayUser, setIsPayUser] = useState(false);
   const [selectKeys, setSelectKeys] = useState([]);
@@ -43,10 +44,21 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType, hideFirstButton
             'token': userInfo.token,
           }).then((res) => {
         message.success(res.msg);
+        jobSave({
+          'searchId': id,
+          'groupId': groupId,
+        });
         setSaveStatus(1);
       }).catch((error) => {
         message.error({
           content: error.toString(), key: 'netError', duration: 2,
+        });
+      }).finally(()=>{
+        get(GETNOREADAUDIENCE, userInfo.token).then((res)=>{
+          store.dispatch(getMangerCounts(res.data));
+          storage.saveData('local', 'mangerCounts', res.data);
+        }).catch((error)=>{
+          console.log(error);
         });
       });
     } else {
@@ -58,11 +70,20 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType, hideFirstButton
             'token': userInfo.token,
           }).then((res) => {
         setSaveStatus(1);
-        console.log(saveStatus);
+        jobSave({
+          'searchId': id,
+        });
         message.success(res.msg);
       }).catch((error) => {
         message.error({
           content: error.toString(), key: 'netError', duration: 2,
+        });
+      }).finally(()=>{
+        get(GETNOREADAUDIENCE, userInfo.token).then((res)=>{
+          store.dispatch(getMangerCounts(res.data));
+          storage.saveData('local', 'mangerCounts', res.data);
+        }).catch((error)=>{
+          console.log(error);
         });
       });
     }
@@ -103,38 +124,7 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType, hideFirstButton
         </Button>
       </Tooltip>);
   };
-  // const onCopy=()=>{
-  //   // const clipboard = new ClipboardJS('#copyBtn', {
-  //   //   text: () => copyValue,
-  //   // });
-  //   // clipboard.on('success', function(e) {
-  //   //   console.log('复制成功');
-  //   //   clipboard.destroy();
-  //   // });
-  //   //
-  //   // message.success('copy');
-  //   // console.log(copyValue);
-  //   // const copy=document.getElementById('copy');
-  //   // // copy.innerHTML=str;
-  //   // // console.log(copy);
-  //   // // // window.clipboardData.clearData('text');
-  //   // // if (window.clipboardData.setData('text', str)) {
-  //   // //   message.success('copy');
-  //   // // } else {
-  //   // //   message.error('copy');
-  //   // // }
-  //   // const range=document.createRange();
-  //   // range.selectNodeContents(copy);
-  //   // window.getSelection().addRange(range);
-  //   // document.execCommand('Copy');
-  //   // const tag=document.execCommand('Copy');
-  //   // if (tag) {
-  //   //   message.success('copy');
-  //   // }
-  // };
-  // const toCopy=()=>{
-  //
-  // };
+
   const copyKeyword = () => {
     return (
       <ReactClipboard
@@ -158,6 +148,7 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType, hideFirstButton
   };
 
   useEffect(() => {
+    console.log(searchData);
     isPay();
   }, []);
   useEffect(()=>{
@@ -199,7 +190,7 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType, hideFirstButton
       <Row>
         <Col span={6}>
           <h2 className="search-content">
-          Tennis
+            {jobName}
           </h2>
         </Col>
         <Col span={18} className="text-right marginB16 paddingR32">
@@ -273,6 +264,8 @@ KeyWordSearchDetails.propTypes = {
   searchData: PropTypes.object.isRequired,
   statusType: PropTypes.string.isRequired,
   hideFirstButton: PropTypes.bool,
+  jobSave: PropTypes.func.isRequired,
+  jobName: PropTypes.string.isRequired,
 };
 
 export default connect(

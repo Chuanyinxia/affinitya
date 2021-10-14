@@ -24,6 +24,7 @@ const ResultTable = ({userInfo, TableData, onSelect, groupId}) => {
         ...rowSelection,
       }}
       dataSource={TableData}
+      scroll={{y: 400}}
       rowKey={(record)=> record.id}
       pagination={{
         pageSize: 100,
