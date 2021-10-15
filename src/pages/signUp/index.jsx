@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
-import {Link, withRouter} from 'react-router-dom';
+import {withRouter} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {Button, Checkbox, Col, Form, Input, message, Modal, Row, Spin, Tooltip} from 'antd';
 import {httpLoading, login, userInfo} from '@/store/actions';
@@ -100,7 +100,7 @@ const SignUp = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) 
       <Spin spinning={httpLoading}>
         <Row className="login-content paddingT32 paddingB64">
           <Col lg={12} xs={0} className="paddingT90">
-            <img src={bg} style={{width: '100%'}} alt="bg"/>
+            <img src={bg} style={{width: '100%'}} alt="bg" className="marginT32"/>
           </Col>
           <Col lg={12} xs={24} className="paddingL36 paddingR36">
             <h1 className="login-title" >Sign Up</h1>
@@ -195,7 +195,7 @@ const SignUp = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) 
                 </Button>
               </Form.Item>
               <div className="marginT16">
-                Have an account? <Link to="/login">Log In</Link>
+                Have an account? <Button type="link" href="/login">Log In</Button>
               </div>
 
             </Form>

@@ -107,8 +107,8 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
     }).then((res)=>{
       message.success(res.msg);
       getJobList({
-        pageNum: 1,
-        pageSize: 10,
+        pageNum: pagination.current,
+        pageSize: pagination.pageSize,
         title: searchTitle,
         type: jobType,
       });
@@ -137,8 +137,8 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
     }).then((res)=>{
       message.success(res.msg);
       getJobList({
-        pageNum: 1,
-        pageSize: 10,
+        pageNum: pagination.current,
+        pageSize: pagination.pageSize,
         title: searchTitle,
         type: jobType,
       });
@@ -161,7 +161,7 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
     setSearchTitle(e.target.value.trim()??'');
     getJobList({
       pageNum: 1,
-      pageSize: 10,
+      pageSize: pagination.pageSize,
       title: e.target.value.trim()??'',
       type: jobType,
     });

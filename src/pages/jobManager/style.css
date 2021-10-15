@@ -103,3 +103,9 @@
   width: calc(100% - 284px);
   z-index: 1000;
 }
+.search-content{
+height: 34px;
+  overflow: hidden;
+  text-overflow:ellipsis;
+  white-space: nowrap;
+}
