@@ -49,6 +49,7 @@ import EditTable from '@/pages/audienceManager/component/EditTable';
 import ResultTable from '@/components/Table/ResultTable';
 import KeyWordSearchDetails from '@/components/Table/KeyWordSearchDetails';
 const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
+  const [renameForm] = Form.useForm();
   const [details, setDetails] = useState(null);
   const [editId, setEditId] = useState(null);
   const [treeData, settreeData] = useState([]);
@@ -76,6 +77,11 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
         e.preventDefault();
         e.stopPropagation();
         setrenameModal(true);
+        setTimeout(()=>{
+          renameForm.setFieldsValue({
+            title: c.current.name,
+          });
+        }, 100);
       }}
     >
       Rename
@@ -505,7 +511,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
         onCancel={()=>{
           setrenameModal(false);
         }}>
-        <Form onFinish={(values)=>updateGroupName(values.title, c.current.type, c.current.jobId)}>
+        <Form onFinish={(values)=>updateGroupName(values.title, c.current.type, c.current.jobId)} form={renameForm}>
           <Form.Item rules={[{required: true, message: 'Please input job/audience name'}]} name="title">
             <Input placeholder="Input job/audience name" maxLength="50"></Input>
           </Form.Item>
@@ -530,7 +536,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
           setArchiveDetailModal(false);
         }}>
         <div >
-          <KeyWordSearchDetails searchData={archiveDetail} statusType={0}/>
+          <KeyWordSearchDetails searchData={archiveDetail} statusType={0} hideTesting={true}/>
         </div>
       </Modal>
       <Modal
@@ -615,7 +621,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                     let data;
                     let type;
                     let jobId = info.node.key;
-                    const name = info.node.title.props.children[0];
+                    const name = info.node.title.props.children[0].props.title;
                     if (info.node.children) {
                       data = info.node.children.map((item)=>item.key.split('-')[1]).join(',');
                       type = 1;
@@ -729,6 +735,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                           c.current = {
                             id: item.searchResultId,
                             jobId: item.searchResultId,
+                            name: item.jobName,
                           };
                         }}
                         >

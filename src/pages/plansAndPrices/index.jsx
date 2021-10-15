@@ -32,6 +32,7 @@ const PlansAndPrices = ({userInfo, httpLoading, setHttpLoading}) => {
         item.checked = false;
         return item;
       });
+      data.sort((a, b)=> a.packageType - b.packageType);
       setPaymentList(data);
     }).catch((error) => {
       message.error({

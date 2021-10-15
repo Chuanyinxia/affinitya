@@ -179,6 +179,19 @@
 .winner-title-box input:focus{
   background-color: #EFF0F7!important;
 }
+.arrow-up,.arrow-down{
+  float: right;
+  cursor: pointer;
+  margin-right: 16;
+}
+.arrow-up.disabled{
+  cursor: no-drop;
+  color: #ccc;
+}
+.arrow-down.disabled{
+  cursor: no-drop;
+  color: #ccc
+}
 @media only screen and (min-width: 1440px){
   .text-box{
     width: 570px;

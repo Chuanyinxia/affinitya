@@ -16,7 +16,7 @@ import {storage} from '@/utils/storage';
 const {TabPane} = Tabs;
 
 
-const KeyWordSearchDetails = ({userInfo, searchData, statusType, hideFirstButton, jobSave, jobName}) => {
+const KeyWordSearchDetails = ({userInfo, searchData, statusType, hideFirstButton, jobSave, jobName, hideTesting}) => {
   const [saveStatus, setSaveStatus] = useState(0);
   const [isPayUser, setIsPayUser] = useState(false);
   const [selectKeys, setSelectKeys] = useState([]);
@@ -195,7 +195,7 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType, hideFirstButton
         </Col>
         <Col span={18} className="text-right marginB16 paddingR32">
           <Space>
-            {(isPayUser&&!hideFirstButton)&&(
+            {(isPayUser&&!hideFirstButton&&!hideTesting)&&(
               <Tooltip
                 placement="top"
                 title={(saveStatus === 1|| parseInt(statusType)===1)?
@@ -266,6 +266,7 @@ KeyWordSearchDetails.propTypes = {
   hideFirstButton: PropTypes.bool,
   jobSave: PropTypes.func.isRequired,
   jobName: PropTypes.string.isRequired,
+  hideTesting: PropTypes.bool.isRequired,
 };
 
 export default connect(
