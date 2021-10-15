@@ -36,7 +36,11 @@ const Headers=({logged, setLogged, setUserInfo})=>{
           <Row className="content ">
             <Col span={8} className="paddingL32">
               <div className="text-left">
-                <img alt="logo" src={logo} width={188}/>
+                {key==='home'?(<a href="/home#top">
+                  <img alt="logo" src={logo} width={188}/>
+                </a>):(<Link to="/home">
+                  <img alt="logo" src={logo} width={188}/>
+                </Link>)}
               </div>
             </Col>
             <Col span={16} className="text-right paddingR32">
@@ -51,7 +55,11 @@ const Headers=({logged, setLogged, setUserInfo})=>{
           <Row className="content-home paddingL16 paddingR16" >
             <Col span={8}>
               <div className="text-left">
-                <img alt="logo" src={logo} width={188}/>
+                {key==='home'?(<a href="/home#top">
+                  <img alt="logo" src={logo} width={188}/>
+                </a>):(<Link to="/home">
+                  <img alt="logo" src={logo} width={188}/>
+                </Link>)}
               </div>
             </Col>
             <Col span={16} className="text-right">
