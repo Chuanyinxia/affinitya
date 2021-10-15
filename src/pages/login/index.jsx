@@ -29,8 +29,10 @@ import logo from '@/assets/login/sm-logo.png';
 import './style.css';
 import {Email, isEmail} from '@/components/plugin/Searchdata';
 import Footers from '@/components/Footers';
-// import Footers from '@/components/Footers';
-
+import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
+const responseFacebook = (response) => {
+  console.log(response);
+};
 const Login = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) => {
   // eslint-disable-next-line new-cap
   const [email]=useState(isEmail()? Email():cookie.load('email'));
@@ -110,6 +112,16 @@ const Login = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) =
                 />
               </Form.Item>
               <Row >
+                <Col span={24}>
+                  <FacebookLogin
+                    appId="919383638998271"
+                    callback={responseFacebook}
+                    render={(renderProps) => (
+                      <button onClick={renderProps.onClick}>This is my custom FB button</button>
+                    )}
+                  />
+
+                </Col>
                 <Col span={12}>
                   <Form.Item name="remember" valuePropName="checked" noStyle >
                     <Checkbox> Remember me</Checkbox>
@@ -119,6 +131,7 @@ const Login = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) =
                   <Link to='/forgotPassword'>Forgot password?</Link>
                 </Col>
               </Row>
+
               <Form.Item className="marginT40">
                 <Button type="primary" size="large" htmlType="submit" block>
                   Log In

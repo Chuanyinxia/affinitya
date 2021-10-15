@@ -42,7 +42,6 @@ const Router = () => {
       <Route path="/changePassword" component={ChangePassword} />
       <Route path="/profile" component={Profile} />
       <Route path="/Subscribe" component={Subscribe} />
-      <Route path="/Subscribe" component={Subscribe} />
       <Route component={ErrorPage} />
     </Switch>
   );
