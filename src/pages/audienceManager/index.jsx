@@ -1,7 +1,8 @@
 import React, {useEffect, useState, useRef} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {httpLoading} from '@/store/actions';
+import store from '../../store';
+import {httpLoading, getMangerCounts} from '@/store/actions';
 import './style.css';
 import {
   GETSEARCHDETAIL,
@@ -12,8 +13,10 @@ import {
   // EXPORTDETAIL,
   GETARCHIVEDETAIL,
   UPDATEGROUPNAME,
+  UPDATENOREADAUDIENCE,
 } from '@/api/index';
 import {get, post, update} from '@/utils/request';
+import {storage} from '@/utils/storage';
 import {
   Spin,
   Row,
@@ -361,7 +364,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
           'token': userInfo.token,
         }).then((res) => {
       getWinnerList('', 999, 1);
-      getArchiveList(tabType, '', 999, 1);
+      getArchiveList(type===2?tabType:type===3?1:3, '', 999, 1);
       setCheckedKeys([]);
     }).catch((error) => {
       message.error({
@@ -394,7 +397,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
         tree.push({
           title: (
             <div style={{width: 476}}>
-              <div className="tree-title">
+              <div className="tree-title" title={data[key][0].jobName}>
                 {data[key].length>0?
                 (<span>{data[key][0].readStatus===0?<i className="read-mark">* </i>:null}{data[key][0].jobName}</span>):
                 'error'}
@@ -477,6 +480,15 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
   useEffect(() => {
     getArchiveList(1, '', 999, 1);
     getWinnerList('', 999, 1);
+    update(UPDATENOREADAUDIENCE, {}, {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'token': userInfo.token,
+    }).then(()=>{
+      store.dispatch(getMangerCounts(0));
+      storage.saveData('local', 'mangerCounts', 0);
+    }).finally(()=>{
+      setHttpLoading(false);
+    });
   }, []);
   return (
     <div className="paddingB16">
@@ -570,10 +582,12 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                   <div className={tabType===1?'tab-title active':'tab-title'} onClick={()=>{
                     settabType(1);
                     getArchiveList(1, '', 99, 1);
+                    setCheckedKeys([]);
                   }}><ExperimentOutlined style={{marginRight: 12}}/>Testing</div>
                   <div className={tabType===3?'tab-title active':'tab-title'} onClick={()=>{
                     settabType(3);
                     getArchiveList(3, '', 99, 1);
+                    setCheckedKeys([]);
                   }}><SaveOutlined style={{marginRight: 12}}/>Archive</div>
                 </div>
               </div>
@@ -590,6 +604,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
               <div className="data-tree-box">
                 <Tree
                   checkable
+                  checkedKeys={checkedKeys}
                   onCheck={(checkedKeys, info)=>{
                     setCheckedKeys(checkedKeys);
                     setselectedTreeData(info);

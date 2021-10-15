@@ -113,48 +113,38 @@ const Customlayout = ({history, activeKey, setLogged}) => {
   };
 
   const content=(
-    <>{
-      noticeMsg&&(<List
-        style={{width: 500}}
-        itemLayout="horizontal"
-        dataSource={noticeMsg}
-        loading={loading}
-        pagination={noticeMsg.length>0?{
-          pageSize: 5,
-          size: 'small',
-        }:false}
-        footer={noticeMsg.length>0?(<Button block onClick={readAllMsg}>Read All</Button>):false}
-        renderItem={(item) => (
-          <List.Item key={item.id} onClick={()=>readMsg([item.id])}>
-            <List.Item.Meta
-              avatar={<Avatar src={parseInt(item.readStatus)===1?msg1:msg2} />}
-              title={<Row>
-                <Col span={14}>{item.title}</Col>
-                <Col span={10} className="text-min text-right">{item.createTime}</Col>
-              </Row>}
-              description={item.notice}
-            />
-          </List.Item>
-        )}
-      />
+    <List
+      style={{width: 500}}
+      itemLayout="horizontal"
+      dataSource={noticeMsg}
+      loading={loading}
+      pagination={noticeMsg.length>0?{
+        pageSize: 5,
+        size: 'small',
+      }:false}
+      footer={noticeMsg.length>0?(<Button block onClick={readAllMsg}>Read All</Button>):false}
+      renderItem={(item) => (
+        <List.Item key={item.id} onClick={()=>readMsg([item.id])}>
+          <List.Item.Meta
+            avatar={<Avatar src={parseInt(item.readStatus)===1?msg1:msg2} />}
+            title={<Row>
+              <Col span={14}>{item.title}</Col>
+              <Col span={10} className="text-min text-right">{item.createTime}</Col>
+            </Row>}
+            description={item.notice}
+          />
+        </List.Item>
       )}
-    </>
+    />
   );
-
-  const checkLogin = (func)=>{
-    console.log(userInfo.token);
-    if (!userInfo.token) {
-      history.push('login');
-      return;
-    }
-    func();
-  };
-  useEffect(() => {
-    checkLogin(getNoticeMsg);
-  }, [activeKey]);
 
   useEffect(() => {
     isPay();
+  }, []);
+  useEffect(() => {
+    getNoticeMsg();
+  }, [activeKey]);
+  useEffect(() => {
     messageTimer.current = setInterval(() => {
       get(GETNOTICEMSG, userInfo.token).then((res) => {
         sethasMessage(res.data.some((item)=>item.readStatus===1));
@@ -213,13 +203,11 @@ const Customlayout = ({history, activeKey, setLogged}) => {
                     <Tooltip title="Tech Help">
                       <div className="icon faq"/>
                     </Tooltip>
-                    {hasMessage?
-                        <Popover content={content} trigger="click" placement="bottomRight">
-                          <div className="icon bell">
-                            <div className="bell-dot"/>
-                          </div>
-                        </Popover>:<div className="icon bell"/>}
-
+                    <Popover content={content} trigger={['click']} placement="bottomRight">
+                      <div className="icon bell">
+                        {/* {hasMessage?<div className="bell-dot"/>:null} */}
+                      </div>
+                    </Popover>
                     <div className="userName">
                       <Dropdown overlay={menu} placement="bottomCenter">
                         <div className="userImg">
@@ -264,12 +252,11 @@ const Customlayout = ({history, activeKey, setLogged}) => {
                     <Tooltip title="Tech Help">
                       <div className="icon faq"/>
                     </Tooltip>
-                    {hasMessage?
-                        <Popover content={content} trigger="click" placement="bottomRight">
-                          <div className="icon bell">
-                            <div className="bell-dot"/>
-                          </div>
-                        </Popover>:<div className="icon bell"/>}
+                    <Popover content={content} trigger="click" placement="bottomRight">
+                      <div className="icon bell">
+                        {hasMessage?<div className="bell-dot"/>:null}
+                      </div>
+                    </Popover>
 
                     <div className="userName">
                       <Dropdown overlay={menu} placement="bottomCenter">
@@ -310,15 +297,11 @@ const Customlayout = ({history, activeKey, setLogged}) => {
           </Header>
           <Content style={{margin: 0}}>
             <div className="site-layout-background" style={{minHeight: 'calc(100vh - 89px)'}}>
-              {userInfo.token?(
-                  <Router/>
-                ):null}
+              <Router/>
             </div>
           </Content>
         </Layout>
       </Layout>
-
-
     </div>
   );
 };

@@ -5,12 +5,13 @@ import {Link, withRouter} from 'react-router-dom';
 import {Menu} from 'antd';
 import './style.css';
 import store from '../../store';
+import {getMangerCounts} from '@/store/actions';
 import {get, update} from '@/utils/request';
 import {setMenusData} from '../../store/actions';
 import dashboard from '../../assets/Dashboard.png';
 import plans from '../../assets/Dollar.png';
-import {GETNEWMESSAGECOUNT, READJOBMANGER} from '@/api/index';
-
+import {GETNEWMESSAGECOUNT, READJOBMANGER, GETNOREADAUDIENCE} from '@/api/index';
+import {storage} from '@/utils/storage';
 // const {SubMenu} = Menu;
 
 
@@ -39,7 +40,12 @@ const Menus = ({userInfo, history, activeKey, openKeys, managerCounts}) => {
   };
   const messageTimer = useRef();
   useEffect(() => {
-    console.log(managerCounts);
+    get(GETNOREADAUDIENCE, userInfo.token).then((res)=>{
+      store.dispatch(getMangerCounts(res.data));
+      storage.saveData('local', 'mangerCounts', res.data);
+    }).catch((error)=>{
+      console.log(error);
+    });
     const array=history.location.pathname.split('/');
     store.dispatch(setMenusData(array[2]??array[1], array[1]));
   }, [history]);
@@ -93,6 +99,7 @@ const Menus = ({userInfo, history, activeKey, openKeys, managerCounts}) => {
           </Link>
         </Menu.Item>
         <Menu.Item key="audienceManager" className="menus_subTitle">
+          {managerCounts!==0&&managerCounts!==null?<div className="job-dot">{managerCounts}</div>:null}
           <Link to="/dashboard/audienceManager">
             Audience Manager
           </Link>
