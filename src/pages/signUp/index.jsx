@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
-import {Link, withRouter} from 'react-router-dom';
+import {withRouter} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {Button, Checkbox, Col, Form, Input, message, Modal, Row, Spin, Tooltip} from 'antd';
 import {httpLoading, login, userInfo} from '@/store/actions';
@@ -195,7 +195,7 @@ const SignUp = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) 
                 </Button>
               </Form.Item>
               <div className="marginT16">
-                Have an account? <Link to="/login">Log In</Link>
+                Have an account? <Button type="link" href="/login">Log In</Button>
               </div>
 
             </Form>

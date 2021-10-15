@@ -52,26 +52,26 @@ const Subscribe = ({userInfo, httpLoading, setHttpLoading}) => {
             <p className="subscribe-tip">{memberSubscribeMsg.cycleMessage}</p>
             <p className="subscribe-tip">{memberSubscribeMsg.automaticMessage}</p>
             <a href="mailto:hello@affinityanalyst.com">Contact us to unsubscribe</a>
-          </Col>: <Col span={12}>
+          </Col>: (moment(new Date()).minute()-moment(memberSubscribeMsg.payCreateTime).minute()<15)?(<Col span={12}>
             <h3 className="subscribe-title">{memberSubscribeMsg.name}</h3>
             <Statistic
               className="marginB30 marginT30"
               valueStyle={{fontSize: 36}}
               prefix={(<span style={{fontSize: 20}}>$</span>)} value={memberSubscribeMsg.price}/>
             <p className="subscribe-info">{memberSubscribeMsg.desc}</p>
-            <p className="subscribe-tip">{memberSubscribeMsg.cycleMessage}</p>
+            {/* <p className="subscribe-tip">{memberSubscribeMsg.cycleMessage}</p>*/}
             <p className="subscribe-tip">{memberSubscribeMsg.automaticMessage}</p>
             <p href="mailto:hello@affinityanalyst.com">
-              <InfoCircleTwoTone twoToneColor="#F7A200" />&nbsp;
+              <InfoCircleTwoTone twoToneColor="#F7A200"/>&nbsp;
               You haven&apos;t paid for the order yet.
               The order will be cancelled automatically after&nbsp;
               <span style={{color: '#ff4d4f'}}>
-                {(15 - moment(new Date()).minute() + moment(memberSubscribeMsg.payCreateTime).minute())>0?
-                  (15 - moment(new Date()).minute() + moment(memberSubscribeMsg.payCreateTime).minute()):0
+                {(15 - moment(new Date()).minute() + moment(memberSubscribeMsg.payCreateTime).minute()) > 0 ?
+                  (15 - moment(new Date()).minute() + moment(memberSubscribeMsg.payCreateTime).minute()) : 0
                 }</span>&nbsp;minutes.&nbsp;
               <a href={memberSubscribeMsg.payUrl} target="_self">Pay now</a>
             </p>
-          </Col>):
+          </Col>):(<Col><div>You haven&apos;t subscribed to any packages yet.</div></Col>)):
           <Col>
             {validPeriod?(
               <div>

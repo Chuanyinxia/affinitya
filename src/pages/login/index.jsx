@@ -128,7 +128,7 @@ const Login = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) =
               </Col>
               <Col>
                 <div className="marginT32 text-center">
-                  Not a member? <Button type="link" href to="/signUp">Sign up now</Button>
+                  Not a member? <Button type="link" href="/signUp">Sign up now</Button>
                 </div>
               </Col>
             </Row>

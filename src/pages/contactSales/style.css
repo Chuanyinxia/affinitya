@@ -200,3 +200,6 @@
   float: left;
   margin-left: 24px;
 }
+#contacts .ant-form-item-label > label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::before{
+  content:'*';
+}

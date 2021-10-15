@@ -1,20 +1,19 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
-import {Button, Form, Input, Card, Modal, message, Space} from 'antd';
+import {Button, Card, Form, Input, message, Modal, Space} from 'antd';
 import {SAVECONTACTUS} from '../api/index';
 import {post} from '@/utils/request';
-import {storage} from '@/utils/storage';
 import icon from '@/assets/check-circle.png';
+
 const ContactUsForm = ({type}) => {
   const [modalShow, setModalShow]=useState(false);
   const [loading, setLoading]=useState(false);
   const onFinish=(value)=>{
-    const userInfo = storage.getData('userInfo');
+    // const userInfo = storage.getData('userInfo');
     setLoading(true);
     post(SAVECONTACTUS, value, {
       // eslint-disable-next-line no-tabs
       'Content-Type':	'application/x-www-form-urlencoded',
-      'token': userInfo.token,
     }).then((res)=>{
       setModalShow(true);
     }).catch((error)=>{
