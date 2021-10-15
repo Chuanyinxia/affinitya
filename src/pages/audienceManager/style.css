@@ -204,9 +204,13 @@
   .more-icon{
     position: absolute;
     right: 0;
+    bottom: 0;
     font-size: 20px;
     font-weight: 600;
   }
+}
+.read-mark{
+  color:#B23730;
 }
 @media only screen and (min-width: 468px) and (max-width: 1439px){
   .text-box{
