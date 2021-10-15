@@ -14,7 +14,7 @@ import {GETNEWMESSAGECOUNT, READJOBMANGER} from '@/api/index';
 // const {SubMenu} = Menu;
 
 
-const Menus = ({userInfo, history, activeKey, openKeys}) => {
+const Menus = ({userInfo, history, activeKey, openKeys, managerCounts}) => {
   const [messageCounter, setmessageCounter] = useState(0);
   const onClick=(item)=>{
     const activeKey1=item.keyPath[0];
@@ -39,6 +39,7 @@ const Menus = ({userInfo, history, activeKey, openKeys}) => {
   };
   const messageTimer = useRef();
   useEffect(() => {
+    console.log(managerCounts);
     const array=history.location.pathname.split('/');
     store.dispatch(setMenusData(array[2]??array[1], array[1]));
   }, [history]);
@@ -111,6 +112,7 @@ const mapStateToProps = (state) => {
     activeKey: state.menus.activeKey,
     openKeys: state.menus.openKeys,
     userInfo: state.getUserInfo.info,
+    managerCounts: state.menus.managerCounts,
   };
 };
 
@@ -126,6 +128,7 @@ Menus.propTypes = {
   activeKey: PropTypes.string.isRequired,
   openKeys: PropTypes.string.isRequired,
   userInfo: PropTypes.object.isRequired,
+  managerCounts: PropTypes.object.isRequired,
 };
 
 export default connect(
