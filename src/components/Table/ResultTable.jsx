@@ -5,7 +5,7 @@ import {httpLoading} from '@/store/actions';
 import './style.css';
 import {Table} from 'antd';
 
-const ResultTable = ({userInfo, TableData, onSelect, groupId}) => {
+const ResultTable = ({userInfo, TableData, onSelect, groupId, hideTesting}) => {
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
       onSelect(selectedRowKeys, selectedRows, groupId);
@@ -59,6 +59,7 @@ ResultTable.propTypes = {
   TableData: PropTypes.array.isRequired,
   onSelect: PropTypes.func.isRequired,
   groupId: PropTypes.number.isRequired,
+  hideTesting: PropTypes.bool.isRequired,
 };
 
 export default connect(
