@@ -22,7 +22,6 @@ axios.interceptors.response.use((response) => {
     });
     return false;
   }
-  console.log(response.data.code);
   switch (response.data.code) {
     case 200:
       return response.data;
