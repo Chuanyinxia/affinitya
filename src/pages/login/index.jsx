@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {Button, Checkbox, Col, Form, Input, message, Row, Spin} from 'antd';
-import bg from '@/assets/login.png';
+import bg from '@/assets/login/Log In-192x360.png';
 import {httpLoading, login, userInfo} from '@/store/actions';
 import {post} from '@/utils/request';
 import {LOGIN} from '@/api';
@@ -56,8 +56,8 @@ const Login = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) =
           </a>
         </div>
         <Row className="login-content paddingT32 paddingB90">
-          <Col lg={12} xs={0} className="paddingT90">
-            <img src={bg} style={{width: '100%'}} alt="bg"/>
+          <Col lg={12} xs={0} className="paddingT32 text-center">
+            <img src={bg} style={{height: 550}} alt="bg"/>
           </Col>
           <Col lg={12} xs={24} className="paddingL36 paddingR36">
             <h1 className="login-title">Log In </h1>

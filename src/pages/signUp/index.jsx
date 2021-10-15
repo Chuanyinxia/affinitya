@@ -100,7 +100,7 @@ const SignUp = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) 
       <Spin spinning={httpLoading}>
         <Row className="login-content paddingT32 paddingB64">
           <Col lg={12} xs={0} className="paddingT90">
-            <img src={bg} style={{width: '100%'}} alt="bg"/>
+            <img src={bg} style={{width: '100%'}} alt="bg" className="marginT32"/>
           </Col>
           <Col lg={12} xs={24} className="paddingL36 paddingR36">
             <h1 className="login-title" >Sign Up</h1>

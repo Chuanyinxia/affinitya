@@ -8,7 +8,7 @@ import {httpLoading, login, userInfo} from '@/store/actions';
 import {post} from '@/utils/request';
 import {FORGETPASSWORD, GETVERIFICATIONCODE} from '@/api';
 import './style.css';
-import bg from '@/assets/singup.png';
+import bg from '@/assets/login.png';
 import logo from '@/assets/login/sm-logo.png';
 import Footers from '@/components/Footers';
 
