@@ -2,25 +2,9 @@ import React, {useState} from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import PropTypes from 'prop-types';
-import {
-  Spin,
-  Button,
-  Form,
-  Input,
-  message,
-  Checkbox,
-  Row,
-  Col,
-} from 'antd';
-import {Link} from 'react-router-dom';
-import {
-} from '@ant-design/icons';
+import {Button, Checkbox, Col, Form, Input, message, Row, Spin} from 'antd';
 import bg from '@/assets/login.png';
-import {
-  httpLoading,
-  login,
-  userInfo,
-} from '@/store/actions';
+import {httpLoading, login, userInfo} from '@/store/actions';
 import {post} from '@/utils/request';
 import {LOGIN} from '@/api';
 import {storage} from '@/utils/storage';
@@ -30,6 +14,7 @@ import './style.css';
 import {Email, isEmail} from '@/components/plugin/Searchdata';
 import Footers from '@/components/Footers';
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
+import FB from '@/assets/alipay-circle.png';
 const responseFacebook = (response) => {
   console.log(response);
 };
@@ -112,23 +97,13 @@ const Login = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) =
                 />
               </Form.Item>
               <Row >
-                <Col span={24}>
-                  <FacebookLogin
-                    appId="919383638998271"
-                    callback={responseFacebook}
-                    render={(renderProps) => (
-                      <button onClick={renderProps.onClick}>This is my custom FB button</button>
-                    )}
-                  />
-
-                </Col>
                 <Col span={12}>
                   <Form.Item name="remember" valuePropName="checked" noStyle >
                     <Checkbox> Remember me</Checkbox>
                   </Form.Item>
                 </Col>
                 <Col span={12} className="text-right">
-                  <Link to='/forgotPassword'>Forgot password?</Link>
+                  <Button type="link" href='/forgotPassword'>Forgot password?</Button>
                 </Col>
               </Row>
 
@@ -137,11 +112,26 @@ const Login = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) =
                   Log In
                 </Button>
               </Form.Item>
-              <div className="marginT16">
-                Not a member? <Link to="/signUp" >Sign up now</Link>
-              </div>
 
             </Form>
+            <Row>
+              <Col span={24}>
+                <h3>Quick Sign-in:&nbsp;&nbsp;&nbsp;&nbsp;
+                  <FacebookLogin
+                    appId="919383638998271"
+                    callback={responseFacebook}
+                    render={(renderProps) => (
+                      <img onClick={renderProps.onClick} src={FB}/>
+                    )}
+                  />
+                </h3>
+              </Col>
+              <Col>
+                <div className="marginT32 text-center">
+                  Not a member? <Button type="link" href to="/signUp">Sign up now</Button>
+                </div>
+              </Col>
+            </Row>
           </Col>
         </Row>
         <Footers/>
