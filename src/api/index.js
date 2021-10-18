@@ -50,3 +50,7 @@ export const READJOBMANGER='/api/readJobManger';
 export const SAVECONTACTUS='/api/saveContactUs';
 export const GETNOREADAUDIENCE='/api/getNoReadAudience';
 export const UPDATENOREADAUDIENCE='/api/updateAudienceStatus';
+
+export const GETBLOGLIST='/api/getBlogList';
+export const GETJOBLIST='/api/getJobList';
+export const GETBLOG='/api/getBlog/';

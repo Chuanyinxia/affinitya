@@ -283,13 +283,37 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
         {renameLink}
       </Menu.Item>
       <Menu.Item>
-        {archiveLink}
+        <a rel="noopener noreferrer" href="javascript:void(0)"
+          onClick={(e)=>{
+            e.preventDefault();
+            e.stopPropagation();
+            updateWiner(3, []);
+          }}
+        >
+          Archive
+        </a>
       </Menu.Item>
       <Menu.Item>
-        {testingLink}
+        <a rel="noopener noreferrer" href="javascript:void(0)"
+          onClick={(e)=>{
+            e.preventDefault();
+            e.stopPropagation();
+            updateWiner(1, []);
+          }}
+        >
+          Testing
+        </a>
       </Menu.Item>
       <Menu.Item>
-        {deleteLink}
+        <a rel="noopener noreferrer" href="javascript:void(0)"
+          onClick={(e)=>{
+            e.preventDefault();
+            e.stopPropagation();
+            updateWiner(1, []);
+          }}
+        >
+          Delete
+        </a>
       </Menu.Item>
     </Menu>
   );
@@ -370,7 +394,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
           'token': userInfo.token,
         }).then((res) => {
       getWinnerList('', 999, 1);
-      getArchiveList(type===2?tabType:type===3?1:3, '', 999, 1);
+      getArchiveList(tabType, '', 999, 1);
       setCheckedKeys([]);
     }).catch((error) => {
       message.error({
