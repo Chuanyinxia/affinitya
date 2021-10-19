@@ -54,6 +54,7 @@ const App = ({history, logged, setLogged, setUserInfo}) => {
           render={() => userInfo ? <Customlayout />:
             <Redirect to={{
               pathname: '/login',
+              search: window.location.search,
             }} />
           }>
         </Route>

@@ -223,7 +223,7 @@ const Home = ({userInfo, httpLoading, setHttpLoading}) => {
               {feature(2)}
             </Col>
             <Col span={12} className="text-right">
-              <img src={info2} alt="banner" style={{width: '80%'}}/>
+              <img src={info2} alt="banner" style={{height: '100%'}}/>
             </Col>
           </Row>
           <Row gutter={64} className="marginTop90 paddingB90">
