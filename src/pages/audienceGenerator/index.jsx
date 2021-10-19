@@ -132,9 +132,15 @@ const AudienceGenerator = ({userInfo}) => {
   };
 
   const addKeywords=(word)=>{
-    if (keyWordForm.getFieldValue().keyWord) {
+    const keyWords=keyWordForm.getFieldValue().keyWord;
+
+    if (keyWords) {
+      if (keyWords.length>=10) {
+        message.warn('Please input less than 10 keywords!');
+        return false;
+      }
       keyWordForm.setFieldsValue({
-        keyWord: [...keyWordForm.getFieldValue().keyWord, word],
+        keyWord: Array.from(new Set([...keyWords, word])),
       });
     } else {
       keyWordForm.setFieldsValue({
@@ -435,7 +441,7 @@ const AudienceGenerator = ({userInfo}) => {
                     <Select
                       mode="multiple"
                       showSearch
-                      maxTagCount={6}
+                      maxTagCount={4}
                       maxTagTextLength={30}
                       optionFilterProp="children"
                       filterOption={(input, option) =>
@@ -561,8 +567,17 @@ const AudienceGenerator = ({userInfo}) => {
                     <Select
                       placeholder="Input keywords..."
                       mode="tags"
+                      onChange={(value)=>{
+                        if (value.length>10) {
+                          message.warn('Please input less than 10 keywords!');
+                          value.pop();
+                          keyWordForm.setFieldsValue({
+                            keyWord: value,
+                          });
+                        }
+                      }}
                       open={false}
-                      tokenSeparators={[',']}/>
+                    />
                   </Form.Item>
                 </Form>
                 <Form
@@ -581,8 +596,6 @@ const AudienceGenerator = ({userInfo}) => {
                   >
                     <Select
                       menuItemSelectedIcon={null}
-                      maxTagCount={3}
-                      maxTagTextLength={10}
                       mode="tags"
                       allowClear
                       placeholder="Custom Audience ID..."
