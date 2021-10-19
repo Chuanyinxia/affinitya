@@ -100,6 +100,7 @@ const Blogs = ({userInfo, httpLoading, setHttpLoading}) => {
               <Pagination
                 hideOnSinglePage
                 defaultCurrent={1}
+                pageSize={6}
                 total={total}
                 current={current}
                 onChange={(e)=>{

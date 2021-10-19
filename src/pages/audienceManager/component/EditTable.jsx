@@ -1,21 +1,27 @@
 import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
+import {useHistory} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {httpLoading} from '@/store/actions';
-import {Form, InputNumber, message, Space, Table, Tooltip, Modal, Button} from 'antd';
+import {Form, InputNumber, message, Space, Table, Tooltip, Modal, Button, Input} from 'antd';
 import {
   AppstoreAddOutlined,
   CloseCircleOutlined,
   FileSearchOutlined,
   FormOutlined,
-  RedoOutlined,
+  SearchOutlined,
   SaveOutlined,
-  SyncOutlined,
   FolderViewOutlined,
-  CloseOutlined,
 } from '@ant-design/icons';
+import store from '@/store';
+import {setMenusData} from '@/store/actions';
 import {get, post} from '@/utils/request';
-import {SAVESEARCHRESULT, GETEXTENDBYAUDI, RESTARTJOB, EXPORTDETAIL, ISPAID, CANCELJOB} from '@/api/index';
+import {
+  SAVESEARCHRESULT,
+  EXPORTDETAIL,
+  ISPAID,
+  GETEXTENDBYAUDI,
+} from '@/api/index';
 import ResultTable from '@/components/Table/ResultTable';
 import './style.css';
 
@@ -53,7 +59,9 @@ const EditableCell = ({
 };
 
 const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id}) => {
+  const history = useHistory();
   const [form] = Form.useForm();
+  const [creatJobForm] = Form.useForm();
   const [editingKey, setEditingKey] = useState('');
   const [data, setData] = useState([]);
   const [viewDetails, setViewDetails] = useState([]);
@@ -62,6 +70,7 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
   const [lookType, setLookType]=useState(null);
   const [dataTitle, setDataTitle] = useState('Details');
   const [isPayUser, setIsPayUser] =useState(false);
+  const [extendModal, setextendModal] = useState(false);
   const isEditing = (record) => record.id === editingKey;
 
   const isPay=()=>{
@@ -137,53 +146,41 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
       console.log('Validate Failed:', errInfo);
     }
   };
-  const extend=(itemId)=>{
-    post(GETEXTENDBYAUDI+itemId, {}, {
-      // eslint-disable-next-line no-tabs
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'token': userInfo.token,
-    }).then((res)=>{
-      console.log(res);
-    }).catch((error) => {
-      message.error({
-        content: error.toString(), key: 'netError', duration: 2,
-      });
-    }).finally(() => {
-      saveFunc(id);
-    });
+  const extend=()=>{
+    setextendModal(true);
   };
 
-  const running=(itemId)=>{
-    post(RESTARTJOB+itemId, {}, {
-      // eslint-disable-next-line no-tabs
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'token': userInfo.token,
-    }).then((res)=>{
-      console.log(res);
-    }).catch((error) => {
-      message.error({
-        content: error.toString(), key: 'netError', duration: 2,
-      });
-    }).finally(() => {
-      saveFunc(id);
-    });
-  };
-  const killJob=(id)=>{
-    console.log(id);
-    post(CANCELJOB+id, '', {
-      // eslint-disable-next-line no-tabs
-      'Content-Type':	'application/x-www-form-urlencoded',
-      'token': userInfo.token,
-    }).then((res)=>{
-      message.success(res.msg);
-    }).catch((error)=>{
-      message.error({
-        content: error.toString(), key: 'netError', duration: 2,
-      });
-    }).finally(() => {
-      saveFunc(id);
-    });
-  };
+  // const running=(itemId)=>{
+  //   post(RESTARTJOB+itemId, {}, {
+  //     // eslint-disable-next-line no-tabs
+  //     'Content-Type': 'application/x-www-form-urlencoded',
+  //     'token': userInfo.token,
+  //   }).then((res)=>{
+  //     console.log(res);
+  //   }).catch((error) => {
+  //     message.error({
+  //       content: error.toString(), key: 'netError', duration: 2,
+  //     });
+  //   }).finally(() => {
+  //     saveFunc(id);
+  //   });
+  // };
+  // const killJob=(id)=>{
+  //   console.log(id);
+  //   post(CANCELJOB+id, '', {
+  //     // eslint-disable-next-line no-tabs
+  //     'Content-Type':'application/x-www-form-urlencoded',
+  //     'token': userInfo.token,
+  //   }).then((res)=>{
+  //     message.success(res.msg);
+  //   }).catch((error)=>{
+  //     message.error({
+  //       content: error.toString(), key: 'netError', duration: 2,
+  //     });
+  //   }).finally(() => {
+  //     saveFunc(id);
+  //   });
+  // };
 
   const columns = [
     {
@@ -270,14 +267,11 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
               </a>
             </Tooltip>
             {record.status===0&&(<Tooltip title="Extend">
-              <a type="link" onClick={()=>extend(record.id)}>
+              <a type="link" onClick={()=>extend()}>
                 <AppstoreAddOutlined style={{fontSize: 16}}/>
               </a>
             </Tooltip>)}
-            {record.status===1&&(<Tooltip title="Running">
-              <RedoOutlined spin style={{fontSize: 16}}/>
-            </Tooltip>)}
-            {record.status===2&&(<Tooltip title="View Extend Search Results">
+            {record.status===2&&(<Tooltip title="View Result">
               <a type="link" onClick={()=>{
                 setViewModal(true);
                 setLookID(record.id);
@@ -285,17 +279,15 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
                 setDataTitle('Extend Search Results');
                 setViewDetails(record.extendDetail??[]);
               }}>
+                <SearchOutlined style={{fontSize: 16}}/>
+              </a>
+            </Tooltip>)}
+            {(record.status!==2&&record.status!==0)&&(<Tooltip title="View Job">
+              <a type="link" onClick={()=>{
+                history.push('/dashboard/jobManager?keyword='+record.jobName);
+                store.dispatch(setMenusData('jobManager', 'dashboard'));
+              }}>
                 <FolderViewOutlined style={{fontSize: 16}}/>
-              </a>
-            </Tooltip>)}
-            {record.status===5&&(<Tooltip title="Kill Job">
-              <a type="link" onClick={()=>killJob(record.jobId)}>
-                <CloseOutlined style={{fontSize: 16}}/>
-              </a>
-            </Tooltip>)}
-            {(record.status===3||record.status===4)&&(<Tooltip title="Restart">
-              <a type="link" onClick={()=>running(record.jobId)}>
-                <SyncOutlined style={{fontSize: 16}}/>
               </a>
             </Tooltip>)}
           </Space>
@@ -326,9 +318,55 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
     })??[];
     return tableData;
   };
-
+  const extendConfim = (title, id)=>{
+    post(GETEXTENDBYAUDI, {
+      searchResultId: id,
+      jobName: title,
+    }, {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'token': userInfo.token,
+    }).then((res) => {
+      store.dispatch(setMenusData('jobManager', 'dashboard'));
+      history.push('/dashboard/jobManager?newID='+res.data.jobId+'&jobName='+res.data.title);
+    }).catch((error)=>{
+      message.error({
+        content: error.toString(), key: 'netError', duration: 2,
+      });
+    });
+  };
   return (
     <div >
+      <Modal
+        title='Extend'
+        visible={extendModal}
+        footer={null}
+        width={650}
+        onCancel={() => {
+          setextendModal(false);
+        }}>
+        <h2>Edit Job</h2>
+        <p className="marginB32">Name your audience for identification in Job & Audience Manager</p>
+        <Form name="creatJob" form={creatJobForm} onFinish={(values)=>{
+          extendConfim(values.title, details[0].id);
+          // history.push('/dashboard/jobManager?jobName='+values.title);
+        }}>
+          <Form.Item
+            name="title"
+            rules={[{required: true, message: 'Please input job name!'}]}
+          >
+            <Input placeholder="Input job name, ex: game name, audience/keyword, etc. " maxLength={255}/>
+          </Form.Item>
+          <Form.Item className="text-right">
+            <Button
+              className="btn-lg marginR32 marginT32"
+              onClick={() => {
+                setextendModal(false);
+                creatJobForm.resetFields();
+              }}>Cancel</Button>
+            <Button type="primary" className="btn-lg" htmlType="submit">Save</Button>
+          </Form.Item>
+        </Form>
+      </Modal>
       <Modal
         title={dataTitle}
         width={1200}
@@ -365,7 +403,6 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
           </div>
           {<ResultTable TableData={addIndex(viewDetails)}/>}
         </div>
-
       </Modal>
       <Form form={form} component={false} onValuesChange={valuesChange} >
         <Table

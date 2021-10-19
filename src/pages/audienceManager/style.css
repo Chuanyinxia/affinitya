@@ -1,3 +1,6 @@
+.audience-menager{
+  overflow-x: auto;
+}
 .box-wrapper{
   padding: 0px 2px;
 }
@@ -103,7 +106,6 @@
   margin: 16px 0;
 }
 .card-group{
-  padding: 0 42px 20px 42px;
   overflow: hidden;
 }
 .card-item{
@@ -154,7 +156,6 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  width: 400px;
   display: block;
 }
 .winner-search-box{
@@ -192,7 +193,56 @@
   cursor: no-drop;
   color: #ccc
 }
-@media only screen and (min-width: 1440px){
+.read-mark{
+  color:#B23730;
+}
+.more-icon{
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+.card-item{
+  border: 1px solid #D9DBE9;
+  border-radius: 16px;
+}
+.card-group-name{
+  color: #4E4B66;
+  font-size: 16px;
+  font-weight: 600;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.card-job-name{
+  color: #4E4B66; 
+  font-size: 12px; 
+}
+.card-job-ct{
+  color: #4E4B66;
+  font-size: 12px;
+}
+.card-job-more{
+  float: left;
+}
+.arrow{
+  float: right;
+  cursor: pointer;
+  margin-right: 16px;
+}
+.arrow.disabled{
+  color:#ccc;
+  cursor: no-drop;
+}
+.table-group-name{
+  float: left;
+  width: 30rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+@media  screen and (min-width: 1920px){
   .text-box{
     width: 570px;
     height: 756px;
@@ -201,30 +251,95 @@
     width: 920px;
     height: 756px;
   }
+  .card-group{
+    padding: 0 42px 20px 42px;
+  }
+  .card-group-name{
+    height: 48;
+    line-height: 48px;
+  }
   .card-item{
     width: 388px;
     height: 186px;
-    border: 1px solid #D9DBE9;
-    border-radius: 16px;
-  }
-  .card-item{
     padding:24px 30px;
-    
+  }
+  .card-job-name{
+    height: 30px; 
+    margin-top: 8px;
+    line-height: 30px; 
+  }
+  .card-job-ct{
+    height: 30px;
+    line-height: 30px;
+    margin-top: 20px;
+  }
+  .card-job-more{
+    padding-left: 16px;
+    height: 30px;
+    line-height: 30px;
   }
   .card-item:nth-child(odd){
     margin-right: 24px;
   }
-  .more-icon{
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    font-size: 20px;
-    font-weight: 600;
+  .tree-title{
+    width: 400px;
+  }
+  .tree-title-box{
+    width: 476px;
+  }
+  .tree-title-box.sc{
+    width: 452px;
   }
 }
-.read-mark{
-  color:#B23730;
+
+@media only screen and (min-width: 1440px) and (max-width: 1919px){
+  .text-box{
+    width: 410px;
+    height: 756px;
+  }
+  .winner-box{
+    width: 696px;
+    height: 756px;
+  }
+  .card-group{
+    padding: 0 20px 20px 20px;
+  }
+  .card-group-name{
+    height: 32;
+    line-height: 32px;
+  }
+  .card-job-name{
+    height: 24px; 
+    margin-top: 8px;
+    line-height: 24px; 
+  }
+  .card-job-ct{
+    height: 24px;
+    line-height: 24px;
+    margin-top: 8px;
+  }
+  .card-job-more{
+    padding-left: 16px;
+    height: 24px;
+    line-height: 24px;
+  }
+  .card-item{
+    width: 312px;
+    height: 124px;
+    margin-left: 12px;
+    padding:8px 30px;
+  }
+  .tree-title{
+    width: 320px;
+  }
+  .tree-title-box{
+    width: 306px;
+  }
+  .tree-title-box.sc{
+    width: 282px;
+  }
 }
+
 @media only screen and (min-width: 468px) and (max-width: 1439px){
   .text-box{
     width: 410px;

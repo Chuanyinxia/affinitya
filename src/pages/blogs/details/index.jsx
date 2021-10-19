@@ -48,9 +48,6 @@ const BlogDtail = ({userInfo, httpLoading, setHttpLoading, location}) => {
               <h4 className="marginB32" style={{textAlign: 'center'}}>
                 {blog.readTime}
               </h4>
-              <div className="blog-image">
-                <img src={blog.img} alt="none" />
-              </div>
               <div dangerouslySetInnerHTML={{__html: blog.content}} style={{textAlign: 'center', marginTop: 32}}>
               </div>
               <BackTop visibilityHeight={100}>

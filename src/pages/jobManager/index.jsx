@@ -44,7 +44,13 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
   const [searchTitle, setSearchTitle]=useState('');
   const [saveManger, setSaveManger]= useState(null);
 
-
+  const loadPageVar = (sVar) => {
+    return decodeURI(
+        window.location.search.replace(
+            new RegExp('^(?:.*[&\\?]' +
+          encodeURI(sVar).replace(/[.+*]/g, '\\$&') +
+          '(?:\\=([^&]*))?)?.*$', 'i'), '$1'));
+  };
   const onFinish = (value) => {
     const data = {
       ...value,
@@ -158,11 +164,14 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
     });
   };
   const onSearch=(e)=>{
-    setSearchTitle(e.target.value.trim()??'');
+    let searchData;
+    if (e&&e.target) searchData = e.target.value;
+    else searchData = e;
+    setSearchTitle(searchData.trim()??'');
     getJobList({
       pageNum: 1,
       pageSize: pagination.pageSize,
-      title: e.target.value.trim()??'',
+      title: searchData.trim()??'',
       type: jobType,
     });
   };
@@ -188,8 +197,14 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
     }
     getJobList(params);
   }, []);
-
-
+  useEffect(() => {
+    const searchData = loadPageVar('keyword');
+    if (searchData!=='') onSearch(location.search.split('=')[1]);
+  }, []);
+  // useEffect(() => {
+  //   const searchData = loadPageVar('jobName');
+  //   if (searchData!=='') onSearch(location.search.split('=')[1]);
+  // }, []);
   const OperationsSlot = {
     left: null,
     right: <div style={{marginRight: 3}}>

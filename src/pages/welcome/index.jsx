@@ -89,7 +89,7 @@ const Welcome = ({userInfo, httpLoading, setHttpLoading}) => {
         <Spin spinning={false}>
           <Row gutter={40}>
             <Col xl={17} md={17} xs={24} sm={24}>
-              <h1>Welcome back, {userInfo.nickName}!</h1>
+              <h1 className="welcome-user">Welcome back, {userInfo.nickName}!</h1>
               <h4 className="marginB32">
               Keep up to date with News & Updates, to make most of your audience discovery.
               </h4>
