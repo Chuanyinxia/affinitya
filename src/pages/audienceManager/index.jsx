@@ -709,8 +709,8 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                       setcurrentName(item.groupName);
                       settableVisible(true);
                     }}>
-                      <div className="card-group-name">{item.groupName}</div>
-                      <div className="card-job-name">{item.jobName}</div>
+                      <div className="card-group-name" title={item.groupName}>{item.groupName}</div>
+                      <div className="card-job-name" title={item.jobName}>{item.jobName}</div>
                       <div className="card-job-ct">
                         <ClockCircleOutlined style={{fontSize: 20, fontWeight: '600', float: 'left', marginTop: 5}}/>
                         <div className="card-job-more">{item.createTime}</div>
