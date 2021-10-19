@@ -1,0 +1,23 @@
+.back-link{
+    color:#120043;
+    cursor: pointer;
+}
+@media only screen and (min-width: 1440px){
+    .blog-image{
+        height: 268px;
+        overflow: hidden;
+        border-radius: 24px;
+    }
+    .blog-image img{
+        width: 100%;
+        background-repeat: no-repeat;
+        border-radius: 24px;
+        background-size: cover;
+    }
+  }
+  @media only screen and (min-width: 468px) and (max-width: 1439px){
+
+  }
+  @media only screen and (min-width: 767px){
+  
+  }

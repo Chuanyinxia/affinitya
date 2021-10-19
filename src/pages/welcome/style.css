@@ -10,6 +10,14 @@
 .overview-box.image{
     padding: 0!important;
 }
+.overview-image-box img{
+    width: 100%;
+    overflow: hidden;
+    background-repeat: no-repeat;
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+    background-size: cover;
+}
 .overview-title-box{
     height: 32px;
     line-height: 32px;
@@ -34,6 +42,21 @@
     float: left;
     margin-left: 12px;
 }
+.job-item{
+    height: 28px;
+    color:#4E4B66;
+    margin-bottom: 16px;
+}
+.job-item.title{
+    height: 48px;
+    font-size: 14px;
+    font-weight: 600;
+}
+.job-item.tag{
+    height: 48px;
+    font-size: 12px;
+    color:#6E7191
+}
 .job-list-box{
     height: 260px;
     margin-top:40px
@@ -41,7 +64,7 @@
 .job-list-box.image{
     height: 150px;
     margin-top:40px;
-    padding: 0 36px;
+    padding: 16px 36px;
 }
 .job-view-btn-box{
     text-align: right;

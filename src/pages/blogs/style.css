@@ -18,15 +18,23 @@
         height: 516px;
         width: 476px;
     }
-    .blog-box-image{
+    .blog-image-box{
         height: 264px;
-        padding: 0 36px;
         background-color: #ccc;
         border-top-left-radius: 23px;
         border-top-right-radius: 24px;
+        overflow: hidden;
+    }
+    .blog-image-box img{
+        width: 100%;
+        background-repeat: no-repeat;
+        border-top-left-radius: 24px;
+        border-top-right-radius: 24px;
+        background-size: cover;
     }
     .blog-text-box{
         height: 200px;
+        padding: 24px;
     }
   }
   @media only screen and (min-width: 468px) and (max-width: 1439px){

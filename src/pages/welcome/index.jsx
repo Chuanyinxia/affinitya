@@ -6,9 +6,12 @@ import {httpLoading} from '@/store/actions';
 import './style.css';
 import {
   GETAUDIENCELIST,
+  GETBLOGLIST,
+  GETJOBLIST,
 } from '@/api/index';
 import {
   get,
+  post,
 } from '@/utils/request';
 import {
   Spin,
@@ -20,16 +23,47 @@ import {
 } from 'antd';
 import {
   ArrowRightOutlined,
+  TagOutlined,
 } from '@ant-design/icons';
 
 const Welcome = ({userInfo, httpLoading, setHttpLoading}) => {
   const history = useHistory();
   const [audienceWords, setAudienceWords]=useState([]);
+  const [blogList, setblogList] = useState([]);
+  const [jobList, setjobList] = useState({
+    complete: [],
+    failed: [],
+    waiting: [],
+  });
   const getAudienceList = () => {
     get(GETAUDIENCELIST).then((res) => {
       setAudienceWords(res.data);
     }).catch((error) => {
       console.log(error);
+    });
+  };
+  const getBobList = () => {
+    get(GETJOBLIST, userInfo.token).then((res) => {
+      setjobList({
+        complete: res.data.complete.slice(0, 4),
+        failed: res.data.failed.slice(0, 4),
+        waiting: res.data.waiting.slice(0, 4),
+      });
+    }).catch((error) => {
+      console.log(error);
+    });
+  };
+  const getBlogLIst = () => {
+    post(GETBLOGLIST, {
+      pageSize: 3,
+      PageNum: 1,
+    }, {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'token': userInfo.token,
+    }).then((res)=>{
+      setblogList(res.data.items);
+    }).finally(()=>{
+      setHttpLoading(false);
     });
   };
   const addKeywords=(word)=>{
@@ -46,6 +80,8 @@ const Welcome = ({userInfo, httpLoading, setHttpLoading}) => {
   };
   useEffect(() => {
     getAudienceList();
+    getBlogLIst();
+    getBobList();
   }, []);
   return (
     <div className="paddingB16">
@@ -59,7 +95,7 @@ const Welcome = ({userInfo, httpLoading, setHttpLoading}) => {
               </h4>
               <h3 className="marginB32">
               Jobs Overview <span className="more-link" onClick={()=>{
-                  history.push('/blogs');
+                  history.push('/dashboard/audienceGenerator');
                 }}>Start Audience Generation <ArrowRightOutlined /></span>
               </h3>
               <Row>
@@ -70,7 +106,9 @@ const Welcome = ({userInfo, httpLoading, setHttpLoading}) => {
                       <div className="overview-title-text">Completed</div>
                     </div>
                     <div className="job-list-box">
-                      <div className="job-item">1</div>
+                      {jobList.complete.map((item)=>(
+                        <div className="job-item" key={item.id}>{item.title}</div>
+                      ))}
                     </div>
                     <div className="job-view-btn-box">
                       <Button type="primary" ghost>View</Button>
@@ -84,7 +122,9 @@ const Welcome = ({userInfo, httpLoading, setHttpLoading}) => {
                       <div className="overview-title-text">Failed</div>
                     </div>
                     <div className="job-list-box">
-                      <div className="job-item">1</div>
+                      {jobList.failed.map((item)=>(
+                        <div className="job-item" key={item.id}>{item.title}</div>
+                      ))}
                     </div>
                     <div className="job-view-btn-box">
                       <Button type="primary" ghost>View</Button>
@@ -98,7 +138,9 @@ const Welcome = ({userInfo, httpLoading, setHttpLoading}) => {
                       <div className="overview-title-text">Waiting</div>
                     </div>
                     <div className="job-list-box">
-                      <div className="job-item">1</div>
+                      {jobList.waiting.map((item)=>(
+                        <div className="job-item" key={item.id}>{item.title}</div>
+                      ))}
                     </div>
                     <div className="job-view-btn-box">
                       <Button type="primary" ghost>View</Button>
@@ -106,49 +148,34 @@ const Welcome = ({userInfo, httpLoading, setHttpLoading}) => {
                   </div>
                 </Col>
               </Row>
-              <h3 className="marginT32 marginB32">
+              <h3 className="marginT32 marginB32" onClick={(e)=>{
+                e.preventDefault();
+                history.push('/blogs');
+              }}>
               Blogs <span className="more-link">Explore More <ArrowRightOutlined /></span>
               </h3>
               <Row>
-                <Col span={8}>
-                  <div className="overview-box image">
-                    <div className="overview-image-box">
+                {blogList.map((item)=>(
+                  <Col span={8} key={item.id}>
+                    <div className="overview-box image">
+                      <div className="overview-image-box">
+                        <img src={item.img} alt="none" />
+                      </div>
+                      <div className="job-list-box image">
+                        <div className="job-item title">{item.title}</div>
+                        <div className="job-item tag">
+                          <TagOutlined style={{paddingRight: 8}}/>
+                          {item.tags}
+                        </div>
+                      </div>
+                      <div className="job-view-btn-box image">
+                        <span className="more-link" onClick={()=>{
+                          history.push('/blogs/detail/'+item.id);
+                        }}>Read More</span>
+                      </div>
                     </div>
-                    <div className="job-list-box image">
-                      <div className="job-item">1111</div>
-                      <div className="job-item">2222</div>
-                    </div>
-                    <div className="job-view-btn-box image">
-                      <span className="more-link">Read More</span>
-                    </div>
-                  </div>
-                </Col>
-                <Col span={8}>
-                  <div className="overview-box image">
-                    <div className="overview-image-box">
-                    </div>
-                    <div className="job-list-box image">
-                      <div className="job-item">1111</div>
-                      <div className="job-item">2222</div>
-                    </div>
-                    <div className="job-view-btn-box image">
-                      <span className="more-link">Read More</span>
-                    </div>
-                  </div>
-                </Col>
-                <Col span={8}>
-                  <div className="overview-box image">
-                    <div className="overview-image-box">
-                    </div>
-                    <div className="job-list-box image">
-                      <div className="job-item">1111</div>
-                      <div className="job-item">2222</div>
-                    </div>
-                    <div className="job-view-btn-box image">
-                      <span className="more-link">Read More</span>
-                    </div>
-                  </div>
-                </Col>
+                  </Col>
+                ))}
               </Row>
             </Col>
             <Col xl={6} md={7} xs={24} sm={24}>

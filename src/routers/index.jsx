@@ -15,6 +15,7 @@ import Profile from '@/pages/profile';
 import Subscribe from '@/pages/subscribe';
 import ContactSales from '@/pages/contactSales';
 import Blogs from '@/pages/blogs';
+import BlogDtail from '@/pages/blogs/details';
 import {storage} from '@/utils/storage';
 const Router = () => {
   const userInfo = storage.getData('userInfo');
@@ -30,6 +31,7 @@ const Router = () => {
     <Switch>
       <Route path="/dashboard" exact component={Welcome} />
       <Route path="/blogs" exact component={Blogs} />
+      <Route path="/blogs/detail/:id" exact component={BlogDtail} />
       <Route path="/dashboard/audienceGenerator" component={AudienceGenerator} />
       <Route path="/dashboard/jobManager" component={JobManger} />
       <Route path="/dashboard/audienceManager" component={AudienceManger} />
