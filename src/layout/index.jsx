@@ -186,7 +186,6 @@ const Customlayout = ({history, activeKey, setLogged}) => {
           </div>
           <Menus/>
         </Sider>
-
         <Layout>
           <Header className="login-header">
             <div className="menu-icon" onClick={()=>setmenuVisible(true)}/>
@@ -223,7 +222,7 @@ const Customlayout = ({history, activeKey, setLogged}) => {
                       </Button>):<span style={{color: '#B23730'}}>Current Plan:Paid</span>}
                     </div>
                     <div style={{display: 'none'}}>
-                      <span className="text-black">{userInfo ? userInfo.nickName : 'Admin'}</span>
+                      <span className="text-black username">{userInfo ? userInfo.nickName : 'Admin'}</span>
                       <Dropdown overlay={menu} placement="bottomCenter">
                         <Avatar icon={<UserOutlined/>} size={26}/>
                       </Dropdown>
@@ -242,7 +241,7 @@ const Customlayout = ({history, activeKey, setLogged}) => {
                   </Space></Col>
                 <Col xs={0} lg={24}>
                   <Space size="large">
-                    <span>{userInfo ? userInfo.nickName : 'Admin'}</span>
+                    <span className="username">{userInfo ? userInfo.nickName : 'Admin'}</span>
                     <Tooltip title="Contact Sales">
                       <div className="icon earphone" onClick={()=>{
                         store.dispatch(setMenusData('', ''));
@@ -273,7 +272,7 @@ const Customlayout = ({history, activeKey, setLogged}) => {
                       </Button>):<span style={{color: '#B23730'}}>Current Plan:Paid</span>}
                     </div>
                     <div style={{display: 'none'}}>
-                      <span className="text-black">{userInfo ? userInfo.nickName : 'Admin'}</span>
+                      <span className="text-black username">{userInfo ? userInfo.nickName : 'Admin'}</span>
                       <Dropdown overlay={menu} placement="bottomCenter">
                         <Avatar icon={<UserOutlined/>} size={26}/>
                       </Dropdown>
@@ -292,7 +291,6 @@ const Customlayout = ({history, activeKey, setLogged}) => {
                   </Space>
                 </Col>
               </Row>
-
             </div>
           </Header>
           <Content style={{margin: 0}}>

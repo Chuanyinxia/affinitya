@@ -1,3 +1,9 @@
+.welcome-user{
+    width: 40rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
 .more-link{
     color:#B23730;
     float: right;
@@ -21,6 +27,7 @@
 .overview-title-box{
     height: 32px;
     line-height: 32px;
+    overflow: hidden;
 }
 .overview-title-dot{
     width: 20px;
@@ -51,6 +58,7 @@
     height: 48px;
     font-size: 14px;
     font-weight: 600;
+    overflow: hidden;
 }
 .job-item.tag{
     height: 48px;
@@ -83,6 +91,7 @@
     }
     .overview-image-box{
         height: 200px;
+        overflow: hidden;
         background-color: #ccc;
         border-top-left-radius: 23px;
         border-top-right-radius: 24px;

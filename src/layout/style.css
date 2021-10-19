@@ -77,6 +77,14 @@
 .userName{
   cursor: pointer;
 }
+.username{
+  width: 20rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  float: left;
+  display: block;
+}
 .sider-wrapper{
   height: 100vh;
 }

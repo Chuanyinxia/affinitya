@@ -29,7 +29,7 @@ import {
   Dropdown,
   Modal,
   Space,
-  // Tooltip,
+  Divider,
   Form,
 } from 'antd';
 import {
@@ -70,6 +70,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
   const [sortType, setsortType] = useState(1);
   const [filterType, setfilterType] = useState(2);
   const [sortedWinnerList, setsortedWinnerList] = useState([]);
+  const [currentIndex, setcurrentIndex] = useState(-1);
   const c = useRef();
   const renameLink = (
     <a rel="noopener noreferrer" href="javascript:void(0)"
@@ -283,37 +284,13 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
         {renameLink}
       </Menu.Item>
       <Menu.Item>
-        <a rel="noopener noreferrer" href="javascript:void(0)"
-          onClick={(e)=>{
-            e.preventDefault();
-            e.stopPropagation();
-            updateWiner(3, []);
-          }}
-        >
-          Archive
-        </a>
+        {archiveLink}
       </Menu.Item>
       <Menu.Item>
-        <a rel="noopener noreferrer" href="javascript:void(0)"
-          onClick={(e)=>{
-            e.preventDefault();
-            e.stopPropagation();
-            updateWiner(1, []);
-          }}
-        >
-          Testing
-        </a>
+        {testingLink}
       </Menu.Item>
       <Menu.Item>
-        <a rel="noopener noreferrer" href="javascript:void(0)"
-          onClick={(e)=>{
-            e.preventDefault();
-            e.stopPropagation();
-            updateWiner(1, []);
-          }}
-        >
-          Delete
-        </a>
+        {deleteLink}
       </Menu.Item>
     </Menu>
   );
@@ -426,7 +403,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
       Object.keys(data).forEach((key)=>{
         tree.push({
           title: (
-            <div style={{width: 476}}>
+            <div className="tree-title-box">
               <div className="tree-title" title={data[key][0].jobName}>
                 {data[key].length>0?
                 (<span>{data[key][0].readStatus===0?<i className="read-mark">* </i>:null}{data[key][0].jobName}</span>):
@@ -452,7 +429,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
               }
               arr.push({
                 title: (
-                  <div style={{width: 452}}>
+                  <div className="tree-title-box sc">
                     <div className="tree-title" title={item.groupName}>
                       {item.groupName}
                     </div>
@@ -521,7 +498,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
     });
   }, []);
   return (
-    <div className="paddingB16">
+    <div className="paddingB16 audience-menager">
       <Modal
         title="Rename"
         width={600}
@@ -623,12 +600,19 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
               </div>
               <div className="box-wrapper">
                 <div className="search-box">
-                  <Input prefix={<SearchOutlined />} placeholder="search" allowClear
-                    onChange={(e)=>{
-                      if (e.target.value==='') getArchiveList(tabType===1?3:1, '', 99, 1);
-                    }}
-                    onPressEnter={(e)=>getArchiveList(tabType===1?3:1, e.target.value, 99, 1)}
-                  ></Input>
+                  <Space split={<Divider type="vertical" />}>
+                    <Input prefix={<SearchOutlined />} placeholder="search" allowClear
+                      onChange={(e)=>{
+                        if (e.target.value==='') getArchiveList(tabType, '', 99, 1);
+                      }}
+                      onPressEnter={(e)=>getArchiveList(tabType, e.target.value, 99, 1)}
+                    ></Input>
+                    <Button className="save-btn" onClick={
+                      ()=>updateWiner(2, selectedTreeData.checkedNodes)
+                    } disabled={checkedKeys.length===0}
+                    style={{float: 'right'}}
+                    ><CrownOutlined/>Save as Winner</Button>
+                  </Space>
                 </div>
               </div>
               <div className="data-tree-box">
@@ -663,11 +647,8 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                   }}
                 />
               </div>
-              <div className="save-btn-box">
-                <Button className="save-btn" onClick={
-                  ()=>updateWiner(2, selectedTreeData.checkedNodes)
-                } disabled={checkedKeys.length===0}><CrownOutlined/>Save as Winner</Button>
-              </div>
+              {/* <div className="save-btn-box">
+              </div> */}
             </div>
           </Col>
           <Col sm={24} md={15}>
@@ -719,6 +700,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                       const data = [...sortedWinnerList];
                       data.forEach((item)=>item.check=false);
                       data[index].check = true;
+                      setcurrentIndex(index);
                       setsortedWinnerList(data);
                       getDetails(item.searchResultId);
                       c.current = {
@@ -727,27 +709,11 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                       setcurrentName(item.groupName);
                       settableVisible(true);
                     }}>
-                      <div
-                        style={{
-                          color: '#4E4B66',
-                          fontSize: 16,
-                          height: 48,
-                          lineHeight: '48px',
-                          fontWeight: '600',
-                          overflow: 'hidden',
-                          whiteSpace: 'nowrap',
-                          textOverflow: 'ellipsis',
-                        }}
-                      >{item.groupName}</div>
-                      <div
-                        style={{color: '#4E4B66', fontSize: 12, height: 30, lineHeight: '30px', marginTop: 8}}
-                      >{item.jobName}</div>
-                      <div
-                        style={{color: '#4E4B66', fontSize: 12, height: 30, lineHeight: '30px', marginTop: 20}}>
+                      <div className="card-group-name" title={item.groupName}>{item.groupName}</div>
+                      <div className="card-job-name" title={item.jobName}>{item.jobName}</div>
+                      <div className="card-job-ct">
                         <ClockCircleOutlined style={{fontSize: 20, fontWeight: '600', float: 'left', marginTop: 5}}/>
-                        <div
-                          style={{paddingLeft: 16, height: 30, lineHeight: '30px', float: 'left'}}
-                        >{item.createTime}</div>
+                        <div className="card-job-more">{item.createTime}</div>
                         <div style={{
                           paddingLeft: 16,
                           float: 'right',
@@ -756,10 +722,11 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                         }}
                         onClick={(e)=>{
                           e.stopPropagation();
+                          console.log(item);
                           c.current = {
                             id: item.searchResultId,
                             jobId: item.searchResultId,
-                            name: item.jobName,
+                            name: item.groupName,
                           };
                         }}
                         >
@@ -810,33 +777,51 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
         {tableVisible?<div style={{width: '83.6%', padding: '0px 32px', position: 'fixed', bottom: 0}}>
           <div style={{padding: '20px 40px', background: '#fff', borderRadius: '16px'}}>
             <div style={{overflow: 'hidden', marginBottom: 24}}>
-              <div style={{float: 'left'}}>{currentName}</div>
+              <div className="table-group-name">{currentName}</div>
               <div style={{float: 'right', cursor: 'pointer'}}>
                 <CloseOutlined style={{fontSize: 20}} onClick={()=>{
                   const data = [...sortedWinnerList];
                   data.forEach((item)=>item.check=false);
+                  setcurrentIndex(-1);
                   setsortedWinnerList(data);
                   settableVisible(false);
                 }}/>
               </div>
-              <div style={{float: 'right', cursor: 'pointer', marginRight: 16}} onClick={()=>{
-                const data = [...sortedWinnerList];
-                const index = data.findIndex((item)=>item.check===true);
-                if (index>=0&&index<data.length-1) {
-                  data.forEach((item)=>item.check=false);
-                  data[index+1].check=true;
-                  setsortedWinnerList(data);
-                }
-              }}><ArrowDownOutlined /></div>
-              <div style={{float: 'right', cursor: 'pointer', marginRight: 16}} onClick={()=>{
-                const data = [...sortedWinnerList];
-                const index = data.findIndex((item)=>item.check===true);
-                if (index>0&&index<=data.length-1) {
-                  data.forEach((item)=>item.check=false);
-                  data[index-1].check=true;
-                  setsortedWinnerList(data);
-                }
-              }}><ArrowUpOutlined /></div>
+              <div
+                className={sortedWinnerList.length===1||
+                  currentIndex===sortedWinnerList.length-1?'arrow disabled':'arrow'}
+                onClick={()=>{
+                  const data = [...sortedWinnerList];
+                  const index = data.findIndex((item)=>item.check===true);
+                  if (index>=0&&index<data.length-1) {
+                    data.forEach((item)=>item.check=false);
+                    data[index+1].check=true;
+                    setcurrentIndex(index+1);
+                    setsortedWinnerList(data);
+                    getDetails(data[index+1].searchResultId);
+                    c.current = {
+                      id: data[index+1].searchResultId,
+                    };
+                    setcurrentName(data[index+1].groupName);
+                  }
+                }}><ArrowDownOutlined /></div>
+              <div
+                className={sortedWinnerList.length===1||currentIndex<1?'arrow disabled':'arrow'}
+                onClick={()=>{
+                  const data = [...sortedWinnerList];
+                  const index = data.findIndex((item)=>item.check===true);
+                  if (index>0&&index<=data.length-1) {
+                    data.forEach((item)=>item.check=false);
+                    data[index-1].check=true;
+                    setcurrentIndex(index-1);
+                    setsortedWinnerList(data);
+                    getDetails(data[index-1].searchResultId);
+                    c.current = {
+                      id: data[index-1].searchResultId,
+                    };
+                    setcurrentName(data[index-1].groupName);
+                  }
+                }}><ArrowUpOutlined /></div>
             </div>
             <EditTable details={details} id={editId} hideFirstButton={true} saveFunc={()=>{
               settableVisible(true);
