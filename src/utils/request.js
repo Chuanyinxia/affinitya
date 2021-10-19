@@ -12,6 +12,9 @@ axios.interceptors.request.use((config) => {
 axios.interceptors.response.use((response) => {
   if (!isLogin&&response.data.code === 401) {
     isLogin = true;
+    const url='/dashboard/jobManager?userName=578150202@qq.com&jobId=729&jobName=ball-1011';
+    console.log(url);
+    console.log(window.location.href);
     Modal.error({
       title: 'Notice',
       content: 'Token has expired or user is not exist, please log in again.',

@@ -21,7 +21,10 @@ const Router = () => {
   const userInfo = storage.getData('userInfo');
   const checkLogin = ()=>{
     if (!userInfo) {
-      history.push('login');
+      // const url='/dashboard/jobManager?userName=578150202@qq.com&jobId=729&jobName=ball-1011';
+      // console.log(url);
+      // console.log(window.location.href);
+      // history.push('login');
     }
   };
   useEffect(() => {

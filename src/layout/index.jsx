@@ -72,7 +72,7 @@ const Customlayout = ({history, activeKey, setLogged}) => {
       <Menu.Item>
         <Link to="/subscribe" onClick={() => {
           store.dispatch(setMenusData('', ''));
-        }}>Subscribe</Link>
+        }}>Subscription</Link>
       </Menu.Item>
       <Menu.Item>
         <Link to="/login" onClick={handleLogoutButton} >Logout</Link>

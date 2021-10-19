@@ -1,5 +1,6 @@
 export const Email=()=>{
-  const search = window.location.search.substring(1).split('&').toString().split('=');
+  const search = window.location.search.substring(1).split('&')[0].split('=');
+  console.log(search);
   if (search.length>1) {
     return (search[1]);
   }

@@ -2,12 +2,14 @@ import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import {httpLoading} from '@/store/actions';
+import {httpLoading, setMenusData} from '@/store/actions';
 import {Card, Col, message, Row, Spin, Statistic} from 'antd';
 import {InfoCircleTwoTone} from '@ant-design/icons';
 import './style.css';
 import {post, get} from '@/utils/request';
 import {MEMBERSUBSCRIBEMSG} from '@/api/index';
+import {Link} from 'react-router-dom';
+import store from '@/store';
 
 const Subscribe = ({userInfo, httpLoading, setHttpLoading}) => {
   const [memberSubscribeMsg, setMemberSubscribeMsg]=useState(null);
@@ -38,7 +40,7 @@ const Subscribe = ({userInfo, httpLoading, setHttpLoading}) => {
   return (
     <div className="padding32 paddingT16">
       <Spin spinning={httpLoading} >
-        <h1 >Subscribe</h1>
+        <h1 >Subscription</h1>
         <Card hoverable>
           <Row>
             {memberSubscribeMsg ?
@@ -51,7 +53,14 @@ const Subscribe = ({userInfo, httpLoading, setHttpLoading}) => {
             <p className="subscribe-info">{memberSubscribeMsg.desc}</p>
             <p className="subscribe-tip">{memberSubscribeMsg.cycleMessage}</p>
             <p className="subscribe-tip">{memberSubscribeMsg.automaticMessage}</p>
-            <a href="mailto:hello@affinityanalyst.com">Contact us to unsubscribe</a>
+            <Link
+              className="marginT16"
+              onClick={()=>{
+                store.dispatch(setMenusData('', ''));
+              }}
+              to="/contactSales"
+            >Contact us to unsubscribe
+            </Link>
           </Col>: (moment(new Date()).minute()-moment(memberSubscribeMsg.payCreateTime).minute()<15)?(<Col span={12}>
             <h3 className="subscribe-title">{memberSubscribeMsg.name}</h3>
             <Statistic
@@ -77,6 +86,14 @@ const Subscribe = ({userInfo, httpLoading, setHttpLoading}) => {
               <div>
                 <h3>Enterprise plan</h3>
                 <p>Valid until: {validPeriod}</p>
+                <Link
+                  className="marginT16"
+                  onClick={()=>{
+                    store.dispatch(setMenusData('', ''));
+                  }}
+                  to="/contactSales"
+                >Contact us to unsubscribe
+                </Link>
               </div>
             ):(<div>You haven&apos;t subscribed to any packages yet.</div>)}
           </Col>}

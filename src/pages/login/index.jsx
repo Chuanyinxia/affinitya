@@ -39,7 +39,13 @@ const Login = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) =
       }
       setUserInfo(res.data);
       setLogged(true);
-      history.push('/dashboard/audienceGenerator');
+      // eslint-disable-next-line new-cap
+      const m=Email();
+      if (isEmail()&&values.email===m) {
+        history.push('/dashboard/jobManager'+window.location.search);
+      } else {
+        history.push('/dashboard/audienceGenerator');
+      }
     }).catch((error)=>{
       message.error({
         content: error.toString(), key: 'netError', duration: 2,
