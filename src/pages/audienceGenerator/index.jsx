@@ -345,7 +345,11 @@ const AudienceGenerator = ({userInfo}) => {
                     Autocomplete="nope"
                     rules={[{required: true, message: 'Please input facebook AD ID!'}]}
                     tooltip={{
-                      title: 'Tooltip with customize icon',
+                      // eslint-disable-next-line react/jsx-no-target-blank
+                      title: <div>Click <a
+                        href="https://business.facebook.com/settings/ad-accounts"
+                        target="_blank">here</a> to
+                        retrieve the ad account information</div>,
                       icon: <InfoCircleOutlined/>,
                     }}>
                     <Input
@@ -358,13 +362,19 @@ const AudienceGenerator = ({userInfo}) => {
                   </Form.Item>
                   <Form.Item
                     name="accessToken"
-                    label="Access Token"
+                    label="User Token"
                     readOnly={read}
                     autocomplete="nope"
                     Autocomplete="nope"
                     rules={[{required: true, message: 'Please input access token!'}]}
                     tooltip={{
-                      title: 'Tooltip with customize icon',
+                      // eslint-disable-next-line react/jsx-no-target-blank
+                      title: <div>In <a
+                        href="https://developers.facebook.com/tools/explorer/"
+                        target="_blank">Facebook Graph API</a>,
+                        grant “ads_management” permission to<br/>
+                        the app and click “Generate Access Token”
+                      </div>,
                       icon: <InfoCircleOutlined/>,
                     }}>
                     <Input.Password
@@ -383,7 +393,10 @@ const AudienceGenerator = ({userInfo}) => {
                         name="myAppId"
                         rules={[{required: true, message: 'Please input App ID!'}]}
                         tooltip={{
-                          title: 'Tooltip with customize icon',
+                          // eslint-disable-next-line react/jsx-no-target-blank
+                          title: <div>Click <a href="https://developers.facebook.com/apps" target="_blank">here</a>,
+                            to create or retrieve an app ID
+                          </div>,
                           icon: <InfoCircleOutlined/>,
                         }}>
                         <Input placeholder="Input App ID..." maxLength={255}/>
@@ -395,7 +408,12 @@ const AudienceGenerator = ({userInfo}) => {
                         name="myAppSecret"
                         rules={[{required: true, message: 'Please input App secret!'}]}
                         tooltip={{
-                          title: 'Tooltip with customize icon',
+                          // eslint-disable-next-line react/jsx-no-target-blank
+                          title: <div>After selection of app ID (<a
+                            href="https://developers.facebook.com/apps"
+                            target="_blank">https://developers.facebook.com/apps</a>),<br/>
+                            click “basic” from Settings
+                          </div>,
                           icon: <InfoCircleOutlined/>,
                         }}>
                         <Input placeholder="Input App secret..." maxLength={100}/>
@@ -535,7 +553,8 @@ const AudienceGenerator = ({userInfo}) => {
                     label="Keyword"
                     name="keyWord"
                     tooltip={{
-                      title: 'One word only for free user, premium users are able add up to 10 keywords in one search.',
+                      title: <div>One word only for free user, premium users are able add up<br/>
+                        to 10 keywords in one search.</div>,
                       icon: <InfoCircleOutlined/>,
                     }}
                     rules={[{required: true, message: 'Please input keyword!'}]}>
