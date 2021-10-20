@@ -60,8 +60,6 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
   const [viewModal, setViewModal] = useState(false);
   const [viewDetails, setViewDetails] = useState([]);
   const [isPayUser, setIsPayUser] =useState(false);
-  // const [lookID, setLookID]=useState(null);
-  // const [lookType, setLookType]=useState(null);
   const [archiveDetailModal, setArchiveDetailModal] = useState(false);
   const [renameModal, setrenameModal] = useState(false);
   const [archiveDetail, setArchiveDetail] = useState([]);
@@ -582,7 +580,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
         <h4 style={{paddingLeft: 32, marginBottom: 28}}>
           Manage and edit the audiences you are testing. Record the performance of the Winning audiences.</h4>
         <Row>
-          <Col sm={24} md={9}>
+          <Col md={24} lg={9}>
             <div className="text-box">
               <div className="box-wrapper">
                 <div className="tab-box">
@@ -611,7 +609,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                       ()=>updateWiner(2, selectedTreeData.checkedNodes)
                     } disabled={checkedKeys.length===0}
                     style={{float: 'right'}}
-                    ><CrownOutlined/>Save as Winner</Button>
+                    ><CrownOutlined/>Save&nbsp;&nbsp;as&nbsp;&nbsp;Winner</Button>
                   </Space>
                 </div>
               </div>
@@ -651,7 +649,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
               </div> */}
             </div>
           </Col>
-          <Col sm={24} md={15}>
+          <Col md={24} lg={15}>
             <div className="winner-box">
               <div className="box-wrapper">
                 <div className="winner-title-box">
