@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {connect} from 'react-redux';
-import {withRouter} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {Button, Checkbox, Col, Form, Input, message, Row, Spin} from 'antd';
 import bg from '@/assets/login/Log In-192x360.png';
@@ -13,11 +13,11 @@ import logo from '@/assets/login/sm-logo.png';
 import './style.css';
 import {Email, isEmail} from '@/components/plugin/Searchdata';
 import Footers from '@/components/Footers';
-import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
-import FB from '@/assets/alipay-circle.png';
-const responseFacebook = (response) => {
-  console.log(response);
-};
+// import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
+// import FB from '@/assets/alipay-circle.png';
+// const responseFacebook = (response) => {
+//   console.log(response);
+// };
 const Login = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) => {
   // eslint-disable-next-line new-cap
   const [email]=useState(isEmail()? Email():cookie.load('email'));
@@ -109,7 +109,7 @@ const Login = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) =
                   </Form.Item>
                 </Col>
                 <Col span={12} className="text-right">
-                  <Button type="link" href='/forgotPassword'>Forgot password?</Button>
+                  <Link to='/forgotPassword'>Forgot password?</Link>
                 </Col>
               </Row>
 
@@ -121,20 +121,20 @@ const Login = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) =
 
             </Form>
             <Row>
-              <Col span={24}>
-                <h3>Quick Sign-in:&nbsp;&nbsp;&nbsp;&nbsp;
-                  <FacebookLogin
-                    appId="919383638998271"
-                    callback={responseFacebook}
-                    render={(renderProps) => (
-                      <img onClick={renderProps.onClick} src={FB}/>
-                    )}
-                  />
-                </h3>
-              </Col>
+              {/* <Col span={24}>*/}
+              {/*  <h3>Quick Sign-in:&nbsp;&nbsp;&nbsp;&nbsp;*/}
+              {/*    <FacebookLogin*/}
+              {/*      appId="919383638998271"*/}
+              {/*      callback={responseFacebook}*/}
+              {/*      render={(renderProps) => (*/}
+              {/*        <img onClick={renderProps.onClick} src={FB}/>*/}
+              {/*      )}*/}
+              {/*    />*/}
+              {/*  </h3>*/}
+              {/* </Col>*/}
               <Col>
                 <div className="marginT32 text-center">
-                  Not a member? <Button type="link" href="/signUp">Sign up now</Button>
+                  Not a member? <Link to="/signUp">Sign up now</Link>
                 </div>
               </Col>
             </Row>

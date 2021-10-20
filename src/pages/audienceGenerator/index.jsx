@@ -19,7 +19,7 @@ import {
   Spin,
 } from 'antd';
 import './style.css';
-import PDF from '@/assets/Guide to get App ID, Token(1).pdf';
+import PDF from '@/assets/Guide for id token secret Oct 2021.pdf';
 
 import {DeleteOutlined, InfoCircleOutlined, LockOutlined, PlusOutlined} from '@ant-design/icons';
 import {Countrys} from '@/components/plugin/Country';
@@ -352,10 +352,9 @@ const AudienceGenerator = ({userInfo}) => {
                     rules={[{required: true, message: 'Please input facebook AD ID!'}]}
                     tooltip={{
                       // eslint-disable-next-line react/jsx-no-target-blank
-                      title: <div>Click <a
+                      title: <div>Retrieve your Ad Account <a
                         href="https://business.facebook.com/settings/ad-accounts"
-                        target="_blank">here</a> to
-                        retrieve the ad account information</div>,
+                        target="_blank">here</a></div>,
                       icon: <InfoCircleOutlined/>,
                     }}>
                     <Input
@@ -375,11 +374,11 @@ const AudienceGenerator = ({userInfo}) => {
                     rules={[{required: true, message: 'Please input access token!'}]}
                     tooltip={{
                       // eslint-disable-next-line react/jsx-no-target-blank
-                      title: <div>In <a
+                      title: <div>In the<a
                         href="https://developers.facebook.com/tools/explorer/"
-                        target="_blank">Facebook Graph API</a>,
-                        grant “ads_management” permission to<br/>
-                        the app and click “Generate Access Token”
+                        target="_blank">Graph API Explorer</a>,
+                        Grant “ads_management” permission<br/>
+                        and click “Generate Access Token”
                       </div>,
                       icon: <InfoCircleOutlined/>,
                     }}>
@@ -401,7 +400,7 @@ const AudienceGenerator = ({userInfo}) => {
                         tooltip={{
                           // eslint-disable-next-line react/jsx-no-target-blank
                           title: <div>Click <a href="https://developers.facebook.com/apps" target="_blank">here</a>,
-                            to create or retrieve an app ID
+                            to create or retrieve an App ID
                           </div>,
                           icon: <InfoCircleOutlined/>,
                         }}>
@@ -415,10 +414,10 @@ const AudienceGenerator = ({userInfo}) => {
                         rules={[{required: true, message: 'Please input App secret!'}]}
                         tooltip={{
                           // eslint-disable-next-line react/jsx-no-target-blank
-                          title: <div>After selection of app ID (<a
+                          title: <div>and clicking the corresponding app (<a
                             href="https://developers.facebook.com/apps"
                             target="_blank">https://developers.facebook.com/apps</a>),<br/>
-                            click “basic” from Settings
+                            click “Settings” then “Basic” to view your App Secret
                           </div>,
                           icon: <InfoCircleOutlined/>,
                         }}>
