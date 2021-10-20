@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {connect} from 'react-redux';
-import {withRouter} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {Button, Col, Form, Input, message, Row, Spin, Tooltip} from 'antd';
 
@@ -152,7 +152,7 @@ const ForgotPassword = ({history, httpLoading, setHttpLoading, setLogged, setUse
                 </Button>
               </Form.Item>
               <div className="marginT16">
-                <Button type="link" href="/login">Back to login.</Button>
+                <Link to="/login">Back to login.</Link>
               </div>
             </Form>
           </Col>
