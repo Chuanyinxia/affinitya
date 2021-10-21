@@ -1,18 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {httpLoading, setMenusData} from '@/store/actions';
+import {httpLoading, setMenusData, updateIsPay} from '@/store/actions';
 import './style.css';
 import {CANCELJOB, GETJOBDETAIL, GETJOBMANAGER, ISPAID, RESTARTJOB, UPDATEJOBTITLE} from '@/api';
 import {get, post, update} from '@/utils/request';
 import {Alert, Button, Form, Input, message, Modal, Space, Table, Tabs, Tag, Tooltip} from 'antd';
 import {SearchOutlined} from '@ant-design/icons';
-import {useHistory} from 'react-router-dom';
+import {Link, useHistory} from 'react-router-dom';
 // import store from '@/store';
 import {type} from '@/components/plugin/Searchdata';
 // import ResultTable from '@/components/Table/ResultTable';
 import KeyWordSearchDetails from '@/components/Table/KeyWordSearchDetails';
-import {Link} from 'react-router-dom';
 import qs from 'querystring';
 import store from '@/store';
 
@@ -37,6 +36,7 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
     total: 0,
     type: jobType,
     size: 'small',
+    showSizeChanger: false,
     hideOnSinglePage: true,
   });
   const [newID, setNewID]=useState(null);
@@ -157,6 +157,7 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
   const isPay=()=>{
     get(ISPAID, userInfo.token).then((res)=>{
       setIsPayUser(res.data===2);
+      store.dispatch(updateIsPay(res.data));
     }).catch((error)=>{
       message.error({
         content: error.toString(), key: 'netError', duration: 2,
@@ -196,7 +197,7 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
       }
       if (search.searchID) {
         params.id=search.searchID;
-        setSearchTitle(search.searchName);
+        setSearchTitle(search.jobName);
       }
     }
     if (searchName!=='') setSearchTitle(searchName);
@@ -227,30 +228,31 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
 
   return (
     <div className="margin_16">
-      {newID&&( <Alert
+      {newID && (<Alert
         message={<p className="text-white text-center margin0">
           Job {jobName} has been successfully generated.
         </p>}
         banner type="success"
         closable/>)}
-      {saveManger&&( <Alert
-        onClose={()=> {
-          setSaveManger(null);
-          setJobName('');
-        }}
-        className="alertFixed"
-        message={<p className="text-white text-center margin0">
-          <Link
-            onClick={()=>{
-              store.dispatch(setMenusData('audienceManager', 'dashboard'));
-            }}
-            to={`/dashboard/audienceManager?searchId=${saveManger.searchId}${saveManger.groupId?
+      {saveManger && (
+        <Alert
+          onClose={() => {
+            setSaveManger(null);
+            setJobName('');
+          }}
+          className="alertFixed"
+          message={<p className="text-white text-center margin0">
+            <Link
+              onClick={() => {
+                store.dispatch(setMenusData('audienceManager', 'dashboard'));
+              }}
+              to={`/dashboard/audienceManager?searchId=${saveManger.searchId}${saveManger.groupId?
               '&groupId='+saveManger.groupId:''}` }>
-            {jobName} has been added to Audience Manager for testing.
-          </Link>
-        </p>}
-        banner type="success"
-        closable/>)}
+              {jobName} has been added to Audience Manager for testing.
+            </Link>
+          </p>}
+          banner type="success"
+          closable/>)}
       <div className="padding32">
         <h1 >Job Manager</h1>
         <h4 className="search-info marginB16">{jobMangerText.title}</h4>
@@ -298,6 +300,7 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
           <Table.Column title="Type" dataIndex="type" key="Type" render={(type) => {
             return type === 1 ? 'Keyword' : type === 2 ? 'Lookalike Audience' : 'Extend';
           }}/>
+          <Table.Column title="Detail" dataIndex="detail" key="detail"/>
           <Table.Column title="Start Time" dataIndex="startTime" key="Start Time"/>
           <Table.Column
             title="Complete Time"

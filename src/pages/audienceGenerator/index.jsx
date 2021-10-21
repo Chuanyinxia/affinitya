@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {setMenusData} from '@/store/actions';
+import {setMenusData, updateIsPay} from '@/store/actions';
 import {
+  Alert,
   Button,
   Card,
   Col,
@@ -29,6 +30,7 @@ import {
   GETAUDIENCEID,
   GETAUDIENCEIDLIST,
   GETAUDIENCELIST,
+  GETUSERMESSAGE,
   ISPAID,
   SAVEAUDIENCEID,
   SEARCHAUID,
@@ -59,7 +61,7 @@ const AudienceGenerator = ({userInfo}) => {
   const [keyWordForm] = Form.useForm();
   const [lookalikeForm] = Form.useForm();
   const [searchData, setSearchData] = useState(null);
-
+  const [errorMsg, setErrorMsg] = useState(false);
   const addItem = () => {
     if (audienceID.trim()) {
       setAddItemLoading(true);
@@ -114,13 +116,14 @@ const AudienceGenerator = ({userInfo}) => {
       }).then((res) => {
         setUserAudienceIdItem(res.data);
       }).catch((error) => {
-        console.log(error);
+        setErrorMsg(true);
       });
     }
   };
   const isPay = () => {
     get(ISPAID, userInfo.token).then((res) => {
       setIsPayUser(res.data === 2);
+      store.dispatch(updateIsPay(res.data));
     }).catch((error) => {
       message.error({
         content: error.toString(), key: 'netError', duration: 2,
@@ -147,7 +150,6 @@ const AudienceGenerator = ({userInfo}) => {
         keyWord: [word],
       });
     }
-    console.log(keyWordForm.getFieldValue().keyWord);
   };
 
   const toAddJob = () => {
@@ -166,7 +168,6 @@ const AudienceGenerator = ({userInfo}) => {
         return false;
       });
     }
-    console.log(searchType);
     let data = {
       ...startForm.getFieldValue(),
       ...baseForm.getFieldValue(),
@@ -278,8 +279,7 @@ const AudienceGenerator = ({userInfo}) => {
     });
   };
 
-  useEffect(() => {
-    isPay();
+  const getInitMessage = () =>{
     setLoading(true);
     const token=userInfo.token??storage.getData('userInfo').token;
     get(GETAUDIENCEIDLIST, token).then((res) => {
@@ -289,35 +289,66 @@ const AudienceGenerator = ({userInfo}) => {
     }).finally(() => {
       setLoading(false);
     });
-
-    if (userInfo.adAccountId && userInfo.accessToken && userInfo.myAppId && userInfo.myAppSecret) {
-      const sdata = {
-        adAccountId: userInfo.adAccountId,
-        accessToken: userInfo.accessToken,
-        myAppId: userInfo.myAppId,
-        myAppSecret: userInfo.myAppSecret,
-      };
-      setLoading(true);
-      post(GETAUDIENCEID, sdata, {
-        'token': userInfo.token,
-        'Content-Type': 'application/x-www-form-urlencoded',
-      }).then((res) => {
-        setUserAudienceIdItem(res.data);
-      }).catch((error) => {
-        console.log(error);
-      }).finally(()=>{
-        setLoading(false);
+    get(GETUSERMESSAGE, token).then((res)=>{
+      // console.log(res);
+      if (res.data.adAccountId && res.data.accessToken && res.data.myAppId && res.data.myAppSecret) {
+        const sdata = {
+          adAccountId: userInfo.adAccountId,
+          accessToken: userInfo.accessToken,
+          myAppId: userInfo.myAppId,
+          myAppSecret: userInfo.myAppSecret,
+        };
+        setLoading(true);
+        post(GETAUDIENCEID, sdata, {
+          'token': token,
+          'Content-Type': 'application/x-www-form-urlencoded',
+        }).then((res) => {
+          setUserAudienceIdItem(res.data);
+        }).catch((error) => {
+          setErrorMsg(true);
+        }).finally(()=>{
+          setLoading(false);
+        });
+      }
+      setTimeout(() => {
+        setRead(false);
+        startForm.setFieldsValue({
+          adAccountId: res.data?.adAccountId,
+          accessToken: res.data?.accessToken,
+          myAppId: res.data?.myAppId,
+          myAppSecret: res.data?.myAppSecret,
+        });
+        lookalikeForm.setFieldsValue({
+          audienceId: res.data.audienceId,
+        });
+      }, 500);
+    }).catch((error) => {
+      message.error({
+        content: error.toString(), key: 'netError', duration: 2,
       });
-    }
-    setTimeout(() => {
-      setRead(false);
-    }, 500);
+    });
+  };
+
+  useEffect(() => {
+    isPay();
+    getInitMessage();
     getAudienceList();
   },
   []);
 
   return (
     <div>
+      {errorMsg && (
+        <Alert
+          onClose={()=>{
+            setErrorMsg(false);
+          }}
+          className="alertFixed"
+          message={<p className="text-white text-center margin0">
+            Audience ID cannot be retrieved from Facebook or empty
+          </p>}
+          banner type="error"
+          closable/>)}
       <div className="padding32">
         <Spin spinning={loading}>
           <Row gutter={40}>
@@ -335,12 +366,6 @@ const AudienceGenerator = ({userInfo}) => {
                   name="accountInfo"
                   layout="vertical"
                   onValuesChange={onLKSearchChange}
-                  initialValues={{
-                    adAccountId: userInfo?.adAccountId,
-                    accessToken: userInfo?.accessToken,
-                    myAppId: userInfo?.myAppId,
-                    myAppSecret: userInfo?.myAppSecret,
-                  }}
                   autocomplete="nope"
                   Autocomplete="nope">
                   <Form.Item
@@ -354,7 +379,7 @@ const AudienceGenerator = ({userInfo}) => {
                       // eslint-disable-next-line react/jsx-no-target-blank
                       title: <div>Retrieve your Ad Account <a
                         href="https://business.facebook.com/settings/ad-accounts"
-                        target="_blank">here</a></div>,
+                        target="_blank">here</a>.</div>,
                       icon: <InfoCircleOutlined/>,
                     }}>
                     <Input
@@ -374,11 +399,11 @@ const AudienceGenerator = ({userInfo}) => {
                     rules={[{required: true, message: 'Please input access token!'}]}
                     tooltip={{
                       // eslint-disable-next-line react/jsx-no-target-blank
-                      title: <div>In the<a
+                      title: <div>In the <a
                         href="https://developers.facebook.com/tools/explorer/"
-                        target="_blank">Graph API Explorer</a>,
-                        Grant “ads_management” permission<br/>
-                        and click “Generate Access Token”
+                        target="_blank">Graph API Explorer</a>, grant  “ads_management”  permission<br/>
+                        and click “Generate Access Token” , then go to “access token debugger“ <br/>
+                        tool to generate extend access token.
                       </div>,
                       icon: <InfoCircleOutlined/>,
                     }}>
@@ -400,7 +425,7 @@ const AudienceGenerator = ({userInfo}) => {
                         tooltip={{
                           // eslint-disable-next-line react/jsx-no-target-blank
                           title: <div>Click <a href="https://developers.facebook.com/apps" target="_blank">here</a>,
-                            to create or retrieve an App ID
+                            to create or retrieve an App ID.
                           </div>,
                           icon: <InfoCircleOutlined/>,
                         }}>
@@ -414,10 +439,11 @@ const AudienceGenerator = ({userInfo}) => {
                         rules={[{required: true, message: 'Please input App secret!'}]}
                         tooltip={{
                           // eslint-disable-next-line react/jsx-no-target-blank
-                          title: <div>and clicking the corresponding app (<a
-                            href="https://developers.facebook.com/apps"
-                            target="_blank">https://developers.facebook.com/apps</a>),<br/>
-                            click “Settings” then “Basic” to view your App Secret
+                          title: <div>Visit your App page (<a
+                            href="https://developers.faceboo.com/apps"
+                            target="_blank">https://developrs.facebook.com/apps</a>),<br/>
+                            click “Settings” then “Basic” to view your App Secret.Then go to <br/>
+                            “access token debugger“ tool generate an extended access <br/>token.
                           </div>,
                           icon: <InfoCircleOutlined/>,
                         }}>
@@ -587,10 +613,6 @@ const AudienceGenerator = ({userInfo}) => {
                   <Form.Item
                     label="Lookalike Audience ID"
                     rules={[{required: true, message: 'Please input lookalike audience ID!'}]}
-                    tooltip={{
-                      title: 'Tooltip with customize icon',
-                      icon: <InfoCircleOutlined/>,
-                    }}
                     name="audienceId"
                   >
                     <Select

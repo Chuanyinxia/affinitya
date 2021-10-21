@@ -32,6 +32,11 @@ const getUserInfo = (state = {info: storage.getData('userInfo')}, action) => {
   switch (action.type) {
     case 'user_info':
       return {info: action.info};
+    case 'update_isPay':
+      return {info: {
+        ...state.info,
+        isPayer: action.isPayer,
+      }};
     default:
       return state;
   }

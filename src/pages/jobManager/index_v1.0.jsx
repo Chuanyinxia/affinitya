@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {httpLoading, setMenusData} from '@/store/actions';
+import {httpLoading, setMenusData, updateIsPay} from '@/store/actions';
 import './style.css';
 import {GETJOBMANAGER, CANCELJOB, RESTARTJOB, EXPORTDETAIL, ISPAID, GETJOBDETAIL} from '@/api';
 import {get, /* get,*/post} from '@/utils/request';
@@ -121,6 +121,7 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
   const isPay=()=>{
     get(ISPAID, userInfo.token).then((res)=>{
       setIsPayUser(res.data===2);
+      store.dispatch(updateIsPay(res.data));
     }).catch((error)=>{
       message.error({
         content: error.toString(), key: 'netError', duration: 2,

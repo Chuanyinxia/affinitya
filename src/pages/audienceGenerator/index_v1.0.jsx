@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {httpLoading, setMenusData} from '@/store/actions';
+import {httpLoading, setMenusData, updateIsPay} from '@/store/actions';
 import {Button, Card, Col, Divider, Form, Input, InputNumber, message, Row, Select, Spin, Tabs, Popconfirm} from 'antd';
 import './style.css';
 import {Link} from 'react-router-dom';
@@ -128,6 +128,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
     let isPay;
     get(ISPAID, userInfo.token).then((res)=>{
       setIsPayUser(res.data===2);
+      store.dispatch(updateIsPay(res.data));
       isPay=res.data===2;
     }).catch((error)=>{
       // console.log(error);
@@ -178,6 +179,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
     setLoading(true);
     get(ISPAID, userInfo.token).then((res)=>{
       setIsPayUser(res.data===2);
+      store.dispatch(updateIsPay(res.data));
     }).catch((error)=>{
       console.log(error);
     }).finally(()=>{
@@ -225,6 +227,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
   const isPay=()=>{
     get(ISPAID, userInfo.token).then((res)=>{
       setIsPayUser(res.data===2);
+      store.dispatch(updateIsPay(res.data));
     }).catch((error)=>{
       message.error({
         content: error.toString(), key: 'netError', duration: 2,

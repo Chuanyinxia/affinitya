@@ -54,3 +54,4 @@ export const UPDATENOREADAUDIENCE='/api/updateAudienceStatus';
 export const GETBLOGLIST='/api/getBlogList';
 export const GETJOBLIST='/api/getJobList';
 export const GETBLOG='/api/getBlog/';
+export const GETUSERMESSAGE='/api/getUserMessage';

@@ -2,7 +2,7 @@ import React, {useEffect, useState, useRef} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import store from '../../store';
-import {httpLoading, getMangerCounts} from '@/store/actions';
+import {httpLoading, getMangerCounts, updateIsPay} from '@/store/actions';
 import './style.css';
 import {
   GETSEARCHDETAIL,
@@ -368,6 +368,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
   const isPay=()=>{
     get(ISPAID, userInfo.token).then((res)=>{
       setIsPayUser(res.data===2);
+      store.dispatch(updateIsPay(res.data));
     }).catch((error)=>{
       message.error({
         content: error.toString(), key: 'netError', duration: 2,

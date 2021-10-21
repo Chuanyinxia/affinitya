@@ -6,7 +6,7 @@ import {Avatar, Badge, Button, Dropdown, Layout, Menu, Space, Popover, message, 
 import {AlertOutlined, UserOutlined, CloseOutlined} from '@ant-design/icons';
 import Router from '../routers';
 import Menus from '../components/menus';
-import {login, setMenusData, sider} from '@/store/actions';
+import {login, setMenusData, sider, updateIsPay} from '@/store/actions';
 import logo from '../assets/lettering-logo.webp';
 import './style.css';
 import {storage} from '@/utils/storage';
@@ -82,6 +82,7 @@ const Customlayout = ({history, activeKey, setLogged}) => {
   const isPay=()=>{
     get(ISPAID, userInfo.token).then((res)=>{
       setIsPayUser(res.data===2);
+      store.dispatch(updateIsPay(res.data));
     }).catch((error)=>{
       message.error({
         content: error.toString(), key: 'netError', duration: 2,
