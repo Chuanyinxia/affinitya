@@ -20,3 +20,7 @@
   box-shadow: 0 0 0 2px #120043;
   background-color: #FFFFFF!important;
 }
+.height600{
+  height: 600px;
+  overflow-y: scroll;
+}

@@ -210,7 +210,7 @@ const SignUp = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) 
         onOk={() => setAgreementBox(false)}
         onCancel={() => setAgreementBox(false)}
       >
-        <div dangerouslySetInnerHTML={{__html: agreement}}/>
+        <div dangerouslySetInnerHTML={{__html: agreement}} className="height600"/>
       </Modal>
     </div>
 
