@@ -823,7 +823,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
           </Col>
         </Row> */}
         {tableVisible?<div className="table-wrap">
-          <div style={{padding: '20px 40px', background: '#fff', borderRadius: '16px'}}>
+          <div style={{padding: '10px 10px', background: '#fff', borderRadius: '16px'}}>
             <div style={{overflow: 'hidden', marginBottom: 24}}>
               <div className="table-group-name">
                 <div style={{fontSize: 24, fontWeight: 600}}>{currentName}</div>
