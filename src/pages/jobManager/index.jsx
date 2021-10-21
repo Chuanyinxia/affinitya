@@ -210,7 +210,7 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
     right: <div style={{marginRight: 3}}>
       <Input
         size="small"
-        style={{height: 40, width: 300}}
+        style={{height: 40, width: 220}}
         placeholder="Search"
         value={searchTitle}
         onChange={(e)=>setSearchTitle(e.target.value)}

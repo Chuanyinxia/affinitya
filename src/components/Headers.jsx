@@ -92,9 +92,7 @@ const Headers=({logged, setLogged, setUserInfo})=>{
         <div className="smMenus">
           <div className="smMenus-top">
             <Space size="large" wrap>
-              <Link to='/' className="navs">Product</Link>
-              <Link to='/dashboard/audienceGenerator'
-                className="navs">About</Link>
+              <Link to='/' className="navs">Home</Link>
               <Link to='/plansPricing' className="navs">Plans & Pricing</Link>
               <Link to='/contactUs' className="navs">Contact Sales</Link>
               {logged&&(<Link to='/dashboard/audienceGenerator' className="navs">Dashboard</Link>)}
