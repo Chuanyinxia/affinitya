@@ -188,7 +188,6 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
   const columns = [
     {
       title: 'Audience ID',
-      width: '150px',
       dataIndex: 'groupId',
       ellipsis: true,
     },
@@ -243,6 +242,7 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
     },
     {
       title: 'Action',
+      ellipsis: true,
       // eslint-disable-next-line react/display-name
       render: (_, record) => {
         const editable = isEditing(record);
@@ -250,12 +250,12 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
           <Space size="small">
             <Tooltip title="Save">
               <a type="link" onClick={() => save(record.key)}>
-                <SaveOutlined style={{fontSize: 16}}/>
+                <SaveOutlined style={{fontSize: 14}}/>
               </a>
             </Tooltip>
             <Tooltip title="Cancel">
               <a type="link" onClick={cancel}>
-                <CloseCircleOutlined style={{fontSize: 16}}/>
+                <CloseCircleOutlined style={{fontSize: 14}}/>
               </a>
             </Tooltip>
           </Space>
@@ -263,7 +263,7 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
           <Space size="small">
             <Tooltip title="Edit">
               <a type="link" onClick={() => edit(record)} disabled={editingKey !== ''}>
-                <FormOutlined style={{fontSize: 16}}/>
+                <FormOutlined style={{fontSize: 14}}/>
               </a>
             </Tooltip>
             <Tooltip title="View Details">

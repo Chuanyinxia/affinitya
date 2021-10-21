@@ -628,7 +628,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
         <h4 style={{paddingLeft: 32, marginBottom: 28}}>
           Manage and edit the audiences you are testing. Record the performance of the Winning audiences.</h4>
         <Row>
-          <Col lg={24} xl={9}>
+          <Col lg={24} xl={9} style={{width: '100%'}}>
             <div className="text-box">
               <div className="box-wrapper">
                 <div className="tab-box">
@@ -697,7 +697,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
               </div> */}
             </div>
           </Col>
-          <Col lg={24} xl={15}>
+          <Col lg={24} xl={15} style={{width: '100%'}}>
             <div className="winner-box">
               <div className="box-wrapper">
                 <div className="winner-title-box">
@@ -823,7 +823,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
           </Col>
         </Row> */}
         {tableVisible?<div className="table-wrap">
-          <div style={{padding: '20px 40px', background: '#fff', borderRadius: '16px'}}>
+          <div style={{padding: '10px 10px', background: '#fff', borderRadius: '16px'}}>
             <div style={{overflow: 'hidden', marginBottom: 24}}>
               <div className="table-group-name">
                 <div style={{fontSize: 24, fontWeight: 600}}>{currentName}</div>

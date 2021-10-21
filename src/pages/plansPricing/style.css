@@ -38,7 +38,7 @@
   margin: 0 auto;
   cursor: pointer;
 }
-@media only screen and (max-width: 1025px){
+@media only screen and (max-width: 1024px){
   .PPContent {
     margin: 0 auto;
     width: 688px;
@@ -109,7 +109,7 @@
     height: 40px;
   }
 }
-@media only screen and (min-width: 1024px){
+@media only screen and (min-width: 1025px){
   .PPContent {
     margin: 0 auto;
     width: 1122px;
