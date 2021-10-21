@@ -654,22 +654,25 @@ const AudienceGenerator = ({userInfo}) => {
                 </Form>
               </Card>
             </Col>
-            <Col xl={6} lg={7} md={24} xs={24}>
-              <h3>Trending Audience</h3>
-              <p className="marginB64">These words is using for SLG...</p>
-              <Space wrap>
-                {audienceWords.map((item) => (
-                  <a key={item.id} type="link" onClick={()=>addKeywords(item.name)}>{item.name}</a>
-                ))}
-              </Space>
-              <Divider/>
-              <h3>Tips</h3>
-              {/* eslint-disable-next-line react/jsx-no-target-blank */}
-              <a
-                href={PDF}
-                target="_blank">
-              Full guide to retrieve token
-              </a>
+            <Col xl={6} lg={7} md={24} xs={24} >
+              <div className="TOP">
+                <h3>Trending Audience</h3>
+                <p className="marginB64">These words is using for SLG...</p>
+                <Space wrap>
+                  {audienceWords.map((item) => (
+                    <a key={item.id} type="link" onClick={()=>addKeywords(item.name)}>{item.name}</a>
+                  ))}
+                </Space>
+                <Divider/>
+                <h3>Tips</h3>
+                {/* eslint-disable-next-line react/jsx-no-target-blank */}
+                <a
+                  href={PDF}
+                  target="_blank">
+                  Full guide to retrieve token
+                </a>
+              </div>
+
             </Col>
           </Row>
 
