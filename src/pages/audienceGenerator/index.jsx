@@ -310,22 +310,21 @@ const AudienceGenerator = ({userInfo}) => {
           setLoading(false);
         });
       }
-      setTimeout(() => {
-        setRead(false);
-        startForm.setFieldsValue({
-          adAccountId: res.data?.adAccountId,
-          accessToken: res.data?.accessToken,
-          myAppId: res.data?.myAppId,
-          myAppSecret: res.data?.myAppSecret,
-        });
-        lookalikeForm.setFieldsValue({
-          audienceId: res.data.audienceId,
-        });
-      }, 500);
-    }).catch((error) => {
-      message.error({
-        content: error.toString(), key: 'netError', duration: 2,
+
+      startForm.setFieldsValue({
+        adAccountId: res.data?.adAccountId,
+        accessToken: res.data?.accessToken,
+        myAppId: res.data?.myAppId,
+        myAppSecret: res.data?.myAppSecret,
       });
+      lookalikeForm.setFieldsValue({
+        audienceId: res.data.audienceId,
+      });
+    }).catch((error) => {
+
+      // message.error({
+      //   content: error.toString(), key: 'netError', duration: 2,
+      // });
     });
   };
 
@@ -333,6 +332,9 @@ const AudienceGenerator = ({userInfo}) => {
     isPay();
     getInitMessage();
     getAudienceList();
+    setTimeout(() => {
+      setRead(false);
+    }, 500);
   },
   []);
 
