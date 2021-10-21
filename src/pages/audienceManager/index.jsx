@@ -71,12 +71,14 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
   const [sortedWinnerList, setsortedWinnerList] = useState([]);
   const [currentIndex, setcurrentIndex] = useState(-1);
   const c = useRef();
+  const tabRef = useRef();
   const renameLink = (
     <a rel="noopener noreferrer" href="javascript:void(0)"
       onClick={(e)=>{
         e.preventDefault();
         e.stopPropagation();
         setrenameModal(true);
+        initWinnerList();
         setTimeout(()=>{
           renameForm.setFieldsValue({
             title: c.current.name,
@@ -104,6 +106,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
       onClick={(e)=>{
         e.preventDefault();
         e.stopPropagation();
+        initWinnerList();
         updateWiner(tabType, 1, []);
       }}
     >
@@ -115,6 +118,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
       onClick={(e)=>{
         e.preventDefault();
         e.stopPropagation();
+        initWinnerList();
         updateWiner(tabType, 3, []);
       }}
     >
@@ -126,6 +130,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
       onClick={(e)=>{
         e.preventDefault();
         e.stopPropagation();
+        initWinnerList();
         updateWiner(tabType, 1, []);
       }}
     >
@@ -654,7 +659,16 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                       onPressEnter={(e)=>getArchiveList(tabType, e.target.value, 99, 1)}
                     ></Input>
                     <Button className="save-btn" onClick={
-                      ()=>updateWiner(tabType, 2, selectedTreeData.checkedNodes)
+                      ()=>{
+                        if (c.current) {
+                          c.current.winner = true;
+                        } else {
+                          c.current = {
+                            winner: true,
+                          };
+                        }
+                        updateWiner(tabType, 2, selectedTreeData.checkedNodes);
+                      }
                     } disabled={checkedKeys.length===0}
                     style={{float: 'right'}}
                     ><CrownOutlined/>Save&nbsp;&nbsp;as&nbsp;&nbsp;Winner</Button>
@@ -689,6 +703,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                       name: name,
                       type: type,
                       jobId: jobId,
+                      winner: false,
                     };
                   }}
                 />
@@ -742,7 +757,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                   {sortedWinnerList.map((item, index)=>(
                     <div className={item.check?'card-item active':
                       item.saveStatus===0?'card-item':
-                        'card-item edited'} key={item.searchId} onClick={()=>{
+                        'card-item edited'} key={item.searchResultId} onClick={()=>{
                       const data = [...sortedWinnerList];
                       data.forEach((item)=>item.check=false);
                       data[index].check = true;
@@ -855,6 +870,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                     };
                     setcurrentName(data[index+1].groupName);
                     setcurrentJob(data[index+1].jobName);
+                    // tabRef.current.cancel();
                   }
                 }}><ArrowDownOutlined /></div>
               <div
@@ -873,13 +889,20 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                     };
                     setcurrentName(data[index-1].groupName);
                     setcurrentJob(data[index-1].jobName);
+                    // tabRef.current.cancel();
                   }
                 }}><ArrowUpOutlined /></div>
             </div>
-            <EditTable details={details} id={editId} hideFirstButton={true} saveFunc={()=>{
-              settableVisible(true);
-              getDetails(c.current.id);
-            }} style={{marginTop: 24}}/>
+            <EditTable
+              refs={tabRef}
+              details={details}
+              id={editId}
+              hideFirstButton={true}
+              saveFunc={()=>{
+                settableVisible(true);
+                getDetails(c.current.id);
+              }}
+              style={{marginTop: 24}}/>
           </div>
         </div>:null}
       </Spin>
