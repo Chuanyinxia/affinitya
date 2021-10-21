@@ -40,8 +40,9 @@
 }
 @media only screen and (max-width: 768px){
   .PPContent {
-    margin: 0 auto;
+    margin: 0;
     width: 688px;
+    height: 768px;
   }
   .price-card{
     width: 220px;

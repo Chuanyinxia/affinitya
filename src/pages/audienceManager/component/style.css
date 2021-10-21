@@ -4,3 +4,12 @@
 .amTable .ant-input-number{
     height: 32px;
 }
+.amTable .ant-table-tbody > tr > td:last-child{
+    border-right: 1px solid #f0f0f0;
+    border-bottom-right-radius: 24px; 
+    
+}
+.amTable .ant-table-tbody > tr > td:first-child{
+    border-left: 1px solid #f0f0f0;
+    border-bottom-left-radius: 24px;
+}

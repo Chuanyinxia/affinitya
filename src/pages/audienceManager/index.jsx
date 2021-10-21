@@ -65,6 +65,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
   const [archiveDetail, setArchiveDetail] = useState([]);
   const [checkedKeys, setCheckedKeys] = useState([]);
   const [currentName, setcurrentName] = useState('');
+  const [currentJob, setcurrentJob] = useState('');
   const [sortType, setsortType] = useState(1);
   const [filterType, setfilterType] = useState(0);
   const [sortedWinnerList, setsortedWinnerList] = useState([]);
@@ -220,11 +221,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
           looklike audience
         </span>
       </Menu.Item>
-      <Menu.Item onClick={()=>{
-        setfilterType(2);
-        initWinnerList();
-        setsortedWinnerList(winnerList.filter((item)=>item.type===2));
-      }}>
+      <Menu.Item danger>
         <span>
           keyword
         </span>
@@ -247,7 +244,11 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
           looklike audience
         </span>
       </Menu.Item>
-      <Menu.Item>
+      <Menu.Item onClick={()=>{
+        setfilterType(2);
+        initWinnerList();
+        setsortedWinnerList(winnerList.filter((item)=>item.type===2));
+      }}>
         <span>
           keyword
         </span>
@@ -751,6 +752,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                         id: item.searchResultId,
                       };
                       setcurrentName(item.groupName);
+                      setcurrentJob(item.jobName);
                       settableVisible(true);
                     }}>
                       <div className="card-group-name" title={item.groupName}>{item.groupName}</div>
@@ -822,7 +824,10 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
         {tableVisible?<div className="table-wrap">
           <div style={{padding: '20px 40px', background: '#fff', borderRadius: '16px'}}>
             <div style={{overflow: 'hidden', marginBottom: 24}}>
-              <div className="table-group-name">{currentName}</div>
+              <div className="table-group-name">
+                <div style={{fontSize: 24, fontWeight: 600}}>{currentName}</div>
+                <div style={{fontSize: 12, marginTop: 8}}>{currentJob}</div>
+              </div>
               <div style={{float: 'right', cursor: 'pointer'}}>
                 <CloseOutlined style={{fontSize: 20}} onClick={()=>{
                   const data = [...sortedWinnerList];
@@ -848,6 +853,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                       id: data[index+1].searchResultId,
                     };
                     setcurrentName(data[index+1].groupName);
+                    setcurrentJob(data[index+1].jobName);
                   }
                 }}><ArrowDownOutlined /></div>
               <div
@@ -865,6 +871,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                       id: data[index-1].searchResultId,
                     };
                     setcurrentName(data[index-1].groupName);
+                    setcurrentJob(data[index-1].jobName);
                   }
                 }}><ArrowUpOutlined /></div>
             </div>
