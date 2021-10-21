@@ -1,8 +1,11 @@
 .amTable input{
-    height: 32px;
+    height: 36px;
 }
 .amTable .ant-input-number{
-    height: 32px;
+    width: 60px;
+}
+.amTable .ant-input-number{
+    height: 36px;
 }
 .amTable .ant-table-tbody > tr > td:last-child{
     border-right: 1px solid #f0f0f0;

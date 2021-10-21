@@ -302,10 +302,7 @@
     width: 452px;
   }
   .table-wrap{
-    width: 83.6%; 
-    padding: 0px 32px; 
-    position: fixed; 
-    bottom: 0;
+    width: 1606px;
   }
 }
 
@@ -356,16 +353,21 @@
   .tree-title-box.sc{
     width: 282px;
   }
+  .table-wrap{
+    width: 1214px;
+  }
 }
 
 @media only screen and (min-width: 986px) and (max-width: 1439px){
   .text-box{
-    width: 310px;
+    width: 688px;
     height: 726px;
+    margin: 0 auto;
   }
   .winner-box{
-    width: 696px;
+    width: 688px;
     height: 726px;
+    margin: 20px auto;
   }
   .card-group{
     padding: 0 20px 20px 20px;
@@ -397,68 +399,69 @@
     padding:8px 30px;
   }
   .tree-title{
-    width: 210px;
+    width: 550px;
   }
   .tree-title-box{
-    width: 226px;
+    width: 566px;
   }
   .tree-title-box.sc{
-    width: 182px;
+    width: 522px;
   }
-  .save-btn{
-    width: 88px;
-    overflow: hidden;
+  .table-wrap{
+    width: 1016px;
   }
 }
 
 @media only screen and (min-width: 1px) and (max-width: 985px){
   .text-box{
-    width: 570px;
+    width: 688px;
     height: 726px;
     margin: 0 auto;
   }
   .winner-box{
-    width: 920px;
+    width: 696px;
     height: 726px;
+    margin: 20px auto;
   }
   .card-group{
-    padding: 0 42px 20px 42px;
+    padding: 0 20px 20px 20px;
   }
   .card-group-name{
-    height: 48;
-    line-height: 48px;
-  }
-  .card-item{
-    width: 388px;
-    height: 186px;
-    padding:24px 30px;
+    height: 32;
+    line-height: 32px;
   }
   .card-job-name{
-    height: 30px; 
+    height: 24px; 
     margin-top: 8px;
-    line-height: 30px; 
-    max-width: 326px;
+    line-height: 24px; 
+    max-width: 250px;
   }
   .card-job-ct{
-    height: 30px;
-    line-height: 30px;
-    margin-top: 20px;
+    height: 24px;
+    line-height: 24px;
+    margin-top: 8px;
   }
   .card-job-more{
     padding-left: 16px;
-    height: 30px;
-    line-height: 30px;
+    height: 24px;
+    line-height: 24px;
   }
-  .card-item:nth-child(odd){
-    margin-right: 24px;
+  .card-item{
+    width: 310px;
+    height: 124px;
+    margin-left: 12px;
+    padding:8px 30px;
   }
   .tree-title{
-    width: 400px;
+    width: 280px;
   }
   .tree-title-box{
-    width: 476px;
+    width: 306px;
   }
   .tree-title-box.sc{
-    width: 452px;
+    width: 282px;
+  }
+  .table-wrap{
+    width: 1016px;
   }
 }

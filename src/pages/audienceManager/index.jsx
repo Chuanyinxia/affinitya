@@ -627,7 +627,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
         <h4 style={{paddingLeft: 32, marginBottom: 28}}>
           Manage and edit the audiences you are testing. Record the performance of the Winning audiences.</h4>
         <Row>
-          <Col md={24} lg={9}>
+          <Col lg={24} xl={9}>
             <div className="text-box">
               <div className="box-wrapper">
                 <div className="tab-box">
@@ -696,7 +696,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
               </div> */}
             </div>
           </Col>
-          <Col md={24} lg={15}>
+          <Col lg={24} xl={15}>
             <div className="winner-box">
               <div className="box-wrapper">
                 <div className="winner-title-box">

@@ -85,7 +85,9 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
   useEffect(()=>{
     isPay();
   }, [isPayUser]);
-
+  useEffect(()=>{
+    console.log(window.innerWidth);
+  }, []);
   const edit = (record) => {
     form.setFieldsValue({
       ...record,
@@ -187,48 +189,56 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
       title: 'Audience ID',
       width: '150px',
       dataIndex: 'groupId',
+      ellipsis: true,
     },
     {
       title: 'Spend',
       dataIndex: 'spend',
       editable: true,
       inputType: 'number',
+      ellipsis: true,
     },
     {
       title: 'Impression',
       dataIndex: 'impression',
       editable: true,
       inputType: 'number',
+      ellipsis: true,
     },
     {
       title: 'Click',
       dataIndex: 'clickCount',
       editable: true,
       inputType: 'number',
+      ellipsis: true,
     },
     {
       title: 'Install',
       dataIndex: 'install',
       inputType: 'install',
       editable: true,
+      ellipsis: true,
     },
     {
       title: 'Purchase',
       dataIndex: 'purchase',
       inputType: 'number',
       editable: true,
+      ellipsis: true,
     },
     {
       title: 'ROAS',
       dataIndex: 'roas',
       editable: true,
       inputType: 'number',
+      ellipsis: true,
     },
     {
       title: 'CPI(Spend/Install)',
       dataIndex: 'cpi',
       inputType: 'number',
       editable: true,
+      ellipsis: true,
     },
     {
       title: 'Action',
@@ -236,7 +246,7 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
       render: (_, record) => {
         const editable = isEditing(record);
         return editable ? (
-          <Space size="large">
+          <Space size="small">
             <Tooltip title="Save">
               <a type="link" onClick={() => save(record.key)}>
                 <SaveOutlined style={{fontSize: 16}}/>
@@ -249,7 +259,7 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
             </Tooltip>
           </Space>
         ) : (
-          <Space size="large">
+          <Space size="small">
             <Tooltip title="Edit">
               <a type="link" onClick={() => edit(record)} disabled={editingKey !== ''}>
                 <FormOutlined style={{fontSize: 16}}/>
@@ -406,6 +416,7 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
       </Modal>
       <Form form={form} component={false} onValuesChange={valuesChange} >
         <Table
+          size="small"
           components={{
             body: {
               cell: EditableCell,
@@ -418,6 +429,7 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
           pagination={false}
           className="marginT16 amTable"
           loading={httpLoading}
+          tableLayout="fixed"
         />
       </Form>
     </div>
