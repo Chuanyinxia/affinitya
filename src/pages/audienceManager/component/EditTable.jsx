@@ -45,7 +45,7 @@ const EditableCell = ({
           rules={[
             {
               required: true,
-              message: `Required field`,
+              message: `Required`,
             },
           ]}
         >
@@ -70,7 +70,7 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
   const [lookType, setLookType]=useState(null);
   const [dataTitle, setDataTitle] = useState('Details');
   const [isPayUser, setIsPayUser] =useState(false);
-  const [extendModal, setextendModal] = useState(true);
+  const [extendModal, setextendModal] = useState(false);
   const isEditing = (record) => record.id === editingKey;
 
   const isPay=()=>{

@@ -178,11 +178,14 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
 
   useEffect(() => {
     const data=history.location.search.split('?');
-    const searchData = loadPageVar('id');
+    const searchId = loadPageVar('id');
+    const searchName = loadPageVar('keyword');
     const params={pageNum: 1,
       pageSize: 10,
-      title: searchData,
-      type: jobType === false ? '' : jobType};
+      title: searchName,
+      type: jobType === false ? '' : jobType,
+      id: searchId,
+    };
     isPay();
     // eslint-disable-next-line no-constant-condition
     if (data.length>1) {
@@ -193,9 +196,10 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
       }
       if (search.searchID) {
         params.id=search.searchID;
-        setSearchTitle(search.jobName);
+        setSearchTitle(search.searchName);
       }
     }
+    if (searchName!=='') setSearchTitle(searchName);
     getJobList(params);
   }, []);
   // useEffect(() => {

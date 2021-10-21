@@ -6,7 +6,7 @@
 }
 .text-box{
   width: 410px;
-  height: 756px;
+  height: 726px;
   background-color: #EFF0F7;
   border-radius: 32px;
   margin-left: 32px;
@@ -32,7 +32,7 @@
 } */
 .winner-box{
   width: 696px;
-  height: 756px;
+  height: 726px;
   border-radius: 32px;
   background-color: #fff;
   margin-left: 40px;
@@ -247,14 +247,19 @@
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+.table-wrap{
+  padding: 0px 32px; 
+  position: fixed; 
+  bottom: 0;
+}
 @media  screen and (min-width: 1920px){
   .text-box{
     width: 570px;
-    height: 756px;
+    height: 726px;
   }
   .winner-box{
     width: 920px;
-    height: 756px;
+    height: 726px;
   }
   .card-group{
     padding: 0 42px 20px 42px;
@@ -296,16 +301,22 @@
   .tree-title-box.sc{
     width: 452px;
   }
+  .table-wrap{
+    width: 83.6%; 
+    padding: 0px 32px; 
+    position: fixed; 
+    bottom: 0;
+  }
 }
 
 @media only screen and (min-width: 1440px) and (max-width: 1919px){
   .text-box{
     width: 410px;
-    height: 756px;
+    height: 726px;
   }
   .winner-box{
     width: 696px;
-    height: 756px;
+    height: 726px;
   }
   .card-group{
     padding: 0 20px 20px 20px;
@@ -347,14 +358,14 @@
   }
 }
 
-@media only screen and (min-width: 768px) and (max-width: 1439px){
+@media only screen and (min-width: 986px) and (max-width: 1439px){
   .text-box{
     width: 310px;
-    height: 756px;
+    height: 726px;
   }
   .winner-box{
     width: 696px;
-    height: 756px;
+    height: 726px;
   }
   .card-group{
     padding: 0 20px 20px 20px;
@@ -399,18 +410,18 @@
     overflow: hidden;
   }
 }
-@media only screen and (min-width: 0px) and (max-width: 767px){
+
+@media only screen and (min-width: 1px) and (max-width: 985px){
   .text-box{
     width: 570px;
-    height: 756px;
+    height: 726px;
     margin: 0 auto;
   }
   .winner-box{
     width: 920px;
-    height: 756px;
-    margin: 0 auto;
+    height: 726px;
   }
-  /* .card-group{
+  .card-group{
     padding: 0 42px 20px 42px;
   }
   .card-group-name{
@@ -449,5 +460,5 @@
   }
   .tree-title-box.sc{
     width: 452px;
-  } */
+  }
 }

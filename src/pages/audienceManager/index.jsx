@@ -66,7 +66,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
   const [checkedKeys, setCheckedKeys] = useState([]);
   const [currentName, setcurrentName] = useState('');
   const [sortType, setsortType] = useState(1);
-  const [filterType, setfilterType] = useState(2);
+  const [filterType, setfilterType] = useState(0);
   const [sortedWinnerList, setsortedWinnerList] = useState([]);
   const [currentIndex, setcurrentIndex] = useState(-1);
   const c = useRef();
@@ -103,7 +103,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
       onClick={(e)=>{
         e.preventDefault();
         e.stopPropagation();
-        updateWiner(1, []);
+        updateWiner(tabType, 1, []);
       }}
     >
       Testing
@@ -114,7 +114,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
       onClick={(e)=>{
         e.preventDefault();
         e.stopPropagation();
-        updateWiner(3, []);
+        updateWiner(tabType, 3, []);
       }}
     >
       Archive
@@ -125,7 +125,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
       onClick={(e)=>{
         e.preventDefault();
         e.stopPropagation();
-        updateWiner(1, []);
+        updateWiner(tabType, 1, []);
       }}
     >
       Delete
@@ -146,8 +146,8 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
       </Menu.Item>
       <Menu.Item onClick={()=>{
         setsortType(2);
-        setsortedWinnerList(winnerList.sort((a, b)=>new Date(a.createTime).getTime()-new Date(b.createTime).getTime()));
         initWinnerList();
+        setsortedWinnerList(winnerList.sort((a, b)=>new Date(a.createTime).getTime()-new Date(b.createTime).getTime()));
       }}>
         <span>
           by country
@@ -159,8 +159,8 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
     <Menu>
       <Menu.Item onClick={()=>{
         setsortType(1);
-        setsortedWinnerList(winnerList.sort((a, b)=>a.source.localeCompare(b.source)));
         initWinnerList();
+        setsortedWinnerList(winnerList.sort((a, b)=>a.source.localeCompare(b.source)));
       }}>
         <span>
           by time
@@ -175,6 +175,15 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
   );
   const filterMenuByA = (
     <Menu>
+      <Menu.Item onClick={()=>{
+        setfilterType(0);
+        initWinnerList();
+        setsortedWinnerList(winnerList);
+      }}>
+        <span>
+          All
+        </span>
+      </Menu.Item>
       <Menu.Item danger>
         <span>
           looklike audience
@@ -182,8 +191,8 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
       </Menu.Item>
       <Menu.Item onClick={()=>{
         setfilterType(2);
-        setsortedWinnerList(winnerList.filter((item)=>item.type===2));
         initWinnerList();
+        setsortedWinnerList(winnerList.filter((item)=>item.type===2));
       }}>
         <span>
           keyword
@@ -194,15 +203,51 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
   const filterMenuByk = (
     <Menu>
       <Menu.Item onClick={()=>{
-        setfilterType(1);
-        setsortedWinnerList(winnerList.filter((item)=>item.type===1));
+        setfilterType(0);
         initWinnerList();
+        setsortedWinnerList(winnerList);
+      }}>
+        <span>
+          All
+        </span>
+      </Menu.Item>
+      <Menu.Item onClick={()=>{
+        setfilterType(1);
+        initWinnerList();
+        setsortedWinnerList(winnerList.filter((item)=>item.type===1));
       }}>
         <span>
           looklike audience
         </span>
       </Menu.Item>
+      <Menu.Item onClick={()=>{
+        setfilterType(2);
+        initWinnerList();
+        setsortedWinnerList(winnerList.filter((item)=>item.type===2));
+      }}>
+        <span>
+          keyword
+        </span>
+      </Menu.Item>
+    </Menu>
+  );
+  const filterMenuA = (
+    <Menu>
       <Menu.Item danger>
+        <span>
+          All
+        </span>
+      </Menu.Item>
+      <Menu.Item onClick={()=>{
+        setfilterType(1);
+        initWinnerList();
+        setsortedWinnerList(winnerList.filter((item)=>item.type===1));
+      }}>
+        <span>
+          looklike audience
+        </span>
+      </Menu.Item>
+      <Menu.Item>
         <span>
           keyword
         </span>
@@ -353,7 +398,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
       setHttpLoading(false);
     });
   };
-  const updateWiner = (type, checkList)=>{
+  const updateWiner = (t, type, checkList)=>{
     let data;
     if (checkList.length>0) {
       data = checkList.filter((item)=>!(item.children)).map((item)=>item.key.split('-')[1]);
@@ -369,7 +414,8 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
           'token': userInfo.token,
         }).then((res) => {
       getWinnerList('', 999, 1);
-      getArchiveList(tabType, '', 999, 1);
+      if (c.current.winner) getArchiveList(t, '', 999, 1);
+      else getArchiveList(t===1?3:1, '', 999, 1);
       setCheckedKeys([]);
     }).catch((error) => {
       message.error({
@@ -606,7 +652,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                       onPressEnter={(e)=>getArchiveList(tabType, e.target.value, 99, 1)}
                     ></Input>
                     <Button className="save-btn" onClick={
-                      ()=>updateWiner(2, selectedTreeData.checkedNodes)
+                      ()=>updateWiner(tabType, 2, selectedTreeData.checkedNodes)
                     } disabled={checkedKeys.length===0}
                     style={{float: 'right'}}
                     ><CrownOutlined/>Save&nbsp;&nbsp;as&nbsp;&nbsp;Winner</Button>
@@ -664,7 +710,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                     </Dropdown>
                   </div>
                   <div className="winner-icon">
-                    <Dropdown overlay={filterType===1?filterMenuByA:filterMenuByk}
+                    <Dropdown overlay={filterType===0?filterMenuA:(filterType===1?filterMenuByA:filterMenuByk)}
                       arrow
                       trigger={['click']}
                       placement="bottomLeft"
@@ -725,6 +771,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                             id: item.searchResultId,
                             jobId: item.searchResultId,
                             name: item.groupName,
+                            winner: true,
                           };
                         }}
                         >
@@ -772,7 +819,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
             <EditTable details={details} id={editId} saveFunc={getDetails}/>
           </Col>
         </Row> */}
-        {tableVisible?<div style={{width: '83.6%', padding: '0px 32px', position: 'fixed', bottom: 0}}>
+        {tableVisible?<div className="table-wrap">
           <div style={{padding: '20px 40px', background: '#fff', borderRadius: '16px'}}>
             <div style={{overflow: 'hidden', marginBottom: 24}}>
               <div className="table-group-name">{currentName}</div>
