@@ -104,6 +104,15 @@
   z-index: 1000;
     top:64px;
 }
+@media only screen and (max-width: 1024px) {
+    .alertFixed {
+        position: fixed;
+        right: 0;
+        width: 100%;
+        z-index: 1000;
+        top: 64px;
+    }
+}
 .search-content{
 height: 34px;
   overflow: hidden;

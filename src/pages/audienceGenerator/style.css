@@ -61,7 +61,7 @@ span.ant-radio + *{
 @media only screen and (min-width: 992px) {
   .TOP{
     position: fixed;
-    top:80px;
+    top: 118px;
     right: 10px;
     width: 20vw;
   }
