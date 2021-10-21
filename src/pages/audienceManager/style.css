@@ -358,7 +358,7 @@
   }
 }
 
-@media only screen and (min-width: 986px) and (max-width: 1439px){
+@media only screen and (max-width: 1439px){
   .text-box{
     width: 688px;
     height: 726px;
@@ -407,12 +407,13 @@
   .tree-title-box.sc{
     width: 522px;
   }
-  .table-wrap{
-    width: 1016px;
-  }
+  /* .table-wrap{
+    width: 766px;
+    overflow-x: scroll;
+  } */
 }
 
-@media only screen and (min-width: 1px) and (max-width: 985px){
+/* @media only screen and (max-width: 985px){
   .text-box{
     width: 688px;
     height: 726px;
@@ -461,7 +462,4 @@
   .tree-title-box.sc{
     width: 282px;
   }
-  .table-wrap{
-    width: 1016px;
-  }
-}
+} */
