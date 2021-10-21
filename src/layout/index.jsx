@@ -208,7 +208,7 @@ const Customlayout = ({history, activeKey, setLogged}) => {
                       </div>
                     </Popover>
                     <div className="userName">
-                      <Dropdown overlay={menu} placement="bottomCenter">
+                      <Dropdown overlay={menu} placement="bottomCenter" trigger={['hover', 'click']}>
                         <div className="userImg">
                           <UserOutlined style={{fontSize: 22}}/>
                         </div>

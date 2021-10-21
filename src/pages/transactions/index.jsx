@@ -39,7 +39,7 @@ const Transactions = ({userInfo, httpLoading, setHttpLoading}) => {
       key: 'productName',
     },
     {
-      title: 'Describtion',
+      title: 'Description',
       dataIndex: 'describe',
       key: 'describe',
     },

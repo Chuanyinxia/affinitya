@@ -321,7 +321,7 @@ const AudienceGenerator = ({userInfo}) => {
       <div className="padding32">
         <Spin spinning={loading}>
           <Row gutter={40}>
-            <Col xl={17} md={17} xs={24} sm={24}>
+            <Col xl={17} lg={17} md={24} xs={24}>
               <h1>Audience Generator</h1>
               <h4 className="marginB32">
               Affinity Analyst extends high correlation audiences from your custom
@@ -654,7 +654,7 @@ const AudienceGenerator = ({userInfo}) => {
                 </Form>
               </Card>
             </Col>
-            <Col xl={6} md={7} xs={24} sm={24}>
+            <Col xl={6} lg={7} md={24} xs={24}>
               <h3>Trending Audience</h3>
               <p className="marginB64">These words is using for SLG...</p>
               <Space wrap>
