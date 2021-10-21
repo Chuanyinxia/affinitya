@@ -8,9 +8,9 @@ import {
   AppstoreAddOutlined,
   CloseCircleOutlined,
   FileSearchOutlined,
-  FormOutlined,
-  SearchOutlined,
+  FileProtectOutlined,
   SaveOutlined,
+  FormOutlined,
   FolderViewOutlined,
 } from '@ant-design/icons';
 import store from '@/store';
@@ -70,7 +70,7 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
   const [lookType, setLookType]=useState(null);
   const [dataTitle, setDataTitle] = useState('Details');
   const [isPayUser, setIsPayUser] =useState(false);
-  const [extendModal, setextendModal] = useState(false);
+  const [extendModal, setextendModal] = useState(true);
   const isEditing = (record) => record.id === editingKey;
 
   const isPay=()=>{
@@ -279,12 +279,12 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
                 setDataTitle('Extend Search Results');
                 setViewDetails(record.extendDetail??[]);
               }}>
-                <SearchOutlined style={{fontSize: 16}}/>
+                <FileProtectOutlined style={{fontSize: 16}}/>
               </a>
             </Tooltip>)}
             {(record.status!==2&&record.status!==0)&&(<Tooltip title="View Job">
               <a type="link" onClick={()=>{
-                history.push('/dashboard/jobManager?keyword='+record.jobName);
+                history.push('/dashboard/jobManager?keyword='+record.jobName+'&id='+record.jobId);
                 store.dispatch(setMenusData('jobManager', 'dashboard'));
               }}>
                 <FolderViewOutlined style={{fontSize: 16}}/>
@@ -327,7 +327,7 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
       'token': userInfo.token,
     }).then((res) => {
       store.dispatch(setMenusData('jobManager', 'dashboard'));
-      history.push('/dashboard/jobManager?newID='+res.data.jobId+'&jobName='+res.data.title);
+      history.push('/dashboard/jobManager?newID='+res.data.jobId+'&jobName='+res.data.jobName);
     }).catch((error)=>{
       message.error({
         content: error.toString(), key: 'netError', duration: 2,
@@ -337,14 +337,14 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
   return (
     <div >
       <Modal
-        title='Extend'
+        title={null}
         visible={extendModal}
         footer={null}
         width={650}
         onCancel={() => {
           setextendModal(false);
         }}>
-        <h2>Edit Job</h2>
+        <h2>Create Job</h2>
         <p className="marginB32">Name your audience for identification in Job & Audience Manager</p>
         <Form name="creatJob" form={creatJobForm} onFinish={(values)=>{
           extendConfim(values.title, details[0].id);
