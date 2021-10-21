@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {setMenusData} from '@/store/actions';
+import {setMenusData, updateIsPay} from '@/store/actions';
 import {
   Button,
   Card,
@@ -28,7 +28,7 @@ import {
   DELETEAUDIENCEID,
   GETAUDIENCEID,
   GETAUDIENCEIDLIST,
-  GETAUDIENCELIST,
+  GETAUDIENCELIST, GETUSERMESSAGE,
   ISPAID,
   SAVEAUDIENCEID,
   SEARCHAUID,
@@ -121,6 +121,7 @@ const AudienceGenerator = ({userInfo}) => {
   const isPay = () => {
     get(ISPAID, userInfo.token).then((res) => {
       setIsPayUser(res.data === 2);
+      store.dispatch(updateIsPay(res.data));
     }).catch((error) => {
       message.error({
         content: error.toString(), key: 'netError', duration: 2,
@@ -147,7 +148,6 @@ const AudienceGenerator = ({userInfo}) => {
         keyWord: [word],
       });
     }
-    console.log(keyWordForm.getFieldValue().keyWord);
   };
 
   const toAddJob = () => {
@@ -166,7 +166,6 @@ const AudienceGenerator = ({userInfo}) => {
         return false;
       });
     }
-    console.log(searchType);
     let data = {
       ...startForm.getFieldValue(),
       ...baseForm.getFieldValue(),
@@ -278,8 +277,7 @@ const AudienceGenerator = ({userInfo}) => {
     });
   };
 
-  useEffect(() => {
-    isPay();
+  const getInitMessage = () =>{
     setLoading(true);
     const token=userInfo.token??storage.getData('userInfo').token;
     get(GETAUDIENCEIDLIST, token).then((res) => {
@@ -289,29 +287,49 @@ const AudienceGenerator = ({userInfo}) => {
     }).finally(() => {
       setLoading(false);
     });
-
-    if (userInfo.adAccountId && userInfo.accessToken && userInfo.myAppId && userInfo.myAppSecret) {
-      const sdata = {
-        adAccountId: userInfo.adAccountId,
-        accessToken: userInfo.accessToken,
-        myAppId: userInfo.myAppId,
-        myAppSecret: userInfo.myAppSecret,
-      };
-      setLoading(true);
-      post(GETAUDIENCEID, sdata, {
-        'token': userInfo.token,
-        'Content-Type': 'application/x-www-form-urlencoded',
-      }).then((res) => {
-        setUserAudienceIdItem(res.data);
-      }).catch((error) => {
-        console.log(error);
-      }).finally(()=>{
-        setLoading(false);
+    get(GETUSERMESSAGE, token).then((res)=>{
+      // console.log(res);
+      if (res.data.adAccountId && res.data.accessToken && res.data.myAppId && res.data.myAppSecret) {
+        const sdata = {
+          adAccountId: userInfo.adAccountId,
+          accessToken: userInfo.accessToken,
+          myAppId: userInfo.myAppId,
+          myAppSecret: userInfo.myAppSecret,
+        };
+        setLoading(true);
+        post(GETAUDIENCEID, sdata, {
+          'token': token,
+          'Content-Type': 'application/x-www-form-urlencoded',
+        }).then((res) => {
+          setUserAudienceIdItem(res.data);
+        }).catch((error) => {
+          console.log(error);
+        }).finally(()=>{
+          setLoading(false);
+        });
+      }
+      setTimeout(() => {
+        setRead(false);
+        startForm.setFieldsValue({
+          adAccountId: res.data?.adAccountId,
+          accessToken: res.data?.accessToken,
+          myAppId: res.data?.myAppId,
+          myAppSecret: res.data?.myAppSecret,
+        });
+        lookalikeForm.setFieldsValue({
+          audienceId: res.data.audienceId,
+        });
+      }, 500);
+    }).catch((error) => {
+      message.error({
+        content: error.toString(), key: 'netError', duration: 2,
       });
-    }
-    setTimeout(() => {
-      setRead(false);
-    }, 500);
+    });
+  };
+
+  useEffect(() => {
+    isPay();
+    getInitMessage();
     getAudienceList();
   },
   []);
@@ -335,12 +353,6 @@ const AudienceGenerator = ({userInfo}) => {
                   name="accountInfo"
                   layout="vertical"
                   onValuesChange={onLKSearchChange}
-                  initialValues={{
-                    adAccountId: userInfo?.adAccountId,
-                    accessToken: userInfo?.accessToken,
-                    myAppId: userInfo?.myAppId,
-                    myAppSecret: userInfo?.myAppSecret,
-                  }}
                   autocomplete="nope"
                   Autocomplete="nope">
                   <Form.Item

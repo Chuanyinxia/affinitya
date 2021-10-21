@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {httpLoading, setMenusData} from '@/store/actions';
+import {httpLoading, setMenusData, updateIsPay} from '@/store/actions';
 import './style.css';
 import {CANCELJOB, GETJOBDETAIL, GETJOBMANAGER, ISPAID, RESTARTJOB, UPDATEJOBTITLE} from '@/api';
 import {get, post, update} from '@/utils/request';
@@ -37,6 +37,7 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
     total: 0,
     type: jobType,
     size: 'small',
+    showSizeChanger: false,
     hideOnSinglePage: true,
   });
   const [newID, setNewID]=useState(null);
@@ -157,6 +158,7 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
   const isPay=()=>{
     get(ISPAID, userInfo.token).then((res)=>{
       setIsPayUser(res.data===2);
+      store.dispatch(updateIsPay(res.data));
     }).catch((error)=>{
       message.error({
         content: error.toString(), key: 'netError', duration: 2,
@@ -294,6 +296,7 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
           <Table.Column title="Type" dataIndex="type" key="Type" render={(type) => {
             return type === 1 ? 'Keyword' : type === 2 ? 'Lookalike Audience' : 'Extend';
           }}/>
+          <Table.Column title="Detail" dataIndex="detail" key="detail"/>
           <Table.Column title="Start Time" dataIndex="startTime" key="Start Time"/>
           <Table.Column
             title="Complete Time"

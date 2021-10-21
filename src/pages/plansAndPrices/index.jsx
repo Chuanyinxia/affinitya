@@ -6,7 +6,7 @@ import {
   CheckCircleFilled,
 } from '@ant-design/icons';
 
-import {httpLoading, setMenusData} from '@/store/actions';
+import {httpLoading, setMenusData, updateIsPay} from '@/store/actions';
 import {GETPAYMENTLIST, ISPAID, PAY} from '@/api/index';
 import {get, post} from '@/utils/request';
 import './style.css';
@@ -74,6 +74,7 @@ const PlansAndPrices = ({userInfo, httpLoading, setHttpLoading}) => {
   const isPay=()=>{
     get(ISPAID, userInfo.token).then((res)=>{
       setIsPayUser(res.data===2);
+      store.dispatch(updateIsPay(res.data));
     }).catch((error)=>{
       message.error({
         content: error.toString(), key: 'netError', duration: 2,

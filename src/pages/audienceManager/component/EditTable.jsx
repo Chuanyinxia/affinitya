@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import {useHistory} from 'react-router-dom';
 import PropTypes from 'prop-types';
-import {httpLoading} from '@/store/actions';
+import {httpLoading, updateIsPay} from '@/store/actions';
 import {Form, InputNumber, message, Space, Table, Tooltip, Modal, Button, Input} from 'antd';
 import {
   AppstoreAddOutlined,
@@ -76,6 +76,7 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
   const isPay=()=>{
     get(ISPAID, userInfo.token).then((res)=>{
       setIsPayUser(res.data===2);
+      store.dispatch(updateIsPay(res.data));
     }).catch((error)=>{
       message.error({
         content: error.toString(), key: 'netError', duration: 2,
