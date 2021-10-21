@@ -44,7 +44,6 @@ const Headers=({logged, setLogged, setUserInfo})=>{
               </div>
             </Col>
             <Col span={16} className="text-right paddingR32">
-
               <span className="navs" onClick={()=>setMenusShow(true)}>
                 <UnorderedListOutlined />
               </span>
