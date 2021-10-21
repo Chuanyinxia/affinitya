@@ -7,12 +7,11 @@ import {CANCELJOB, GETJOBDETAIL, GETJOBMANAGER, ISPAID, RESTARTJOB, UPDATEJOBTIT
 import {get, post, update} from '@/utils/request';
 import {Alert, Button, Form, Input, message, Modal, Space, Table, Tabs, Tag, Tooltip} from 'antd';
 import {SearchOutlined} from '@ant-design/icons';
-import {useHistory} from 'react-router-dom';
+import {Link, useHistory} from 'react-router-dom';
 // import store from '@/store';
 import {type} from '@/components/plugin/Searchdata';
 // import ResultTable from '@/components/Table/ResultTable';
 import KeyWordSearchDetails from '@/components/Table/KeyWordSearchDetails';
-import {Link} from 'react-router-dom';
 import qs from 'querystring';
 import store from '@/store';
 
@@ -198,7 +197,7 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
       }
       if (search.searchID) {
         params.id=search.searchID;
-        setSearchTitle(search.searchName);
+        setSearchTitle(search.jobName);
       }
     }
     if (searchName!=='') setSearchTitle(searchName);
@@ -229,30 +228,31 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
 
   return (
     <div className="margin_16">
-      {newID&&( <Alert
+      {newID && (<Alert
         message={<p className="text-white text-center margin0">
           Job {jobName} has been successfully generated.
         </p>}
         banner type="success"
         closable/>)}
-      {saveManger&&( <Alert
-        onClose={()=> {
-          setSaveManger(null);
-          setJobName('');
-        }}
-        className="alertFixed"
-        message={<p className="text-white text-center margin0">
-          <Link
-            onClick={()=>{
-              store.dispatch(setMenusData('audienceManager', 'dashboard'));
-            }}
-            to={`/dashboard/audienceManager?searchId=${saveManger.searchId}${saveManger.groupId?
+      {saveManger && (
+        <Alert
+          onClose={() => {
+            setSaveManger(null);
+            setJobName('');
+          }}
+          className="alertFixed"
+          message={<p className="text-white text-center margin0">
+            <Link
+              onClick={() => {
+                store.dispatch(setMenusData('audienceManager', 'dashboard'));
+              }}
+              to={`/dashboard/audienceManager?searchId=${saveManger.searchId}${saveManger.groupId?
               '&groupId='+saveManger.groupId:''}` }>
-            {jobName} has been added to Audience Manager for testing.
-          </Link>
-        </p>}
-        banner type="success"
-        closable/>)}
+              {jobName} has been added to Audience Manager for testing.
+            </Link>
+          </p>}
+          banner type="success"
+          closable/>)}
       <div className="padding32">
         <h1 >Job Manager</h1>
         <h4 className="search-info marginB16">{jobMangerText.title}</h4>

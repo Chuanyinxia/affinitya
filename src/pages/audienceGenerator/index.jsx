@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {setMenusData, updateIsPay} from '@/store/actions';
 import {
+  Alert,
   Button,
   Card,
   Col,
@@ -28,7 +29,8 @@ import {
   DELETEAUDIENCEID,
   GETAUDIENCEID,
   GETAUDIENCEIDLIST,
-  GETAUDIENCELIST, GETUSERMESSAGE,
+  GETAUDIENCELIST,
+  GETUSERMESSAGE,
   ISPAID,
   SAVEAUDIENCEID,
   SEARCHAUID,
@@ -59,7 +61,7 @@ const AudienceGenerator = ({userInfo}) => {
   const [keyWordForm] = Form.useForm();
   const [lookalikeForm] = Form.useForm();
   const [searchData, setSearchData] = useState(null);
-
+  const [errorMsg, setErrorMsg] = useState(false);
   const addItem = () => {
     if (audienceID.trim()) {
       setAddItemLoading(true);
@@ -114,7 +116,7 @@ const AudienceGenerator = ({userInfo}) => {
       }).then((res) => {
         setUserAudienceIdItem(res.data);
       }).catch((error) => {
-        console.log(error);
+        setErrorMsg(true);
       });
     }
   };
@@ -303,7 +305,7 @@ const AudienceGenerator = ({userInfo}) => {
         }).then((res) => {
           setUserAudienceIdItem(res.data);
         }).catch((error) => {
-          console.log(error);
+          setErrorMsg(true);
         }).finally(()=>{
           setLoading(false);
         });
@@ -336,6 +338,17 @@ const AudienceGenerator = ({userInfo}) => {
 
   return (
     <div>
+      {errorMsg && (
+        <Alert
+          onClose={()=>{
+            setErrorMsg(false);
+          }}
+          className="alertFixed"
+          message={<p className="text-white text-center margin0">
+            Audience ID cannot be retrieved from Facebook or empty
+          </p>}
+          banner type="error"
+          closable/>)}
       <div className="padding32">
         <Spin spinning={loading}>
           <Row gutter={40}>
@@ -366,7 +379,7 @@ const AudienceGenerator = ({userInfo}) => {
                       // eslint-disable-next-line react/jsx-no-target-blank
                       title: <div>Retrieve your Ad Account <a
                         href="https://business.facebook.com/settings/ad-accounts"
-                        target="_blank">here</a></div>,
+                        target="_blank">here</a>.</div>,
                       icon: <InfoCircleOutlined/>,
                     }}>
                     <Input
@@ -386,11 +399,11 @@ const AudienceGenerator = ({userInfo}) => {
                     rules={[{required: true, message: 'Please input access token!'}]}
                     tooltip={{
                       // eslint-disable-next-line react/jsx-no-target-blank
-                      title: <div>In the<a
+                      title: <div>In the <a
                         href="https://developers.facebook.com/tools/explorer/"
-                        target="_blank">Graph API Explorer</a>,
-                        Grant “ads_management” permission<br/>
-                        and click “Generate Access Token”
+                        target="_blank">Graph API Explorer</a>, grant  “ads_management”  permission<br/>
+                        and click “Generate Access Token” , then go to “access token debugger“ <br/>
+                        tool to generate extend access token.
                       </div>,
                       icon: <InfoCircleOutlined/>,
                     }}>
@@ -412,7 +425,7 @@ const AudienceGenerator = ({userInfo}) => {
                         tooltip={{
                           // eslint-disable-next-line react/jsx-no-target-blank
                           title: <div>Click <a href="https://developers.facebook.com/apps" target="_blank">here</a>,
-                            to create or retrieve an App ID
+                            to create or retrieve an App ID.
                           </div>,
                           icon: <InfoCircleOutlined/>,
                         }}>
@@ -426,10 +439,11 @@ const AudienceGenerator = ({userInfo}) => {
                         rules={[{required: true, message: 'Please input App secret!'}]}
                         tooltip={{
                           // eslint-disable-next-line react/jsx-no-target-blank
-                          title: <div>and clicking the corresponding app (<a
-                            href="https://developers.facebook.com/apps"
-                            target="_blank">https://developers.facebook.com/apps</a>),<br/>
-                            click “Settings” then “Basic” to view your App Secret
+                          title: <div>Visit your App page (<a
+                            href="https://developers.faceboo.com/apps"
+                            target="_blank">https://developrs.facebook.com/apps</a>),<br/>
+                            click “Settings” then “Basic” to view your App Secret.Then go to <br/>
+                            “access token debugger“ tool generate an extended access <br/>token.
                           </div>,
                           icon: <InfoCircleOutlined/>,
                         }}>
@@ -599,10 +613,6 @@ const AudienceGenerator = ({userInfo}) => {
                   <Form.Item
                     label="Lookalike Audience ID"
                     rules={[{required: true, message: 'Please input lookalike audience ID!'}]}
-                    tooltip={{
-                      title: 'Tooltip with customize icon',
-                      icon: <InfoCircleOutlined/>,
-                    }}
                     name="audienceId"
                   >
                     <Select

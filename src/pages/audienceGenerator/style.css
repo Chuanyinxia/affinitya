@@ -66,4 +66,6 @@ span.ant-radio + *{
     width: 20vw;
   }
 }
-
+.ant-alert-error {
+    background-color: #E92C3A;
+}
