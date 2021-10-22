@@ -262,7 +262,7 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
         ) : (
           <Space size="small">
             <Tooltip title="Edit">
-              <a type="link" onClick={() => edit(record)} disabled={editingKey !== ''}>
+              <a type="link" onClick={() => edit(record)}>
                 <FormOutlined style={{fontSize: 14}}/>
               </a>
             </Tooltip>

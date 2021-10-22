@@ -219,7 +219,7 @@ const PlansAndPrices = ({userInfo, httpLoading, setHttpLoading}) => {
           <Checkbox checked={payRadio} onChange={()=>{
             setpayRadio(!payRadio);
           }}>I have read and agreed to the&nbsp;&nbsp;
-            <a href="/privacyPolicy?type=4" target="_blank">
+            <a href="/privacyPolicy?type=2" target="_blank">
               Payment Policy.
             </a>
           </Checkbox>

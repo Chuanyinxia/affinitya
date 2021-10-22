@@ -142,6 +142,10 @@
   background-color: #B23730;
   color:#fff;
 }
+.save-btn:hover{
+  background-color: #B23730;
+  color:#fff;
+}
 .edit-box{
   padding: 40px;
   background-color: #fff;
