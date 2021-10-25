@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 import {Route, Switch} from 'react-router-dom';
-// import Welcome from '@/pages/welcome';
+import Welcome from '@/pages/welcome';
+import Faq from '@/pages/faq';
 import AudienceGenerator from '@/pages/audienceGenerator';
 import JobManger from '@/pages/jobManager';
 import AudienceManger from '@/pages/audienceManager';
@@ -32,7 +33,8 @@ const Router = () => {
   }, []);
   return (
     <Switch>
-      <Route path="/dashboard" exact component={AudienceGenerator} />
+      <Route path="/dashboard" exact component={Welcome} />
+      <Route path="/faq" component={Faq} />
       <Route path="/blogs" exact component={Blogs} />
       <Route path="/blogs/detail/:id" exact component={BlogDtail} />
       <Route path="/dashboard/audienceGenerator" component={AudienceGenerator} />

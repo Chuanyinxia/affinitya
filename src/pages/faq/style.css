@@ -1,0 +1,22 @@
+.fandq{
+
+}
+.fandq .ant-collapse-header{
+font-size: 16px;
+color: #14142A;
+font-weight: 600;
+}
+.fandq .ant-collapse-item.ant-collapse-item-active>*{
+    color: #2A00A2;
+}
+/* .collapse-border.active{
+    border-left: 2px solid #2A00A2;
+    position: absolute;
+    height: 48px;
+    left: 0!important;
+    top:0!important;
+    border-top-left-radius: 20px;
+} */
+.fandq .ant-collapse-item{
+    border-bottom:0!important;
+}

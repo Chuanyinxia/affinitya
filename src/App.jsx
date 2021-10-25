@@ -15,6 +15,7 @@ import Home from '@/pages/home';
 import SignUp from '@/pages/signUp';
 import ForgotPassword from '@/pages/forgotPassword';
 import ContactUS from '@/pages/contactUs';
+import Faq from '@/pages/faq';
 import PrivacyPolicy from '@/pages/privacyPolicy';
 import PlansPricing from '@/pages/plansPricing';
 import TermsService from '@/pages/termsService';
@@ -46,6 +47,7 @@ const App = ({history, logged, setLogged, setUserInfo}) => {
         <Route path="/termsService" component={TermsService} />
         <Route path="/plansPricing" component={PlansPricing} />
         <Route path="/contactUS" component={ContactUS} />
+        <Route path="/faq" component={Faq} />
         <Route path="/login" component={Login} />
         <Route path="/signUp" component={SignUp} />
         <Route path="/forgotPassword" component={ForgotPassword} />

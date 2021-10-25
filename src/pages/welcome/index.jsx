@@ -3,6 +3,8 @@ import {connect} from 'react-redux';
 import {useHistory} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {httpLoading} from '@/store/actions';
+import store from '../../store';
+import {setMenusData} from '@/store/actions';
 import './style.css';
 import {
   GETAUDIENCELIST,
@@ -20,13 +22,14 @@ import {
   Space,
   Divider,
   Button,
+  Modal,
 } from 'antd';
 import {
   ArrowRightOutlined,
   TagOutlined,
 } from '@ant-design/icons';
 
-const Welcome = ({userInfo, httpLoading, setHttpLoading}) => {
+const Faq = ({userInfo, httpLoading, setHttpLoading}) => {
   const history = useHistory();
   const [audienceWords, setAudienceWords]=useState([]);
   const [blogList, setblogList] = useState([]);
@@ -35,12 +38,17 @@ const Welcome = ({userInfo, httpLoading, setHttpLoading}) => {
     failed: [],
     waiting: [],
   });
+  const [firstModalVisible, setfirstModalVisible] = useState(true);
+  const [firstIndex, setfirstIndex] = useState(1);
   const getAudienceList = () => {
     get(GETAUDIENCELIST).then((res) => {
       setAudienceWords(res.data);
     }).catch((error) => {
       console.log(error);
     });
+  };
+  const goToNext = (index)=>{
+    setfirstIndex(index+1);
   };
   const getBobList = () => {
     get(GETJOBLIST, userInfo.token).then((res) => {
@@ -86,19 +94,85 @@ const Welcome = ({userInfo, httpLoading, setHttpLoading}) => {
   return (
     <div className="paddingB16">
       <div className="padding32">
+        <Modal
+          title={null}
+          visible={firstModalVisible}
+          footer={null}
+          width={944}
+          className="first-modal"
+          onCancel={()=>setfirstModalVisible(false)}
+        >
+          <div>
+            <Row>
+              <Col span={12}>
+                <div className="first-left-box">
+                  <div className="first-left-step-box">
+                    <div className={firstIndex===1?'step-dot active':'step-dot'} onClick={()=>setfirstIndex(1)}></div>
+                    <div className={firstIndex===2?'step-dot active':'step-dot'} onClick={()=>setfirstIndex(2)}></div>
+                    <div className={firstIndex===3?'step-dot active':'step-dot'} onClick={()=>setfirstIndex(3)}></div>
+                    <div className={firstIndex===4?'step-dot active':'step-dot'} onClick={()=>setfirstIndex(4)}></div>
+                  </div>
+                  <div className="first-left-title">
+                    <h2>Welcome to Affinity Analysis</h2>
+                  </div>
+                  <div className="first-left-content">
+                    {firstIndex===1&&<div>
+                      <p>Begin your audience discovery success here.</p>
+                      <br />
+                      <p>Discover, customize, and manage your audiences now.</p>
+                    </div>}
+                    {firstIndex===2&&<div>
+                      <p>Start with our AI powered Audience Generator - build on successful audience parameters
+                         and keywords or try totally new. </p>
+                    </div>}
+                    {firstIndex===3&&<div>
+                      <p>Once audiences are generated, view them in the Job Manager,
+                        where you can view the progress of the keyword jobs,
+                        customize the resulting keywords and save the results to the Audience Manager.</p>
+                    </div>}
+                    {firstIndex===4&&<div>
+                      <p>Manage and edit all your saved audiences in the Audience Manager.
+                        Expand the number of correlated keywords via our Extend feature,
+                        driving further keyword possibilities and success.</p>
+                    </div>}
+                  </div>
+                  <div className="first-left-button-group">
+                    {firstIndex<4&&<Button type="default" size="large" onClick={()=>goToNext(firstIndex)}>Next</Button>}
+                    <Button
+                      type={firstIndex===4?'primary':'link'}
+                      size="large"
+                      onClick={()=>setfirstModalVisible(false)}
+                    >
+                      {firstIndex===4?'Start Now':'Skip'}
+                    </Button>
+                  </div>
+                </div>
+              </Col>
+              <Col span={12}>
+                <div className="first-right-box">
+                  {firstIndex===1&&<div className="first-img first-1"></div>}
+                  {firstIndex===2&&<div className="first-img first-2"></div>}
+                  {firstIndex===3&&<div className="first-img first-3"></div>}
+                  {firstIndex===4&&<div className="first-img first-4"></div>}
+                </div>
+              </Col>
+            </Row>
+          </div>
+        </Modal>
         <Spin spinning={false}>
           <Row gutter={40}>
-            <Col xl={17} md={17} xs={24} sm={24}>
+            <Col xl={17} lg={24} xs={24} sm={24}>
               <h1 className="welcome-user">Welcome back, {userInfo.nickName}!</h1>
               <h4 className="marginB32">
               Keep up to date with News & Updates, to make most of your audience discovery.
               </h4>
               <h3 className="marginB32">
-              Jobs Overview <span className="more-link" onClick={()=>{
+                <span style={{fontWeight: 600}}>Jobs Overview</span>
+                <span className="more-link" onClick={()=>{
                   history.push('/dashboard/audienceGenerator');
                 }}>Start Audience Generation <ArrowRightOutlined /></span>
               </h3>
-              <Row>
+              <Row justify="center">
                 <Col span={8}>
                   <div className="overview-box">
                     <div className="overview-title-box">
@@ -107,11 +181,19 @@ const Welcome = ({userInfo, httpLoading, setHttpLoading}) => {
                     </div>
                     <div className="job-list-box">
                       {jobList.complete.map((item)=>(
-                        <div className="job-item" key={item.id}>{item.title}</div>
+                        <a className="job-item" key={item.id}
+                          onClick={()=>{
+                            history.push('/dashboard/jobManager?keyword='+item.title+'&id='+item.id);
+                            store.dispatch(setMenusData('jobManager', 'dashboard'));
+                          }}
+                        >{item.title}</a>
                       ))}
                     </div>
                     <div className="job-view-btn-box">
-                      <Button type="primary" ghost>View</Button>
+                      <Button type="primary" ghost onClick={()=>{
+                        history.push('/dashboard/jobManager');
+                        store.dispatch(setMenusData('jobManager', 'dashboard'));
+                      }}>View</Button>
                     </div>
                   </div>
                 </Col>
@@ -123,11 +205,19 @@ const Welcome = ({userInfo, httpLoading, setHttpLoading}) => {
                     </div>
                     <div className="job-list-box">
                       {jobList.failed.map((item)=>(
-                        <div className="job-item" key={item.id}>{item.title}</div>
+                        <a className="job-item" key={item.id}
+                          onClick={()=>{
+                            history.push('/dashboard/jobManager?keyword='+item.title+'&id='+item.id);
+                            store.dispatch(setMenusData('jobManager', 'dashboard'));
+                          }}
+                        >{item.title}</a>
                       ))}
                     </div>
                     <div className="job-view-btn-box">
-                      <Button type="primary" ghost>View</Button>
+                      <Button type="primary" ghost onClick={()=>{
+                        history.push('/dashboard/jobManager');
+                        store.dispatch(setMenusData('jobManager', 'dashboard'));
+                      }}>View</Button>
                     </div>
                   </div>
                 </Col>
@@ -139,11 +229,19 @@ const Welcome = ({userInfo, httpLoading, setHttpLoading}) => {
                     </div>
                     <div className="job-list-box">
                       {jobList.waiting.map((item)=>(
-                        <div className="job-item" key={item.id}>{item.title}</div>
+                        <a className="job-item" key={item.id}
+                          onClick={()=>{
+                            history.push('/dashboard/jobManager?keyword='+item.title+'&id='+item.id);
+                            store.dispatch(setMenusData('jobManager', 'dashboard'));
+                          }}
+                        >{item.title}</a>
                       ))}
                     </div>
                     <div className="job-view-btn-box">
-                      <Button type="primary" ghost>View</Button>
+                      <Button type="primary" ghost onClick={()=>{
+                        history.push('/dashboard/jobManager');
+                        store.dispatch(setMenusData('jobManager', 'dashboard'));
+                      }}>View</Button>
                     </div>
                   </div>
                 </Col>
@@ -152,7 +250,8 @@ const Welcome = ({userInfo, httpLoading, setHttpLoading}) => {
                 e.preventDefault();
                 history.push('/blogs');
               }}>
-              Blogs <span className="more-link">Explore More <ArrowRightOutlined /></span>
+                <span style={{fontWeight: 600}}>News and Updates</span>
+                <span className="more-link">Explore More <ArrowRightOutlined /></span>
               </h3>
               <Row>
                 {blogList.map((item)=>(
@@ -163,10 +262,10 @@ const Welcome = ({userInfo, httpLoading, setHttpLoading}) => {
                       </div>
                       <div className="job-list-box image">
                         <div className="job-item title">{item.title}</div>
-                        <div className="job-item tag">
+                        {item.tags&&<div className="job-item tag">
                           <TagOutlined style={{paddingRight: 8}}/>
                           {item.tags}
-                        </div>
+                        </div>}
                       </div>
                       <div className="job-view-btn-box image">
                         <span className="more-link" onClick={()=>{
@@ -216,7 +315,7 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-Welcome.propTypes = {
+Faq.propTypes = {
   userInfo: PropTypes.object.isRequired,
   httpLoading: PropTypes.bool.isRequired,
   setHttpLoading: PropTypes.func.isRequired,
@@ -225,4 +324,4 @@ Welcome.propTypes = {
 export default connect(
     mapStateToProps,
     mapDispatchToProps,
-)(Welcome);
+)(Faq);
