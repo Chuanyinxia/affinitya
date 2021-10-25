@@ -61,7 +61,7 @@ const AudienceGenerator = ({userInfo}) => {
   const [keyWordForm] = Form.useForm();
   const [lookalikeForm] = Form.useForm();
   const [searchData, setSearchData] = useState(null);
-  const [errorMsg, setErrorMsg] = useState(false);
+  const [errorMsg, setErrorMsg] = useState(null);
   const addItem = () => {
     if (audienceID.trim()) {
       setAddItemLoading(true);
@@ -116,7 +116,7 @@ const AudienceGenerator = ({userInfo}) => {
       }).then((res) => {
         setUserAudienceIdItem(res.data);
       }).catch((error) => {
-        setErrorMsg(true);
+        setErrorMsg(error.toString());
       });
     }
   };
@@ -293,10 +293,10 @@ const AudienceGenerator = ({userInfo}) => {
       // console.log(res);
       if (res.data.adAccountId && res.data.accessToken && res.data.myAppId && res.data.myAppSecret) {
         const sdata = {
-          adAccountId: userInfo.adAccountId,
-          accessToken: userInfo.accessToken,
-          myAppId: userInfo.myAppId,
-          myAppSecret: userInfo.myAppSecret,
+          adAccountId: res.data.adAccountId,
+          accessToken: res.data.accessToken,
+          myAppId: res.data.myAppId,
+          myAppSecret: res.data.myAppSecret,
         };
         setLoading(true);
         post(GETAUDIENCEID, sdata, {
@@ -305,7 +305,7 @@ const AudienceGenerator = ({userInfo}) => {
         }).then((res) => {
           setUserAudienceIdItem(res.data);
         }).catch((error) => {
-          setErrorMsg(true);
+          setErrorMsg(error.toString());
         }).finally(()=>{
           setLoading(false);
         });
@@ -343,11 +343,11 @@ const AudienceGenerator = ({userInfo}) => {
       {errorMsg && (
         <Alert
           onClose={()=>{
-            setErrorMsg(false);
+            setErrorMsg(null);
           }}
           className="alertFixed"
           message={<p className="text-white text-center margin0">
-            Audience ID cannot be retrieved from Facebook or empty
+            Audience ID cannot be retrieved from Facebook or empty. “{errorMsg}“
           </p>}
           banner type="error"
           closable/>)}
