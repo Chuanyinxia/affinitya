@@ -293,10 +293,10 @@ const AudienceGenerator = ({userInfo}) => {
       // console.log(res);
       if (res.data.adAccountId && res.data.accessToken && res.data.myAppId && res.data.myAppSecret) {
         const sdata = {
-          adAccountId: userInfo.adAccountId,
-          accessToken: userInfo.accessToken,
-          myAppId: userInfo.myAppId,
-          myAppSecret: userInfo.myAppSecret,
+          adAccountId: res.data.adAccountId,
+          accessToken: res.data.accessToken,
+          myAppId: res.data.myAppId,
+          myAppSecret: res.data.myAppSecret,
         };
         setLoading(true);
         post(GETAUDIENCEID, sdata, {
