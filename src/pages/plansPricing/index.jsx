@@ -37,8 +37,8 @@ const PlansPricing = ({userInfo, httpLoading, setHttpLoading}) => {
       setHttpLoading(false);
     });
   };
-  const selectPayment = ()=>{
-    history.push('/login');
+  const selectPayment = (type)=>{
+    history.push(`/login?type=${type}`);
   };
   useEffect(() => {
     getPaymentList();
@@ -112,10 +112,12 @@ const PlansPricing = ({userInfo, httpLoading, setHttpLoading}) => {
                   <Row>
                     <Col span={24} className="price-btn">
                       {payment.packageType===1?
-                        <Button type="primary" block onClick={()=>selectPayment(idx)}>
+                        <Button type="primary" block onClick={()=>selectPayment(payment.packageType)}>
                         Sign up Now</Button>:
                       payment.packageType===2?
-                      <Button type="primary" block onClick={()=>selectPayment(idx)}>Sign up Now</Button>:
+                      <Button type="primary"
+                        block
+                        onClick={()=>selectPayment(payment.packageType)}>Sign up Now</Button>:
                       <Button type="primary" block onClick={()=>{
                         history.push('/contactUs');
                       }}>Contact Sales</Button>

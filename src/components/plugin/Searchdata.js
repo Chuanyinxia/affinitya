@@ -1,7 +1,7 @@
 export const Email=()=>{
   const search = window.location.search.substring(1).split('&')[0].split('=');
   console.log(search);
-  if (search.length>1) {
+  if (search.length>1&&search[0]!=='type') {
     return (search[1]);
   }
   return '';
