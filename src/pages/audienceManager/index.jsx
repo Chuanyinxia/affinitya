@@ -153,8 +153,9 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
       <Menu.Item onClick={()=>{
         setsortType(2);
         initWinnerList();
-        setsortedWinnerList(winnerList.sort((a, b)=>new Date(a.createTime).getTime()-new Date(b.createTime).getTime()));
-      }}>
+        setsortedWinnerList(winnerList.sort((a, b)=>a.source.localeCompare(b.source)));
+      }}
+      >
         <span>
           by country
         </span>
@@ -166,7 +167,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
       <Menu.Item onClick={()=>{
         setsortType(1);
         initWinnerList();
-        setsortedWinnerList(winnerList.sort((a, b)=>a.source.localeCompare(b.source)));
+        setsortedWinnerList(winnerList.sort((a, b)=>new Date(b.createTime).getTime()-new Date(a.createTime).getTime()));
       }}>
         <span>
           by time
@@ -356,6 +357,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
       setrenameModal(false);
       getArchiveList(tabType, '', 99, 1);
       getWinnerList('', 999, 1);
+      setsortType(1);
     }).catch((error) => {
       message.error({
         content: error.toString(), key: 'netError', duration: 2,

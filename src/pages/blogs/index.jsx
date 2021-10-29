@@ -48,9 +48,9 @@ const Blogs = ({userInfo, httpLoading, setHttpLoading}) => {
   }, []);
   return (
     <div className="paddingB16 blog">
-      <div className="padding32">
+      <div className="padding32" style={{minWidth: 768}}>
         <Spin spinning={false}>
-          <Row gutter={40}>
+          <Row gutter={40} justify="center">
             <Col span={24}>
               <h1 style={{textAlign: 'center'}}>News & Updates</h1>
               <h4 className="marginB32" style={{textAlign: 'center'}}>
@@ -81,8 +81,10 @@ const Blogs = ({userInfo, httpLoading, setHttpLoading}) => {
                     <div className="blog-text-box">
                       <div className="job-item title">{item.title}</div>
                       <div className="job-item tag">
-                        <TagOutlined style={{paddingRight: 8}}/>
-                        {item.tags}
+                        {item.tags&&<div className="job-item tag">
+                          <TagOutlined style={{paddingRight: 8}}/>
+                          {item.tags}
+                        </div>}
                       </div>
                     </div>
                     <div className="blog-btn-box">

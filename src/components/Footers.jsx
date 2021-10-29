@@ -14,7 +14,7 @@ const Footers =()=> (
           <Link className="footerNav" to="/privacyPolicy?type=4">Privacy Policy</Link>
         </Col>
         <Col lg={6} xs={0} sm={0} md={0} className="text-left">
-          <Link className="footerNav" to="/contactUs">Contact Sales</Link>
+          <Link className="footerNav" to="/faq">FAQ</Link>
         </Col>
         <Col lg={0} xs={8} sm={8} md={8} className="text-center">
           <Link className="footerNav" to='/termsService?type=3'>Terms of Service</Link>
@@ -23,7 +23,7 @@ const Footers =()=> (
           <Link className="footerNav" to="/privacyPolicy?type=4">Privacy Policy</Link>
         </Col>
         <Col lg={0} xs={8} sm={8} md={8} className="text-center">
-          <Link className="footerNav" to="/contactUs">Contact Sales</Link>
+          <Link className="footerNav" to="/faq">FAQ</Link>
         </Col>
         <Col lg={6} xs={0} sm={0} md={0} className="text-right footerNav"> ©2021 by Affinity Analyst.</Col>
       </Row>

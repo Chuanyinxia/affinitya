@@ -22,8 +22,15 @@ const Login = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) =
   // eslint-disable-next-line new-cap
   const [email]=useState(isEmail()? Email():cookie.load('email'));
   const [password]=useState(!isEmail()?cookie.load('password'):'');
-
+  const loadPageVar = (sVar) => {
+    return decodeURI(
+        window.location.search.replace(
+            new RegExp('^(?:.*[&\\?]' +
+          encodeURI(sVar).replace(/[.+*]/g, '\\$&') +
+          '(?:\\=([^&]*))?)?.*$', 'i'), '$1'));
+  };
   const handleLogin = (values)=>{
+    const type = loadPageVar('type');
     setHttpLoading(true);
     const param={email: values.email,
       password: values.password};
@@ -44,7 +51,11 @@ const Login = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) =
       if (isEmail()&&values.email===m) {
         history.push('/dashboard/jobManager'+window.location.search);
       } else {
-        history.push('/dashboard/audienceGenerator');
+        if (type!==''&&type==='2') {
+          history.push('/plansAndPrices');
+        } else {
+          history.push('/dashboard');
+        }
       }
     }).catch((error)=>{
       message.error({

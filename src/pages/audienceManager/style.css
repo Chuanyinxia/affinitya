@@ -411,59 +411,5 @@
   .tree-title-box.sc{
     width: 522px;
   }
-  /* .table-wrap{
-    width: 766px;
-    overflow-x: scroll;
-  } */
 }
 
-/* @media only screen and (max-width: 985px){
-  .text-box{
-    width: 688px;
-    height: 726px;
-    margin: 0 auto;
-  }
-  .winner-box{
-    width: 696px;
-    height: 726px;
-    margin: 20px auto;
-  }
-  .card-group{
-    padding: 0 20px 20px 20px;
-  }
-  .card-group-name{
-    height: 32;
-    line-height: 32px;
-  }
-  .card-job-name{
-    height: 24px; 
-    margin-top: 8px;
-    line-height: 24px; 
-    max-width: 250px;
-  }
-  .card-job-ct{
-    height: 24px;
-    line-height: 24px;
-    margin-top: 8px;
-  }
-  .card-job-more{
-    padding-left: 16px;
-    height: 24px;
-    line-height: 24px;
-  }
-  .card-item{
-    width: 310px;
-    height: 124px;
-    margin-left: 12px;
-    padding:8px 30px;
-  }
-  .tree-title{
-    width: 280px;
-  }
-  .tree-title-box{
-    width: 306px;
-  }
-  .tree-title-box.sc{
-    width: 282px;
-  }
-} */
