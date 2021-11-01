@@ -70,6 +70,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
   const [filterType, setfilterType] = useState(0);
   const [sortedWinnerList, setsortedWinnerList] = useState([]);
   const [currentIndex, setcurrentIndex] = useState(-1);
+  const [isFirst, setisFirst] = useState(true);
   const c = useRef();
   const tabRef = useRef();
   const renameLink = (
@@ -188,18 +189,18 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
         setsortedWinnerList(winnerList);
       }}>
         <span>
-          All
+          all
         </span>
       </Menu.Item>
       <Menu.Item danger>
         <span>
-          looklike audience
+          lookalike audience
         </span>
       </Menu.Item>
       <Menu.Item onClick={()=>{
-        setfilterType(2);
+        setfilterType(1);
         initWinnerList();
-        setsortedWinnerList(winnerList.filter((item)=>item.type===2));
+        setsortedWinnerList(winnerList.filter((item)=>item.type===1));
       }}>
         <span>
           keyword
@@ -215,16 +216,16 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
         setsortedWinnerList(winnerList);
       }}>
         <span>
-          All
+          all
         </span>
       </Menu.Item>
       <Menu.Item onClick={()=>{
-        setfilterType(1);
+        setfilterType(2);
         initWinnerList();
-        setsortedWinnerList(winnerList.filter((item)=>item.type===1));
+        setsortedWinnerList(winnerList.filter((item)=>item.type===2));
       }}>
         <span>
-          looklike audience
+          lookalike audience
         </span>
       </Menu.Item>
       <Menu.Item danger>
@@ -238,22 +239,22 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
     <Menu>
       <Menu.Item danger>
         <span>
-          All
-        </span>
-      </Menu.Item>
-      <Menu.Item onClick={()=>{
-        setfilterType(1);
-        initWinnerList();
-        setsortedWinnerList(winnerList.filter((item)=>item.type===1));
-      }}>
-        <span>
-          looklike audience
+          all
         </span>
       </Menu.Item>
       <Menu.Item onClick={()=>{
         setfilterType(2);
         initWinnerList();
         setsortedWinnerList(winnerList.filter((item)=>item.type===2));
+      }}>
+        <span>
+          lookalike audience
+        </span>
+      </Menu.Item>
+      <Menu.Item onClick={()=>{
+        setfilterType(1);
+        initWinnerList();
+        setsortedWinnerList(winnerList.filter((item)=>item.type===1));
       }}>
         <span>
           keyword
@@ -387,7 +388,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
   }, [isPayUser]);
   const getWinnerList = (name, pageSize, pageNum)=>{
     const data = {
-      name: name,
+      name: name.trim(),
       pageSize: pageSize,
       pageNum: pageNum,
     };
@@ -424,7 +425,14 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
         }).then((res) => {
       getWinnerList('', 999, 1);
       if (c.current.winner) getArchiveList(t, '', 999, 1);
-      else getArchiveList(t===1?3:1, '', 999, 1);
+      else {
+        if (isFirst) {
+          getArchiveList(t, '', 999, 1);
+          setisFirst(false);
+        } else {
+          getArchiveList(t===1?3:1, '', 999, 1);
+        }
+      }
       setCheckedKeys([]);
     }).catch((error) => {
       message.error({
@@ -438,7 +446,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
     post(GETARCHIVELIST,
         {
           status: status,
-          name: searchData,
+          name: searchData.trim(),
           pageSize: 999,
           pageNum: 1,
         }, {
@@ -590,7 +598,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
           setArchiveDetailModal(false);
         }}>
         <div >
-          <KeyWordSearchDetails searchData={archiveDetail} statusType={0} hideTesting={true}/>
+          <KeyWordSearchDetails searchData={archiveDetail} statusType={0} hideTesting={true} hideCheckbox={true}/>
         </div>
       </Modal>
       <Modal
@@ -729,7 +737,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                     </Dropdown>
                   </div>
                   <div className="winner-icon">
-                    <Dropdown overlay={filterType===0?filterMenuA:(filterType===1?filterMenuByA:filterMenuByk)}
+                    <Dropdown overlay={filterType===0?filterMenuA:(filterType===1?filterMenuByk:filterMenuByA)}
                       arrow
                       trigger={['click']}
                       placement="bottomLeft"

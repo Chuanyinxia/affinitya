@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {Link, withRouter} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {Button, Checkbox, Col, Form, Input, message, Modal, Row, Spin, Tooltip} from 'antd';
-import {httpLoading, login, userInfo} from '@/store/actions';
+import {httpLoading, login, userInfo, setFirst} from '@/store/actions';
 import {get, post} from '@/utils/request';
 import {GETAGREEMENT, GETVERIFICATIONCODE, REGISTER} from '@/api';
 import './style.css';
@@ -12,6 +12,9 @@ import {Email} from '@/components/plugin/Searchdata';
 import {storage} from '@/utils/storage';
 import logo from '@/assets/login/sm-logo.png';
 import Footers from '@/components/Footers';
+import store from '@/store/index';
+import Base64 from 'crypto-js/enc-base64';
+import Utf8 from 'crypto-js/enc-utf8';
 
 const SignUp = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) => {
   const [read, setRead] = useState(true);
@@ -39,17 +42,19 @@ const SignUp = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) 
     setHttpLoading(true);
     const param = {
       email: values.email,
-      password: values.password,
-      confirmPassword: values.password,
+      password: Base64.stringify(Utf8.parse(values.password)),
+      confirmPassword: Base64.stringify(Utf8.parse(values.password)),
       verificationCode: values.verificationCode,
     };
+    store.dispatch(setFirst(true));
     post(REGISTER, param, {
       'Content-Type': 'application/x-www-form-urlencoded',
     }).then((res) => {
       storage.saveData('session', 'userInfo', res.data);
       setUserInfo(res.data);
       setLogged(true);
-      history.push('/dashboard/audienceGenerator');
+      history.push('/dashboard');
+      store.dispatch(setFirst(true));
     }).catch((error) => {
       message.error({
         content: error.toString(), key: 'netError', duration: 2,

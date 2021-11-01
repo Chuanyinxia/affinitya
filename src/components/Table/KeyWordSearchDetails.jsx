@@ -16,7 +16,8 @@ import {storage} from '@/utils/storage';
 const {TabPane} = Tabs;
 
 
-const KeyWordSearchDetails = ({userInfo, searchData, statusType, hideFirstButton, jobSave, jobName, hideTesting}) => {
+const KeyWordSearchDetails = ({userInfo, searchData, statusType,
+  hideFirstButton, jobSave, jobName, hideTesting, hideCheckbox}) => {
   const [saveStatus, setSaveStatus] = useState(0);
   const [isPayUser, setIsPayUser] = useState(false);
   const [selectKeys, setSelectKeys] = useState([]);
@@ -237,6 +238,7 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType, hideFirstButton
                 TableData={tableData(item.searchDetails ?? [])}
                 onSelect={onSelect}
                 groupId={item.groupId}
+                hideCheckbox={hideCheckbox}
               />
             </TabPane>))}
         </Tabs>):(<Empty />)
@@ -268,6 +270,7 @@ KeyWordSearchDetails.propTypes = {
   jobSave: PropTypes.func.isRequired,
   jobName: PropTypes.string.isRequired,
   hideTesting: PropTypes.bool.isRequired,
+  hideCheckbox: PropTypes.bool.isRequired,
 };
 
 export default connect(

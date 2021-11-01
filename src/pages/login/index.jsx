@@ -13,6 +13,8 @@ import logo from '@/assets/login/sm-logo.png';
 import './style.css';
 import {Email, isEmail} from '@/components/plugin/Searchdata';
 import Footers from '@/components/Footers';
+import Base64 from 'crypto-js/enc-base64';
+import Utf8 from 'crypto-js/enc-utf8';
 // import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
 // import FB from '@/assets/alipay-circle.png';
 // const responseFacebook = (response) => {
@@ -32,14 +34,16 @@ const Login = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) =
   const handleLogin = (values)=>{
     const type = loadPageVar('type');
     setHttpLoading(true);
-    const param={email: values.email,
-      password: values.password};
+    const param={
+      email: values.email,
+      password: Base64.stringify(Utf8.parse(values.password)),
+    };
     post(LOGIN, param, {
       'Content-Type': 'application/x-www-form-urlencoded',
     }).then((res)=>{
       if (values.remember) {
         cookie.save('email', param.email);
-        cookie.save('password', param.password);
+        cookie.save('password', Base64.parse(param.password).toString(Utf8));
         storage.saveData('local', 'userInfo', res.data);
       } else {
         storage.saveData('session', 'userInfo', res.data);

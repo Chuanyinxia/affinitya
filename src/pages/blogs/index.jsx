@@ -4,6 +4,7 @@ import {useHistory} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {httpLoading} from '@/store/actions';
 import './style.css';
+import icon from '@/assets/default.png';
 import {
   GETBLOGLIST,
 } from '@/api/index';
@@ -32,7 +33,7 @@ const Blogs = ({userInfo, httpLoading, setHttpLoading}) => {
     post(GETBLOGLIST, {
       pageSize: pageSize,
       PageNum: PageNum,
-      keyword: keyword,
+      keyword: keyword.trim(),
     }, {
       'Content-Type': 'application/x-www-form-urlencoded',
       'token': userInfo.token,
@@ -58,7 +59,7 @@ const Blogs = ({userInfo, httpLoading, setHttpLoading}) => {
               </h4>
               <div className="blog-search-box marginB32">
                 <Input
-                  placeholder="input search text"
+                  placeholder="Search"
                   style={{width: 464}}
                   prefix={<SearchOutlined />}
                   allowClear
@@ -74,23 +75,28 @@ const Blogs = ({userInfo, httpLoading, setHttpLoading}) => {
               </div>
               <div className="blog-list-box">
                 {blogList.map((item, index)=>(
-                  <div className="blog-item" key={index}>
-                    <div className="blog-image-box">
-                      <img src={item.img} alt="none" />
-                    </div>
-                    <div className="blog-text-box">
-                      <div className="job-item title">{item.title}</div>
-                      <div className="job-item tag">
-                        {item.tags&&<div className="job-item tag">
-                          <TagOutlined style={{paddingRight: 8}}/>
-                          {item.tags}
-                        </div>}
+                  <div className="blog-item-box" key={index} onClick={()=>{
+                    history.push('/blogs/detail/'+item.id);
+                  }}>
+                    <div className="blog-item">
+                      <div className="blog-image-box">
+                        <img src={item.img} onError={(e)=>{
+                          e.target.onerror=null;
+                          e.target.src=icon;
+                        }}/>
                       </div>
-                    </div>
-                    <div className="blog-btn-box">
-                      <span className="more-link" onClick={()=>{
-                        history.push('/blogs/detail/'+item.id);
-                      }}>Read More</span>
+                      <div className="blog-text-box">
+                        <div className="job-item title">{item.title}</div>
+                        <div className="job-item tag">
+                          {item.tags&&<div className="job-item tag">
+                            <TagOutlined style={{paddingRight: 8}}/>
+                            {item.tags}
+                          </div>}
+                        </div>
+                      </div>
+                      <div className="blog-btn-box">
+                        <span className="more-link">Read More</span>
+                      </div>
                     </div>
                   </div>
                 ))}

@@ -7,23 +7,29 @@ const Footers =()=> (
   <div>
     <Footer className="home-footer">
       <Row className="footer-nav">
-        <Col lg={6} xs={0} sm={0} md={0} className="text-left">
+        <Col lg={4} xs={0} sm={0} md={0} className="text-left">
           <Link className="footerNav" to='/termsService?type=3'>Terms of Service</Link>
         </Col>
-        <Col lg={6} xs={0} sm={0} md={0} className="text-left">
+        <Col lg={4} xs={0} sm={0} md={0} className="text-left">
           <Link className="footerNav" to="/privacyPolicy?type=4">Privacy Policy</Link>
         </Col>
-        <Col lg={6} xs={0} sm={0} md={0} className="text-left">
-          <Link className="footerNav" to="/faq">FAQ</Link>
+        <Col lg={4} xs={0} sm={0} md={0} className="text-left">
+          <Link className="footerNav" to="/contactUs">Contact Sales</Link>
         </Col>
-        <Col lg={0} xs={8} sm={8} md={8} className="text-center">
+        <Col lg={4} xs={0} sm={0} md={0} className="text-left">
+          <Link className="footerNav" to="/ufaq">FAQ</Link>
+        </Col>
+        <Col lg={0} xs={6} sm={6} md={6} className="text-center">
           <Link className="footerNav" to='/termsService?type=3'>Terms of Service</Link>
         </Col>
-        <Col lg={0} xs={8} sm={8} md={8} className="text-center">
+        <Col lg={0} xs={6} sm={6} md={6} className="text-center">
           <Link className="footerNav" to="/privacyPolicy?type=4">Privacy Policy</Link>
         </Col>
-        <Col lg={0} xs={8} sm={8} md={8} className="text-center">
-          <Link className="footerNav" to="/faq">FAQ</Link>
+        <Col lg={0} xs={6} sm={6} md={6} className="text-left">
+          <Link className="footerNav" to="/contactUs">Contact Sales</Link>
+        </Col>
+        <Col lg={0} xs={6} sm={6} md={6} className="text-center">
+          <Link className="footerNav" to="/ufaq">FAQ</Link>
         </Col>
         <Col lg={6} xs={0} sm={0} md={0} className="text-right footerNav"> ©2021 by Affinity Analyst.</Col>
       </Row>

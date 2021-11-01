@@ -343,7 +343,7 @@
     line-height: 24px;
   }
   .card-item{
-    width: 310px;
+    width: 300px;
     height: 124px;
     margin-left: 12px;
     padding:8px 30px;
@@ -397,7 +397,7 @@
     line-height: 24px;
   }
   .card-item{
-    width: 310px;
+    width: 300px;
     height: 124px;
     margin-left: 12px;
     padding:8px 30px;
@@ -410,6 +410,9 @@
   }
   .tree-title-box.sc{
     width: 522px;
+  }
+  .ant-form-item-explain-error{
+    font-size: 12px;
   }
 }
 

@@ -5,7 +5,7 @@ import {httpLoading} from '@/store/actions';
 import './style.css';
 import {Table} from 'antd';
 
-const ResultTable = ({userInfo, TableData, onSelect, groupId, hideTesting}) => {
+const ResultTable = ({userInfo, TableData, onSelect, groupId, hideCheckbox}) => {
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
       onSelect(selectedRowKeys, selectedRows, groupId);
@@ -20,9 +20,9 @@ const ResultTable = ({userInfo, TableData, onSelect, groupId, hideTesting}) => {
   return (
     // eslint-disable-next-line new-cap
     <Table
-      rowSelection={{
-        ...rowSelection,
-      }}
+      rowSelection={
+        !hideCheckbox?{...rowSelection}:null
+      }
       dataSource={TableData}
       scroll={{y: 400}}
       rowKey={(record)=> record.id}
@@ -59,7 +59,7 @@ ResultTable.propTypes = {
   TableData: PropTypes.array.isRequired,
   onSelect: PropTypes.func.isRequired,
   groupId: PropTypes.number.isRequired,
-  hideTesting: PropTypes.bool.isRequired,
+  hideCheckbox: PropTypes.bool.isRequired,
 };
 
 export default connect(

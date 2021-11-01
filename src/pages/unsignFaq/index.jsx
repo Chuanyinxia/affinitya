@@ -10,12 +10,14 @@ import {httpLoading} from '@/store/actions';
 import './style.css';
 // import {post} from '@/utils/request';
 // import {CONTACTUS} from '@/api';
+import Headers from '@/components/Headers';
+import Footers from '@/components/Footers';
 
 
 const {Content} = Layout;
 const {Panel} = Collapse;
 
-const Faq = () => {
+const UnsignFaq = () => {
   const title1=`
   1. How are keywords expanded?
 `;
@@ -84,13 +86,14 @@ const Faq = () => {
   const [activeKey, setactiveKey] = useState('');
   return (
     <Layout className="layout Home">
+      <Headers/>
       <Content>
         <div className="login-content fandq" style={{
           minHeight: 'calc(100vh - 100px)',
+          paddingTop: 130,
           paddingBottom: 80,
-          marginTop: 48,
         }}>
-          <Row>
+          <Row style={{marginTop: 18}}>
             <Col span={24}>
               <Row>
                 <Col span={24}>
@@ -102,7 +105,7 @@ const Faq = () => {
             </Col>
           </Row>
           <Row>
-            <Col xs={24} xl={20} lg={20} style={{margin: '24px auto'}}>
+            <Col xs={24} xl={20} lg={20} style={{marginTop: 40, margin: '32px auto'}}>
               <Collapse
                 className="faq-collapse"
                 bordered={false}
@@ -186,6 +189,7 @@ const Faq = () => {
           </Row>
         </div>
       </Content>
+      <Footers/>
     </Layout>
   );
 };
@@ -205,7 +209,7 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-Faq.propTypes = {
+UnsignFaq.propTypes = {
   httpLoading: PropTypes.bool.isRequired,
   setHttpLoading: PropTypes.func.isRequired,
   userInfo: PropTypes.object.isRequired,
@@ -214,4 +218,4 @@ Faq.propTypes = {
 export default connect(
     mapStateToProps,
     mapDispatchToProps,
-)(Faq);
+)(UnsignFaq);

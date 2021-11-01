@@ -68,15 +68,18 @@ const Headers=({logged, setLogged, setUserInfo})=>{
                   (<Link to='/home' className="navs">Home</Link>)}
                 {/* <Link to='/dashboard/audienceGenerator'*/}
                 {/*  className="navs">About</Link>*/}
-                <Link to='/plansPricing'
-                  className={key==='plansPricing'?'navs activeNav':'navs'}
+                <Link to={logged?'/plansAndPrices':'/plansPricing'}
+                  className={key.includes('plans')?'navs activeNav':'navs'}
                 >Plans & Pricing</Link>
+                <Link to='/ublogs'
+                  className={key.includes('blogs')?'navs activeNav':'navs'}
+                >News & Updates</Link>
                 <Link to='/contactUs' className={key==='contactUs'?'navs activeNav':'navs '}>Contact Sales</Link>
+                <Link to='/ufaq' className={key.includes('faq')?'navs activeNav':'navs '}>FAQ</Link>
                 <span className="navs">|</span>
                 {logged?(<Link to='/login' onClick={logout} className="navs">Logout</Link>):
                   ( <Link to='/login' className={key==='login'?'navs activeNav':'navs'}>Login</Link>)}
-
-                {logged?(<Button href="/dashboard/audienceGenerator" className="navButton">Dashboard</Button>):
+                {logged?(<Button href="/dashboard" className="navButton">Dashboard</Button>):
                   (<Button href="/signUp" className="navButton">Sign Up</Button>)}
               </Space>
             </Col>
@@ -92,9 +95,14 @@ const Headers=({logged, setLogged, setUserInfo})=>{
           <div className="smMenus-top">
             <Space size="large" wrap>
               <Link to='/' className="navs">Home</Link>
-              <Link to='/plansPricing' className="navs">Plans & Pricing</Link>
+              <Link to={logged?'/plansAndPrices':'/plansPricing'}
+                className={key.includes('plans')?'navs activeNav':'navs'}
+              >Plans & Pricing</Link>
+              <Link to='/ublogs' className="navs">News & Updates</Link>
               <Link to='/contactUs' className="navs">Contact Sales</Link>
-              {logged&&(<Link to='/dashboard/audienceGenerator' className="navs">Dashboard</Link>)}
+              <Link to='/ufaq' className="navs">
+                FAQ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Link>
+              {logged&&(<Link to='/dashboard' className="navs">Dashboard</Link>)}
             </Space>
           </div>
           <div className="smMenus-bottom">
