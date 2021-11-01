@@ -97,7 +97,6 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
       onClick={(e)=>{
         e.preventDefault();
         e.stopPropagation();
-        setSearchID(c.current.id);
         setSearchType(c.current.type);
         getArchiveDetails(c.current.id);
         setArchiveDetailModal(true);
@@ -710,12 +709,15 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                     let type;
                     let jobId = info.node.key;
                     const name = info.node.title.props.children[0].props.title;
+                    // console.log(info.node.key);
                     if (info.node.children) {
                       data = info.node.children.map((item)=>item.key.split('-')[1]).join(',');
                       type = 1;
+                      setSearchID(info.node.key);
                     } else {
                       data = info.node.key.split('-')[1];
                       type = 2;
+                      setSearchID(info.node.key.split('-')[1]);
                     }
                     if (jobId.includes('-')) jobId = jobId.split('-')[1];
                     c.current = {
@@ -804,7 +806,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                         }}
                         onClick={(e)=>{
                           e.stopPropagation();
-                          console.log(item);
+                          setSearchID(item.searchResultId);
                           c.current = {
                             id: item.searchResultId,
                             jobId: item.searchResultId,
