@@ -71,6 +71,8 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
   const [sortedWinnerList, setsortedWinnerList] = useState([]);
   const [currentIndex, setcurrentIndex] = useState(-1);
   const [isFirst, setisFirst] = useState(true);
+  const [searchID, setSearchID] = useState('');
+  const [searchType, setSearchType] = useState('');
   const c = useRef();
   const tabRef = useRef();
   const renameLink = (
@@ -95,6 +97,8 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
       onClick={(e)=>{
         e.preventDefault();
         e.stopPropagation();
+        setSearchID(c.current.id);
+        setSearchType(c.current.type);
         getArchiveDetails(c.current.id);
         setArchiveDetailModal(true);
       }}
@@ -598,7 +602,13 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
           setArchiveDetailModal(false);
         }}>
         <div >
-          <KeyWordSearchDetails searchData={archiveDetail} statusType={0} hideTesting={true} hideCheckbox={true}/>
+          <KeyWordSearchDetails
+            searchID={searchID}
+            searchType={searchType}
+            searchData={archiveDetail}
+            statusType={0}
+            hideTesting={true}
+            hideCheckbox={true}/>
         </div>
       </Modal>
       <Modal

@@ -6,7 +6,7 @@ import './style.css';
 import {Button, Card, Col, Empty, message, Row, Space, Tabs, Tooltip} from 'antd';
 import ResultTable from '@/components/Table/ResultTable';
 import {get, post} from '@/utils/request';
-import {EXPORTCVS, ISPAID, SAVESEARCHMESSAGE, SAVESEARCHMESSAGEBYGROUP, GETNOREADAUDIENCE} from '@/api';
+import {EXPORTCVS, ISPAID, SAVESEARCHMESSAGE, SAVESEARCHMESSAGEBYGROUP, GETNOREADAUDIENCE, EXPORTCVS2} from '@/api';
 // import {CopyToClipboard} from 'react-copy-to-clipboard';
 // import ClipboardJS from 'clipboard';
 
@@ -16,14 +16,13 @@ import {storage} from '@/utils/storage';
 const {TabPane} = Tabs;
 
 
-const KeyWordSearchDetails = ({userInfo, searchData, statusType,
+const KeyWordSearchDetails = ({userInfo, searchData, statusType, searchID, searchType, source,
   hideFirstButton, jobSave, jobName, hideTesting, hideCheckbox}) => {
   const [saveStatus, setSaveStatus] = useState(0);
   const [isPayUser, setIsPayUser] = useState(false);
   const [selectKeys, setSelectKeys] = useState([]);
   const [copyValue, setCopyValues] = useState('');
   const [groupId, setGroupId] = useState(null);
-  const id = searchData ? searchData[0]?.searchId : '';
   const tableData = (tableData) => {
     const data = tableData.map((item, index) => {
       return {...item, index: index + 1};
@@ -33,7 +32,7 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType,
   const saveAudience = () => {
     if (groupId === 0 || groupId) {
       const data = {
-        'searchId': id,
+        'searchId': searchID,
         'saveGroup': [{
           'groupId': groupId,
           'ids': selectKeys.join(','),
@@ -46,7 +45,7 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType,
           }).then((res) => {
         message.success(res.msg);
         jobSave({
-          'searchId': id,
+          'searchId': searchID,
           'groupId': groupId,
         });
         setSaveStatus(1);
@@ -64,7 +63,7 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType,
       });
     } else {
       post(SAVESEARCHMESSAGE,
-          {searchId: id},
+          {searchId: searchID},
           {
           // eslint-disable-next-line no-tabs
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -72,7 +71,7 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType,
           }).then((res) => {
         setSaveStatus(1);
         jobSave({
-          'searchId': id,
+          'searchId': searchID,
         });
         message.success(res.msg);
       }).catch((error) => {
@@ -102,6 +101,7 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType,
   };
 
   const downloadButton=()=>{
+    const url=source?EXPORTCVS:EXPORTCVS2;
     if (isPayUser) {
       if (searchData.length<1) {
         return ( <Tooltip title="The search result is empty and cannot be exported.">
@@ -114,7 +114,7 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType,
         className="btn-md"
         download
         target="_blank"
-        href={`${EXPORTCVS}${id}/${userInfo.token}`}
+        href={`${url}${searchID}/${searchType}/${userInfo.token}`}
         disabled={!isPayUser}>
         Export to CSV
       </Button>);
@@ -207,7 +207,7 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType,
                 <Button
                   type="primary"
                   className="btn-md"
-                  disabled={(saveStatus === 1|| statusType===1||!id)?true:false}
+                  disabled={(saveStatus === 1|| statusType===1||!searchID)?true:false}
                   onClick={saveAudience}
                 >Save for Testing</Button>
               </Tooltip>)
@@ -227,7 +227,7 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType,
       </Row>
       <Card>
         {searchData.length>0?(<Tabs
-          defaultActiveKey={searchData[0]?.id}
+          defaultActiveKey={searchID}
           destroyInactiveTabPane onChange={()=>{
             setGroupId(null);
             setSelectKeys([]);
@@ -271,6 +271,9 @@ KeyWordSearchDetails.propTypes = {
   jobName: PropTypes.string.isRequired,
   hideTesting: PropTypes.bool.isRequired,
   hideCheckbox: PropTypes.bool.isRequired,
+  searchID: PropTypes.string.isRequired,
+  searchType: PropTypes.string.isRequired,
+  source: PropTypes.string.isRequired,
 };
 
 export default connect(

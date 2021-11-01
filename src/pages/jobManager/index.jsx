@@ -7,11 +7,10 @@ import {
   CANCELJOB,
   GETJOBDETAIL,
   GETJOBMANAGER,
-  GETNEWMESSAGECOUNT,
   ISPAID,
   READJOBMANGER,
   RESTARTJOB,
-  UPDATEJOBTITLE
+  UPDATEJOBTITLE,
 } from '@/api';
 import {get, post, update} from '@/utils/request';
 import {Alert, Button, Form, Input, message, Modal, Space, Table, Tabs, Tag, Tooltip} from 'antd';
@@ -52,7 +51,8 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
   const [creatJobForm] = Form.useForm();
   const [searchTitle, setSearchTitle]=useState('');
   const [saveManger, setSaveManger]= useState(null);
-
+  const [searchID, setSearchID] = useState('');
+  const [searchType, setSearchType] = useState('');
   const loadPageVar = (sVar) => {
     return decodeURI(
         window.location.search.replace(
@@ -235,7 +235,7 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
     left: null,
     right: <div style={{marginRight: 3}}>
       <Input
-        size="small"
+        size="small"ya
         style={{height: 40, width: 220}}
         placeholder="Search"
         value={searchTitle}
@@ -361,6 +361,8 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
                   onClick={() => {
                     getJobDetails(record.id);
                     setJobName(record.title);
+                    setSearchID(record.id);
+                    setSearchType(record.type);
                   }}
                   type="link"
                   className="btn-xs btn-red-link">
@@ -424,12 +426,15 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
             setViewModal(false);
           }}>
           <div >
-            {<KeyWordSearchDetails
+            {viewDetail&&(<KeyWordSearchDetails
               searchData={viewDetail}
+              searchID={searchID}
+              searchType={searchType}
+              source="jobManager"
               statusType={saveStatusType}
               jobSave={setSaveManger}
               jobName={jobName}
-            />}
+            />)}
           </div>
 
         </Modal>
