@@ -56,12 +56,12 @@ const Transactions = ({userInfo, httpLoading, setHttpLoading}) => {
     {
       title: 'Action',
       render: (r) => (
-        r.payStatus===1?<a
-          onClick={(e)=>{
-            e.preventDefault();
+        r.payStatus===1?<Button
+          type="text" className="btn-xs btn-red-link"
+          onClick={()=>{
             downloadInvoice(r.id);
           }}
-        >Invoice</a>:null
+        >Invoice</Button>:null
       ),
     },
   ];

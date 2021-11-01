@@ -3,7 +3,16 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {httpLoading, setMenusData, updateIsPay} from '@/store/actions';
 import './style.css';
-import {CANCELJOB, GETJOBDETAIL, GETJOBMANAGER, ISPAID, RESTARTJOB, UPDATEJOBTITLE} from '@/api';
+import {
+  CANCELJOB,
+  GETJOBDETAIL,
+  GETJOBMANAGER,
+  GETNEWMESSAGECOUNT,
+  ISPAID,
+  READJOBMANGER,
+  RESTARTJOB,
+  UPDATEJOBTITLE
+} from '@/api';
 import {get, post, update} from '@/utils/request';
 import {Alert, Button, Form, Input, message, Modal, Space, Table, Tabs, Tag, Tooltip} from 'antd';
 import {SearchOutlined} from '@ant-design/icons';
@@ -176,6 +185,15 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
       type: jobType,
     });
   };
+  const jobReader=()=>{
+    update(READJOBMANGER, '', {
+      'token': userInfo.token,
+    }).then((res)=>{
+      console.log(res);
+    }).catch((error)=>{
+      console.log(error);
+    });
+  };
 
   useEffect(() => {
     const data=history.location.search.split('?');
@@ -188,6 +206,8 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
       id: searchId,
     };
     isPay();
+    // 新增Job阅读
+    jobReader();
     // eslint-disable-next-line no-constant-condition
     if (data.length>1) {
       const search=qs.parse(data[1]);
