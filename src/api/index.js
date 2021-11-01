@@ -7,6 +7,7 @@ export const FORGETPASSWORD='/api/forgetPassword';
 export const SEARCHKW='/api/searchKW';
 export const SEARCHAUID='/api/searchAuId';
 // export const EXPORTCVS='http://124.71.9.188:8881/api/export/';
+// export const EXPORTCVS2='http://124.71.9.188:8881/api/exportDetail/';
 export const EXPORTCVS='https://affinityanalyst.com/api/export/';
 export const EXPORTCVS2='https://affinityanalyst.com/api/exportDetail/';
 export const SAVESEARCHMESSAGE='/api/saveSearchMessage';
