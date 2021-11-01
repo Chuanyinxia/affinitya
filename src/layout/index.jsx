@@ -26,6 +26,7 @@ const Customlayout = ({history, activeKey, setLogged}) => {
   const [loading, setLoading] =useState(false);
   const [dotShow, setDotShow] = useState(false);
   const [menuVisible, setmenuVisible] = useState(false);
+  // const [popVisible, setpopVisible] = useState(false);
   const getNoticeMsg=()=>{
     setLoading(true);
     get(GETNOTICEMSG, userInfo.token).then((res)=>{
@@ -129,8 +130,22 @@ const Customlayout = ({history, activeKey, setLogged}) => {
           <List.Item.Meta
             avatar={<Avatar src={parseInt(item.readStatus)===1?msg1:msg2} />}
             title={<Row>
-              <Col span={14}>{item.title}</Col>
-              <Col span={10} className="text-min text-right">{item.createTime}</Col>
+              {item.type===3?
+              <>
+                <Col span={14}>Job <a onClick={(e)=>{
+                  e.preventDefault();
+                  e.stopPropagation();
+                  history.push('/dashboard/jobManager?keyword='+item.jobTitle+'&id='+item.jobId);
+                  store.dispatch(setMenusData('jobManager', 'dashboard'));
+                  // setpopVisible(false);
+                }}>{item.jobTitle}</a> : {item.title}</Col>
+                <Col span={10} className="text-min text-right">{item.createTime}</Col>
+              </>:
+              <>
+                <Col span={14}>{item.title}</Col>
+                <Col span={10} className="text-min text-right">{item.createTime}</Col>
+              </>
+              }
             </Row>}
             description={item.notice}
           />
@@ -168,6 +183,11 @@ const Customlayout = ({history, activeKey, setLogged}) => {
           onClick={()=>setmenuVisible(false)}>
           <CloseOutlined />
         </div>
+        <div className="logoBox">
+          <a href="/home">
+            <img src={logo} width={168}/>
+          </a>
+        </div>
         <Menus/>
       </div>:null}
       <Layout>
@@ -200,14 +220,22 @@ const Customlayout = ({history, activeKey, setLogged}) => {
                         history.push('/contactSales');
                       }}/>
                     </Tooltip>
-                    <Tooltip title="Tech Help">
-                      <div className="icon faq"/>
+                    <Tooltip title="FAQ">
+                      <div className="icon faq" onClick={()=>{
+                        store.dispatch(setMenusData('', ''));
+                        history.push('/faq');
+                      }}/>
                     </Tooltip>
-                    <Popover content={content} trigger={['click']} placement="bottomRight">
-                      <div className="icon bell">
-                        {/* {hasMessage?<div className="bell-dot"/>:null} */}
-                      </div>
-                    </Popover>
+                    <Tooltip title="Notice">
+                      <Popover content={content} trigger="click" placement="bottomRight"
+                        // onVisibleChange={()=>setpopVisible(!popVisible)}
+                        // visible={popVisible}
+                      >
+                        <div className="icon bell">
+                          {hasMessage?<div className="bell-dot"/>:null}
+                        </div>
+                      </Popover>
+                    </Tooltip>
                     <div className="userName">
                       <Dropdown overlay={menu} placement="bottomCenter" trigger={['hover', 'click']}>
                         <div className="userImg">
@@ -249,15 +277,22 @@ const Customlayout = ({history, activeKey, setLogged}) => {
                         history.push('/contactSales');
                       }}/>
                     </Tooltip>
-                    <Tooltip title="Tech Help">
-                      <div className="icon faq"/>
+                    <Tooltip title="FAQ">
+                      <div className="icon faq" onClick={()=>{
+                        store.dispatch(setMenusData('', ''));
+                        history.push('/faq');
+                      }}/>
                     </Tooltip>
-                    <Popover content={content} trigger="click" placement="bottomRight">
-                      <div className="icon bell">
-                        {hasMessage?<div className="bell-dot"/>:null}
-                      </div>
-                    </Popover>
-
+                    <Tooltip title="Notice">
+                      <Popover content={content} trigger="click" placement="bottomRight"
+                        // onVisibleChange={()=>setpopVisible(!popVisible)}
+                        // visible={popVisible}
+                      >
+                        <div className="icon bell">
+                          {hasMessage?<div className="bell-dot"/>:null}
+                        </div>
+                      </Popover>
+                    </Tooltip>
                     <div className="userName">
                       <Dropdown overlay={menu} placement="bottomCenter">
                         <div className="userImg">

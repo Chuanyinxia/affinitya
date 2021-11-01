@@ -32,16 +32,16 @@ const ContactUS = () => {
       <Content>
         <div className="login-content" style={{
           minHeight: 'calc(100vh - 180px)',
-          paddingTop: 130,
+          paddingTop: 32,
           paddingBottom: 80,
         }}>
-          <Row style={{marginTop: 18}}>
+          <Row>
             <Col span={24}>
               <Row style={{marginTop: 18}}>
                 <Col span={24}>
                   <div style={{textAlign: 'center', fontSize: 24, fontWeight: 600}}>Contact Sales</div>
                   <div style={{textAlign: 'center', fontSize: 14, color: '#6E7191', marginTop: 8}}>
-                    Fill out the form below to contact sales team</div>
+                    Fill out the form below to contact sales team.</div>
                 </Col>
               </Row>
             </Col>

@@ -242,7 +242,6 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
     },
     {
       title: 'Action',
-      ellipsis: true,
       // eslint-disable-next-line react/display-name
       render: (_, record) => {
         const editable = isEditing(record);
@@ -412,7 +411,7 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
               }
             </Space>
           </div>
-          {<ResultTable TableData={addIndex(viewDetails)}/>}
+          {<ResultTable TableData={addIndex(viewDetails)} hideCheckbox={true}/>}
         </div>
       </Modal>
       <Form form={form} component={false} onValuesChange={valuesChange} >

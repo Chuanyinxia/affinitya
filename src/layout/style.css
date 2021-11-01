@@ -78,7 +78,7 @@
   cursor: pointer;
 }
 .username{
-  width: 20rem;
+  width: 15rem;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -88,6 +88,7 @@
 .sider-wrapper{
   height: 100vh;
 }
+
 @media only screen and (min-width: 1025px){
   .sider-wrapper{
     display: block;
@@ -122,9 +123,9 @@
   .small-menu-close{
     color:#fff;
     cursor: pointer;
-    margin-left: 224px;
-    margin-top: 8px;
+    left: 230px;
     font-size: 18px;
+    position: absolute;
   }
 }
 

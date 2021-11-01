@@ -6,13 +6,17 @@ import {Button, Card, Form, Input, message, Row, Spin, Col} from 'antd';
 import './style.css';
 import {UPDATEPASSWORD} from '@/api/index';
 import {post} from '@/utils/request';
-
+import Base64 from 'crypto-js/enc-base64';
+import Utf8 from 'crypto-js/enc-utf8';
 
 const ChangePassword = ({userInfo, httpLoading, setHttpLoading}) => {
   const [form] = Form.useForm();
   const onChangePassword = (value) => {
     setHttpLoading(true);
-    post(UPDATEPASSWORD, value, {
+    post(UPDATEPASSWORD, {
+      password: Base64.stringify(Utf8.parse(value.password)),
+      confirmPassword: Base64.stringify(Utf8.parse(value.confirmPassword)),
+    }, {
       // eslint-disable-next-line no-tabs
       'Content-Type': 'application/x-www-form-urlencoded',
       'token': userInfo.token,

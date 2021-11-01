@@ -50,6 +50,16 @@ const toggleAdvancedSearch = (state = {can: false}, action) => {
       return state;
   }
 };
+
+const checkFirst = (state = {isFirst: false}, action) => {
+  switch (action.type) {
+    case 'is_first':
+      return {isFirst: action.isFirst};
+    default:
+      return state;
+  }
+};
+
 const menus=(state={
   activeKey: 'home',
   openKeys: 'home',
@@ -74,6 +84,7 @@ const reducer = combineReducers({
   getUserInfo,
   toggleAdvancedSearch,
   menus,
+  checkFirst,
 });
 
 export default reducer;

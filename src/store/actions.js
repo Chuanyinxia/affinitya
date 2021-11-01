@@ -6,6 +6,7 @@ import {
   CANDOAS,
   GET_MENUS_DATA,
   GET_MANAGER_COUNTS, UPDATE_IS_PAY,
+  IS_FIRST,
 } from './actionTypes';
 
 export const httpLoading = (f)=>{
@@ -57,4 +58,9 @@ export const getMangerCounts = (managerCounts)=>({
 export const updateIsPay = (isPayer)=>({
   type: UPDATE_IS_PAY,
   isPayer,
+});
+
+export const setFirst = (isFirst)=>({
+  type: IS_FIRST,
+  isFirst,
 });

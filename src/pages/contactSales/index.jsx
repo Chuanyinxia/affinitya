@@ -10,20 +10,54 @@ const {Content} = Layout;
 
 const ContactSales = ({userInfo, httpLoading, setHttpLoading}) => {
   return (
+    // <Layout className="layout Home">
+    //   <Content>
+    //     <div style={{textAlign: 'center', fontSize: 24, fontWeight: 600, marginTop: 48}}>Contact Sales</div>
+    //     <div style={{textAlign: 'center', fontSize: 14, color: '#6E7191', marginTop: 8}}>
+    //       Fill out the form below to contact sales team.</div>
+    //     <div className="contact-us" style={{
+    //       minHeight: 'calc(100vh - 100px )',
+    //       paddingTop: 40,
+    //     }}>
+    //       <Row>
+    //         <Col lg={6}/>
+    //         <Col xs={24} lg={12} className="marginB32">
+    //           <ContactUsForm/>
+    //         </Col>
+    //       </Row>
+    //     </div>
+    //   </Content>
+    // </Layout>
     <Layout className="layout Home">
       <Content>
-        <div style={{textAlign: 'center', fontSize: 24, fontWeight: 600}}>Contact Sales</div>
-        <div style={{textAlign: 'center', fontSize: 14, color: '#6E7191', marginTop: 8}}>
-          Fill out the form below to contact sales team</div>
-        <div className="contact-us" style={{
-          minHeight: 'calc(100vh - 180px )',
-          paddingTop: 40,
+        <div className="login-content fandq" style={{
+          minHeight: 'calc(100vh - 100px)',
+          paddingBottom: 80,
+          marginTop: 48,
         }}>
           <Row>
-            <Col lg={6}/>
-            <Col xs={24} lg={12} className="marginB32">
-              <ContactUsForm/>
+            <Col span={24}>
+              <Row>
+                <Col span={24}>
+                  <div style={{textAlign: 'center', fontSize: 24, fontWeight: 600}}>Contact Sales</div>
+                  <div style={{textAlign: 'center', fontSize: 14, color: '#6E7191', marginTop: 8}}>
+                  Fill out the form below to contact sales team.</div>
+                  <div className="contact-us" style={{
+                    minHeight: 'calc(100vh - 100px )',
+                    paddingTop: 6,
+                  }}>
+                    <Row>
+                      <Col lg={6}/>
+                      <Col xs={24} lg={12} className="marginB32">
+                        <ContactUsForm/>
+                      </Col>
+                    </Row>
+                  </div>
+                </Col>
+              </Row>
             </Col>
+          </Row>
+          <Row>
           </Row>
         </div>
       </Content>

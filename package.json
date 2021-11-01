@@ -2,7 +2,7 @@
   "name": "fbad",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://124.71.9.188:8881/",
+  "proxy": "http://1.14.16.201:8881/",
   "dependencies": {
     "@ant-design/charts": "^1.0.21",
     "@craco/craco": "^6.1.1",
@@ -13,6 +13,7 @@
     "axios": "^0.21.1",
     "clipboard": "^2.0.8",
     "craco-less": "^1.17.1",
+    "crypto-js": "^4.1.1",
     "i18next": "^19.8.9",
     "i18next-browser-languagedetector": "^6.0.1",
     "js-export-excel": "^1.1.4",

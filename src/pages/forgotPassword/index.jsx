@@ -11,6 +11,8 @@ import './style.css';
 import bg from '@/assets/login.png';
 import logo from '@/assets/login/sm-logo.png';
 import Footers from '@/components/Footers';
+import Base64 from 'crypto-js/enc-base64';
+import Utf8 from 'crypto-js/enc-utf8';
 
 const ForgotPassword = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) => {
   // eslint-disable-next-line new-cap
@@ -21,8 +23,8 @@ const ForgotPassword = ({history, httpLoading, setHttpLoading, setLogged, setUse
     setHttpLoading(true);
     const param = {
       email: values.email,
-      password: values.password,
-      confirmPassword: values.confirmPassword,
+      password: Base64.stringify(Utf8.parse(values.password)),
+      confirmPassword: Base64.stringify(Utf8.parse(values.password)),
       verificationCode: values.verificationCode,
     };
     post(FORGETPASSWORD, param, {

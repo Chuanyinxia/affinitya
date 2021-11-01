@@ -225,10 +225,10 @@ const PlansAndPrices = ({userInfo, httpLoading, setHttpLoading}) => {
           </Checkbox>
         </div>
         {payRadio?null:<div style={{paddingLeft: 44, color: '#E92C3A'}}>You should accept the payment policy.</div>}
-        <div style={{marginLeft: 350, marginTop: 72}}>
-          <Button style={{width: 174, height: 48}} onClick={()=>setpayModalVisible(false)}>Cancel</Button>
+        <div style={{marginLeft: 350, marginTop: 72, width: 360}}>
+          <Button style={{width: 164, height: 48}} onClick={()=>setpayModalVisible(false)}>Cancel</Button>
           <Button
-            style={{width: 174, height: 48, marginLeft: 14}}
+            style={{width: 164, height: 48, marginLeft: 14}}
             type="primary"
             onClick={()=>pay(current.id)}
             disabled={!payRadio}>Pay Now</Button>

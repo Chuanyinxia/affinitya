@@ -222,7 +222,7 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
     }
     if (searchName!=='') setSearchTitle(searchName);
     getJobList(params);
-  }, []);
+  }, [history.location]);
   // useEffect(() => {
   //   const searchData = loadPageVar('id');
   //   if (searchData!=='') onSearch(searchData);

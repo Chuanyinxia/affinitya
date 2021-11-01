@@ -50,16 +50,14 @@ const Menus = ({userInfo, history, activeKey, openKeys, managerCounts}) => {
     store.dispatch(setMenusData(array[2]??array[1], array[1]));
   }, [history]);
   useEffect(() => {
+    get(GETNEWMESSAGECOUNT, userInfo.token).then((res) => {
+      setmessageCounter(res.data);
+    });
     messageTimer.current = setInterval(() => {
       get(GETNEWMESSAGECOUNT, userInfo.token).then((res) => {
         setmessageCounter(res.data);
-      }).catch((error) => {
-        // message.error({
-        //   content: error.toString(), key: 'netError', duration: 2,
-        // });
       });
     }, 60000);
-    // clearInterval(messageTimer.current);
     return ()=>{
       clearInterval(messageTimer.current);
     };

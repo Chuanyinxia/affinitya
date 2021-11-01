@@ -18,6 +18,7 @@ import {
   Select,
   Space,
   Spin,
+  Tooltip,
 } from 'antd';
 import './style.css';
 import PDF from '@/assets/Guide for id token secret Oct 2021.pdf';
@@ -62,6 +63,13 @@ const AudienceGenerator = ({userInfo}) => {
   const [lookalikeForm] = Form.useForm();
   const [searchData, setSearchData] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
+  const loadPageVar = (sVar) => {
+    return decodeURI(
+        window.location.search.replace(
+            new RegExp('^(?:.*[&\\?]' +
+          encodeURI(sVar).replace(/[.+*]/g, '\\$&') +
+          '(?:\\=([^&]*))?)?.*$', 'i'), '$1'));
+  };
   const addItem = () => {
     if (audienceID.trim()) {
       setAddItemLoading(true);
@@ -337,7 +345,13 @@ const AudienceGenerator = ({userInfo}) => {
     }, 500);
   },
   []);
-
+  useEffect(() => {
+    const keyword = loadPageVar('keyword');
+    console.log(keyword);
+    if (keyword!=='') {
+      addKeywords(keyword);
+    }
+  }, []);
   return (
     <div>
       {errorMsg && (
@@ -679,28 +693,36 @@ const AudienceGenerator = ({userInfo}) => {
               </Card>
             </Col>
             <Col xl={6} lg={7} md={24} xs={24} >
-              <div className="TOP">
-                <h3>Trending Audience</h3>
-                <p className="marginB64">These words is using for SLG...</p>
-                <Space wrap>
-                  {audienceWords.map((item) => (
-                    <a key={item.id} type="link" onClick={()=>addKeywords(item.name)}>{item.name}</a>
-                  ))}
-                </Space>
-                <Divider/>
-                <h3>Tips</h3>
-                {/* eslint-disable-next-line react/jsx-no-target-blank */}
-                <a
-                  href={PDF}
-                  target="_blank">
-                  Full guide to retrieve token
-                </a>
-              </div>
+              {/* <div className="TOP"> */}
+              {audienceWords.length!==0?<><h3 style={{fontWeight: 600}}>TRENDING ADUIENCE&nbsp;
+                <Tooltip
+                  arrowPointAtCenter
+                  placement="left"
+                  title={`
+                Trending audiences are audiences our engine identifies 
+                that are of significant correlation to the category.`}>
+                  <InfoCircleOutlined />
+                </Tooltip>
+              </h3>
+              <Space wrap>
+                {audienceWords.map((item) => (
+                  <a key={item.id} type="link" onClick={()=>addKeywords(item.name)}>{item.name}</a>
+                ))}
+              </Space>
+              <Divider/></>:null}
+              <h3 style={{fontWeight: 600}}>TIPS</h3>
+              {/* eslint-disable-next-line react/jsx-no-target-blank */}
+              <a
+                href={PDF}
+                target="_blank">
+                Full guide to retrieve token
+              </a>
+              {/* </div> */}
 
             </Col>
           </Row>
 
-          <Row>
+          <Row style={{marginTop: 32}}>
             <Col span={24} className="text-center">
               <Space size="large">
                 <Button className="btn-xl" onClick={onResetAll}>Reset All</Button>

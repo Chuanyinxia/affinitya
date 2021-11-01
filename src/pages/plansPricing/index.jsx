@@ -47,8 +47,10 @@ const PlansPricing = ({userInfo, httpLoading, setHttpLoading}) => {
     <Layout className="layout">
       <Headers/>
       <Content>
-        <div className="marginTop90 PPContent" style={{minHeight: 'calc(100vh - 180px)', paddingTop: 30}}>
-          <Row style={{marginTop: 48}}>
+        <div
+          className="marginTop90 PPContent"
+          style={{minHeight: 'calc(100vh - 180px)', paddingTop: 30}}>
+          <Row style={{marginTop: 30}}>
             <Col span={24}>
               <div style={{textAlign: 'center', fontSize: 24, fontWeight: 600}}>Plans and pricing</div>
               <div style={{textAlign: 'center', fontSize: 14, color: '#6E7191', marginTop: 8}}>
