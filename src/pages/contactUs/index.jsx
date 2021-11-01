@@ -32,7 +32,7 @@ const ContactUS = () => {
       <Content>
         <div className="login-content" style={{
           minHeight: 'calc(100vh - 180px)',
-          paddingTop: 32,
+          marginTop: 138,
           paddingBottom: 80,
         }}>
           <Row>

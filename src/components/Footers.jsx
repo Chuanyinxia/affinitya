@@ -25,7 +25,7 @@ const Footers =()=> (
         <Col lg={0} xs={6} sm={6} md={6} className="text-center">
           <Link className="footerNav" to="/privacyPolicy?type=4">Privacy Policy</Link>
         </Col>
-        <Col lg={0} xs={6} sm={6} md={6} className="text-left">
+        <Col lg={0} xs={6} sm={6} md={6} className="text-center">
           <Link className="footerNav" to="/contactUs">Contact Sales</Link>
         </Col>
         <Col lg={0} xs={6} sm={6} md={6} className="text-center">

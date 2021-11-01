@@ -430,7 +430,7 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
               searchData={viewDetail}
               searchID={searchID}
               searchType={searchType}
-              source="jobManager"
+              source={1}
               statusType={saveStatusType}
               jobSave={setSaveManger}
               jobName={jobName}
