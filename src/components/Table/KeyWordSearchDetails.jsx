@@ -115,7 +115,7 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType, searchID, searc
         className="btn-md"
         download
         target="_blank"
-        href={`${url}${searchID}/${searchType}/1/${userInfo.token}`}
+        href={url}
         disabled={!isPayUser}>
         Export to CSV
       </Button>);

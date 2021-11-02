@@ -239,11 +239,17 @@ const PlansAndPrices = ({userInfo, httpLoading, setHttpLoading}) => {
           status="success"
           title="Payment successful!"
           extra={[
-            <Button key="back" style={{width: 152, height: 48}} onClick={()=>setstatusModalVisible(false)}>
+            <Button key="back" style={{width: 152, height: 48}} onClick={()=> {
+              setstatusModalVisible(false);
+              isPay();
+            }}>
               Back
             </Button>,
             <Button key="start" type="primary" style={{width: 152, height: 48}}
-              onClick={()=>history.push('/dashboard/audienceGenerator')}>Get Started</Button>,
+              onClick={()=> {
+                isPay();
+                history.push('/dashboard/audienceGenerator');
+              }}>Get Started</Button>,
           ]}
         />:
         <Result

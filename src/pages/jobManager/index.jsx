@@ -136,6 +136,7 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
   const getJobDetails=(id)=>{
     get(GETJOBDETAIL+id, userInfo.token).then((res)=>{
       setViewDetail(res.data.kwResultVoList);
+      setSearchID(res.data.kwResultVoList[0]?res.data.kwResultVoList[0].searchId:'');
       setSaveStatusType(res.data.status);
       setViewModal(true);
     }).catch((error)=>{
@@ -361,7 +362,6 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
                   onClick={() => {
                     getJobDetails(record.id);
                     setJobName(record.title);
-                    setSearchID(record.id);
                     setSearchType(record.type);
                   }}
                   type="link"
