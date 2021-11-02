@@ -72,6 +72,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
   const [currentIndex, setcurrentIndex] = useState(-1);
   const [isFirst, setisFirst] = useState(true);
   const [searchID, setSearchID] = useState('');
+  const [searchSource, setSearchSource] = useState(1);
   const [searchType, setSearchType] = useState('');
   const c = useRef();
   const tabRef = useRef();
@@ -602,6 +603,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
         }}>
         <div >
           <KeyWordSearchDetails
+            source={searchSource}
             searchID={searchID}
             searchType={searchType}
             searchData={archiveDetail}
@@ -714,10 +716,12 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                       data = info.node.children.map((item)=>item.key.split('-')[1]).join(',');
                       type = 1;
                       setSearchID(info.node.key);
+                      setSearchSource(2);
                     } else {
                       data = info.node.key.split('-')[1];
                       type = 2;
                       setSearchID(info.node.key.split('-')[1]);
+                      setSearchSource(1);
                     }
                     if (jobId.includes('-')) jobId = jobId.split('-')[1];
                     c.current = {
@@ -807,6 +811,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                         onClick={(e)=>{
                           e.stopPropagation();
                           setSearchID(item.searchResultId);
+                          setSearchSource(2);
                           c.current = {
                             id: item.searchResultId,
                             jobId: item.searchResultId,
