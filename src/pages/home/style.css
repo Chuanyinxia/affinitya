@@ -21,8 +21,11 @@
 .bg-header {
   background: #120043;
   height: 90px;
-  padding-top: 12px;
-  padding-bottom: 16px;
+  padding: 12px calc((100% - 1254px)/2 ) 16px;
+  /*padding-top: ;*/
+  /*padding-bottom: 16px;*/
+  /*padding-left: 5%;*/
+  /*padding-right: 5%;*/
   position: fixed;
   width: 100%;
   z-index: 9999;

@@ -50,9 +50,9 @@ const Headers=({logged, setLogged, setUserInfo})=>{
             </Col>
           </Row>
         </Col>
-        <Col offset={1} xl={22} lg={0} md={0} sm={0} xs={0}>
+        <Col xl={24} lg={0} md={0} sm={0} xs={0} >
           <Row className="content-home paddingL16 paddingR16" >
-            <Col span={8}>
+            <Col span={5}>
               <div className="text-left">
                 {key==='home'?(<a href="/home#top">
                   <img alt="logo" src={logo} width={188}/>
@@ -61,7 +61,7 @@ const Headers=({logged, setLogged, setUserInfo})=>{
                 </Link>)}
               </div>
             </Col>
-            <Col span={16} className="text-right">
+            <Col span={19} className="text-right">
               <Space size="large">
                 {key==='home'?
                   (<a href='/home#top' className="navs activeNav">Home</a>):

@@ -116,22 +116,23 @@ const Customlayout = ({history, activeKey, setLogged}) => {
 
   const content=(
     <List
-      style={{width: 500}}
       itemLayout="horizontal"
       dataSource={noticeMsg}
       loading={loading}
+      style={{minWidth: 584}}
+      size="small"
       pagination={noticeMsg.length>0?{
-        pageSize: 5,
+        pageSize: 3,
         size: 'small',
       }:false}
-      footer={noticeMsg.length>0?(<Button block onClick={readAllMsg}>Read All</Button>):false}
+      footer={noticeMsg.length>0?(<Button block className="margin0" onClick={readAllMsg}>Read All</Button>):false}
       renderItem={(item) => (
         <List.Item key={item.id} onClick={()=>readMsg([item.id])}>
           <List.Item.Meta
             avatar={<Avatar src={parseInt(item.readStatus)===1?msg1:msg2} />}
-            title={<Row>
+            title={<div>
               {item.type===3?
-              <>
+              <Row gutter={16}>
                 <Col span={14}>Job <a onClick={(e)=>{
                   e.preventDefault();
                   e.stopPropagation();
@@ -140,13 +141,13 @@ const Customlayout = ({history, activeKey, setLogged}) => {
                   // setpopVisible(false);
                 }}>{item.jobTitle}</a> : {item.title}</Col>
                 <Col span={10} className="text-min text-right">{item.createTime}</Col>
-              </>:
-              <>
+              </Row>:
+              <Row>
                 <Col span={14}>{item.title}</Col>
                 <Col span={10} className="text-min text-right">{item.createTime}</Col>
-              </>
+              </Row>
               }
-            </Row>}
+            </div>}
             description={item.notice}
           />
         </List.Item>
@@ -214,30 +215,37 @@ const Customlayout = ({history, activeKey, setLogged}) => {
               <Row>
                 <Col xs={24} lg={0}>
                   <Space size="large">
-                    <Tooltip title="Contact Sales">
+                    <Tooltip title="Contact Sales" placement="top">
                       <div className="icon earphone" onClick={()=>{
                         store.dispatch(setMenusData('', ''));
                         history.push('/contactSales');
                       }}/>
                     </Tooltip>
-                    <Tooltip title="FAQ">
+                    <Tooltip title="FAQ" placement="top">
                       <div className="icon faq" onClick={()=>{
                         store.dispatch(setMenusData('', ''));
                         history.push('/faq');
                       }}/>
                     </Tooltip>
-                    <Tooltip title="Notice">
-                      <Popover content={content} trigger="click" placement="bottomRight"
-                        // onVisibleChange={()=>setpopVisible(!popVisible)}
-                        // visible={popVisible}
-                      >
-                        <div className="icon bell">
+
+                    <Popover
+                      content={content}
+                      // placement={'bottomCenter'}
+                      trigger="click"
+
+                      title={null}
+                      // onVisibleChange={()=>setpopVisible(!popVisible)}
+                      // visible={popVisible}
+                    >
+                      <div className="icon bell">
+                        <Tooltip title="Notice" >
                           {hasMessage?<div className="bell-dot"/>:null}
-                        </div>
-                      </Popover>
-                    </Tooltip>
+                        </Tooltip>
+                      </div>
+                    </Popover>
+
                     <div className="userName">
-                      <Dropdown overlay={menu} placement="bottomCenter" trigger={['hover', 'click']}>
+                      <Dropdown overlay={menu} placement="bottomCenter" trigger={['click']}>
                         <div className="userImg">
                           <UserOutlined style={{fontSize: 22}}/>
                         </div>

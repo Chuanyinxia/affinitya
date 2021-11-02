@@ -101,7 +101,8 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType, searchID, searc
   };
 
   const downloadButton=()=>{
-    const url=source?EXPORTCVS:EXPORTCVS2;
+    const url=source===1?`${EXPORTCVS}${searchID}/${searchType}/1/${userInfo.token}`:
+      `${EXPORTCVS2}${searchID}/${searchType}/2/${userInfo.token}`;
     if (isPayUser) {
       if (searchData.length<1) {
         return ( <Tooltip title="The search result is empty and cannot be exported.">
@@ -114,7 +115,7 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType, searchID, searc
         className="btn-md"
         download
         target="_blank"
-        href={`${url}${searchID}/${searchType}/${userInfo.token}`}
+        href={url}
         disabled={!isPayUser}>
         Export to CSV
       </Button>);
@@ -273,7 +274,7 @@ KeyWordSearchDetails.propTypes = {
   hideCheckbox: PropTypes.bool.isRequired,
   searchID: PropTypes.string.isRequired,
   searchType: PropTypes.string.isRequired,
-  source: PropTypes.string.isRequired,
+  source: PropTypes.number.isRequired,
 };
 
 export default connect(
