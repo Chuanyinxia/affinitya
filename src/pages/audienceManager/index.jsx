@@ -482,7 +482,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
               </span>
             </div>
           ),
-          key: key,
+          key: `${key}-${data[key][0].searchId}`,
           children: (()=>{
             const arr = [];
             data[key].forEach((item)=>{
@@ -506,7 +506,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                     </span>
                   </div>
                 ),
-                key: `${key}-${item.searchResultId}`,
+                key: `${key}-${item.searchId}-${item.searchResultId}`,
               });
             });
             return arr;
@@ -709,26 +709,24 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                   onSelect={(selectedKeys, info)=>{
                     let data;
                     let type;
-                    let jobId = info.node.key;
                     const name = info.node.title.props.children[0].props.title;
                     // console.log(info.node.key);
                     if (info.node.children) {
-                      data = info.node.children.map((item)=>item.key.split('-')[1]).join(',');
+                      data = info.node.children.map((item)=>item.key.split('-')[2]).join(',');
                       type = 1;
-                      setSearchID(info.node.key);
-                      setSearchSource(2);
-                    } else {
-                      data = info.node.key.split('-')[1];
-                      type = 2;
                       setSearchID(info.node.key.split('-')[1]);
                       setSearchSource(1);
+                    } else {
+                      data = info.node.key.split('-')[2];
+                      type = 2;
+                      setSearchID(info.node.key.split('-')[2]);
+                      setSearchSource(1);
                     }
-                    if (jobId.includes('-')) jobId = jobId.split('-')[1];
                     c.current = {
                       id: data,
                       name: name,
                       type: type,
-                      jobId: jobId,
+                      jobId: info.node.key.split('-')[0],
                       winner: false,
                     };
                   }}
@@ -811,12 +809,13 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                         onClick={(e)=>{
                           e.stopPropagation();
                           setSearchID(item.searchResultId);
-                          setSearchSource(2);
+                          setSearchSource(1);
                           c.current = {
                             id: item.searchResultId,
                             jobId: item.searchResultId,
                             name: item.groupName,
                             winner: true,
+                            type: 2,
                           };
                         }}
                         >
