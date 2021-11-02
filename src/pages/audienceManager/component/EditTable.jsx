@@ -18,7 +18,7 @@ import {setMenusData} from '@/store/actions';
 import {get, post} from '@/utils/request';
 import {
   SAVESEARCHRESULT,
-  EXPORTDETAIL,
+  EXPORTCVS2,
   ISPAID,
   GETEXTENDBYAUDI,
 } from '@/api/index';
@@ -58,7 +58,7 @@ const EditableCell = ({
   );
 };
 
-const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id}) => {
+const EditTable = ({searchId, searchType, userInfo, httpLoading, setHttpLoading, details, saveFunc, id}) => {
   const history = useHistory();
   const [form] = Form.useForm();
   const [creatJobForm] = Form.useForm();
@@ -66,8 +66,8 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
   const [data, setData] = useState([]);
   const [viewDetails, setViewDetails] = useState([]);
   const [viewModal, setViewModal]= useState(false);
-  const [lookID, setLookID]=useState(null);
-  const [lookType, setLookType]=useState(null);
+  // const [lookID, setLookID]=useState(null);
+  // const [lookType, setLookType]=useState(null);
   const [dataTitle, setDataTitle] = useState('Details');
   const [isPayUser, setIsPayUser] =useState(false);
   const [extendModal, setextendModal] = useState(false);
@@ -268,8 +268,8 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
             <Tooltip title="View Details">
               <a type="link" onClick={()=>{
                 setViewModal(true);
-                setLookID(record.id);
-                setLookType(1);
+                // setLookID(record.id);
+                // setLookType(1);
                 setViewDetails(record.searchDetails??[]);
                 setDataTitle('Details');
               }}>
@@ -284,8 +284,8 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
             {record.status===2&&(<Tooltip title="View Result">
               <a type="link" onClick={()=>{
                 setViewModal(true);
-                setLookID(record.id);
-                setLookType(2);
+                // setLookID(record.id);
+                // setLookType(2);
                 setDataTitle('Extend Search Results');
                 setViewDetails(record.extendDetail??[]);
               }}>
@@ -396,14 +396,14 @@ const EditTable = ({userInfo, httpLoading, setHttpLoading, details, saveFunc, id
             <Space>
               {isPayUser?(<Button
                 download
-                href={`${EXPORTDETAIL}${lookID}/${lookType}/${userInfo.token}`}
+                href={`${EXPORTCVS2}${searchId}/${searchType}/${userInfo.token}`}
                 disabled={!isPayUser}>
                   Export to CSV
               </Button>):
                 (<Tooltip title="Pls upgrade to use this function.">
                   <Button
                     download
-                    href={`${EXPORTDETAIL}${lookID}/${lookType}/${userInfo.token}`}
+                    href={`${EXPORTCVS2}${searchId}/${searchType}/${userInfo.token}`}
                     disabled={!isPayUser}>
                     Export to CSV
                   </Button>
@@ -457,6 +457,8 @@ EditTable.propTypes = {
   details: PropTypes.arrayOf.isRequired,
   saveFunc: PropTypes.func.isRequired,
   id: PropTypes.number.isRequired,
+  searchId: PropTypes.number.isRequired,
+  searchType: PropTypes.number.isRequired,
 };
 
 export default connect(
