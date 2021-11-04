@@ -198,7 +198,7 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType, searchID, searc
         </Col>
         <Col span={18} className="text-right marginB16 paddingR32">
           <Space>
-            {(isPayUser&&!hideFirstButton&&!hideTesting)&&(
+            {(isPayUser&&!hideFirstButton&&!hideTesting&&searchType!==3)&&(
               <Tooltip
                 placement="top"
                 title={(saveStatus === 1|| parseInt(statusType)===1)?
@@ -213,7 +213,7 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType, searchID, searc
                 >Save for Testing</Button>
               </Tooltip>)
             }
-            {(!isPayUser&&!hideFirstButton)&& (<Tooltip title="Pls upgrade to use this function.">
+            {(!isPayUser&&!hideFirstButton&&searchType!==3)&& (<Tooltip title="Pls upgrade to use this function.">
               <Button
                 disabled
                 type="primary"
