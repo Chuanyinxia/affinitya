@@ -709,15 +709,16 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                     let data;
                     let type;
                     let sType;
+                    let jobId;
                     const name = info.node.title.props.children[0].props.title;
                     if (info.node.children) {
-                      console.log(info.node.children);
                       data = info.node.children.map((item)=>item.key.split('-')[2]).join(',');
                       type = 1;
                       setSearchID(info.node.key.split('-')[1]);
                       setSearchSource(3);
                       setSearchType(info.node.key.split('-')[2]);
                       sType = info.node.key.split('-')[2];
+                      jobId = info.node.key.split('-')[0];
                     } else {
                       data = info.node.key.split('-')[2];
                       type = 2;
@@ -725,12 +726,13 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                       setSearchSource(2);
                       setSearchType(info.node.key.split('-')[3]);
                       sType = info.node.key.split('-')[3];
+                      jobId = info.node.key.split('-')[2];
                     }
                     c.current = {
                       id: data,
                       name: name,
                       type: type,
-                      jobId: info.node.key.split('-')[0],
+                      jobId: jobId,
                       winner: false,
                       searchType: sType,
                     };
