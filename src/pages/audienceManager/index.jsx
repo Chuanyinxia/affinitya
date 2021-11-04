@@ -72,7 +72,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
   const [currentIndex, setcurrentIndex] = useState(-1);
   const [isFirst, setisFirst] = useState(true);
   const [searchID, setSearchID] = useState('');
-  const [searchSource, setSearchSource] = useState(1);
+  const [searchSource, setSearchSource] = useState(2);
   const [searchType, setSearchType] = useState('');
   const c = useRef();
   const tabRef = useRef();
@@ -414,7 +414,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
   const updateWiner = (t, type, checkList)=>{
     let data;
     if (checkList.length>0) {
-      data = checkList.filter((item)=>!(item.children)).map((item)=>item.key.split('-')[1]);
+      data = checkList.filter((item)=>!(item.children)).map((item)=>item.key.split('-')[2]);
     } else {
       data = c.current.id;
     }
@@ -523,7 +523,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
   };
   const getArchiveDetails = (ids) => {
     setHttpLoading(true);
-    get(GETARCHIVEDETAIL +'/'+ ids, userInfo.token).then((res) => {
+    get(GETARCHIVEDETAIL +'/'+ ids+'/'+c.current.searchType??'', userInfo.token).then((res) => {
       const data=res.data;
       setArchiveDetail(data);
     }).catch((error) => {
@@ -708,20 +708,23 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                   onSelect={(selectedKeys, info)=>{
                     let data;
                     let type;
+                    let sType;
                     const name = info.node.title.props.children[0].props.title;
-                    console.log(info.node.key);
                     if (info.node.children) {
+                      console.log(info.node.children);
                       data = info.node.children.map((item)=>item.key.split('-')[2]).join(',');
                       type = 1;
                       setSearchID(info.node.key.split('-')[1]);
-                      setSearchSource(1);
+                      setSearchSource(3);
                       setSearchType(info.node.key.split('-')[2]);
+                      sType = info.node.key.split('-')[2];
                     } else {
                       data = info.node.key.split('-')[2];
                       type = 2;
                       setSearchID(info.node.key.split('-')[2]);
                       setSearchSource(2);
                       setSearchType(info.node.key.split('-')[3]);
+                      sType = info.node.key.split('-')[3];
                     }
                     c.current = {
                       id: data,
@@ -729,6 +732,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                       type: type,
                       jobId: info.node.key.split('-')[0],
                       winner: false,
+                      searchType: sType,
                     };
                   }}
                 />
@@ -786,14 +790,15 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                       const data = [...sortedWinnerList];
                       data.forEach((item)=>item.check=false);
                       data[index].check = true;
+                      c.current = {
+                        id: item.searchResultId,
+                        searchType: item.type,
+                      };
                       setcurrentIndex(index);
                       setsortedWinnerList(data);
                       setSearchID(data[index].searchResultId);
                       setSearchType(data[index].type);
                       getDetails(item.searchResultId);
-                      c.current = {
-                        id: item.searchResultId,
-                      };
                       setcurrentName(item.groupName);
                       setcurrentJob(item.jobName);
                       settableVisible(true);
@@ -820,6 +825,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                             name: item.groupName,
                             winner: true,
                             type: 2,
+                            searchType: item.type,
                           };
                         }}
                         >

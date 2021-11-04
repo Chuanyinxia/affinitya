@@ -101,8 +101,10 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType, searchID, searc
   };
 
   const downloadButton=()=>{
-    const url=source===1?`${EXPORTCVS}${searchID}/${searchType}/2/${userInfo.token}`:
-      `${EXPORTCVS2}${searchID}/${searchType}/${userInfo.token}`;
+    const url=source===1?`${EXPORTCVS}${searchID}/${searchType}/1/${userInfo.token}`:
+    source===2?`${EXPORTCVS2}${searchID}/${searchType}/${userInfo.token}`:
+                `${EXPORTCVS}${searchID}/${searchType}/2/${userInfo.token}`
+    ;
     if (isPayUser) {
       if (searchData.length<1) {
         return ( <Tooltip title="The search result is empty and cannot be exported.">

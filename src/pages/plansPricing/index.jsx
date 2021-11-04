@@ -52,7 +52,7 @@ const PlansPricing = ({userInfo, httpLoading, setHttpLoading}) => {
           style={{minHeight: 'calc(100vh - 180px)', paddingTop: 30}}>
           <Row style={{marginTop: 30}}>
             <Col span={24}>
-              <div style={{textAlign: 'center', fontSize: 24, fontWeight: 600}}>Plans and pricing</div>
+              <div style={{textAlign: 'center', fontSize: 24, fontWeight: 600}}>Plans and Pricing</div>
               <div style={{textAlign: 'center', fontSize: 14, color: '#6E7191', marginTop: 8}}>
                 Choose the best plan for your business.</div>
             </Col>
