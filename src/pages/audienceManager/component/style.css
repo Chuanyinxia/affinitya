@@ -1,11 +1,14 @@
 .amTable input{
-    height: 36px;
+    height: 32px;
 }
 .amTable .ant-input-number{
     width: 60px;
 }
 .amTable .ant-input-number{
-    height: 36px;
+    height: 32px;
+}
+.amTable .ant-form-item-explain-error{
+    font-size: 14px;
 }
 .amTable .ant-table-tbody > tr > td:last-child{
     border-right: 1px solid #f0f0f0;

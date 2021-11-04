@@ -72,6 +72,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
   const [currentIndex, setcurrentIndex] = useState(-1);
   const [isFirst, setisFirst] = useState(true);
   const [searchID, setSearchID] = useState('');
+  const [searchSource, setSearchSource] = useState(2);
   const [searchType, setSearchType] = useState('');
   const c = useRef();
   const tabRef = useRef();
@@ -97,7 +98,6 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
       onClick={(e)=>{
         e.preventDefault();
         e.stopPropagation();
-        setSearchType(c.current.type);
         getArchiveDetails(c.current.id);
         setArchiveDetailModal(true);
       }}
@@ -414,7 +414,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
   const updateWiner = (t, type, checkList)=>{
     let data;
     if (checkList.length>0) {
-      data = checkList.filter((item)=>!(item.children)).map((item)=>item.key.split('-')[1]);
+      data = checkList.filter((item)=>!(item.children)).map((item)=>item.key.split('-')[2]);
     } else {
       data = c.current.id;
     }
@@ -481,7 +481,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
               </span>
             </div>
           ),
-          key: key,
+          key: `${key}-${data[key][0].searchId}-${data[key][0].type}`,
           children: (()=>{
             const arr = [];
             data[key].forEach((item)=>{
@@ -505,7 +505,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                     </span>
                   </div>
                 ),
-                key: `${key}-${item.searchResultId}`,
+                key: `${key}-${item.searchId}-${item.searchResultId}-${item.type}`,
               });
             });
             return arr;
@@ -523,7 +523,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
   };
   const getArchiveDetails = (ids) => {
     setHttpLoading(true);
-    get(GETARCHIVEDETAIL +'/'+ ids, userInfo.token).then((res) => {
+    get(GETARCHIVEDETAIL +'/'+ ids+'/'+c.current.searchType??'', userInfo.token).then((res) => {
       const data=res.data;
       setArchiveDetail(data);
     }).catch((error) => {
@@ -602,6 +602,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
         }}>
         <div >
           <KeyWordSearchDetails
+            source={searchSource}
             searchID={searchID}
             searchType={searchType}
             searchData={archiveDetail}
@@ -707,25 +708,31 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                   onSelect={(selectedKeys, info)=>{
                     let data;
                     let type;
-                    let jobId = info.node.key;
+                    let sType;
                     const name = info.node.title.props.children[0].props.title;
-                    // console.log(info.node.key);
                     if (info.node.children) {
-                      data = info.node.children.map((item)=>item.key.split('-')[1]).join(',');
+                      console.log(info.node.children);
+                      data = info.node.children.map((item)=>item.key.split('-')[2]).join(',');
                       type = 1;
-                      setSearchID(info.node.key);
-                    } else {
-                      data = info.node.key.split('-')[1];
-                      type = 2;
                       setSearchID(info.node.key.split('-')[1]);
+                      setSearchSource(3);
+                      setSearchType(info.node.key.split('-')[2]);
+                      sType = info.node.key.split('-')[2];
+                    } else {
+                      data = info.node.key.split('-')[2];
+                      type = 2;
+                      setSearchID(info.node.key.split('-')[2]);
+                      setSearchSource(2);
+                      setSearchType(info.node.key.split('-')[3]);
+                      sType = info.node.key.split('-')[3];
                     }
-                    if (jobId.includes('-')) jobId = jobId.split('-')[1];
                     c.current = {
                       id: data,
                       name: name,
                       type: type,
-                      jobId: jobId,
+                      jobId: info.node.key.split('-')[0],
                       winner: false,
+                      searchType: sType,
                     };
                   }}
                 />
@@ -783,12 +790,15 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                       const data = [...sortedWinnerList];
                       data.forEach((item)=>item.check=false);
                       data[index].check = true;
-                      setcurrentIndex(index);
-                      setsortedWinnerList(data);
-                      getDetails(item.searchResultId);
                       c.current = {
                         id: item.searchResultId,
+                        searchType: item.type,
                       };
+                      setcurrentIndex(index);
+                      setsortedWinnerList(data);
+                      setSearchID(data[index].searchResultId);
+                      setSearchType(data[index].type);
+                      getDetails(item.searchResultId);
                       setcurrentName(item.groupName);
                       setcurrentJob(item.jobName);
                       settableVisible(true);
@@ -807,11 +817,15 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                         onClick={(e)=>{
                           e.stopPropagation();
                           setSearchID(item.searchResultId);
+                          setSearchSource(2);
+                          setSearchType(item.type);
                           c.current = {
                             id: item.searchResultId,
                             jobId: item.searchResultId,
                             name: item.groupName,
                             winner: true,
+                            type: 2,
+                            searchType: item.type,
                           };
                         }}
                         >
@@ -919,6 +933,8 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
               refs={tabRef}
               details={details}
               id={editId}
+              searchId={searchID}
+              searchType={searchType}
               hideFirstButton={true}
               saveFunc={()=>{
                 settableVisible(true);
