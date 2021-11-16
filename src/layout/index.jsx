@@ -215,6 +215,10 @@ const Customlayout = ({history, activeKey, setLogged}) => {
               <Row>
                 <Col xs={24} lg={0}>
                   <Space size="large">
+                    <span className="h1" style={{color: '#120043'}}>
+                      <span >Timezone: </span>
+                      GMT{((0 - new Date().getTimezoneOffset()) / 60)>0?'+':''}
+                      {((0 - new Date().getTimezoneOffset()) / 60)}</span>
                     <Tooltip title="Contact Sales" placement="top">
                       <div className="icon earphone" onClick={()=>{
                         store.dispatch(setMenusData('', ''));
@@ -278,6 +282,10 @@ const Customlayout = ({history, activeKey, setLogged}) => {
                   </Space></Col>
                 <Col xs={0} lg={24}>
                   <Space size="large">
+                    <span className="h1" style={{color: '#120043'}}>
+                      <span >Timezone: </span>
+                      GMT{((0 - new Date().getTimezoneOffset()) / 60)>0?'+':''}
+                      {((0 - new Date().getTimezoneOffset()) / 60)}</span>
                     <span className="username">{userInfo ? userInfo.nickName : 'Admin'}</span>
                     <Tooltip title="Contact Sales">
                       <div className="icon earphone" onClick={()=>{
