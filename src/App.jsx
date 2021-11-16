@@ -21,6 +21,7 @@ import UnsignFaq from '@/pages/unsignFaq';
 import PrivacyPolicy from '@/pages/privacyPolicy';
 import PlansPricing from '@/pages/plansPricing';
 import TermsService from '@/pages/termsService';
+import Guide from '@/pages/guide';
 const App = ({history, logged, setLogged, setUserInfo}) => {
   const userInfo = storage.getData('userInfo');
   const checkLogin = ()=>{
@@ -45,6 +46,7 @@ const App = ({history, logged, setLogged, setUserInfo}) => {
     <div className="App">
       <Switch>
         <Route path="/home" component={Home} />
+        <Route path="/Guide" component={Guide} />
         <Route path="/privacyPolicy" component={PrivacyPolicy} />
         <Route path="/termsService" component={TermsService} />
         <Route path="/plansPricing" component={PlansPricing} />

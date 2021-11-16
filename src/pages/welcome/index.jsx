@@ -316,13 +316,13 @@ const WelcomPage = ({userInfo, httpLoading, setHttpLoading, isFirst}) => {
             </Col>
             <Col xl={6} md={24} xs={24} sm={24} className="tip-box">
               {audienceWords.length!==0?<>
-                <h3 style={{fontWeight: 600}}>TRENDING ADUIENCE&nbsp;
+                <h3 style={{fontWeight: 600}}>TRENDING AUDIENCE&nbsp;
                   <Tooltip
                     arrowPointAtCenter
                     placement="left"
-                    title={`
-                  Trending audiences are audiences our engine identifies 
-                  that are of significant correlation to the category.`}>
+                    title={<span>
+                Trending audiences are audiences our engine identifies<br/>
+                that are of significant correlation to the category</span>}>
                     <InfoCircleOutlined />
                   </Tooltip>
                 </h3>

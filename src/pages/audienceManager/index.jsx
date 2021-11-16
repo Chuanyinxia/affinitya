@@ -48,6 +48,7 @@ import {
 import EditTable from '@/pages/audienceManager/component/EditTable';
 import ResultTable from '@/components/Table/ResultTable';
 import KeyWordSearchDetails from '@/components/Table/KeyWordSearchDetails';
+import {timeFormat} from '@/components/plugin/TimeFormat';
 const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
   const [renameForm] = Form.useForm();
   const [details, setDetails] = useState(null);
@@ -807,7 +808,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                       <div className="card-job-name" title={item.jobName}>{item.jobName}</div>
                       <div className="card-job-ct">
                         <ClockCircleOutlined style={{fontSize: 20, fontWeight: '600', float: 'left', marginTop: 5}}/>
-                        <div className="card-job-more">{item.createTime}</div>
+                        <div className="card-job-more">{timeFormat(item.createTime)}</div>
                         <div style={{
                           paddingLeft: 16,
                           float: 'right',
@@ -837,32 +838,7 @@ const AudienceManger = ({userInfo, httpLoading, setHttpLoading}) => {
                       </div>
                     </div>
                   ))}
-                  {/* <div className="card-item active">
-                    <div
-                      style={{color: '#4E4B66', fontSize: 16, height: 48, lineHeight: '48px', fontWeight: '600'}}
-                    >name</div>
-                    <div
-                      style={{color: '#4E4B66', fontSize: 12, height: 30, lineHeight: '30px', marginTop: 8}}>desc</div>
-                    <div
-                      style={{color: '#4E4B66', fontSize: 12, height: 30, lineHeight: '30px', marginTop: 20}}>
-                      <ClockCircleOutlined style={{fontSize: 20, fontWeight: '600'}}/>
-                      <span style={{paddingLeft: 16}}>time</span>
-                      <span style={{paddingLeft: 16, float: 'right', fontSize: 32, fontWeight: '600'}}>...</span>
-                    </div>
-                  </div> */}
-                  {/* <div className="card-item edited">
-                    <div
-                      style={{color: '#4E4B66', fontSize: 16, height: 48, lineHeight: '48px', fontWeight: '600'}}
-                    >name</div>
-                    <div
-                      style={{color: '#4E4B66', fontSize: 12, height: 30, lineHeight: '30px', marginTop: 8}}>desc</div>
-                    <div
-                      style={{color: '#4E4B66', fontSize: 12, height: 30, lineHeight: '30px', marginTop: 20}}>
-                      <ClockCircleOutlined style={{fontSize: 20, fontWeight: '600'}}/>
-                      <span style={{paddingLeft: 16}}>time</span>
-                      <span style={{paddingLeft: 16, float: 'right', fontSize: 32, fontWeight: '600'}}>...</span>
-                    </div>
-                  </div> */}
+
                 </div>
               </div>
             </div>

@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {httpLoading} from '@/store/actions';
 import './style.css';
-import {Table} from 'antd';
+import {Table, Statistic} from 'antd';
 
 const ResultTable = ({userInfo, TableData, onSelect, groupId, hideCheckbox}) => {
   const rowSelection = {
@@ -34,7 +34,9 @@ const ResultTable = ({userInfo, TableData, onSelect, groupId, hideCheckbox}) => 
       }}>
       <Table.Column title="ID" key="id" dataIndex="index"/>
       <Table.Column title="Keyword" key="Keyword" dataIndex="keyword"/>
-      <Table.Column title="Size" key="size" dataIndex="size" sorter={(a, b) => a.size - b.size}/>
+      <Table.Column title="Size" key="size" dataIndex="size" sorter={(a, b) => a.size - b.size}
+        render={(size)=><Statistic value={size} valueStyle={{fontSize: 12}}/>}
+      />
       <Table.Column title="Path" key="Path" dataIndex="path"/>
     </Table>
 

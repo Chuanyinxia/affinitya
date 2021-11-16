@@ -21,7 +21,7 @@ import {
   Tooltip,
 } from 'antd';
 import './style.css';
-import PDF from '@/assets/Guide for id token secret Oct 2021.pdf';
+
 
 import {DeleteOutlined, InfoCircleOutlined, LockOutlined, PlusOutlined} from '@ant-design/icons';
 import {Countrys} from '@/components/plugin/Country';
@@ -457,7 +457,7 @@ const AudienceGenerator = ({userInfo}) => {
                           // eslint-disable-next-line react/jsx-no-target-blank
                           title: <div>Visit your App page (<a
                             href="https://developers.faceboo.com/apps"
-                            target="_blank">https://developrs.facebook.com/apps</a>),<br/>
+                            target="_blank">https://developers.facebook.com/apps</a>),<br/>
                             click “Settings” then “Basic” to view your App Secret.Then go to <br/>
                             “access token debugger“ tool generate an extended access <br/>token.
                           </div>,
@@ -694,13 +694,13 @@ const AudienceGenerator = ({userInfo}) => {
             </Col>
             <Col xl={6} lg={7} md={24} xs={24} >
               {/* <div className="TOP"> */}
-              {audienceWords.length!==0?<><h3 style={{fontWeight: 600}}>TRENDING ADUIENCE&nbsp;
+              {audienceWords.length!==0?<><h3 style={{fontWeight: 600}}>TRENDING AUDIENCE&nbsp;
                 <Tooltip
                   arrowPointAtCenter
                   placement="left"
-                  title={`
-                Trending audiences are audiences our engine identifies 
-                that are of significant correlation to the category.`}>
+                  title={<span>
+                Trending audiences are audiences our engine identifies<br/>
+                that are of significant correlation to the category</span>}>
                   <InfoCircleOutlined />
                 </Tooltip>
               </h3>
@@ -713,7 +713,7 @@ const AudienceGenerator = ({userInfo}) => {
               <h3 style={{fontWeight: 600}}>TIPS</h3>
               {/* eslint-disable-next-line react/jsx-no-target-blank */}
               <a
-                href={PDF}
+                href='/Guide'
                 target="_blank">
                 Full guide to retrieve token
               </a>

@@ -15,6 +15,7 @@ import {httpLoading} from '@/store/actions';
 import {GETTRANSACTION, DOWNLOADINVOICE} from '@/api/index';
 import {post} from '@/utils/request';
 import './style.css';
+import {timeFormat} from '@/components/plugin/TimeFormat';
 
 const options = [
   {label: 'All', value: -1},
@@ -32,6 +33,7 @@ const Transactions = ({userInfo, httpLoading, setHttpLoading}) => {
       title: 'Order Time',
       dataIndex: 'createTime',
       key: 'createTime',
+      render: (createTime)=> timeFormat(createTime),
     },
     {
       title: 'Package Name',

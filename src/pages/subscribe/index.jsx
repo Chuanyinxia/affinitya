@@ -10,6 +10,7 @@ import {post, get} from '@/utils/request';
 import {MEMBERSUBSCRIBEMSG} from '@/api/index';
 import {Link} from 'react-router-dom';
 import store from '@/store';
+import {timeFormat} from '@/components/plugin/TimeFormat';
 
 const Subscribe = ({userInfo, httpLoading, setHttpLoading}) => {
   const [memberSubscribeMsg, setMemberSubscribeMsg]=useState(null);
@@ -24,7 +25,7 @@ const Subscribe = ({userInfo, httpLoading, setHttpLoading}) => {
       setMemberSubscribeMsg(res.data);
     }).catch((error) => {
       get('/api/isPaidSubscribe', userInfo.token).then((res)=>{
-        setValidPeriod(res.data.validPeriod);
+        setValidPeriod(timeFormat(res.data.validPeriod));
       }).catch((error)=>{
         message.error({
           content: error.toString(), key: 'netError', duration: 2,

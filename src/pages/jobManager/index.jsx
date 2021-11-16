@@ -22,6 +22,7 @@ import {type} from '@/components/plugin/Searchdata';
 import KeyWordSearchDetails from '@/components/Table/KeyWordSearchDetails';
 import qs from 'querystring';
 import store from '@/store';
+import {timeFormat} from '@/components/plugin/TimeFormat';
 
 const jobMangerText = {
   title: 'Unsaved audience will be deleted after 30 days.',
@@ -322,13 +323,19 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
             return type === 1 ? 'Keyword' : type === 2 ? 'Lookalike Audience' : 'Extend';
           }}/>
           <Table.Column title="Detail" dataIndex="detail" key="detail"/>
-          <Table.Column title="Start Time" dataIndex="startTime" key="Start Time"/>
+          <Table.Column
+            title="Start Time"
+            dataIndex="startTime"
+            key="Start Time"
+            render={(startTime)=>timeFormat(startTime)}/>
           <Table.Column
             title="Complete Time"
             dataIndex="endTime"
             key="Complete Time"
             render={(endTime, record) => {
-              return (endTime && (record.jobStatus === 1 || record.jobStatus === 5)) ? endTime + `(Estimate)` : endTime;
+              return (endTime && (record.jobStatus === 1 || record.jobStatus === 5)) ?
+                timeFormat(endTime) + `(Estimate)` :
+                timeFormat(endTime);
             }}/>
           <Table.Column title="Status" dataIndex="jobStatus" key="Status" render={(jobStatus, record) => (
             <Space>
