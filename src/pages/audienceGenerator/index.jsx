@@ -456,7 +456,7 @@ const AudienceGenerator = ({userInfo}) => {
                         tooltip={{
                           // eslint-disable-next-line react/jsx-no-target-blank
                           title: <div>Visit your App page (<a
-                            href="https://developers.faceboo.com/apps"
+                            href="https://developers.facebook.com/apps"
                             target="_blank">https://developers.facebook.com/apps</a>),<br/>
                             click “Settings” then “Basic” to view your App Secret.Then go to <br/>
                             “access token debugger“ tool generate an extended access <br/>token.
@@ -700,7 +700,7 @@ const AudienceGenerator = ({userInfo}) => {
                   placement="left"
                   title={<span>
                 Trending audiences are audiences our engine identifies<br/>
-                that are of significant correlation to the category</span>}>
+                that are of significant correlation to the category.</span>}>
                   <InfoCircleOutlined />
                 </Tooltip>
               </h3>

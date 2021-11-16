@@ -322,7 +322,7 @@ const WelcomPage = ({userInfo, httpLoading, setHttpLoading, isFirst}) => {
                     placement="left"
                     title={<span>
                 Trending audiences are audiences our engine identifies<br/>
-                that are of significant correlation to the category</span>}>
+                that are of significant correlation to the category.</span>}>
                     <InfoCircleOutlined />
                   </Tooltip>
                 </h3>

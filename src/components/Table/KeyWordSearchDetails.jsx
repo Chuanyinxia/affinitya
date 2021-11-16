@@ -158,6 +158,33 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType, searchID, searc
   }, []);
   useEffect(()=>{
     let str='';
+    const commafy=(num)=>{
+      if ((num+'').trim()==='') {
+        return '';
+      }
+      if (isNaN(num)) {
+        return '';
+      }
+      num = num+'';
+      if (/^.*\..*$/.test(num)) {
+        const pointIndex =num.lastIndexOf('.');
+        let intPart = num.substring(0, pointIndex);
+        const pointPart =num.substring(pointIndex+1, num.length);
+        intPart = intPart +'';
+        const re =/(-?\d+)(\d{3})/;
+        while (re.test(intPart)) {
+          intPart =intPart.replace(re, '$1,$2');
+        }
+        num = intPart+'.'+pointPart;
+      } else {
+        num = num +'';
+        const re =/(-?\d+)(\d{3})/;
+        while (re.test(num)) {
+          num =num.replace(re, '$1,$2');
+        }
+      }
+      return num;
+    };
     setCopyValues('');
     if (searchData.length>0) {
       console.log(searchData);
@@ -177,7 +204,7 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType, searchID, searc
                       <td>${item.groupId}</td>
                       <td>${index+1}</td>
                       <td>${data.keyword??''}</td>
-                      <td>${data.size??''}</td>
+                      <td>${commafy(data.size)}</td>
                       <td>${data.path??''}</td>
                   </tr>`;
         });

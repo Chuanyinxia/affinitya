@@ -15,6 +15,7 @@ import {get, post} from '@/utils/request';
 import {GETNOTICEMSG, ISPAID, UPDATEREADSTATUS} from '@/api/index';
 import msg1 from '@/assets/msg01.png';
 import msg2 from '@/assets/msg02.png';
+import {timeFormat} from '@/components/plugin/TimeFormat';
 
 const Customlayout = ({history, activeKey, setLogged}) => {
   const {Header, Content, Sider} = Layout;
@@ -140,11 +141,11 @@ const Customlayout = ({history, activeKey, setLogged}) => {
                   store.dispatch(setMenusData('jobManager', 'dashboard'));
                   // setpopVisible(false);
                 }}>{item.jobTitle}</a> : {item.title}</Col>
-                <Col span={10} className="text-min text-right">{item.createTime}</Col>
+                <Col span={10} className="text-min text-right">{timeFormat(item.createTime)}</Col>
               </Row>:
               <Row>
                 <Col span={14}>{item.title}</Col>
-                <Col span={10} className="text-min text-right">{item.createTime}</Col>
+                <Col span={10} className="text-min text-right">{timeFormat(item.createTime)}</Col>
               </Row>
               }
             </div>}
@@ -154,6 +155,28 @@ const Customlayout = ({history, activeKey, setLogged}) => {
       )}
     />
   );
+  const timezone=()=>{
+    const offset =(0 - new Date().getTimezoneOffset()) / 60;
+    const offsetStr=offset.toString().split('.');
+    let timezoneStr = '';
+    const hour=offsetStr[0].split('-');
+    let hourStr='';
+    console.log(hour);
+    if (hour.length>1) {
+      hourStr='-' +(hour[1]>9?hour[1]:'0'+hour[1]);
+    } else {
+      hourStr='+'+(hour[0]>9?hour[0]:'0'+hour[0]);
+    }
+
+    // const hour =parseInt(offsetStr[0])>9||parseInt(offsetStr[0])<-9?offsetStr[0]:'0'+offsetStr[0];
+    if (offsetStr.length>1) {
+      timezoneStr=hourStr+':'+offsetStr[1]*6;
+    } else {
+      timezoneStr=hourStr+':00';
+    }
+    const str='UTC'+timezoneStr;
+    return str;
+  };
 
   useEffect(() => {
     isPay();
@@ -283,9 +306,7 @@ const Customlayout = ({history, activeKey, setLogged}) => {
                 <Col xs={0} lg={24}>
                   <Space size="large">
                     <span className="h1" style={{color: '#120043'}}>
-                      <span >Timezone: </span>
-                      GMT{((0 - new Date().getTimezoneOffset()) / 60)>0?'+':''}
-                      {((0 - new Date().getTimezoneOffset()) / 60)}</span>
+                      <span >Time Zone: </span>{timezone()}</span>
                     <span className="username">{userInfo ? userInfo.nickName : 'Admin'}</span>
                     <Tooltip title="Contact Sales">
                       <div className="icon earphone" onClick={()=>{
