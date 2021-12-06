@@ -169,7 +169,8 @@ const Home = ({userInfo, httpLoading, setHttpLoading}) => {
                   <Col sm={21} xs={20}>
                     <div className="card-title marginT0">AI Enabled</div>
                     <div className="card-info">
-                      We deploy AI to drive processing time, breadth, and accuracy of correlative inferences
+                      We deploy explainable artificial intelligence to drive the breadth and accuracy of correlative
+                      inferences for your Player and Meta intelligence.
                     </div>
                   </Col>
                 </Row>
@@ -182,10 +183,12 @@ const Home = ({userInfo, httpLoading, setHttpLoading}) => {
                     <img style={{width: 64}} src={icon2}/>
                   </Col>
                   <Col sm={21} xs={20}>
-                    <div className="card-title marginT0">Digital Anthropology</div>
+                    <div className="card-title marginT0">Player Meta&trade;</div>
                     <div className="card-info">
-                  We contextualize the player metaverse to comprehend fundamentally with a Game industry-specific BI
-                  framework accurately and actionable insights
+                      With our proprietary engine derived from behavioral science and digital anthropology, we identify
+                      &
+                      classify accurate player signals for the Metaverse, recreating insightful real-time narratives &
+                      actionable insights with zero platform boundaries.
                     </div>
                   </Col>
                 </Row>
@@ -198,10 +201,10 @@ const Home = ({userInfo, httpLoading, setHttpLoading}) => {
                     <img style={{width: 64}} src={icon3}/>
                   </Col>
                   <Col sm={21} xs={20}>
-                    <div className="card-title marginT0">Social Data Mesh</div>
+                    <div className="card-title marginT0">Social Data Mesh&trade;</div>
                     <div className="card-info ">
-                  We process directly related content across multiple social media content sources, integrate to our
-                  data consolidation mesh to engage dynamically and evolve with player real-world interests
+                      Utilizing an advanced data-lake repository of player data and our dynamic expert system, we
+                      integrate, consolidate and maximize social data.
                     </div>
                   </Col>
                 </Row>

@@ -15,11 +15,11 @@ import {Email, isEmail} from '@/components/plugin/Searchdata';
 import Footers from '@/components/Footers';
 import Base64 from 'crypto-js/enc-base64';
 import Utf8 from 'crypto-js/enc-utf8';
-import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
-import FB from '@/assets/alipay-circle.png';
-const responseFacebook = (response) => {
-  console.log(response);
-};
+// import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
+// import FB from '@/assets/alipay-circle.png';
+// const responseFacebook = (response) => {
+//   console.log(response);
+// };
 const Login = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) => {
   // eslint-disable-next-line new-cap
   const [email]=useState(isEmail()? Email():cookie.load('email'));
@@ -136,17 +136,17 @@ const Login = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) =
 
             </Form>
             <Row>
-              <Col span={24}>
-                <h3>Quick Sign-in:&nbsp;&nbsp;&nbsp;&nbsp;
-                  <FacebookLogin
-                    appId="919383638998271"
-                    callback={responseFacebook}
-                    render={(renderProps) => (
-                      <img onClick={renderProps.onClick} src={FB}/>
-                    )}
-                  />
-                </h3>
-              </Col>
+              {/* <Col span={24}>*/}
+              {/*  <h3>Quick Sign-in:&nbsp;&nbsp;&nbsp;&nbsp;*/}
+              {/*    <FacebookLogin*/}
+              {/*      appId="919383638998271"*/}
+              {/*      callback={responseFacebook}*/}
+              {/*      render={(renderProps) => (*/}
+              {/*        <img onClick={renderProps.onClick} src={FB}/>*/}
+              {/*      )}*/}
+              {/*    />*/}
+              {/*  </h3>*/}
+              {/* </Col>*/}
               <Col>
                 <div className="marginT32 text-center">
                   Not a member? <Link to="/signUp">Sign up now</Link>
