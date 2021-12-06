@@ -100,7 +100,7 @@ const SignUp = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) 
   return (
     <div>
       <div className="padding32">
-        <a href="/home" ><img src={logo}/></a>
+        <a href="/home" ><img src={logo} width={260} alt="logo"/></a>
       </div>
       <Spin spinning={httpLoading}>
         <Row className="login-content paddingT32 paddingB64">

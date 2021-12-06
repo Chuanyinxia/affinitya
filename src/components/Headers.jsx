@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {Col, Layout, Row, Space, Button, Drawer} from 'antd';
-import logo from '@/assets/lettering-logo.webp';
+import logo from '@/assets/lettering-logo.png';
 import {Link, useHistory, withRouter} from 'react-router-dom';
 import {UnorderedListOutlined} from '@ant-design/icons';
 import {connect} from 'react-redux';

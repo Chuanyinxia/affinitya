@@ -7,7 +7,7 @@ import {AlertOutlined, UserOutlined, CloseOutlined} from '@ant-design/icons';
 import Router from '../routers';
 import Menus from '../components/menus';
 import {login, setMenusData, sider, updateIsPay} from '@/store/actions';
-import logo from '../assets/lettering-logo.webp';
+import logo from '../assets/lettering-logo.png';
 import './style.css';
 import {storage} from '@/utils/storage';
 import store from '../store';

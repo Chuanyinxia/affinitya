@@ -580,7 +580,11 @@ const AudienceGenerator = ({userInfo}) => {
                 </h4>)}
                 <Radio.Group onChange={onSearchTypeChange} value={searchType} className="marginB32">
                   <Radio value={1}>Keyword Search</Radio>
-                  <Radio value={2} className="paddingL32" disabled={!isPayUser}>Lookalike Audience Search</Radio>
+                  <Radio
+                    value={2}
+                    className="paddingL32"
+                    disabled={!isPayUser}
+                  >Lookalike Audience Search</Radio>
                 </Radio.Group>
                 <Form
                   layout="vertical"
@@ -633,7 +637,7 @@ const AudienceGenerator = ({userInfo}) => {
                   >
                     <Select
                       menuItemSelectedIcon={null}
-                      mode="tags"
+                      // mode="tags"
                       allowClear
                       placeholder="Custom Audience ID..."
                       dropdownRender={(menu) => (

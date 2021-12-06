@@ -29,13 +29,13 @@ const {Content} = Layout;
 const homeText = {
   banner: {
     title: 'Discover Your Game’s Audience Here',
-    describe: 'AI - Enabled Player Intelligence Platform',
+    describe: 'AI-Enabled Player Intelligence Platform for the Metaverse',
   },
   feature: {
     title: 'Why Choose Affinity Analyst?',
   },
   developers: {
-    title: 'Trusted by Leading Developers & Studios',
+    title: 'Trusted by Leading Partners',
   },
   easySimple: {
     title: 'Just a few simple steps to access your custom audiences!',
@@ -133,7 +133,8 @@ const Home = ({userInfo, httpLoading, setHttpLoading}) => {
                 <img style={{width: 64}} src={icon1}/>
                 <div className="card-title">AI Enabled</div>
                 <div className="card-info">
-                  We deploy AI to drive processing time, breadth, and accuracy of correlative inferences
+                  We deploy explainable artificial intelligence to drive the breadth and accuracy of correlative
+                  inferences for your Player and Meta intelligence.
                 </div>
 
               </Card>
@@ -141,10 +142,11 @@ const Home = ({userInfo, httpLoading, setHttpLoading}) => {
             <Col className="marginB64" lg={8} md={0} sm={0} xs={0}>
               <Card hoverable className="text-center Cards">
                 <img style={{width: 64}} src={icon2}/>
-                <div className="card-title">Digital Anthropology&trade;</div>
+                <div className="card-title">Player Meta&trade;</div>
                 <div className="card-info">
-                  We recreate accurate player-meta identities,
-                  recreating insightful real-time narratives and actionable insights
+                  With our proprietary engine derived from behavioral science and digital anthropology, we identify &
+                  classify accurate player signals for the Metaverse, recreating insightful real-time narratives &
+                  actionable insights with zero platform boundaries.
                 </div>
               </Card>
             </Col>
@@ -153,8 +155,8 @@ const Home = ({userInfo, httpLoading, setHttpLoading}) => {
                 <img style={{width: 64}} src={icon3}/>
                 <div className="card-title">Social Data Mesh&trade;</div>
                 <div className="card-info">
-                  We utilize our player data consolidation mesh,
-                  allowing you to engage dynamically and evolve with your players in real-time
+                  Utilizing an advanced data-lake repository of player data and our dynamic expert system, we integrate,
+                  consolidate and maximize social data.
                 </div>
               </Card>
             </Col>
@@ -212,7 +214,7 @@ const Home = ({userInfo, httpLoading, setHttpLoading}) => {
         <div className="home-content marginTop90">
           <Row gutter={64}>
             <Col span={12} className="text-left">
-              <img src={info1} alt="banner" style={{width: '80%'}}/>
+              <img src={info1} alt="banner" className="info_img"/>
             </Col>
             <Col span={12} className="padding16">
               {feature(1)}
@@ -223,12 +225,12 @@ const Home = ({userInfo, httpLoading, setHttpLoading}) => {
               {feature(2)}
             </Col>
             <Col span={12} className="text-right">
-              <img src={info2} alt="banner" style={{height: '100%'}}/>
+              <img src={info2} alt="banner" className="info_img"/>
             </Col>
           </Row>
           <Row gutter={64} className="marginTop90 paddingB90">
             <Col span={12} className="text-left">
-              <img src={info4} alt="banner" style={{width: '80%'}}/>
+              <img src={info4} alt="banner" className="info_img"/>
             </Col>
             <Col span={12} className="padding16">
               {feature(3)}
@@ -251,17 +253,17 @@ const Home = ({userInfo, httpLoading, setHttpLoading}) => {
               <h2 className="text-center developersTitle">{homeText.developers.title}</h2>
             </Col>
             <Col span={6} className="text-center">
-              <img src={logo1} style={{width: '100%'}} alt="logo"/>
+              <img src={logo1} className="developers_logo" alt="logo"/>
             </Col>
             <Col span={6} className="text-center">
 
-              <img src={logo2} style={{width: '100%'}} alt="logo"/>
+              <img src={logo2} className="developers_logo" alt="logo"/>
             </Col>
             <Col span={6} className="text-center">
-              <img src={logo3} style={{width: '100%'}} alt="logo"/>
+              <img src={logo3} className="developers_logo" alt="logo"/>
             </Col>
             <Col span={6} className="text-center">
-              <img src={logo4} style={{width: '100%'}} alt="logo"/>
+              <img src={logo4} className="developers_logo" alt="logo"/>
             </Col>
           </Row>
         </div>
