@@ -118,7 +118,7 @@ const Home = ({userInfo, httpLoading, setHttpLoading}) => {
       <Content className="marginTop90 banner">
         <div className="home-content">
           <Row className="home-content bg-imageBanner">
-            <Col lg={12} xs={12} sm={12} md={12}>
+            <Col lg={12} xs={18} sm={18} md={18}>
               <h1 className="homeBannerText">{homeText.banner.title}</h1>
               <p className="banner-info">{homeText.banner.describe}</p>
               <Button href="/signUp" className="BannerButton">Register Today</Button>
@@ -215,26 +215,26 @@ const Home = ({userInfo, httpLoading, setHttpLoading}) => {
       <Content className="bg-white">
         <div className="home-content marginTop90">
           <Row gutter={64}>
-            <Col span={12} className="text-left padding0">
+            <Col span={13} className="text-left padding0">
               <img src={info1} alt="banner" className="info_img"/>
             </Col>
-            <Col span={12} className="padding16">
+            <Col span={11} className="padding16">
               {feature(1)}
             </Col>
           </Row>
           <Row gutter={64} className="marginTop90">
-            <Col span={12} className="padding16">
+            <Col span={11} className="padding16">
               {feature(2)}
             </Col>
-            <Col span={12} className="text-right padding0">
+            <Col span={13} className="text-right padding0">
               <img src={info2} alt="banner" className="info_img"/>
             </Col>
           </Row>
           <Row gutter={64} className="marginTop90 paddingB90">
-            <Col span={12} className="text-left padding0">
+            <Col span={13} className="text-left padding0">
               <img src={info4} alt="banner" className="info_img"/>
             </Col>
-            <Col span={12} className="padding16">
+            <Col span={11} className="padding16">
               {feature(3)}
             </Col>
           </Row>

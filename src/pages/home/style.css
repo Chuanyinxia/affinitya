@@ -1,5 +1,5 @@
 .padding0 {
-  padding:0!important;
+  padding:0;
 }
 .Home .ant-layout-content{
   margin: 0;
@@ -376,17 +376,17 @@
     min-width: 100%;
   }
 
-  .Home .homeBannerText{
+  /*.Home .homeBannerText{
     font-size: 24px;
     line-height: 38px;
-  }
+  }*/
   .banner {
     background-size: 100% 560px;
   }
     .bg-imageBanner{
       margin-top: 20px;
       padding-top: 40px;
-      height: 360px;
+      height: 400px;
     }
 }
 
