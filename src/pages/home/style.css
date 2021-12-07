@@ -376,10 +376,10 @@
     min-width: 100%;
   }
 
-  /*.Home .homeBannerText{
-    font-size: 24px;
-    line-height: 38px;
-  }*/
+  .Home .homeBannerText{
+    font-size: 48px;
+    line-height: 60px;
+  }
   .banner {
     background-size: 100% 560px;
   }
