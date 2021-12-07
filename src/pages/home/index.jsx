@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import {Button, Card, Col, Layout, Row} from 'antd';
 import {httpLoading} from '@/store/actions';
 import './style.css';
-import banner from '@/assets/home/banner_img.png';
+// import banner from '@/assets/home/banner_img.png';
 import info1 from '@/assets/home/info1.png';
 import info2 from '@/assets/home/info2.png';
 // import info3 from '@/assets/home/info3.png';
@@ -116,17 +116,16 @@ const Home = ({userInfo, httpLoading, setHttpLoading}) => {
       <Headers/>
       <div id="top"/>
       <Content className="marginTop90 banner">
-        <Row className="home-content paddingT90" >
-          <Col lg={14} xs={12} sm={12} md={12}>
-            <h1 className="homeBannerText">{homeText.banner.title}</h1>
-            <p className="banner-info">{homeText.banner.describe}</p>
-            <Button href="/signUp" className="BannerButton">Register Today</Button>
-          </Col>
-          <Col lg={10} xs={12} sm={12} md={12}>
-            <img src={banner} className="banner-img"/>
-          </Col>
-        </Row>
-        <div className="home-content marginTop90">
+        <div className="home-content">
+          <Row className="home-content bg-imageBanner">
+            <Col lg={12} xs={12} sm={12} md={12}>
+              <h1 className="homeBannerText">{homeText.banner.title}</h1>
+              <p className="banner-info">{homeText.banner.describe}</p>
+              <Button href="/signUp" className="BannerButton">Register Today</Button>
+            </Col>
+          </Row>
+        </div>
+        <div className="home-content marginTop80">
           <Row gutter={64}>
             <Col className="marginB64" lg={8} md={0} sm={0} xs={0}>
               <Card hoverable className="text-center Cards">
@@ -216,7 +215,7 @@ const Home = ({userInfo, httpLoading, setHttpLoading}) => {
       <Content className="bg-white">
         <div className="home-content marginTop90">
           <Row gutter={64}>
-            <Col span={12} className="text-left">
+            <Col span={12} className="text-left padding0">
               <img src={info1} alt="banner" className="info_img"/>
             </Col>
             <Col span={12} className="padding16">
@@ -227,12 +226,12 @@ const Home = ({userInfo, httpLoading, setHttpLoading}) => {
             <Col span={12} className="padding16">
               {feature(2)}
             </Col>
-            <Col span={12} className="text-right">
+            <Col span={12} className="text-right padding0">
               <img src={info2} alt="banner" className="info_img"/>
             </Col>
           </Row>
           <Row gutter={64} className="marginTop90 paddingB90">
-            <Col span={12} className="text-left">
+            <Col span={12} className="text-left padding0">
               <img src={info4} alt="banner" className="info_img"/>
             </Col>
             <Col span={12} className="padding16">
@@ -253,17 +252,16 @@ const Home = ({userInfo, httpLoading, setHttpLoading}) => {
         <div className="home-content ">
           <Row gutter={64} className="marginB64">
             <Col span={24}>
-              <h2 className="text-center developersTitle">{homeText.developers.title}</h2>
+              <div className="text-center developersTitle">{homeText.developers.title}</div>
             </Col>
             <Col span={6} className="text-center">
               <img src={logo1} className="developers_logo" alt="logo"/>
             </Col>
             <Col span={6} className="text-center">
-
-              <img src={logo2} className="developers_logo" alt="logo"/>
+              <img src={logo3} className="developers_logo" alt="logo"/>
             </Col>
             <Col span={6} className="text-center">
-              <img src={logo3} className="developers_logo" alt="logo"/>
+              <img src={logo2} className="developers_logo" alt="logo"/>
             </Col>
             <Col span={6} className="text-center">
               <img src={logo4} className="developers_logo" alt="logo"/>
