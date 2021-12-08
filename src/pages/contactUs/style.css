@@ -16,6 +16,9 @@
   height: 50px;
   line-height: 50px;
 }
+.contact-log-box{
+  margin-right: 32px;
+}
 .contact-log{
   margin-top: 32px;
   background-repeat: no-repeat;
