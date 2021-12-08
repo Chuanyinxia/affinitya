@@ -48,7 +48,7 @@ const ContactUS = () => {
           </Row>
           <Row>
             <Col xs={0} lg={12}>
-              <div className="contact-log-box">
+              <div className="stagesId">
                 <div className="contact-log"/>
               </div>
             </Col>

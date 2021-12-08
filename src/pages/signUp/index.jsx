@@ -194,7 +194,7 @@ const SignUp = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) 
                 </Checkbox>
               </Form.Item>
               <Form.Item className="marginT40">
-                <Button type="primary" size="large" htmlType="submit" block>
+                <Button type="primary" size="large" className="btn-xl" htmlType="submit" block>
                   Sign Up
                 </Button>
               </Form.Item>

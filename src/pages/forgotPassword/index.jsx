@@ -68,9 +68,9 @@ const ForgotPassword = ({history, httpLoading, setHttpLoading, setLogged, setUse
         <a href="/home" ><img src={logo} width={260} alt="logo"/></a>
       </div>
       <Spin spinning={httpLoading}>
-        <Row className="login-content  paddingT32 paddingB64">
-          <Col lg={12} xs={0} className="paddingT90">
-            <img src={bg} style={{width: '100%'}} alt="bg"/>
+        <Row className="login-content  paddingT32 paddingB64" >
+          <Col lg={12} xs={0} className="paddingT90 text-center">
+            <img src={bg} style={{height: 550}} alt="bg"/>
           </Col>
           <Col lg={12} xs={24} className="paddingL36 paddingR36">
             <h1 className="login-title">Forgot Password</h1>
@@ -149,7 +149,7 @@ const ForgotPassword = ({history, httpLoading, setHttpLoading, setLogged, setUse
                 />
               </Form.Item>
               <Form.Item className="marginT40">
-                <Button type="primary" size="large" htmlType="submit" block>
+                <Button type="primary" size="large" className="btn-xl" htmlType="submit" block>
                   Reset Password
                 </Button>
               </Form.Item>

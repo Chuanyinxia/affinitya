@@ -77,8 +77,8 @@ const Login = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) =
           </a>
         </div>
         <Row className="login-content paddingT32 paddingB90">
-          <Col lg={12} xs={0} className="paddingT32 text-center">
-            <img src={bg} style={{height: 550}} alt="bg"/>
+          <Col lg={12} xs={0} className="text-center paddingT16">
+            <img src={bg} style={{height: 500}} alt="bg"/>
           </Col>
           <Col lg={12} xs={24} className="paddingL36 paddingR36">
             <h1 className="login-title">Log In </h1>
@@ -129,7 +129,7 @@ const Login = ({history, httpLoading, setHttpLoading, setLogged, setUserInfo}) =
               </Row>
 
               <Form.Item className="marginT40">
-                <Button type="primary" size="large" htmlType="submit" block>
+                <Button type="primary" size="large" className="btn-xl" htmlType="submit" block>
                   Log In
                 </Button>
               </Form.Item>
