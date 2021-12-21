@@ -408,7 +408,7 @@ const AudienceGenerator2 = ({userInfo}) => {
                     />
                   </Form.Item>
                   <div>
-                    <h4>Grand Facebook Permission:
+                    <h4>Grant Facebook Permission:
                       <span className="marginR32"/>
                       <FacebookLogin
                         appId="294011789405420"
