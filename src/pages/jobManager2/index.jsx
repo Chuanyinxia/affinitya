@@ -27,7 +27,7 @@ import {timeFormat} from '@/components/plugin/TimeFormat';
 const jobMangerText = {
   title: 'Unsaved audience will be deleted after 30 days.',
 };
-const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
+const JobManger2 = ({userInfo, httpLoading, setHttpLoading}) => {
   const history = useHistory();
   const [jobName, setJobName]=useState('');
   const [, setIsPayUser] = useState(false);
@@ -462,7 +462,7 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-JobManger.propTypes = {
+JobManger2.propTypes = {
   userInfo: PropTypes.object.isRequired,
   httpLoading: PropTypes.bool.isRequired,
   setHttpLoading: PropTypes.func.isRequired,
@@ -471,4 +471,4 @@ JobManger.propTypes = {
 export default connect(
     mapStateToProps,
     mapDispatchToProps,
-)(JobManger);
+)(JobManger2);

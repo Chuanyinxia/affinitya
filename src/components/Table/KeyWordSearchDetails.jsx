@@ -57,9 +57,7 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType, searchID, searc
         get(GETNOREADAUDIENCE, userInfo.token).then((res)=>{
           store.dispatch(getMangerCounts(res.data));
           storage.saveData('local', 'mangerCounts', res.data);
-        }).catch((error)=>{
-          console.log(error);
-        });
+        }).catch((error)=>{});
       });
     } else {
       post(SAVESEARCHMESSAGE,
@@ -82,9 +80,7 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType, searchID, searc
         get(GETNOREADAUDIENCE, userInfo.token).then((res)=>{
           store.dispatch(getMangerCounts(res.data));
           storage.saveData('local', 'mangerCounts', res.data);
-        }).catch((error)=>{
-          console.log(error);
-        });
+        }).catch((error)=>{});
       });
     }
   };
@@ -153,7 +149,6 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType, searchID, searc
   };
 
   useEffect(() => {
-    console.log(searchData);
     isPay();
   }, []);
   useEffect(()=>{
@@ -187,7 +182,6 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType, searchID, searc
     };
     setCopyValues('');
     if (searchData.length>0) {
-      console.log(searchData);
       str = `<table>
                       <thead>
                       <tr>

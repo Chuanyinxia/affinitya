@@ -96,7 +96,10 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
         setShowJobManagerTips(true);
       }
     }).catch((error) => {
-
+      // console.log(error);
+      // message.error({
+      //   content: error.toString(), key: 'netError', duration: 2,
+      // });
     }).finally(()=>{
       setLoading(false);
     });
@@ -128,6 +131,7 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
       store.dispatch(updateIsPay(res.data));
       isPay=res.data===2;
     }).catch((error)=>{
+      // console.log(error);
     }).finally(()=>{
       post(SEARCHKW, data, {
         // eslint-disable-next-line no-tabs
@@ -143,7 +147,6 @@ const AudienceGenerator = ({userInfo, httpLoading, setHttpLoading}) => {
             setFreeSearchData(res.data.kwResultVoList[0].searchDetails??[]);
             setShowFreeSKData(true);
           }
-
           setSaveNameKW(values.keyWord[0]+moment().format('YYYYMMDDhhmmss'));
         } else {
           setShowJobManagerTips(true);

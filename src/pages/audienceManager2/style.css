@@ -1,0 +1,418 @@
+.audience-menager{
+  overflow-x: auto;
+}
+.box-wrapper{
+  padding: 0px 2px;
+}
+.text-box{
+  width: 410px;
+  height: 726px;
+  background-color: #EFF0F7;
+  border-radius: 32px;
+  margin-left: 32px;
+  position:relative;
+  overflow: hidden;
+}
+.text-box .ant-tree-checkbox-inner{
+  border-radius: 0;
+}
+.ant-dropdown-menu-item-active:first-child{
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+.ant-dropdown-menu-item-active:last-child{
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+.ant-tree-node-selected{
+  background: none !important;;
+}
+/* .ant-dropdown {
+  left: 804px!important;
+} */
+.winner-box{
+  width: 696px;
+  height: 726px;
+  border-radius: 32px;
+  background-color: #fff;
+  margin-left: 40px;
+}
+.tab-box{
+  height: 74px;
+}
+.tab-title{
+  float: left;
+  width: 50%;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 74px;
+  text-align: center;
+  border-bottom: 1px solid #D9DBE9;
+  cursor: pointer;
+}
+.tab-title.active{
+  line-height: 74px;
+  border-bottom: 4px solid #120043;
+}
+.search-box{
+  height: 83px;
+  border-bottom: 1px solid #D9DBE9;
+  width: 374px;
+  padding: 24px;
+  width: 100%;
+}
+.search-box .ant-input-affix-wrapper{
+  height: 40px;
+  background-color: #fff;
+}
+.search-box input{
+  height: 40px;
+  line-height: 40px;
+  background-color: #fff;
+}
+.data-tree-box{
+  padding: 16px 20px;
+  max-height: 584px;
+  overflow: auto;
+}
+.data-tree-box  .ant-tree-list{
+  background-color: #EFF0F7;
+}
+.winner-title-box{
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 74px;
+  height: 74px;
+  border-bottom: 1px solid #D9DBE9;
+  padding:0 4px;
+}
+.winner-title{
+  color:#B23730;
+  float: left;
+  padding-left: 24px;
+}
+.winner-icon{
+  float: right;
+  font-size: 24px;
+  margin-left: 18px;
+  cursor: pointer;
+}
+.ant-dropdown{
+  z-index: 999;
+}
+.card-group-title{
+  padding: 0 42px;
+  height: 32px;
+  line-height: 32px;
+  margin: 16px 0;
+}
+.card-group{
+  max-height: 632px;
+  overflow: auto;
+}
+.card-item{
+  float: left;
+  cursor: pointer;
+  margin-top: 24px;
+}
+.card-item.active{
+  background: #B23730;
+}
+.card-item.active *{
+  color:#fff!important;
+}
+.card-item.edited{
+  border-color: #00BA88!important;
+}
+.card-item.edited *{
+  color:#00BA88!important;
+}
+.save-btn-box{
+  width: 100%;
+  text-align: center;
+  height: 82px;
+  border-top: 1px solid #D9DBE9;
+  padding-top: 20px;
+  position: absolute;
+  bottom: 0;
+}
+.save-btn{
+  width: 205px;
+  height: 40px;
+  background-color: #B23730;
+  color:#fff;
+}
+.save-btn:hover{
+  background-color: #B23730;
+  color:#fff;
+}
+.edit-box{
+  padding: 40px;
+  background-color: #fff;
+  border-radius: 32px;
+  margin: 0 50px;
+}
+.edit-box .ant-input-number{
+  height: 32px;
+}
+.edit-box input{
+  height: 32px;
+}
+.tree-title{
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: block;
+}
+.winner-search-box{
+  height: 32px;
+  width: 200px;
+  float: right;
+  line-height: 32px;
+  margin-top: 21px
+}
+.winner-title-box .ant-input-affix-wrapper{
+  height: 32px;
+  background-color: #EFF0F7!important;
+}
+.winner-title-box .ant-input-affix-wrapper-focused{
+  background-color: #EFF0F7!important;
+}
+.winner-title-box input{
+  height: 32px;
+  font-size: 14px;
+  background-color: #EFF0F7!important;
+}
+.winner-title-box input:focus{
+  background-color: #EFF0F7!important;
+}
+.arrow-up,.arrow-down{
+  float: right;
+  cursor: pointer;
+  margin-right: 16;
+}
+.arrow-up.disabled{
+  cursor: no-drop;
+  color: #ccc;
+}
+.arrow-down.disabled{
+  cursor: no-drop;
+  color: #ccc
+}
+.read-mark{
+  color:#B23730;
+}
+.more-icon{
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+.card-item{
+  border: 1px solid #D9DBE9;
+  border-radius: 16px;
+}
+.card-group-name{
+  color: #4E4B66;
+  font-size: 16px;
+  font-weight: 600;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.card-job-name{
+  color: #4E4B66; 
+  font-size: 12px; 
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.card-job-ct{
+  color: #4E4B66;
+  font-size: 12px;
+}
+.card-job-more{
+  float: left;
+}
+.arrow{
+  float: right;
+  cursor: pointer;
+  margin-right: 16px;
+}
+.arrow.disabled{
+  color:#ccc;
+  cursor: no-drop;
+}
+.table-group-name{
+  float: left;
+  width: 30rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.table-wrap{
+  padding: 0px 32px; 
+  position: fixed; 
+  bottom: 0;
+}
+@media  screen and (min-width: 1920px){
+  .text-box{
+    width: 570px;
+    height: 726px;
+  }
+  .winner-box{
+    width: 920px;
+    height: 726px;
+  }
+  .card-group{
+    padding: 0 42px 20px 42px;
+  }
+  .card-group-name{
+    height: 48;
+    line-height: 48px;
+  }
+  .card-item{
+    width: 388px;
+    height: 186px;
+    padding:24px 30px;
+  }
+  .card-job-name{
+    height: 30px; 
+    margin-top: 8px;
+    line-height: 30px; 
+    max-width: 326px;
+  }
+  .card-job-ct{
+    height: 30px;
+    line-height: 30px;
+    margin-top: 20px;
+  }
+  .card-job-more{
+    padding-left: 16px;
+    height: 30px;
+    line-height: 30px;
+  }
+  .card-item:nth-child(odd){
+    margin-right: 24px;
+  }
+  .tree-title{
+    width: 400px;
+  }
+  .tree-title-box{
+    width: 476px;
+  }
+  .tree-title-box.sc{
+    width: 452px;
+  }
+  .table-wrap{
+    width: 1606px;
+  }
+}
+
+@media only screen and (min-width: 1440px) and (max-width: 1919px){
+  .text-box{
+    width: 410px;
+    height: 726px;
+  }
+  .winner-box{
+    width: 696px;
+    height: 726px;
+  }
+  .card-group{
+    padding: 0 20px 20px 20px;
+  }
+  .card-group-name{
+    height: 32;
+    line-height: 32px;
+  }
+  .card-job-name{
+    height: 24px; 
+    margin-top: 8px;
+    line-height: 24px; 
+    max-width: 250px;
+  }
+  .card-job-ct{
+    height: 24px;
+    line-height: 24px;
+    margin-top: 8px;
+  }
+  .card-job-more{
+    padding-left: 16px;
+    height: 24px;
+    line-height: 24px;
+  }
+  .card-item{
+    width: 300px;
+    height: 124px;
+    margin-left: 12px;
+    padding:8px 30px;
+  }
+  .tree-title{
+    width: 280px;
+  }
+  .tree-title-box{
+    width: 306px;
+  }
+  .tree-title-box.sc{
+    width: 282px;
+  }
+  .table-wrap{
+    width: 1214px;
+  }
+}
+
+@media only screen and (max-width: 1439px){
+  .text-box{
+    width: 688px;
+    height: 726px;
+    margin: 0 auto;
+  }
+  .winner-box{
+    width: 688px;
+    height: 726px;
+    margin: 20px auto;
+  }
+  .card-group{
+    padding: 0 20px 20px 20px;
+  }
+  .card-group-name{
+    height: 32;
+    line-height: 32px;
+  }
+  .card-job-name{
+    height: 24px; 
+    margin-top: 8px;
+    line-height: 24px; 
+    max-width: 250px;
+  }
+  .card-job-ct{
+    height: 24px;
+    line-height: 24px;
+    margin-top: 8px;
+  }
+  .card-job-more{
+    padding-left: 16px;
+    height: 24px;
+    line-height: 24px;
+  }
+  .card-item{
+    width: 300px;
+    height: 124px;
+    margin-left: 12px;
+    padding:8px 30px;
+  }
+  .tree-title{
+    width: 550px;
+  }
+  .tree-title-box{
+    width: 566px;
+  }
+  .tree-title-box.sc{
+    width: 522px;
+  }
+  .ant-form-item-explain-error{
+    font-size: 12px;
+  }
+}
+

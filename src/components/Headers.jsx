@@ -14,7 +14,6 @@ const Headers=({logged, setLogged, setUserInfo})=>{
   const [key, setKey]=useState('home');
   const history = useHistory().location.pathname.split('/');
   useEffect(()=>{
-    console.log(history);
     if (history[1]) {
       setKey(history[1]);
     }

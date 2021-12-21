@@ -48,7 +48,6 @@ const Profile = ({userInfo, httpLoading, setHttpLoading, setUserInfo}) => {
   };
   const memberInfo = ()=>{
     get(MEMBERINFO, userInfo.token).then((res) => {
-      console.log(res);
       form.setFieldsValue({
         email: res.data.email,
         nickName: res.data.nickName,

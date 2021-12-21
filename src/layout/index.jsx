@@ -40,7 +40,7 @@ const Customlayout = ({history, activeKey, setLogged}) => {
       message.error({
         content: error.toString(), key: 'netError', duration: 2,
       });
-      console.log(error.toString());
+
       if (error.toString()==='Error: Token 过期或失效，请重新登录!') {
         history.push('/login');
       }
@@ -161,7 +161,6 @@ const Customlayout = ({history, activeKey, setLogged}) => {
     let timezoneStr = '';
     const hour=offsetStr[0].split('-');
     let hourStr='';
-    console.log(hour);
     if (hour.length>1) {
       hourStr='-' +(hour[1]>9?hour[1]:'0'+hour[1]);
     } else {

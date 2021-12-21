@@ -33,8 +33,7 @@ axios.interceptors.response.use((response) => {
     case 314:
       return Promise.reject(response.data.msg);
     default:
-      return Promise.reject(new Error(response.data.msg ??
-          'Network error'));
+      return Promise.reject(response.data.msg);
   }
 }, (error) => {
   const msg=error.toString()==='Error: timeout of 20000ms exceeded'?

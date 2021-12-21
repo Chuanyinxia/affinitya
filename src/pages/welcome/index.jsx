@@ -55,16 +55,12 @@ const WelcomPage = ({userInfo, httpLoading, setHttpLoading, isFirst}) => {
       'token': userInfo.token,
     }).then((res) => {
       settipsList(res.data.items);
-    }).catch((error) => {
-      console.log(error);
-    });
+    }).catch((error) => {});
   };
   const getAudienceList = () => {
     get(GETAUDIENCELIST).then((res) => {
       setAudienceWords(res.data);
-    }).catch((error) => {
-      console.log(error);
-    });
+    }).catch((error) => {});
   };
   const goToNext = (index)=>{
     setfirstIndex(index+1);
@@ -76,9 +72,7 @@ const WelcomPage = ({userInfo, httpLoading, setHttpLoading, isFirst}) => {
         failed: res.data.failed.slice(0, 3),
         waiting: res.data.waiting.slice(0, 3),
       });
-    }).catch((error) => {
-      console.log(error);
-    });
+    }).catch((error) => {});
   };
   const getBlogLIst = () => {
     post(GETBLOGLIST, {

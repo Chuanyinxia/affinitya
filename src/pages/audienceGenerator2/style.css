@@ -1,0 +1,74 @@
+.ages{
+  line-height: 64px;
+  height: 64px;
+}
+.width40{
+  width: 100%;
+}
+.ant-form-item-label > label::after{
+  content: none;
+}
+.ant-radio-wrapper{
+  width: 160px;
+  line-height: 28px;
+}
+.ant-radio-inner{
+  top:-3px;
+}
+span.ant-radio + *{
+  line-height: 28px;
+}
+.show{
+  display: block;
+}
+.hide{
+  display: none;
+}
+.Audience .ant-form-item-label > label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::before{
+  content: none;
+}
+.marginT32{
+  margin-top: 32px;
+}
+.marginR32{
+  margin-right: 32px;
+}
+.text-red{
+  color:#e92c3a;
+}
+.hover {
+  opacity: 0.5;
+}
+.hover:hover{
+  opacity: 1;
+}
+.ant-select-dropdown{
+  background: #EFF0F7;
+  max-width: 710px;
+}
+.ant-select-dropdown .ant-input{
+  background: #ffffff;
+  border-radius: 8px;
+}
+.ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+  color: #14142B;
+  font-weight: 600;
+  background: rgba(76 ,63, 113,.1 )
+}
+.break{
+  word-wrap:break-word;
+}
+@media only screen and (min-width: 992px) {
+  .TOP{
+    position: fixed;
+    top: 118px;
+    right: 10px;
+    width: 20vw;
+  }
+}
+.ant-alert-error {
+    background-color: #E92C3A;
+}
+.ant-select-selector .anticon-delete{
+ display: none;
+}

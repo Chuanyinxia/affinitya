@@ -21,7 +21,11 @@ import {
   Tooltip,
 } from 'antd';
 import './style.css';
-
+import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
+import FB from '@/assets/alipay-circle.png';
+const responseFacebook = (response) => {
+  console.log(response);
+};
 
 import {DeleteOutlined, InfoCircleOutlined, LockOutlined, PlusOutlined} from '@ant-design/icons';
 import {Countrys} from '@/components/plugin/Country';
@@ -42,7 +46,7 @@ import store from '@/store';
 import {storage} from '@/utils/storage';
 
 
-const AudienceGenerator = ({userInfo}) => {
+const AudienceGenerator2 = ({userInfo}) => {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
   const [audienceID, setAudienceID] = useState('');
@@ -52,8 +56,8 @@ const AudienceGenerator = ({userInfo}) => {
   const [searchType, setSearchType] = useState(1);
   const [read, setRead] = useState(true);
   const [modalShow, setModalShow] = useState(false);
-  const [addItemLoading, setAddItemLoading]=useState(false);
-  const [audienceWords, setAudienceWords]=useState([]);
+  const [addItemLoading, setAddItemLoading] = useState(false);
+  const [audienceWords, setAudienceWords] = useState([]);
   // new
   const [creatJobForm] = Form.useForm();
   const [startForm] = Form.useForm();
@@ -142,11 +146,11 @@ const AudienceGenerator = ({userInfo}) => {
     setSearchType(e.target.value);
   };
 
-  const addKeywords=(word)=>{
-    const keyWords=keyWordForm.getFieldValue().keyWord;
+  const addKeywords = (word) => {
+    const keyWords = keyWordForm.getFieldValue().keyWord;
 
     if (keyWords) {
-      if (keyWords.length>=10) {
+      if (keyWords.length >= 10) {
         message.warn('Please input less than 10 keywords!');
         return false;
       }
@@ -228,31 +232,31 @@ const AudienceGenerator = ({userInfo}) => {
     lookalikeForm.resetFields();
   };
 
-  const onFinish=(value)=>{
-    const data={
+  const onFinish = (value) => {
+    const data = {
       ...value,
       ...searchData,
     };
-    if (searchType===1) {
+    if (searchType === 1) {
       post(SEARCHKW, data, {
         // eslint-disable-next-line no-tabs
         'Content-Type': 'application/x-www-form-urlencoded',
         'token': userInfo.token,
       }).then((res) => {
         store.dispatch(setMenusData('jobManager', 'dashboard'));
-        history.push('/dashboard/jobManager?newID='+res.data+'&jobName='+value.jobName);
+        history.push('/dashboard/jobManager?newID=' + res.data + '&jobName=' + value.jobName);
       }).catch((error) => {
         // console.log(error);
-        if (error.code===371) {
+        if (error.code === 371) {
           Modal.confirm({
             content: error.msg,
             key: 'netError',
             duration: 2,
             okText: 'View the Job',
             cancelText: 'Cancel',
-            onOk: ()=>{
+            onOk: () => {
               store.dispatch(setMenusData('jobManager', 'dashboard'));
-              history.push('/dashboard/jobManager?searchID='+error.data.jobId+'&jobName='+error.data.title);
+              history.push('/dashboard/jobManager?searchID=' + error.data.jobId + '&jobName=' + error.data.title);
             },
           });
         } else {
@@ -268,7 +272,7 @@ const AudienceGenerator = ({userInfo}) => {
         'token': userInfo.token,
       }).then((res) => {
         store.dispatch(setMenusData('jobManager', 'dashboard'));
-        history.push('/dashboard/jobManager?newID=' + res.data+'&jobName='+value.jobName);
+        history.push('/dashboard/jobManager?newID=' + res.data + '&jobName=' + value.jobName);
       }).catch((error) => {
         message.error({
           content: error.toString(), key: 'netError', duration: 2,
@@ -283,22 +287,24 @@ const AudienceGenerator = ({userInfo}) => {
     }).catch((error) => {});
   };
 
-  const getInitMessage = () =>{
+  const getInitMessage = () => {
     setLoading(true);
-    const token=userInfo.token??storage.getData('userInfo').token;
+    const token = userInfo.token ?? storage.getData('userInfo').token;
     get(GETAUDIENCEIDLIST, token).then((res) => {
       setAudienceIdItem(res.data);
     }).catch((error) => {}).finally(() => {
       setLoading(false);
     });
-    get(GETUSERMESSAGE, token).then((res)=>{
+    get(GETUSERMESSAGE, token).then((res) => {
       // console.log(res);
       if (res.data.adAccountId && res.data.accessToken && res.data.myAppId && res.data.myAppSecret) {
         const sdata = {
           adAccountId: res.data.adAccountId,
-          accessToken: res.data.accessToken,
-          myAppId: res.data.myAppId,
-          myAppSecret: res.data.myAppSecret,
+          accessToken: 'EAAELZAvREbOwBACx9cZBxel1ihzyPZBWUv32ln' +
+            'O2PdGbVjtJZCgcKuTYNBZAUVieY0GNjiZBIEnOGwcHFDTn2XN6QnOimb1yly0' +
+            'SRuEO9JhipKV6bpPeJgqTIeSHblNjde7JZCYr1ZBw6DHF7O6VzKfQLpVZCEBv0ytXaNGDZBDb9aXgZDZD',
+          myAppId: '294011789405420',
+          myAppSecret: 'f9a0e90ea3b1018bdffc3dec61f54881',
         };
         setLoading(true);
         post(GETAUDIENCEID, sdata, {
@@ -308,16 +314,18 @@ const AudienceGenerator = ({userInfo}) => {
           setUserAudienceIdItem(res.data);
         }).catch((error) => {
           setErrorMsg(error.toString());
-        }).finally(()=>{
+        }).finally(() => {
           setLoading(false);
         });
       }
 
       startForm.setFieldsValue({
         adAccountId: res.data?.adAccountId,
-        accessToken: res.data?.accessToken,
-        myAppId: res.data?.myAppId,
-        myAppSecret: res.data?.myAppSecret,
+        accessToken: 'EAAELZAvREbOwBACx9cZBxel1ihzyPZBWUv32lnO2PdGbVjtJ' +
+          'ZCgcKuTYNBZAUVieY0GNjiZBIEnOGwcHFDTn2XN6QnOimb1yly0SRuEO9JhipKV' +
+          '6bpPeJgqTIeSHblNjde7JZCYr1ZBw6DHF7O6VzKfQLpVZCEBv0ytXaNGDZBDb9aXgZDZD',
+        myAppId: '294011789405420',
+        myAppSecret: 'f9a0e90ea3b1018bdffc3dec61f54881',
       });
       lookalikeForm.setFieldsValue({
         audienceId: res.data.audienceId,
@@ -341,7 +349,7 @@ const AudienceGenerator = ({userInfo}) => {
   []);
   useEffect(() => {
     const keyword = loadPageVar('keyword');
-    if (keyword!=='') {
+    if (keyword !== '') {
       addKeywords(keyword);
     }
   }, []);
@@ -349,7 +357,7 @@ const AudienceGenerator = ({userInfo}) => {
     <div>
       {errorMsg && (
         <Alert
-          onClose={()=>{
+          onClose={() => {
             setErrorMsg(null);
           }}
           className="alertFixed"
@@ -364,8 +372,8 @@ const AudienceGenerator = ({userInfo}) => {
             <Col xl={17} lg={17} md={24} xs={24}>
               <h1>Audience Generator</h1>
               <h4 className="marginB32">
-              Affinity Analyst extends high correlation audiences from your custom
-              audiences
+                Affinity Analyst extends high correlation audiences from your custom
+                audiences
               </h4>
               <Card className="marginB32 padding64 hover" hoverable>
                 <h2>1.Start with your FB</h2>
@@ -399,10 +407,23 @@ const AudienceGenerator = ({userInfo}) => {
                       maxLength={100}
                     />
                   </Form.Item>
+                  <div>
+                    <h4>Grand Facebook Permission:
+                      <span className="marginR32"/>
+                      <FacebookLogin
+                        appId="294011789405420"
+                        callback={responseFacebook}
+                        render={(renderProps) => (
+                          <img onClick={renderProps.onClick} src={FB}/>
+                        )}
+                      />
+                    </h4>
+                  </div>
                   <Form.Item
                     name="accessToken"
                     label="User Token"
                     readOnly={read}
+                    hidden
                     autocomplete="nope"
                     Autocomplete="nope"
                     rules={[{required: true, message: 'Please input access token!'}]}
@@ -410,7 +431,7 @@ const AudienceGenerator = ({userInfo}) => {
                       // eslint-disable-next-line react/jsx-no-target-blank
                       title: <div>In the <a
                         href="https://developers.facebook.com/tools/explorer/"
-                        target="_blank">Graph API Explorer</a>, grant  “ads_management”  permission<br/>
+                        target="_blank">Graph API Explorer</a>, grant “ads_management” permission<br/>
                         and click “Generate Access Token” , then go to “access token debugger“ <br/>
                         tool to generate extend access token.
                       </div>,
@@ -428,6 +449,7 @@ const AudienceGenerator = ({userInfo}) => {
                   <Row gutter={32}>
                     <Col span={12}>
                       <Form.Item
+                        hidden
                         label="App ID"
                         name="myAppId"
                         rules={[{required: true, message: 'Please input App ID!'}]}
@@ -443,6 +465,7 @@ const AudienceGenerator = ({userInfo}) => {
                     </Col>
                     <Col span={12}>
                       <Form.Item
+                        hidden
                         label="App Secret"
                         name="myAppSecret"
                         rules={[{required: true, message: 'Please input App secret!'}]}
@@ -565,11 +588,11 @@ const AudienceGenerator = ({userInfo}) => {
               </Card>
               <Card className="marginB32 padding64 hover" hoverable>
                 <h2>3. Last small step to get your generated keywords</h2>
-                {searchType === 1&&(<h4 className="marginB32">
-                Input one or more keywords, it is suggested to try different
-                combinations.</h4>)}
-                {searchType === 2&&(<h4 className="marginB32">
-                Fill in the corresponding Facebook Lookalike Audience information.
+                {searchType === 1 && (<h4 className="marginB32">
+                  Input one or more keywords, it is suggested to try different
+                  combinations.</h4>)}
+                {searchType === 2 && (<h4 className="marginB32">
+                  Fill in the corresponding Facebook Lookalike Audience information.
                 </h4>)}
                 <Radio.Group onChange={onSearchTypeChange} value={searchType} className="marginB32">
                   <Radio value={1}>Keyword Search</Radio>
@@ -585,9 +608,9 @@ const AudienceGenerator = ({userInfo}) => {
                   name="keywords"
                   className={searchType === 1 ? 'show' : 'hide'}
                 >
-                  {!isPayUser&&(
+                  {!isPayUser && (
                     <h4 className="marginB32">
-                Access to 40 keywords is free. Need access to all 300 of your custom keyword audience?
+                      Access to 40 keywords is free. Need access to all 300 of your custom keyword audience?
                       <Link to="/plansAndPrices" className="target" onClick={() => {
                         store.dispatch(setMenusData('plansAndPrices', 'dashboard'));
                       }}> Upgrade now!</Link>
@@ -605,8 +628,8 @@ const AudienceGenerator = ({userInfo}) => {
                     <Select
                       placeholder="Input keywords..."
                       mode="tags"
-                      onChange={(value)=>{
-                        if (value.length>10) {
+                      onChange={(value) => {
+                        if (value.length > 10) {
                           message.warn('Please input less than 10 keywords!');
                           value.pop();
                           keyWordForm.setFieldsValue({
@@ -689,24 +712,24 @@ const AudienceGenerator = ({userInfo}) => {
                 </Form>
               </Card>
             </Col>
-            <Col xl={6} lg={7} md={24} xs={24} >
+            <Col xl={6} lg={7} md={24} xs={24}>
               {/* <div className="TOP"> */}
-              {audienceWords.length!==0?<><h3 style={{fontWeight: 600}}>TRENDING AUDIENCE&nbsp;
+              {audienceWords.length !== 0 ? <><h3 style={{fontWeight: 600}}>TRENDING AUDIENCE&nbsp;
                 <Tooltip
                   arrowPointAtCenter
                   placement="left"
                   title={<span>
                 Trending audiences are audiences our engine identifies<br/>
                 that are of significant correlation to the category.</span>}>
-                  <InfoCircleOutlined />
+                  <InfoCircleOutlined/>
                 </Tooltip>
               </h3>
               <Space wrap>
                 {audienceWords.map((item) => (
-                  <a key={item.id} type="link" onClick={()=>addKeywords(item.name)}>{item.name}</a>
+                  <a key={item.id} type="link" onClick={() => addKeywords(item.name)}>{item.name}</a>
                 ))}
               </Space>
-              <Divider/></>:null}
+              <Divider/></> : null}
               <h3 style={{fontWeight: 600}}>TIPS</h3>
               {/* eslint-disable-next-line react/jsx-no-target-blank */}
               <a
@@ -732,7 +755,7 @@ const AudienceGenerator = ({userInfo}) => {
             visible={modalShow}
             footer={null}
             width={650}
-            onCancel={()=> {
+            onCancel={() => {
               setModalShow(false);
               setSearchData(null);
             }}>
@@ -745,7 +768,7 @@ const AudienceGenerator = ({userInfo}) => {
               <Form.Item className="text-right">
                 <Button
                   className="btn-lg marginR32 marginT32"
-                  onClick={()=> {
+                  onClick={() => {
                     setModalShow(false);
                     setSearchData(null);
                     creatJobForm.resetFields();
@@ -768,15 +791,14 @@ const mapStateToProps = (state) => {
 
 
 const mapDispatchToProps = (dispatch) => {
-  return {
-  };
+  return {};
 };
 
-AudienceGenerator.propTypes = {
+AudienceGenerator2.propTypes = {
   userInfo: PropTypes.object.isRequired,
 };
 
 export default connect(
     mapStateToProps,
     mapDispatchToProps,
-)(AudienceGenerator);
+)(AudienceGenerator2);

@@ -44,7 +44,6 @@ const PlansAndPrices = ({userInfo, httpLoading, setHttpLoading}) => {
         item.checked = false;
         return item;
       });
-      console.log(data);
       setPaymentList(data);
     }).catch((error) => {
       message.error({

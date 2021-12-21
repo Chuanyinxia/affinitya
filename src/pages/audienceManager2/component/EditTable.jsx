@@ -111,7 +111,8 @@ const EditTable = ({searchId, searchType, userInfo, httpLoading, setHttpLoading,
       // eslint-disable-next-line no-tabs
       'Content-Type': 'application/json',
       'token': userInfo.token,
-    }).then((res) => {}).catch((error) => {
+    }).then(() => {
+    }).catch((error) => {
       message.error({
         content: error.toString(), key: 'netError', duration: 2,
       });
@@ -139,9 +140,7 @@ const EditTable = ({searchId, searchType, userInfo, httpLoading, setHttpLoading,
         saveSearchResult(newData);
         setEditingKey('');
       }
-    } catch (errInfo) {
-      console.log(errInfo);
-    }
+    } catch (errInfo) {}
   };
   const extend=()=>{
     setextendModal(true);
@@ -153,7 +152,6 @@ const EditTable = ({searchId, searchType, userInfo, httpLoading, setHttpLoading,
   //     'Content-Type': 'application/x-www-form-urlencoded',
   //     'token': userInfo.token,
   //   }).then((res)=>{
-
   //   }).catch((error) => {
   //     message.error({
   //       content: error.toString(), key: 'netError', duration: 2,
@@ -163,6 +161,7 @@ const EditTable = ({searchId, searchType, userInfo, httpLoading, setHttpLoading,
   //   });
   // };
   // const killJob=(id)=>{
+
   //   post(CANCELJOB+id, '', {
   //     // eslint-disable-next-line no-tabs
   //     'Content-Type':'application/x-www-form-urlencoded',

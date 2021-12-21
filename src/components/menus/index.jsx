@@ -31,21 +31,15 @@ const Menus = ({userInfo, history, activeKey, openKeys, managerCounts}) => {
     }).then((res)=>{
       get(GETNEWMESSAGECOUNT, userInfo.token).then((res) => {
         setmessageCounter(res.data);
-      }).catch((error) => {
-        console.log(error);
-      });
-    }).catch((error)=>{
-      console.log(error);
-    });
+      }).catch((error) => {});
+    }).catch((error)=>{});
   };
   const messageTimer = useRef();
   useEffect(() => {
     get(GETNOREADAUDIENCE, userInfo.token).then((res)=>{
       store.dispatch(getMangerCounts(res.data));
       storage.saveData('local', 'mangerCounts', res.data);
-    }).catch((error)=>{
-      console.log(error);
-    });
+    }).catch((error)=>{});
     const array=history.location.pathname.split('/');
     store.dispatch(setMenusData(array[2]??array[1], array[1]));
   }, [history]);

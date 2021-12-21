@@ -58,7 +58,6 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
     });
   };
   const killJob=(id)=>{
-    console.log(id);
     post(CANCELJOB+id, '', {
       // eslint-disable-next-line no-tabs
       'Content-Type':	'application/x-www-form-urlencoded',
@@ -83,7 +82,6 @@ const JobManger = ({userInfo, httpLoading, setHttpLoading}) => {
   };
   const getJobDetails=(id)=>{
     get(GETJOBDETAIL+id, userInfo.token).then((res)=>{
-      console.log(res);
       setViewModal(true);
       setLookID(res.data.kwResultVoList[0].id);
       setLookType(2);

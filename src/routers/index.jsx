@@ -5,6 +5,9 @@ import Faq from '@/pages/faq';
 import AudienceGenerator from '@/pages/audienceGenerator';
 import JobManger from '@/pages/jobManager';
 import AudienceManger from '@/pages/audienceManager';
+import AudienceGenerator2 from '@/pages/audienceGenerator2';
+import JobManger2 from '@/pages/jobManager2';
+import AudienceManger2 from '@/pages/audienceManager2';
 import Roles from '../pages/roles';
 import Users from '../pages/users';
 import PlansAndPrices from '../pages/plansAndPrices';
@@ -37,9 +40,10 @@ const Router = () => {
       <Route path="/faq" component={Faq} />
       <Route path="/blogs" exact component={Blogs} />
       <Route path="/blogs/detail/:id" exact component={BlogDtail} />
-      <Route path="/dashboard/audienceGenerator" component={AudienceGenerator} />
-      <Route path="/dashboard/jobManager" component={JobManger} />
-      <Route path="/dashboard/audienceManager" component={AudienceManger} />
+      <Route path="/dashboard/audienceGenerator" component={userInfo.FBTest?AudienceGenerator2:AudienceGenerator} />
+      <Route path="/dashboard/jobManager" component={userInfo.FBTest?JobManger2:JobManger} />
+      <Route path="/dashboard/audienceManager" component={userInfo.FBTest?AudienceManger2:AudienceManger} />
+
       <Route path="/access/users" component={Users} />
       <Route path="/access/roles" component={Roles} />
       <Route path="/plansAndPrices" component={PlansAndPrices} />
