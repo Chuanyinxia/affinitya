@@ -69,6 +69,16 @@ span.ant-radio + *{
 .ant-alert-error {
     background-color: #E92C3A;
 }
-.ant-select-selector .anticon-delete{
- display: none;
+.ant-select-selector .anticon-delete {
+  display: none;
+}
+
+.kep-login-facebook {
+  height: 36px;
+  line-height: 36px;
+  padding-top: 0!important;
+  padding-bottom: 0!important;
+  font-size: 18px!important;
+  font-weight: 500!important;
+  border-radius: 32px!important;
 }

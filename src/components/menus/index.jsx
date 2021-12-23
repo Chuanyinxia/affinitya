@@ -91,7 +91,7 @@ const Menus = ({userInfo, history, activeKey, openKeys, managerCounts}) => {
           </Link>
         </Menu.Item>
         <Menu.Item key="audienceManager" className="menus_subTitle">
-          {managerCounts!==0&&managerCounts!==null?<div className="job-dot">{managerCounts}</div>:null}
+          {managerCounts>0?<div className="job-dot">{managerCounts}</div>:null}
           <Link to="/dashboard/audienceManager">
             Audience Manager
           </Link>
@@ -127,7 +127,7 @@ Menus.propTypes = {
   activeKey: PropTypes.string.isRequired,
   openKeys: PropTypes.string.isRequired,
   userInfo: PropTypes.object.isRequired,
-  managerCounts: PropTypes.object.isRequired,
+  managerCounts: PropTypes.number.isRequired,
 };
 
 export default connect(

@@ -21,8 +21,7 @@ import {
   Tooltip,
 } from 'antd';
 import './style.css';
-import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
-import FB from '@/assets/alipay-circle.png';
+import FacebookLogin from 'react-facebook-login';
 const responseFacebook = (response) => {
   console.log(response);
 };
@@ -412,10 +411,9 @@ const AudienceGenerator2 = ({userInfo}) => {
                       <span className="marginR32"/>
                       <FacebookLogin
                         appId="294011789405420"
+                        scope="public_profile,email,ads_read"
+                        onlogin="checkLoginState();"
                         callback={responseFacebook}
-                        render={(renderProps) => (
-                          <img onClick={renderProps.onClick} src={FB}/>
-                        )}
                       />
                     </h4>
                   </div>
