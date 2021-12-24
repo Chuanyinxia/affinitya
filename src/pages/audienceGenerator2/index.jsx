@@ -21,10 +21,8 @@ import {
   Tooltip,
 } from 'antd';
 import './style.css';
+import FacebookLoginP from 'react-facebook-login/dist/facebook-login-render-props';
 import FacebookLogin from 'react-facebook-login';
-const responseFacebook = (response) => {
-  console.log(response);
-};
 
 import {DeleteOutlined, InfoCircleOutlined, LockOutlined, PlusOutlined} from '@ant-design/icons';
 import {Countrys} from '@/components/plugin/Country';
@@ -66,6 +64,13 @@ const AudienceGenerator2 = ({userInfo}) => {
   const [lookalikeForm] = Form.useForm();
   const [searchData, setSearchData] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
+  const [isFBLogin, setIsFBLogin]= useState('');
+  const responseFacebook = (response) => {
+    if (response.name) {
+      setIsFBLogin(response.name);
+    }
+  };
+
   const loadPageVar = (sVar) => {
     return decodeURI(
         window.location.search.replace(
@@ -407,7 +412,8 @@ const AudienceGenerator2 = ({userInfo}) => {
                     />
                   </Form.Item>
                   <div>
-                    <h4>Grant Facebook Permission:
+                    {!isFBLogin?(<h4 className="required-title">
+                      <span className="text-mark">*</span>Grant Facebook Permission:
                       <span className="marginR32"/>
                       <FacebookLogin
                         appId="294011789405420"
@@ -415,7 +421,23 @@ const AudienceGenerator2 = ({userInfo}) => {
                         onlogin="checkLoginState();"
                         callback={responseFacebook}
                       />
-                    </h4>
+                    </h4>):(<h4 className="required-title">
+                      <span className="text-mark">*</span>
+                      Permission Granted by: {isFBLogin}
+                      <FacebookLoginP
+                        appId="294011789405420"
+                        scope="public_profile,email,ads_read"
+                        onlogin="checkLoginState();"
+                        callback={responseFacebook}
+                        render={(renderProps) => (
+                          <Button
+                            type="primary"
+                            className="marginL16"
+                            ghost
+                            onClick={renderProps.onClick}> Re Login with Facebook</Button>
+                        )}
+                      />
+                    </h4>)}
                   </div>
                   <Form.Item
                     name="accessToken"

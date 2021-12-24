@@ -82,3 +82,17 @@ span.ant-radio + *{
   font-weight: 500!important;
   border-radius: 32px!important;
 }
+.text-mark {
+  display: inline-block;
+  margin-right: 4px;
+  color: #ff4d4f;
+  font-size: 16px;
+  font-family: SimSun, sans-serif;
+  line-height: 1;
+}
+.required-title{
+  line-height: 28px;
+  color: #4E4B66;
+  height: 32px;
+  font-size: 16px;
+}
