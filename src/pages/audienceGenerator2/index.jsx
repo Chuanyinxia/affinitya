@@ -31,17 +31,23 @@ import {
   DELETEAUDIENCEID,
   GETAUDIENCEID,
   GETAUDIENCEIDLIST,
-  GETAUDIENCELIST,
+  GETAUDIENCELIST, GETFBUSER,
   GETUSERMESSAGE,
   ISPAID,
-  SAVEAUDIENCEID,
+  SAVEAUDIENCEID, SAVEFBUSER,
   SEARCHAUID,
   SEARCHKW,
 } from '@/api';
 import {Link, useHistory} from 'react-router-dom';
 import store from '@/store';
 import {storage} from '@/utils/storage';
-
+const FBLoginData={
+  accessToken: 'EAANELK82ZCP8BAMDeeGvNFXOTzaQd9hZBVSwexjClE6Y0BxZB' +
+    'Osyi8mR7O9zGF0JLOYcj1JsEvbElL0UiI7NqfIsIZBtDocFfGDuj1IIbpfTyaCg' +
+    'i5SJFoR2uoZCCqoSY23NLdhaQgim7o6l4X5lEjoueZBdmqanjJRSeXK7d3PQZDZD',
+  myAppId: '919383638998271',
+  myAppSecret: '3eb781cc0cf396c8f62e1685ea80ebc5',
+};
 
 const AudienceGenerator2 = ({userInfo}) => {
   const history = useHistory();
@@ -65,9 +71,28 @@ const AudienceGenerator2 = ({userInfo}) => {
   const [searchData, setSearchData] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [isFBLogin, setIsFBLogin]= useState('');
+  const getFBName=()=>{
+    get(GETFBUSER, userInfo.token).then((res)=>{
+      setIsFBLogin(res.data.name);
+    }).catch((error) => {
+      message.error({
+        content: error.toString(), key: 'netError', duration: 2,
+      });
+    });
+  };
   const responseFacebook = (response) => {
     if (response.name) {
       setIsFBLogin(response.name);
+      post(SAVEFBUSER, response, {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'token': userInfo.token,
+      }).then(()=>{
+        message.success('Permission granted success!');
+      }).catch((error) => {
+        message.error({
+          content: error.toString(), key: 'netError', duration: 2,
+        });
+      });
     }
   };
 
@@ -304,11 +329,7 @@ const AudienceGenerator2 = ({userInfo}) => {
       if (res.data.adAccountId && res.data.accessToken && res.data.myAppId && res.data.myAppSecret) {
         const sdata = {
           adAccountId: res.data.adAccountId,
-          accessToken: 'EAAELZAvREbOwBACx9cZBxel1ihzyPZBWUv32ln' +
-            'O2PdGbVjtJZCgcKuTYNBZAUVieY0GNjiZBIEnOGwcHFDTn2XN6QnOimb1yly0' +
-            'SRuEO9JhipKV6bpPeJgqTIeSHblNjde7JZCYr1ZBw6DHF7O6VzKfQLpVZCEBv0ytXaNGDZBDb9aXgZDZD',
-          myAppId: '294011789405420',
-          myAppSecret: 'f9a0e90ea3b1018bdffc3dec61f54881',
+          ...FBLoginData,
         };
         setLoading(true);
         post(GETAUDIENCEID, sdata, {
@@ -325,11 +346,7 @@ const AudienceGenerator2 = ({userInfo}) => {
 
       startForm.setFieldsValue({
         adAccountId: res.data?.adAccountId,
-        accessToken: 'EAAELZAvREbOwBACx9cZBxel1ihzyPZBWUv32lnO2PdGbVjtJ' +
-          'ZCgcKuTYNBZAUVieY0GNjiZBIEnOGwcHFDTn2XN6QnOimb1yly0SRuEO9JhipKV' +
-          '6bpPeJgqTIeSHblNjde7JZCYr1ZBw6DHF7O6VzKfQLpVZCEBv0ytXaNGDZBDb9aXgZDZD',
-        myAppId: '294011789405420',
-        myAppSecret: 'f9a0e90ea3b1018bdffc3dec61f54881',
+        ...FBLoginData,
       });
       lookalikeForm.setFieldsValue({
         audienceId: res.data.audienceId,
@@ -344,6 +361,7 @@ const AudienceGenerator2 = ({userInfo}) => {
 
   useEffect(() => {
     isPay();
+    getFBName();
     getInitMessage();
     getAudienceList();
     setTimeout(() => {

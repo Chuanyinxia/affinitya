@@ -59,3 +59,6 @@ export const GETBLOG='/api/getBlog/';
 export const GETUSERMESSAGE='/api/getUserMessage';
 
 export const GETTIPSLIST='/api/getTipsList';
+// FB info
+export const SAVEFBUSER='/api/saveFBUser';
+export const GETFBUSER='/api/getFBUser';
