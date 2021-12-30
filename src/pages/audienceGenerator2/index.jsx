@@ -89,8 +89,11 @@ const AudienceGenerator2 = ({userInfo}) => {
       }).then(()=>{
         message.success('Permission granted success!');
       }).catch((error) => {
-        message.error({
-          content: error.toString(), key: 'netError', duration: 2,
+        Modal.error({
+          title: error.toString(),
+          onOk() {
+            window.location.reload();
+          },
         });
       });
     }
