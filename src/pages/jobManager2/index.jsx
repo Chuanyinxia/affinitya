@@ -11,18 +11,20 @@ import {
   READJOBMANGER,
   RESTARTJOB,
   UPDATEJOBTITLE,
+  DELETEJOB,
 } from '@/api';
 import {get, post, update} from '@/utils/request';
-import {Alert, Button, Form, Input, message, Modal, Space, Table, Tabs, Tag, Tooltip} from 'antd';
-import {SearchOutlined} from '@ant-design/icons';
+import {Alert, Button, Form, message, Modal, Space, Table, Tabs, Tag, Tooltip, Typography} from 'antd';
+import {EditFilled} from '@ant-design/icons';
 import {Link, useHistory} from 'react-router-dom';
-// import store from '@/store';
 import {type} from '@/components/plugin/Searchdata';
-// import ResultTable from '@/components/Table/ResultTable';
 import KeyWordSearchDetails from '@/components/Table/KeyWordSearchDetails';
 import qs from 'querystring';
 import store from '@/store';
 import {timeFormat} from '@/components/plugin/TimeFormat';
+import {getColumnSearchProps} from '@/components/search/SearchOption';
+import {getColumnSelectProps} from '@/components/search/SelectOption';
+import {toDecodeSort, toTrim} from '@/components/search/TrimData';
 
 const jobMangerText = {
   title: 'Unsaved audience will be deleted after 30 days.',
@@ -37,8 +39,6 @@ const JobManger2 = ({userInfo, httpLoading, setHttpLoading}) => {
   const [jobList, setJobList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [jobType, setJobType] = useState(type() ?? 0);
-  const [modalShow, setModalShow] = useState(false);
-  const [editData, setEditData] = useState(null);
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
@@ -53,6 +53,7 @@ const JobManger2 = ({userInfo, httpLoading, setHttpLoading}) => {
   const [searchTitle, setSearchTitle]=useState('');
   const [saveManger, setSaveManger]= useState(null);
   const [searchID, setSearchID] = useState('');
+  const [searchName, setSearchName]=useState('');
   const [searchType, setSearchType] = useState('');
   const loadPageVar = (sVar) => {
     return decodeURI(
@@ -61,29 +62,28 @@ const JobManger2 = ({userInfo, httpLoading, setHttpLoading}) => {
           encodeURI(sVar).replace(/[.+*]/g, '\\$&') +
           '(?:\\=([^&]*))?)?.*$', 'i'), '$1'));
   };
-  const onFinish = (value) => {
+  const onJobTitleChange = (value, id) => {
     const data = {
-      ...value,
-      id: editData.id,
+      jobTitle: value,
+      id: id,
     };
     update(UPDATEJOBTITLE, data, {
       // eslint-disable-next-line no-tabs
       'Content-Type':	'application/x-www-form-urlencoded',
       'token': userInfo.token,
     }).then((res)=>{
-      setModalShow(false);
       message.success('Success');
       creatJobForm.resetFields();
+    }).catch((error)=>{
+      message.error({
+        content: error.toString(), key: 'netError', duration: 2,
+      });
+    }).finally(()=>{
       getJobList({
         pageSize: 10,
         pageNum: pagination.current,
         title: searchTitle,
         type: jobType === false ? '' : jobType,
-      });
-      setEditData(null);
-    }).catch((error)=>{
-      message.error({
-        content: error.toString(), key: 'netError', duration: 2,
       });
     });
   };
@@ -174,28 +174,35 @@ const JobManger2 = ({userInfo, httpLoading, setHttpLoading}) => {
       });
     });
   };
-  const onSearch=(e)=>{
-    let searchData;
-    if (e&&e.target) searchData = e.target.value;
-    else searchData = e;
-    setSearchTitle(searchData.trim()??'');
-    getJobList({
-      pageNum: 1,
-      pageSize: pagination.pageSize,
-      title: searchData.trim()??'',
-      type: jobType,
-    });
-  };
   const jobReader=()=>{
     update(READJOBMANGER, '', {
       'token': userInfo.token,
     }).then(()=>{}).catch((error)=>{});
   };
-
+  const deleteJob = (id) =>{
+    update(DELETEJOB+id, '', {
+      // eslint-disable-next-line no-tabs
+      'Content-Type':	'application/x-www-form-urlencoded',
+      'token': userInfo.token,
+    }).then((res)=>{
+      message.success(res.msg);
+      getJobList({
+        pageNum: pagination.current,
+        pageSize: pagination.pageSize,
+        title: searchTitle,
+        type: jobType,
+      });
+    }).catch((error)=>{
+      message.error({
+        content: error.toString(), key: 'netError', duration: 2,
+      });
+    });
+  };
   useEffect(() => {
     const data=history.location.search.split('?');
     const searchId = loadPageVar('id');
     const searchName = loadPageVar('keyword');
+    setSearchName(searchName);
     const params={pageNum: 1,
       pageSize: 10,
       title: searchName,
@@ -220,29 +227,122 @@ const JobManger2 = ({userInfo, httpLoading, setHttpLoading}) => {
     if (searchName!=='') setSearchTitle(searchName);
     getJobList(params);
   }, [history.location]);
-  // useEffect(() => {
-  //   const searchData = loadPageVar('id');
-  //   if (searchData!=='') onSearch(searchData);
-  // }, []);
-  // useEffect(() => {
-  //   const searchData = loadPageVar('jobName');
-  //   if (searchData!=='') onSearch(location.search.split('=')[1]);
-  // }, []);
-  const OperationsSlot = {
-    left: null,
-    right: <div style={{marginRight: 3}}>
-      <Input
-        size="small"ya
-        style={{height: 40, width: 220}}
-        placeholder="Search"
-        value={searchTitle}
-        onChange={(e)=>setSearchTitle(e.target.value)}
-        onPressEnter={onSearch}
-        prefix={<SearchOutlined/>}
-      />
-    </div>,
-  };
 
+  const Columns=[{
+    title: 'Job Name',
+    dataIndex: 'title',
+    key: 'title',
+    ...getColumnSearchProps('job name', 'title', searchName),
+    width: 260,
+    // eslint-disable-next-line react/display-name
+    render: (title, record)=> parseInt(record.id)===parseInt(newID)?
+      (<span style={{wordBreak: 'break-all'}}>
+        <span className="text-red">*</span>
+        <Typography.Paragraph
+          editable={{
+            icon: <EditFilled />,
+            tooltip: 'Click to edit job name',
+            onChange: (e)=>onJobTitleChange(e, record.id),
+          }}
+        >
+          {title}
+        </Typography.Paragraph>
+      </span>):(<Typography.Paragraph
+        editable={{
+          icon: <EditFilled />,
+          tooltip: 'Click to edit job name',
+          onChange: (e)=>onJobTitleChange(e, record.id),
+        }}
+      >
+        {title}
+      </Typography.Paragraph>),
+  }, {
+    title: 'Type',
+    dataIndex: 'type',
+    key: 'type',
+    render: (type) => type === 1 ? 'Keyword' :
+      type === 2 ? 'Lookalike Audience' : 'Extend',
+  }, {
+    title: 'User OS',
+    dataIndex: 'os',
+    key: 'os',
+    filters: [
+      {text: 'IOS', value: 'IOS'},
+      {text: 'Android', value: 'Android'},
+    ],
+    filterMultiple: false,
+    render: (os) => os === 'na' ? 'All' :os,
+  }, {
+    title: 'Country',
+    dataIndex: 'country',
+    key: 'country',
+    ...getColumnSelectProps('country', 'country'),
+  }, {
+    title: 'Start Time',
+    dataIndex: 'startTime',
+    key: 'start_time',
+    sorter: true,
+    render: (startTime)=>timeFormat(startTime),
+  }, {
+    title: 'Complete Time',
+    dataIndex: 'endTime',
+    key: 'end_time',
+    sorter: true,
+    render: (endTime, record) => (endTime && (record.jobStatus === 1 || record.jobStatus === 5)) ?
+        timeFormat(endTime) + `(Estimate)` :
+        timeFormat(endTime),
+  }, {
+    title: 'Status',
+    dataIndex: 'jobStatus',
+    key: 'jobStatus',
+    // eslint-disable-next-line react/display-name
+    render: (jobStatus, record) => <Space>
+      {(jobStatus === 1) ? (<Tag color="gold" className="no-border lg-tag">Running</Tag>) :
+          (jobStatus === 2) ? (<Tag color="green" className="no-border lg-tag">Completed</Tag>) :
+            (jobStatus === 3) ? (<Tag color="purple" className="no-border lg-tag">Canceled</Tag>) :
+              (jobStatus === 4) ? ( <Tooltip title={record.failReason}>
+                <Tag color="red" className="no-border lg-tag">Failed</Tag>
+              </Tooltip>) :
+                (<Tag color="lime" className="no-border lg-tag">Waiting</Tag>)}
+    </Space>,
+  }, {
+    title: 'Action',
+    key: 'Action',
+    // eslint-disable-next-line react/display-name
+    render: (record)=><Space size="small">
+      <Button onClick={()=>deleteJob(record.id)} type="text" className="btn-xs btn-red-link">
+          del
+      </Button>
+      {(record.jobStatus === 1 || record.jobStatus === 5) ? (
+        <Button
+          onClick={() => killJob(record.id)}
+          type="text"
+          className="btn-xs btn-red-link">
+          Cancel
+        </Button>
+      ) : (record.jobStatus === 2) ?
+        (<Button
+          onClick={() => {
+            getJobDetails(record.id);
+            setJobName(record.title);
+            setSearchType(record.type);
+          }}
+          type="link"
+          className="btn-xs btn-red-link">
+            View
+        </Button>
+        ) :
+        (<Button
+          onClick={() => {
+            restartJob(record.id);
+          }}
+          type="link"
+          className="btn-xs btn-red-link">
+          Restart
+        </Button>)}
+    </Space>,
+  },
+  ];
   return (
     <div className="margin_16">
       {newID && (<Alert
@@ -275,7 +375,6 @@ const JobManger2 = ({userInfo, httpLoading, setHttpLoading}) => {
         <h4 className="search-info marginB16">{jobMangerText.title}</h4>
 
         <Tabs
-          tabBarExtraContent={OperationsSlot}
           defaultActiveKey={jobType}
           onChange={(key) => {
             setJobType(key);
@@ -296,122 +395,22 @@ const JobManger2 = ({userInfo, httpLoading, setHttpLoading}) => {
           loading={loading}
           dataSource={jobList}
           pagination={pagination}
-          onChange={(pagination) =>
+          columns={Columns}
+          onChange={(pagination, filters, sort) =>{
+            const filter = toTrim(filters);
+            if (filters.title&&filters.title===' ') {
+              setSearchName('');
+            }
+            const sorts=toDecodeSort(sort);
             getJobList({
               ...pagination,
+              ...sorts,
+              ...filter,
               pageNum: pagination.current,
-              title: searchTitle,
               type: jobType,
-            })}
-        >
-          {/* <Table.Column title="Job Name" dataIndex="id" key="Job ID"/>*/}
-          <Table.Column
-            title="Job Name"
-            dataIndex="title"
-            key="Job Title"
-            style={{wordBreak: 'break-all'}}
-            render={(title, record)=>{
-              return parseInt(record.id)===parseInt(newID)?
-                (<span><span className="text-red">*</span>{title}</span>):title;
-            }}/>
-          <Table.Column title="Type" dataIndex="type" key="Type" render={(type) => {
-            return type === 1 ? 'Keyword' : type === 2 ? 'Lookalike Audience' : 'Extend';
-          }}/>
-          <Table.Column title="Detail" dataIndex="detail" key="detail"/>
-          <Table.Column
-            title="Start Time"
-            dataIndex="startTime"
-            key="Start Time"
-            render={(startTime)=>timeFormat(startTime)}/>
-          <Table.Column
-            title="Complete Time"
-            dataIndex="endTime"
-            key="Complete Time"
-            render={(endTime, record) => {
-              return (endTime && (record.jobStatus === 1 || record.jobStatus === 5)) ?
-                timeFormat(endTime) + `(Estimate)` :
-                timeFormat(endTime);
-            }}/>
-          <Table.Column title="Status" dataIndex="jobStatus" key="Status" render={(jobStatus, record) => (
-            <Space>
-              {(jobStatus === 1) ? (<Tag color="gold" className="no-border lg-tag">Running</Tag>) :
-                (jobStatus === 2) ? (<Tag color="green" className="no-border lg-tag">Completed</Tag>) :
-                  (jobStatus === 3) ? (<Tag color="purple" className="no-border lg-tag">Canceled</Tag>) :
-                    (jobStatus === 4) ? ( <Tooltip title={record.failReason}>
-                      <Tag color="red" className="no-border lg-tag">Failed</Tag>
-                    </Tooltip>) :
-                      (<Tag color="lime" className="no-border lg-tag">Waiting</Tag>)}
-            </Space>
-          )}/>
-          <Table.Column title="Action" key="Action" render={(record) => (
-            <Space size="small">
-              <Button type="text" className="btn-xs btn-red-link" onClick={() => {
-                setEditData(record);
-                setModalShow(true);
-                creatJobForm.setFieldsValue({
-                  jobTitle: record.title,
-                });
-              }}>Edit</Button>
-              {(record.jobStatus === 1 || record.jobStatus === 5) ? (
-                <Button
-                  onClick={() => killJob(record.id)}
-                  type="text"
-                  className="btn-xs btn-red-link">
-                  Cancel
-                </Button>
-              ) : (record.jobStatus === 2) ?
-                (<Button
-                  onClick={() => {
-                    getJobDetails(record.id);
-                    setJobName(record.title);
-                    setSearchType(record.type);
-                  }}
-                  type="link"
-                  className="btn-xs btn-red-link">
-                    View
-                </Button>
-                ) :
-                (<Button
-                  onClick={() => {
-                    restartJob(record.id);
-                  }}
-                  type="link"
-                  className="btn-xs btn-red-link">
-                  Restart
-                </Button>)}
-            </Space>
-          )}/>
-        </Table>
-        <Modal
-          title={null}
-          visible={modalShow}
-          footer={null}
-          width={650}
-          onCancel={() => {
-            setModalShow(false);
-            setEditData(null);
-          }}>
-          <h2>Edit Job</h2>
-          <p className="marginB32">Name your audience for identification in Job & Audience Manager</p>
-          <Form name="creatJob" form={creatJobForm} onFinish={onFinish}>
-            <Form.Item
-              name="jobTitle"
-              rules={[{required: true, message: 'Please input job name!'}]}
-            >
-              <Input placeholder="Input job name, ex: game name, audience/keyword, etc. " maxLength={255}/>
-            </Form.Item>
-            <Form.Item className="text-right">
-              <Button
-                className="btn-lg marginR32 marginT32"
-                onClick={() => {
-                  setModalShow(false);
-                  setEditData(null);
-                  creatJobForm.resetFields();
-                }}>Cancel</Button>
-              <Button type="primary" className="btn-lg" htmlType="submit">Save</Button>
-            </Form.Item>
-          </Form>
-        </Modal>
+            });
+          }}
+        />
         <Modal
           className="hideOverFlow"
           title={null}

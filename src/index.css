@@ -7,3 +7,7 @@
 .paddingB32{
   padding-bottom: 32px;
 }
+.active>span ,
+.ant-typography-expand, .ant-typography-edit, .ant-typography-copy {
+    color: #5f5aa7 !important;
+}

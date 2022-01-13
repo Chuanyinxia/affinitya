@@ -19,28 +19,32 @@ import {
   Space,
   Spin,
   Tooltip,
+  Badge,
 } from 'antd';
 import './style.css';
 import FacebookLoginP from 'react-facebook-login/dist/facebook-login-render-props';
 import FacebookLogin from 'react-facebook-login';
 
-import {DeleteOutlined, InfoCircleOutlined, LockOutlined, PlusOutlined} from '@ant-design/icons';
+import {CloseOutlined, DeleteOutlined, InfoCircleOutlined, LockOutlined, PlusOutlined} from '@ant-design/icons';
 import {Countrys} from '@/components/plugin/Country';
 import {get, post, remove} from '@/utils/request';
 import {
   DELETEAUDIENCEID,
   GETAUDIENCEID,
   GETAUDIENCEIDLIST,
-  GETAUDIENCELIST, GETFBUSER,
+  GETAUDIENCELIST,
+  GETFBUSER,
   GETUSERMESSAGE,
   ISPAID,
-  SAVEAUDIENCEID, SAVEFBUSER,
+  SAVEAUDIENCEID,
+  SAVEFBUSER,
   SEARCHAUID,
   SEARCHKW,
 } from '@/api';
 import {Link, useHistory} from 'react-router-dom';
 import store from '@/store';
 import {storage} from '@/utils/storage';
+
 const FBLoginData={
   accessToken: 'EAANELK82ZCP8BAMDeeGvNFXOTzaQd9hZBVSwexjClE6Y0BxZB' +
     'Osyi8mR7O9zGF0JLOYcj1JsEvbElL0UiI7NqfIsIZBtDocFfGDuj1IIbpfTyaCg' +
@@ -70,10 +74,12 @@ const AudienceGenerator2 = ({userInfo}) => {
   const [lookalikeForm] = Form.useForm();
   const [searchData, setSearchData] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
-  const [isFBLogin, setIsFBLogin]= useState('');
-  const getFBName=()=>{
-    get(GETFBUSER, userInfo.token).then((res)=>{
+  const [isFBLogin, setIsFBLogin] = useState('');
+  const [FBAStatus, setFBAStatus] = useState(false);
+  const getFBName = () => {
+    get(GETFBUSER, userInfo.token).then((res) => {
       setIsFBLogin(res.data.name);
+      setFBAStatus(res.data.authorizationStatus);
     }).catch((error) => {
       message.error({
         content: error.toString(), key: 'netError', duration: 2,
@@ -95,6 +101,8 @@ const AudienceGenerator2 = ({userInfo}) => {
             window.location.reload();
           },
         });
+      }).finally(()=>{
+        getFBName();
       });
     }
   };
@@ -437,14 +445,17 @@ const AudienceGenerator2 = ({userInfo}) => {
                       <span className="text-mark">*</span>Grant Facebook Permission:
                       <span className="marginR32"/>
                       <FacebookLogin
-                        appId="294011789405420"
+                        appId={FBLoginData.myAppId}
                         scope="public_profile,email,ads_read"
                         onlogin="checkLoginState();"
                         callback={responseFacebook}
                       />
                     </h4>):(<h4 className="required-title">
                       <span className="text-mark">*</span>
-                      Permission Granted by: {isFBLogin}
+                      Permission Granted by: <span className="marginL8">{isFBLogin}</span>
+                      <span className="marginL8">{FBAStatus?
+                        <Badge status="success" />:
+                        <CloseOutlined className="text-red"/>}</span>
                       <FacebookLoginP
                         appId="294011789405420"
                         scope="public_profile,email,ads_read"

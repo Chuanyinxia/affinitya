@@ -8,7 +8,7 @@
 .ant-form-item-label > label::after{
   content: none;
 }
-.ant-radio-wrapper{
+.ant-card .ant-radio-wrapper{
   width: 160px;
   line-height: 28px;
 }
