@@ -14,8 +14,8 @@ import {
   DELETEJOB,
 } from '@/api';
 import {get, post, update} from '@/utils/request';
-import {Alert, Button, Form, message, Modal, Space, Table, Tabs, Tag, Tooltip, Typography} from 'antd';
-import {EditFilled} from '@ant-design/icons';
+import {Alert, Button, Form, message, Modal, Space, Table, Tabs, Tag, Tooltip, Typography, Popconfirm} from 'antd';
+import {EditFilled, DeleteFilled, EyeFilled, SyncOutlined, CloseCircleFilled} from '@ant-design/icons';
 import {Link, useHistory} from 'react-router-dom';
 import {type} from '@/components/plugin/Searchdata';
 import KeyWordSearchDetails from '@/components/Table/KeyWordSearchDetails';
@@ -229,7 +229,7 @@ const JobManger2 = ({userInfo, httpLoading, setHttpLoading}) => {
   }, [history.location]);
 
   const Columns=[{
-    title: 'Job Name',
+    title: 'Job',
     dataIndex: 'title',
     key: 'title',
     ...getColumnSearchProps('job name', 'title', searchName),
@@ -241,7 +241,7 @@ const JobManger2 = ({userInfo, httpLoading, setHttpLoading}) => {
         <Typography.Paragraph
           editable={{
             icon: <EditFilled />,
-            tooltip: 'Click to edit job name',
+            tooltip: 'Edit',
             onChange: (e)=>onJobTitleChange(e, record.id),
           }}
         >
@@ -250,7 +250,7 @@ const JobManger2 = ({userInfo, httpLoading, setHttpLoading}) => {
       </span>):(<Typography.Paragraph
         editable={{
           icon: <EditFilled />,
-          tooltip: 'Click to edit job name',
+          tooltip: 'Edit',
           onChange: (e)=>onJobTitleChange(e, record.id),
         }}
       >
@@ -263,7 +263,7 @@ const JobManger2 = ({userInfo, httpLoading, setHttpLoading}) => {
     render: (type) => type === 1 ? 'Keyword' :
       type === 2 ? 'Lookalike Audience' : 'Extend',
   }, {
-    title: 'User OS',
+    title: 'OS',
     dataIndex: 'os',
     key: 'os',
     filters: [
@@ -278,13 +278,13 @@ const JobManger2 = ({userInfo, httpLoading, setHttpLoading}) => {
     key: 'country',
     ...getColumnSelectProps('country', 'country'),
   }, {
-    title: 'Start Time',
+    title: 'Start',
     dataIndex: 'startTime',
     key: 'start_time',
     sorter: true,
     render: (startTime)=>timeFormat(startTime),
   }, {
-    title: 'Complete Time',
+    title: 'End',
     dataIndex: 'endTime',
     key: 'end_time',
     sorter: true,
@@ -310,36 +310,55 @@ const JobManger2 = ({userInfo, httpLoading, setHttpLoading}) => {
     key: 'Action',
     // eslint-disable-next-line react/display-name
     render: (record)=><Space size="small">
-      <Button onClick={()=>deleteJob(record.id)} type="text" className="btn-xs btn-red-link">
-          del
-      </Button>
+      <Popconfirm
+        title="Are you sure to delete this job?"
+        onConfirm={()=>deleteJob(record.id)}
+        okText="Yes"
+        cancelText="No"
+      >
+        <Button type="link" className="btn-xs btn-theme-link">
+          <DeleteFilled />
+        </Button>
+      </Popconfirm>
       {(record.jobStatus === 1 || record.jobStatus === 5) ? (
-        <Button
-          onClick={() => killJob(record.id)}
-          type="text"
-          className="btn-xs btn-red-link">
-          Cancel
-        </Button>
+        <Popconfirm
+          title="Are you sure to stop this job?"
+          onConfirm={()=> killJob(record.id)}
+          okText="Yes"
+          cancelText="No"
+        >
+          <Button
+            type="text"
+            className="btn-xs btn-theme-link">
+            <CloseCircleFilled />
+          </Button>
+        </Popconfirm>
       ) : (record.jobStatus === 2) ?
-        (<Button
-          onClick={() => {
-            getJobDetails(record.id);
-            setJobName(record.title);
-            setSearchType(record.type);
-          }}
-          type="link"
-          className="btn-xs btn-red-link">
-            View
-        </Button>
+        (
+          <Button
+            onClick={() => {
+              getJobDetails(record.id);
+              setJobName(record.title);
+              setSearchType(record.type);
+            }}
+            type="text"
+            className="btn-xs btn-theme-link">
+            <EyeFilled />
+          </Button>
         ) :
-        (<Button
-          onClick={() => {
-            restartJob(record.id);
-          }}
-          type="link"
-          className="btn-xs btn-red-link">
-          Restart
-        </Button>)}
+        (
+          <Popconfirm
+            title="Are you sure to restart this job?"
+            onConfirm={()=> restartJob(record.id)}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button
+              type="text"
+              className="btn-xs btn-theme-link">
+              <SyncOutlined/>
+            </Button>
+          </Popconfirm>)}
     </Space>,
   },
   ];

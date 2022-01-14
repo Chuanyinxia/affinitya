@@ -81,6 +81,15 @@
 .btn-red-link:hover{
   color:#3E1E20;
 }
+
+.btn-theme-link{
+  color: rgba(95, 90, 167, 0.75);
+}
+.btn-theme-link:hover{
+  color:#5f5aa7;
+}
+
+
 .btn-blue-link{
   color:#1CC8EE;
 }

@@ -17,21 +17,24 @@ export const getColumnSearchProps = (data, dataIndex, values) => ({
           placeholder={`Search ${data}`}
           defaultValue={values}
           value={selectedKeys[0]}
-          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onChange={(e) => {
+            setSelectedKeys(e.target.value ? [e.target.value] : []);
+            values='';
+          }}
           style={{marginBottom: 8, display: 'block', height: 32}}
         />
         <Space>
           <Button onClick={() => {
             if (values&&values.length>0) {
-              console.log(values);
-              setSelectedKeys([' ']);
+              setSelectedKeys(['']);
+              values='';
+              confirm();
+              clearFilters();
               setTimeout(()=>{
-                clearFilters();
                 setSelectedKeys([]);
-                confirm();
               }, 300);
             } else {
-              console.log(2);
+              setSelectedKeys([]);
               clearFilters();
               confirm();
             }
@@ -55,7 +58,7 @@ export const getColumnSearchProps = (data, dataIndex, values) => ({
   },
   // eslint-disable-next-line react/display-name
   filterIcon: (filtered) => {
-    return (<SearchOutlined style={{color: (!values&&!filtered)? undefined:'#8986b0'}}/>);
+    return (<SearchOutlined style={{color: (!values&&!filtered)? undefined:'#5f5aa7'}}/>);
   },
   onFilter: (value, record) => record,
 });
