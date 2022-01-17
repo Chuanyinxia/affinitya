@@ -139,7 +139,8 @@ const JobManger2 = ({userInfo, httpLoading, setHttpLoading}) => {
       setSearchConfig({
         ...res.data.baseSearchRequest,
         keywords: res.data.keywords,
-
+        extend: res.data.extend,
+        audience: res.data.audience,
       } || {});
       setViewDetail(res.data.kwResultVoList || []);
       setSearchID(res.data.kwResultVoList[0] ? res.data.kwResultVoList[0].searchId : '');

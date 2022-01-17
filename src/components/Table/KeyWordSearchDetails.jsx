@@ -163,7 +163,7 @@ const KeyWordSearchDetails = ({
           </Space>
         </Col>
       </Row>
-      {searchConfig&&(<Row gutter={32} className="marginB30 padding32">
+      {searchConfig&&(<Row gutter={32} className="padding32">
         <Col span={6} className="border-right">
           <Row>
             <Col flex="120px" className="search-config-title">
@@ -178,7 +178,9 @@ const KeyWordSearchDetails = ({
               Age
             </Col>
             <Col flex="auto" className="search-config-details">
-              {searchConfig.age}
+              {searchConfig.age.split(',')[0]}
+               -
+              {searchConfig.age.split(',')[1]}
             </Col>
           </Row>
           <Row>
@@ -186,7 +188,7 @@ const KeyWordSearchDetails = ({
               Gender
             </Col>
             <Col flex="auto" className="search-config-details">
-              {searchConfig.gender}
+              {searchConfig.gender==='1,2'?'All':searchConfig.gender===1?'Male':'Female'}
             </Col>
           </Row>
         </Col>
@@ -204,7 +206,7 @@ const KeyWordSearchDetails = ({
               Device
             </Col>
             <Col flex="auto" className="search-config-details">
-              {searchConfig.platform}
+              {searchConfig.platform==='all'?'All':searchConfig.platform==='mobile'?'Mobile':'Desktop'}
             </Col>
           </Row>
           <Row>
@@ -212,17 +214,19 @@ const KeyWordSearchDetails = ({
               OS
             </Col>
             <Col flex="auto" className="search-config-details">
-              {searchConfig.os}
+              {searchConfig.os==='na'?'All':searchConfig.os}
             </Col>
           </Row>
         </Col>
         <Col span={12}>
           <Row>
             <Col flex="120px" className="search-config-title">
-              Keywords
+              {searchConfig.keywords?'Keywords':
+                searchConfig.extend?'Extend':'Audience'}
             </Col>
-            <Col flex="auto" className="">
-              {searchConfig.keywords.join(',')}
+            <Col flex="auto" className="search-config-title">
+              {searchConfig.keywords?searchConfig.keywords.join(','):
+                searchConfig.extend?searchConfig.extend:searchConfig.extend}
             </Col>
           </Row>
         </Col>

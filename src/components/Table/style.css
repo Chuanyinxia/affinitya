@@ -19,3 +19,9 @@
 .search-config-details{
   text-align: right;
 }
+.search-config-title,
+.search-config-details{
+  line-height: 32px;
+  font-size: 14px;
+
+}

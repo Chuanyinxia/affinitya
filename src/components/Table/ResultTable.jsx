@@ -24,7 +24,7 @@ const ResultTable = ({userInfo, TableData, onSelect, groupId, hideCheckbox}) => 
         !hideCheckbox?{...rowSelection}:null
       }
       dataSource={TableData}
-      scroll={{y: 400}}
+      scroll={{y: 300}}
       rowKey={(record)=> record.id}
       pagination={{
         pageSize: 100,
