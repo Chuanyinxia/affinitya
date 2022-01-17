@@ -5,17 +5,17 @@ import {httpLoading, setMenusData, updateIsPay} from '@/store/actions';
 import './style.css';
 import {
   CANCELJOB,
+  DELETEJOB,
   GETJOBDETAIL,
   GETJOBMANAGER,
   ISPAID,
   READJOBMANGER,
   RESTARTJOB,
   UPDATEJOBTITLE,
-  DELETEJOB,
 } from '@/api';
 import {get, post, update} from '@/utils/request';
-import {Alert, Button, Form, message, Modal, Space, Table, Tabs, Tag, Tooltip, Typography, Popconfirm} from 'antd';
-import {EditFilled, DeleteFilled, EyeFilled, SyncOutlined, CloseCircleFilled} from '@ant-design/icons';
+import {Alert, Button, Form, message, Modal, Popconfirm, Space, Table, Tabs, Tag, Tooltip, Typography} from 'antd';
+import {CloseCircleFilled, DeleteFilled, EditFilled, EyeFilled, SyncOutlined} from '@ant-design/icons';
 import {Link, useHistory} from 'react-router-dom';
 import {type} from '@/components/plugin/Searchdata';
 import KeyWordSearchDetails from '@/components/Table/KeyWordSearchDetails';
@@ -55,6 +55,7 @@ const JobManger2 = ({userInfo, httpLoading, setHttpLoading}) => {
   const [searchID, setSearchID] = useState('');
   const [searchName, setSearchName]=useState('');
   const [searchType, setSearchType] = useState('');
+  const [searchConfig, setSearchConfig] = useState({});
   const loadPageVar = (sVar) => {
     return decodeURI(
         window.location.search.replace(
@@ -133,13 +134,18 @@ const JobManger2 = ({userInfo, httpLoading, setHttpLoading}) => {
       });
     });
   };
-  const getJobDetails=(id)=>{
-    get(GETJOBDETAIL+id, userInfo.token).then((res)=>{
-      setViewDetail(res.data.kwResultVoList);
-      setSearchID(res.data.kwResultVoList[0]?res.data.kwResultVoList[0].searchId:'');
+  const getJobDetails=(id)=> {
+    get(GETJOBDETAIL + id, userInfo.token).then((res) => {
+      setSearchConfig({
+        ...res.data.baseSearchRequest,
+        keywords: res.data.keywords,
+
+      } || {});
+      setViewDetail(res.data.kwResultVoList || []);
+      setSearchID(res.data.kwResultVoList[0] ? res.data.kwResultVoList[0].searchId : '');
       setSaveStatusType(res.data.status);
       setViewModal(true);
-    }).catch((error)=>{
+    }).catch((error) => {
       message.error({
         content: error.toString(), key: 'netError', duration: 2,
       });
@@ -441,19 +447,22 @@ const JobManger2 = ({userInfo, httpLoading, setHttpLoading}) => {
             setViewDetail([]);
             setViewModal(false);
           }}
-          onCancel={()=>{
+          onCancel={() => {
             setViewDetail([]);
+            setSearchConfig({});
             setViewModal(false);
           }}>
-          <div >
-            {viewDetail&&(<KeyWordSearchDetails
+          <div>
+            {viewDetail && (<KeyWordSearchDetails
               searchData={viewDetail}
               searchID={searchID}
               searchType={searchType}
+              searchConfig={searchConfig}
               source={1}
               statusType={saveStatusType}
               jobSave={setSaveManger}
               jobName={jobName}
+              hideCheckbox={true}
             />)}
           </div>
 

@@ -1,89 +1,31 @@
 import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {httpLoading, getMangerCounts, updateIsPay} from '@/store/actions';
+import {httpLoading, updateIsPay} from '@/store/actions';
 import './style.css';
 import {Button, Card, Col, Empty, message, Row, Space, Tabs, Tooltip} from 'antd';
 import ResultTable from '@/components/Table/ResultTable';
-import {get, post} from '@/utils/request';
-import {EXPORTCVS, ISPAID, SAVESEARCHMESSAGE, SAVESEARCHMESSAGEBYGROUP, GETNOREADAUDIENCE, EXPORTCVS2} from '@/api';
-// import {CopyToClipboard} from 'react-copy-to-clipboard';
-// import ClipboardJS from 'clipboard';
-
+import {get} from '@/utils/request';
+import {EXPORTCVS, EXPORTCVS2, ISPAID} from '@/api';
 import ReactClipboard from 'react-clipboardjs-copy';
 import store from '@/store';
-import {storage} from '@/utils/storage';
+// import {CopyToClipboard} from 'react-copy-to-clipboard';
+// import ClipboardJS from 'clipboard';
 const {TabPane} = Tabs;
 
 
-const KeyWordSearchDetails = ({userInfo, searchData, statusType, searchID, searchType, source,
-  hideFirstButton, jobSave, jobName, hideTesting, hideCheckbox}) => {
-  const [saveStatus, setSaveStatus] = useState(0);
+const KeyWordSearchDetails = ({
+  userInfo, searchData, searchID, searchType, source, jobName, hideCheckbox, searchConfig,
+}) => {
   const [isPayUser, setIsPayUser] = useState(false);
-  const [selectKeys, setSelectKeys] = useState([]);
   const [copyValue, setCopyValues] = useState('');
-  const [groupId, setGroupId] = useState(null);
   const tableData = (tableData) => {
     const data = tableData.map((item, index) => {
       return {...item, index: index + 1};
     });
     return data;
   };
-  const saveAudience = () => {
-    if (groupId === 0 || groupId) {
-      const data = {
-        'searchId': searchID,
-        'saveGroup': [{
-          'groupId': groupId,
-          'ids': selectKeys.join(','),
-        }],
-      };
-      post(SAVESEARCHMESSAGEBYGROUP, data,
-          {
-            'Content-Type': 'application/json',
-            'token': userInfo.token,
-          }).then((res) => {
-        message.success(res.msg);
-        jobSave({
-          'searchId': searchID,
-          'groupId': groupId,
-        });
-        setSaveStatus(1);
-      }).catch((error) => {
-        message.error({
-          content: error.toString(), key: 'netError', duration: 2,
-        });
-      }).finally(()=>{
-        get(GETNOREADAUDIENCE, userInfo.token).then((res)=>{
-          store.dispatch(getMangerCounts(res.data));
-          storage.saveData('local', 'mangerCounts', res.data);
-        }).catch((error)=>{});
-      });
-    } else {
-      post(SAVESEARCHMESSAGE,
-          {searchId: searchID},
-          {
-          // eslint-disable-next-line no-tabs
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'token': userInfo.token,
-          }).then((res) => {
-        setSaveStatus(1);
-        jobSave({
-          'searchId': searchID,
-        });
-        message.success(res.msg);
-      }).catch((error) => {
-        message.error({
-          content: error.toString(), key: 'netError', duration: 2,
-        });
-      }).finally(()=>{
-        get(GETNOREADAUDIENCE, userInfo.token).then((res)=>{
-          store.dispatch(getMangerCounts(res.data));
-          storage.saveData('local', 'mangerCounts', res.data);
-        }).catch((error)=>{});
-      });
-    }
-  };
+
 
   const isPay=()=>{
     get(ISPAID, userInfo.token).then((res)=>{
@@ -133,7 +75,7 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType, searchID, searc
         onSuccess={() => message.success('Copy success!')}
         onError={() => message.success('Copy error!')}>
         <Button size="md" className="btn-md" >
-          Copy Keyword
+          Copy All to Clipboard
         </Button>
       </ReactClipboard>
 
@@ -142,11 +84,6 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType, searchID, searc
     );
   };
 
-  const onSelect = (key, value, groupId) => {
-    // console.log(key, value, groupId);
-    setSelectKeys(key);
-    setGroupId(groupId);
-  };
 
   useEffect(() => {
     isPay();
@@ -221,46 +158,84 @@ const KeyWordSearchDetails = ({userInfo, searchData, statusType, searchID, searc
         </Col>
         <Col span={18} className="text-right marginB16 paddingR32">
           <Space>
-            {(isPayUser&&!hideFirstButton&&!hideTesting&&searchType!==3)&&(
-              <Tooltip
-                placement="top"
-                title={(saveStatus === 1|| parseInt(statusType)===1)?
-                         'You have saved this result.':(
-                           selectKeys.length>0?'': 'If you don\'t choose any keyword, we will save all for you.')
-                }>
-                <Button
-                  type="primary"
-                  className="btn-md"
-                  disabled={(saveStatus === 1|| statusType===1||!searchID)?true:false}
-                  onClick={saveAudience}
-                >Save for Testing</Button>
-              </Tooltip>)
-            }
-            {(!isPayUser&&!hideFirstButton&&searchType!==3)&& (<Tooltip title="Pls upgrade to use this function.">
-              <Button
-                disabled
-                type="primary"
-                className="btn-md"
-              >Save for Testing
-              </Button>
-            </Tooltip>)}
             {copyKeyword()}
             {downloadButton()}
           </Space>
         </Col>
       </Row>
+      {searchConfig&&(<Row gutter={32} className="marginB30 padding32">
+        <Col span={6} className="border-right">
+          <Row>
+            <Col flex="120px" className="search-config-title">
+              Country
+            </Col>
+            <Col flex="auto" className="search-config-details">
+              {searchConfig.country}
+            </Col>
+          </Row>
+          <Row>
+            <Col flex="120px" className="search-config-title">
+              Age
+            </Col>
+            <Col flex="auto" className="search-config-details">
+              {searchConfig.age}
+            </Col>
+          </Row>
+          <Row>
+            <Col flex="120px" className="search-config-title">
+              Gender
+            </Col>
+            <Col flex="auto" className="search-config-details">
+              {searchConfig.gender}
+            </Col>
+          </Row>
+        </Col>
+        <Col span={6} className="border-right">
+          <Row>
+            <Col flex="120px" className="search-config-title">
+              Language
+            </Col>
+            <Col flex="auto" className="search-config-details">
+              {searchConfig.language}
+            </Col>
+          </Row>
+          <Row>
+            <Col flex="120px" className="search-config-title">
+              Device
+            </Col>
+            <Col flex="auto" className="search-config-details">
+              {searchConfig.platform}
+            </Col>
+          </Row>
+          <Row>
+            <Col flex="120px" className="search-config-title">
+              OS
+            </Col>
+            <Col flex="auto" className="search-config-details">
+              {searchConfig.os}
+            </Col>
+          </Row>
+        </Col>
+        <Col span={12}>
+          <Row>
+            <Col flex="120px" className="search-config-title">
+              Keywords
+            </Col>
+            <Col flex="auto" className="">
+              {searchConfig.keywords.join(',')}
+            </Col>
+          </Row>
+        </Col>
+      </Row>)}
       <Card>
         {searchData.length>0?(<Tabs
           defaultActiveKey={searchID}
-          destroyInactiveTabPane onChange={()=>{
-            setGroupId(null);
-            setSelectKeys([]);
-          }}>
+          destroyInactiveTabPane
+        >
           {searchData.map((item)=>(
             <TabPane tab={`Audience ${item.groupId} (${item.searchDetails.length})`} key={item.id} >
               <ResultTable
                 TableData={tableData(item.searchDetails ?? [])}
-                onSelect={onSelect}
                 groupId={item.groupId}
                 hideCheckbox={hideCheckbox}
               />
@@ -298,6 +273,7 @@ KeyWordSearchDetails.propTypes = {
   searchID: PropTypes.string.isRequired,
   searchType: PropTypes.string.isRequired,
   source: PropTypes.number.isRequired,
+  searchConfig: PropTypes.object.isRequired,
 };
 
 export default connect(

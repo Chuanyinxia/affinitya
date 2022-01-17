@@ -13,3 +13,9 @@
   left: -2000px;
   top: -2000px;
 }
+.border-right{
+  border-right: 1px dotted #5f5aa7;
+}
+.search-config-details{
+  text-align: right;
+}
