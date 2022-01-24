@@ -21,6 +21,7 @@ export const getColumnSearchProps = (data, dataIndex, values) => ({
             setSelectedKeys(e.target.value ? [e.target.value] : []);
             values='';
           }}
+          onPressEnter={()=>confirm()}
           style={{marginBottom: 8, display: 'block', height: 32}}
         />
         <Space>

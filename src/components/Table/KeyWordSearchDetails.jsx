@@ -9,6 +9,7 @@ import {get} from '@/utils/request';
 import {EXPORTCVS, EXPORTCVS2, ISPAID} from '@/api';
 import ReactClipboard from 'react-clipboardjs-copy';
 import store from '@/store';
+import {countryStr} from '@/components/plugin/CountryStr';
 // import {CopyToClipboard} from 'react-copy-to-clipboard';
 // import ClipboardJS from 'clipboard';
 const {TabPane} = Tabs;
@@ -47,7 +48,7 @@ const KeyWordSearchDetails = ({
       if (searchData.length<1) {
         return ( <Tooltip title="The search result is empty and cannot be exported.">
           <Button disabled className="btn-md">
-            Export to CSV
+            Export All to CSV
           </Button>
         </Tooltip>);
       }
@@ -57,13 +58,13 @@ const KeyWordSearchDetails = ({
         target="_blank"
         href={url}
         disabled={!isPayUser}>
-        Export to CSV
+        Export All to CSV
       </Button>);
     }
     return (
       <Tooltip title="Pls upgrade to use this function.">
         <Button disabled className="btn-md">
-          Export to CSV
+          Export All to CSV
         </Button>
       </Tooltip>);
   };
@@ -166,35 +167,42 @@ const KeyWordSearchDetails = ({
       {searchConfig&&(<Row gutter={32} className="padding32">
         <Col span={6} className="border-right">
           <Row>
-            <Col flex="120px" className="search-config-title">
+            <Col flex="80px" className="search-config-title">
               Country
             </Col>
             <Col flex="auto" className="search-config-details">
-              {searchConfig.country}
+              {countryStr(searchConfig.country).length>20?(
+                <Tooltip title={countryStr(searchConfig.country)}>
+                  {countryStr(searchConfig.country)}
+                </Tooltip>
+              ):(
+               <span> {countryStr(searchConfig.country)}</span>
+              )}
+
             </Col>
           </Row>
           <Row>
-            <Col flex="120px" className="search-config-title">
+            <Col flex="80px" className="search-config-title">
               Age
             </Col>
             <Col flex="auto" className="search-config-details">
               {searchConfig.age.split(',')[0]}
-               -
+              -
               {searchConfig.age.split(',')[1]}
             </Col>
           </Row>
           <Row>
-            <Col flex="120px" className="search-config-title">
+            <Col flex="80px" className="search-config-title">
               Gender
             </Col>
             <Col flex="auto" className="search-config-details">
-              {searchConfig.gender==='1,2'?'All':searchConfig.gender===1?'Male':'Female'}
+              {searchConfig.gender === '1,2' ? 'All' : searchConfig.gender === 1 ? 'Male' : 'Female'}
             </Col>
           </Row>
         </Col>
         <Col span={6} className="border-right">
           <Row>
-            <Col flex="120px" className="search-config-title">
+            <Col flex="80px" className="search-config-title">
               Language
             </Col>
             <Col flex="auto" className="search-config-details">
@@ -202,32 +210,43 @@ const KeyWordSearchDetails = ({
             </Col>
           </Row>
           <Row>
-            <Col flex="120px" className="search-config-title">
+            <Col flex="80px" className="search-config-title">
               Device
             </Col>
             <Col flex="auto" className="search-config-details">
-              {searchConfig.platform==='all'?'All':searchConfig.platform==='mobile'?'Mobile':'Desktop'}
+              {searchConfig.platform === 'all' ? 'All' : searchConfig.platform === 'mobile' ? 'Mobile' : 'Desktop'}
             </Col>
           </Row>
           <Row>
-            <Col flex="120px" className="search-config-title">
+            <Col flex="80px" className="search-config-title">
               OS
             </Col>
             <Col flex="auto" className="search-config-details">
-              {searchConfig.os==='na'?'All':searchConfig.os}
+              {searchConfig.os === 'na' ? 'All' : searchConfig.os}
             </Col>
           </Row>
         </Col>
         <Col span={12}>
           <Row>
-            <Col flex="120px" className="search-config-title">
-              {searchConfig.keywords?'Keywords':
-                searchConfig.extend?'Extend':'Audience'}
+            <Col flex="80px" className="search-config-title">
+              {searchConfig.keywords ? 'Keywords' :
+                searchConfig.extend ? 'Extend' : 'Audience'}
             </Col>
-            <Col flex="auto" className="search-config-title">
-              {searchConfig.keywords?searchConfig.keywords.join(','):
-                searchConfig.extend?searchConfig.extend:searchConfig.extend}
-            </Col>
+            {(searchConfig.keywords ? searchConfig.keywords.join(',') :
+              searchConfig.extend ? searchConfig.extend : searchConfig.audience).length>150?
+              (<Tooltip title={searchConfig.keywords ? searchConfig.keywords.join(',') :
+              searchConfig.extend ? searchConfig.extend : searchConfig.audience}
+              >
+                <Col flex="auto" className="search-config-high-details">
+                  {searchConfig.keywords ? searchConfig.keywords.join(',') :
+                  searchConfig.extend ? searchConfig.extend : searchConfig.audience}
+                </Col>
+              </Tooltip>):( <Col flex="auto" className="search-config-high-details">
+                {searchConfig.keywords ? searchConfig.keywords.join(',') :
+                searchConfig.extend ? searchConfig.extend : searchConfig.audience}
+              </Col>)}
+
+
           </Row>
         </Col>
       </Row>)}

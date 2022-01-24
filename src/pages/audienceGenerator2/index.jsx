@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import {setMenusData, updateIsPay} from '@/store/actions';
 import {
   Alert,
+  Badge,
   Button,
   Card,
   Col,
@@ -19,33 +20,19 @@ import {
   Space,
   Spin,
   Tooltip,
-  Badge,
 } from 'antd';
 import './style.css';
 import FacebookLoginP from 'react-facebook-login/dist/facebook-login-render-props';
 import FacebookLogin from 'react-facebook-login';
 
-import {CloseOutlined, DeleteOutlined, InfoCircleOutlined, LockOutlined, PlusOutlined} from '@ant-design/icons';
+import {CloseOutlined, InfoCircleOutlined, LockOutlined} from '@ant-design/icons';
 import {Countrys} from '@/components/plugin/Country';
-import {get, post, remove} from '@/utils/request';
-import {
-  DELETEAUDIENCEID,
-  GETAUDIENCEID,
-  GETAUDIENCEIDLIST,
-  GETAUDIENCELIST,
-  GETFBUSER,
-  GETUSERMESSAGE,
-  ISPAID,
-  SAVEAUDIENCEID,
-  SAVEFBUSER,
-  SEARCHAUID,
-  SEARCHKW,
-} from '@/api';
+import {get, post} from '@/utils/request';
+import {GETAUDIENCEID, GETAUDIENCELIST, GETFBUSER, ISPAID, SAVEFBUSER, SEARCHAUID, SEARCHKW} from '@/api';
 import {Link, useHistory} from 'react-router-dom';
 import store from '@/store';
-import {storage} from '@/utils/storage';
 
-const FBLoginData={
+const FBLoginData = {
   accessToken: 'EAANELK82ZCP8BAMDeeGvNFXOTzaQd9hZBVSwexjClE6Y0BxZB' +
     'Osyi8mR7O9zGF0JLOYcj1JsEvbElL0UiI7NqfIsIZBtDocFfGDuj1IIbpfTyaCg' +
     'i5SJFoR2uoZCCqoSY23NLdhaQgim7o6l4X5lEjoueZBdmqanjJRSeXK7d3PQZDZD',
@@ -56,14 +43,14 @@ const FBLoginData={
 const AudienceGenerator2 = ({userInfo}) => {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
-  const [audienceID, setAudienceID] = useState('');
-  const [audienceIdItem, setAudienceIdItem] = useState([]);
+  // const [audienceID, setAudienceID] = useState('');
+  // const [audienceIdItem, setAudienceIdItem] = useState([]);
   const [userAudienceIdItem, setUserAudienceIdItem] = useState([]);
   const [isPayUser, setIsPayUser] = useState(false);
   const [searchType, setSearchType] = useState(1);
   const [read, setRead] = useState(true);
   const [modalShow, setModalShow] = useState(false);
-  const [addItemLoading, setAddItemLoading] = useState(false);
+  // const [addItemLoading, setAddItemLoading] = useState(false);
   const [audienceWords, setAudienceWords] = useState([]);
   // new
   const [creatJobForm] = Form.useForm();
@@ -114,38 +101,38 @@ const AudienceGenerator2 = ({userInfo}) => {
           encodeURI(sVar).replace(/[.+*]/g, '\\$&') +
           '(?:\\=([^&]*))?)?.*$', 'i'), '$1'));
   };
-  const addItem = () => {
-    if (audienceID.trim()) {
-      setAddItemLoading(true);
-      post(SAVEAUDIENCEID, {audienceId: audienceID}, {
-        'token': userInfo.token,
-        'Content-Type': 'application/x-www-form-urlencoded',
-      }).then((res) => {
-        audienceIdItem.unshift({audienceId: audienceID, audienceParams: audienceID});
-        setAudienceIdItem(audienceIdItem);
-        setAudienceID(null);
-      }).catch((error) => {
-        message.error({
-          content: error.toString(), key: 'netError', duration: 2,
-        });
-      }).finally(() => {
-        setAddItemLoading(false);
-      });
-    } else {
-      message.error('Please input lookalike audience!');
-    }
-  };
-  const deleteOption = (e, id) => {
-    e.stopPropagation();
-    remove(DELETEAUDIENCEID + id, userInfo.token).then((res) => {
-      message.success(res.msg);
-      setAudienceIdItem(audienceIdItem.filter((item) => item.audienceParams !== id));
-    }).catch((error) => {
-      message.error({
-        content: error.toString(), key: 'netError', duration: 2,
-      });
-    });
-  };
+  // const addItem = () => {
+  //   if (audienceID.trim()) {
+  //     setAddItemLoading(true);
+  //     post(SAVEAUDIENCEID, {audienceId: audienceID}, {
+  //       'token': userInfo.token,
+  //       'Content-Type': 'application/x-www-form-urlencoded',
+  //     }).then((res) => {
+  //       audienceIdItem.unshift({audienceId: audienceID, audienceParams: audienceID});
+  //       setAudienceIdItem(audienceIdItem);
+  //       setAudienceID(null);
+  //     }).catch((error) => {
+  //       message.error({
+  //         content: error.toString(), key: 'netError', duration: 2,
+  //       });
+  //     }).finally(() => {
+  //       setAddItemLoading(false);
+  //     });
+  //   } else {
+  //     message.error('Please input lookalike audience!');
+  //   }
+  // };
+  // const deleteOption = (e, id) => {
+  //   e.stopPropagation();
+  //   remove(DELETEAUDIENCEID + id, userInfo.token).then((res) => {
+  //     message.success(res.msg);
+  //     setAudienceIdItem(audienceIdItem.filter((item) => item.audienceParams !== id));
+  //   }).catch((error) => {
+  //     message.error({
+  //       content: error.toString(), key: 'netError', duration: 2,
+  //     });
+  //   });
+  // };
   const onLKSearchChange = (changedValues, allValues) => {
     const adAccountId = allValues.adAccountId;
     const myAppId = allValues.myAppId;
@@ -322,58 +309,62 @@ const AudienceGenerator2 = ({userInfo}) => {
   };
 
   const getAudienceList = () => {
+    setLoading(true);
     get(GETAUDIENCELIST).then((res) => {
       setAudienceWords(res.data);
-    }).catch((error) => {});
-  };
-
-  const getInitMessage = () => {
-    setLoading(true);
-    const token = userInfo.token ?? storage.getData('userInfo').token;
-    get(GETAUDIENCEIDLIST, token).then((res) => {
-      setAudienceIdItem(res.data);
-    }).catch((error) => {}).finally(() => {
+    }).catch((error) => {
+    }).finally(()=>{
       setLoading(false);
     });
-    get(GETUSERMESSAGE, token).then((res) => {
-      // console.log(res);
-      if (res.data.adAccountId && res.data.accessToken && res.data.myAppId && res.data.myAppSecret) {
-        const sdata = {
-          adAccountId: res.data.adAccountId,
-          ...FBLoginData,
-        };
-        setLoading(true);
-        post(GETAUDIENCEID, sdata, {
-          'token': token,
-          'Content-Type': 'application/x-www-form-urlencoded',
-        }).then((res) => {
-          setUserAudienceIdItem(res.data);
-        }).catch((error) => {
-          setErrorMsg(error.toString());
-        }).finally(() => {
-          setLoading(false);
-        });
-      }
-
-      startForm.setFieldsValue({
-        adAccountId: res.data?.adAccountId,
-        ...FBLoginData,
-      });
-      lookalikeForm.setFieldsValue({
-        audienceId: res.data.audienceId,
-      });
-    }).catch((error) => {
-
-      // message.error({
-      //   content: error.toString(), key: 'netError', duration: 2,
-      // });
-    });
   };
+
+  // const getInitMessage = () => {
+  //   setLoading(true);
+  //   const token = userInfo.token ?? storage.getData('userInfo').token;
+  //   get(GETAUDIENCEIDLIST, token).then((res) => {
+  //     setAudienceIdItem(res.data);
+  //   }).catch((error) => {}).finally(() => {
+  //     setLoading(false);
+  //   });
+  //   get(GETUSERMESSAGE, token).then((res) => {
+  //     // console.log(res);
+  //     if (res.data.adAccountId && res.data.accessToken && res.data.myAppId && res.data.myAppSecret) {
+  //       const sdata = {
+  //         adAccountId: res.data.adAccountId,
+  //         ...FBLoginData,
+  //       };
+  //       setLoading(true);
+  //       post(GETAUDIENCEID, sdata, {
+  //         'token': token,
+  //         'Content-Type': 'application/x-www-form-urlencoded',
+  //       }).then((res) => {
+  //         setUserAudienceIdItem(res.data);
+  //       }).catch((error) => {
+  //         setErrorMsg(error.toString());
+  //       }).finally(() => {
+  //         setLoading(false);
+  //       });
+  //     }
+  //
+  //     startForm.setFieldsValue({
+  //       adAccountId: res.data?.adAccountId,
+  //       ...FBLoginData,
+  //     });
+  //     lookalikeForm.setFieldsValue({
+  //       audienceId: res.data.audienceId,
+  //     });
+  //   }).catch((error) => {
+  //
+  //     // message.error({
+  //     //   content: error.toString(), key: 'netError', duration: 2,
+  //     // });
+  //   });
+  // };
 
   useEffect(() => {
     isPay();
     getFBName();
-    getInitMessage();
+    // getInitMessage();
     getAudienceList();
     setTimeout(() => {
       setRead(false);
@@ -624,12 +615,12 @@ const AudienceGenerator2 = ({userInfo}) => {
                     initialValue={'na'}>
                     <Radio.Group size="large">
                       <Radio value="na">All</Radio>
-                      <Radio value="iOS">IOS</Radio>
+                      <Radio value="iOS">iOS</Radio>
                       <Radio value="Android">Android</Radio>
                     </Radio.Group>
                   </Form.Item>
                   <Form.Item label="Device Platform" name="platform"
-                    initialValue={'all'}>
+                    initialValue={'mobile'}>
                     <Radio.Group>
                       <Radio value="all">All</Radio>
                       <Radio value="mobile">Mobile</Radio>
@@ -647,9 +638,10 @@ const AudienceGenerator2 = ({userInfo}) => {
                   Fill in the corresponding Facebook Lookalike Audience information.
                 </h4>)}
                 <Radio.Group onChange={onSearchTypeChange} value={searchType} className="marginB32">
-                  <Radio value={1}>Keyword Search</Radio>
+                  <Radio value={1} style={{width: 200}}>Keyword Search</Radio>
                   <Radio
                     value={2}
+                    style={{width: 400}}
                     className="paddingL32"
                     disabled={!isPayUser}
                   >Lookalike Audience Search</Radio>
@@ -708,47 +700,47 @@ const AudienceGenerator2 = ({userInfo}) => {
                       // mode="tags"
                       allowClear
                       placeholder="Custom Audience ID..."
-                      dropdownRender={(menu) => (
-                        <div>
-                          {menu}
-                          <Divider style={{margin: '4px 0'}}/>
-                          <div className="padding16">
-                            <Row className="margin16">
-                              <Col flex={4}>
-                                <Input
-                                  size="small"
-                                  value={audienceID}
-                                  onChange={(e) => setAudienceID(e.target.value)}
-                                  maxLength={255}/>
-                              </Col>
-                              <Col flex={1} className="text-center padding16">
-                                <Button
-                                  type="link"
-                                  ghost
-                                  loading={addItemLoading}
-                                  onClick={addItem}
-                                >
-                                  <PlusOutlined/>Lookalike Audience
-                                </Button>
-                              </Col>
-                            </Row>
-                          </div>
-
-                        </div>
-                      )}
+                      // dropdownRender={(menu) => (
+                      //   <div>
+                      //     {menu}
+                      //     <Divider style={{margin: '4px 0'}}/>
+                      //     <div className="padding16">
+                      //       <Row className="margin16">
+                      //         <Col flex={4}>
+                      //           <Input
+                      //             size="small"
+                      //             value={audienceID}
+                      //             onChange={(e) => setAudienceID(e.target.value)}
+                      //             maxLength={255}/>
+                      //         </Col>
+                      //         <Col flex={1} className="text-center padding16">
+                      //           <Button
+                      //             type="link"
+                      //             ghost
+                      //             loading={addItemLoading}
+                      //             onClick={addItem}
+                      //           >
+                      //             <PlusOutlined/>Lookalike Audience
+                      //           </Button>
+                      //         </Col>
+                      //       </Row>
+                      //     </div>
+                      //
+                      //   </div>
+                      // )}
                     >
-                      {audienceIdItem.map((item) => (
-                        <Select.Option key={item.audienceParams} className="padding16">
-                          <Row>
-                            <Col flex="auto" className="paddingL16">
-                              {item.audienceParams}
-                            </Col>
-                            <Col flex="80px" className="text-right paddingR16">
-                              <DeleteOutlined onClick={(e) => deleteOption(e, item.audienceParams)}/>
-                            </Col>
-                          </Row>
-                        </Select.Option>
-                      ))}
+                      {/* {audienceIdItem.map((item) => (*/}
+                      {/*  <Select.Option key={item.audienceParams} className="padding16">*/}
+                      {/*    <Row>*/}
+                      {/*      <Col flex="auto" className="paddingL16">*/}
+                      {/*        {item.audienceParams}*/}
+                      {/*      </Col>*/}
+                      {/*      <Col flex="80px" className="text-right paddingR16">*/}
+                      {/*        <DeleteOutlined onClick={(e) => deleteOption(e, item.audienceParams)}/>*/}
+                      {/*      </Col>*/}
+                      {/*    </Row>*/}
+                      {/*  </Select.Option>*/}
+                      {/* ))}*/}
                       {userAudienceIdItem.map((item) => (
                         <Select.Option key={item.audienceId} className="padding16">
                           <Row>

@@ -304,8 +304,10 @@ const Customlayout = ({history, activeKey, setLogged}) => {
                   </Space></Col>
                 <Col xs={0} lg={24}>
                   <Space size="large">
-                    <span className="h1" style={{color: '#120043'}}>
-                      <span >Time Zone: </span>{timezone()}</span>
+                    <span style={{color: '#120043'}}>
+                      <span >Time Zone: </span>
+                      {timezone()}
+                    </span>
                     <span className="username">{userInfo ? userInfo.nickName : 'Admin'}</span>
                     <Tooltip title="Contact Sales">
                       <div className="icon earphone" onClick={()=>{

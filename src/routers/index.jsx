@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {Route, Switch} from 'react-router-dom';
 import Welcome from '@/pages/welcome';
 import Faq from '@/pages/faq';
-import AudienceGenerator from '@/pages/audienceGenerator';
+// import AudienceGenerator from '@/pages/audienceGenerator';
 // import JobManger from '@/pages/jobManager';
 import AudienceManger from '@/pages/audienceManager';
 import AudienceGenerator2 from '@/pages/audienceGenerator2';
@@ -40,7 +40,7 @@ const Router = () => {
       <Route path="/faq" component={Faq} />
       <Route path="/blogs" exact component={Blogs} />
       <Route path="/blogs/detail/:id" exact component={BlogDtail} />
-      <Route path="/dashboard/audienceGenerator" component={userInfo.FBTest?AudienceGenerator2:AudienceGenerator} />
+      <Route path="/dashboard/audienceGenerator" component={AudienceGenerator2} />
       <Route path="/dashboard/jobManager" component={userInfo.FBTest?JobManger2:JobManger2} />
       <Route path="/dashboard/audienceManager" component={userInfo.FBTest?AudienceManger2:AudienceManger} />
 

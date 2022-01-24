@@ -15,7 +15,13 @@ import {
 } from '@/api';
 import {get, post, update} from '@/utils/request';
 import {Alert, Button, Form, message, Modal, Popconfirm, Space, Table, Tabs, Tag, Tooltip, Typography} from 'antd';
-import {CloseCircleFilled, DeleteFilled, EditFilled, EyeFilled, SyncOutlined} from '@ant-design/icons';
+
+import EditSvg from './../../icons/edit.svg';
+import DeleteSvg from './../../icons/delete.svg';
+import ViewSvg from './../../icons/view.svg';
+import StopSvg from './../../icons/stop.svg';
+import RestartSvg from './../../icons/restart.svg';
+
 import {Link, useHistory} from 'react-router-dom';
 import {type} from '@/components/plugin/Searchdata';
 import KeyWordSearchDetails from '@/components/Table/KeyWordSearchDetails';
@@ -25,13 +31,15 @@ import {timeFormat} from '@/components/plugin/TimeFormat';
 import {getColumnSearchProps} from '@/components/search/SearchOption';
 import {getColumnSelectProps} from '@/components/search/SelectOption';
 import {toDecodeSort, toTrim} from '@/components/search/TrimData';
+import {countryStr} from '@/components/plugin/CountryStr';
+// import {DeleteSvg, EditSvg, ViewSvg} from '@/icons/Icons';
 
 const jobMangerText = {
   title: 'Unsaved audience will be deleted after 30 days.',
 };
 const JobManger2 = ({userInfo, httpLoading, setHttpLoading}) => {
   const history = useHistory();
-  const [jobName, setJobName]=useState('');
+  const [jobName, setJobName] = useState('');
   const [, setIsPayUser] = useState(false);
   const [viewDetail, setViewDetail] = useState([]);
   const [viewModal, setViewModal] = useState(false);
@@ -240,25 +248,25 @@ const JobManger2 = ({userInfo, httpLoading, setHttpLoading}) => {
     dataIndex: 'title',
     key: 'title',
     ...getColumnSearchProps('job name', 'title', searchName),
-    width: 260,
+    width: 220,
     // eslint-disable-next-line react/display-name
     render: (title, record)=> parseInt(record.id)===parseInt(newID)?
       (<span style={{wordBreak: 'break-all'}}>
         <span className="text-red">*</span>
         <Typography.Paragraph
           editable={{
-            icon: <EditFilled />,
+            icon: <img src={EditSvg} width={18}/>,
             tooltip: 'Edit',
-            onChange: (e)=>onJobTitleChange(e, record.id),
+            onChange: (e) => onJobTitleChange(e, record.id),
           }}
         >
           {title}
         </Typography.Paragraph>
       </span>):(<Typography.Paragraph
         editable={{
-          icon: <EditFilled />,
+          icon: <img src={EditSvg} width={18}/>,
           tooltip: 'Edit',
-          onChange: (e)=>onJobTitleChange(e, record.id),
+          onChange: (e) => onJobTitleChange(e, record.id),
         }}
       >
         {title}
@@ -270,20 +278,22 @@ const JobManger2 = ({userInfo, httpLoading, setHttpLoading}) => {
     render: (type) => type === 1 ? 'Keyword' :
       type === 2 ? 'Lookalike Audience' : 'Extend',
   }, {
-    title: 'OS',
-    dataIndex: 'os',
-    key: 'os',
-    filters: [
-      {text: 'IOS', value: 'IOS'},
-      {text: 'Android', value: 'Android'},
-    ],
-    filterMultiple: false,
-    render: (os) => os === 'na' ? 'All' :os,
-  }, {
     title: 'Country',
     dataIndex: 'country',
     key: 'country',
     ...getColumnSelectProps('country', 'country'),
+    render: (country) => countryStr(country),
+  }, {
+    title: 'OS',
+    dataIndex: 'os',
+    width: 80,
+    key: 'os',
+    filters: [
+      {text: 'iOS', value: 'IOS'},
+      {text: 'Android', value: 'Android'},
+    ],
+    filterMultiple: false,
+    render: (os) => os === 'na' ? 'All' : os,
   }, {
     title: 'Start',
     dataIndex: 'startTime',
@@ -301,16 +311,24 @@ const JobManger2 = ({userInfo, httpLoading, setHttpLoading}) => {
   }, {
     title: 'Status',
     dataIndex: 'jobStatus',
-    key: 'jobStatus',
+    key: 'status',
+    filters: [
+      {text: 'Running', value: 1},
+      {text: 'Completed', value: 2},
+      {text: 'Canceled', value: 3},
+      {text: 'Failed', value: 4},
+      {text: 'Waiting', value: 5},
+    ],
+    filterMultiple: false,
     // eslint-disable-next-line react/display-name
     render: (jobStatus, record) => <Space>
       {(jobStatus === 1) ? (<Tag color="gold" className="no-border lg-tag">Running</Tag>) :
-          (jobStatus === 2) ? (<Tag color="green" className="no-border lg-tag">Completed</Tag>) :
-            (jobStatus === 3) ? (<Tag color="purple" className="no-border lg-tag">Canceled</Tag>) :
-              (jobStatus === 4) ? ( <Tooltip title={record.failReason}>
-                <Tag color="red" className="no-border lg-tag">Failed</Tag>
-              </Tooltip>) :
-                (<Tag color="lime" className="no-border lg-tag">Waiting</Tag>)}
+        (jobStatus === 2) ? (<Tag color="green" className="no-border lg-tag">Completed</Tag>) :
+          (jobStatus === 3) ? (<Tag color="purple" className="no-border lg-tag">Canceled</Tag>) :
+            (jobStatus === 4) ? (<Tooltip title={record.failReason}>
+              <Tag color="red" className="no-border lg-tag">Failed</Tag>
+            </Tooltip>) :
+              (<Tag color="lime" className="no-border lg-tag">Waiting</Tag>)}
     </Space>,
   }, {
     title: 'Action',
@@ -323,8 +341,8 @@ const JobManger2 = ({userInfo, httpLoading, setHttpLoading}) => {
         okText="Yes"
         cancelText="No"
       >
-        <Button type="link" className="btn-xs btn-theme-link">
-          <DeleteFilled />
+        <Button type="text" size="small" className="btn-theme-link">
+          <img src={DeleteSvg} width={18}/>
         </Button>
       </Popconfirm>
       {(record.jobStatus === 1 || record.jobStatus === 5) ? (
@@ -335,9 +353,9 @@ const JobManger2 = ({userInfo, httpLoading, setHttpLoading}) => {
           cancelText="No"
         >
           <Button
-            type="text"
-            className="btn-xs btn-theme-link">
-            <CloseCircleFilled />
+            type="text" size="small"
+            className="btn-theme-link">
+            <img src={StopSvg} width={18}/>
           </Button>
         </Popconfirm>
       ) : (record.jobStatus === 2) ?
@@ -348,9 +366,9 @@ const JobManger2 = ({userInfo, httpLoading, setHttpLoading}) => {
               setJobName(record.title);
               setSearchType(record.type);
             }}
-            type="text"
-            className="btn-xs btn-theme-link">
-            <EyeFilled />
+            type="text" size="small"
+            className="btn-theme-link">
+            <img src={ViewSvg} width={18}/>
           </Button>
         ) :
         (
@@ -361,9 +379,9 @@ const JobManger2 = ({userInfo, httpLoading, setHttpLoading}) => {
             cancelText="No"
           >
             <Button
-              type="text"
-              className="btn-xs btn-theme-link">
-              <SyncOutlined/>
+              type="text" size="small"
+              className="btn-theme-link">
+              <img src={RestartSvg} width={18}/>
             </Button>
           </Popconfirm>)}
     </Space>,
@@ -422,6 +440,7 @@ const JobManger2 = ({userInfo, httpLoading, setHttpLoading}) => {
           dataSource={jobList}
           pagination={pagination}
           columns={Columns}
+          scroll={{x: 910}}
           onChange={(pagination, filters, sort) =>{
             const filter = toTrim(filters);
             if (filters.title&&filters.title===' ') {

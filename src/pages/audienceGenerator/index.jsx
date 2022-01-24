@@ -549,7 +549,7 @@ const AudienceGenerator = ({userInfo}) => {
                     initialValue={'na'}>
                     <Radio.Group size="large">
                       <Radio value="na">All</Radio>
-                      <Radio value="iOS">IOS</Radio>
+                      <Radio value="iOS">iOS</Radio>
                       <Radio value="Android">Android</Radio>
                     </Radio.Group>
                   </Form.Item>

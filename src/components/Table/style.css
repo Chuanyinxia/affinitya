@@ -18,10 +18,26 @@
 }
 .search-config-details{
   text-align: right;
+  text-overflow: ellipsis;
+  width: calc(100% - 80px);
+  white-space: nowrap;
 }
+.search-config-title{
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.search-config-high-details,
 .search-config-title,
-.search-config-details{
+.search-config-details {
   line-height: 32px;
   font-size: 14px;
+  overflow: hidden;
 
+}
+.search-config-high-details{
+  width: calc(100% - 80px);
+  height:96px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
 }

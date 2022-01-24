@@ -2,7 +2,7 @@ import React, {useState, useEffect, useRef} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {Link, withRouter} from 'react-router-dom';
-import {Menu} from 'antd';
+import {Menu, Tooltip} from 'antd';
 import './style.css';
 import store from '../../store';
 import {getMangerCounts} from '@/store/actions';
@@ -90,12 +90,19 @@ const Menus = ({userInfo, history, activeKey, openKeys, managerCounts}) => {
             Job Manager
           </Link>
         </Menu.Item>
+        {userInfo.FBTest?(
         <Menu.Item key="audienceManager" className="menus_subTitle">
           {managerCounts>0?<div className="job-dot">{managerCounts}</div>:null}
           <Link to="/dashboard/audienceManager">
-            Audience Manager
+              Audience Manager
           </Link>
-        </Menu.Item>
+        </Menu.Item>):(
+          <Menu.Item key="audienceManager" disabled={true} className="menus_subTitle">
+            <Tooltip placement="top" title="Coming soon">
+              Audience Manager
+            </Tooltip>
+          </Menu.Item>
+        )}
         {/* </SubMenu> */}
         <div className="menus_group">GENERAL INFO</div>
         <Menu.Item key="plansAndPrices" icon={<img src={plans}/>} className="menus_title">
