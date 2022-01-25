@@ -122,11 +122,14 @@ const Customlayout = ({history, activeKey, setLogged}) => {
       loading={loading}
       style={{minWidth: 584}}
       size="small"
-      pagination={noticeMsg.length>0?{
+      pagination={noticeMsg&&noticeMsg.length>0?{
         pageSize: 3,
         size: 'small',
       }:false}
-      footer={noticeMsg.length>0?(<Button block className="margin0" onClick={readAllMsg}>Read All</Button>):false}
+      footer={noticeMsg&&noticeMsg.length>0?(<Button
+        block className="margin0"
+        onClick={readAllMsg}>Read All
+      </Button>):false}
       renderItem={(item) => (
         <List.Item key={item.id} onClick={()=>readMsg([item.id])}>
           <List.Item.Meta

@@ -37,10 +37,23 @@ display: none;
   background-color: #00BA88;
   position: absolute;
   right: 56px;
-  top:11px;
+  top: 11px;
   font-size: 14px;
   border-radius: 9px;
   line-height: 18px;
-  color:#fff;
+  color: #fff;
   text-align: center;
+}
+
+.ant-menu-item.come-soon {
+  background: url("../../assets/icons.png") no-repeat right;
+  background-size: auto 100%;
+  transition: none;
+  opacity: 1 !important;
+}
+
+.ant-menu-dark .come-soon:hover {
+  background: url("../../assets/icons.png") no-repeat right;
+  background-size: auto 100%;
+  opacity: 1 !important;
 }

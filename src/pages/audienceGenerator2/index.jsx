@@ -25,10 +25,19 @@ import './style.css';
 import FacebookLoginP from 'react-facebook-login/dist/facebook-login-render-props';
 import FacebookLogin from 'react-facebook-login';
 
-import {CloseOutlined, InfoCircleOutlined, LockOutlined} from '@ant-design/icons';
+import {InfoCircleOutlined, LockOutlined} from '@ant-design/icons';
 import {Countrys} from '@/components/plugin/Country';
-import {get, post} from '@/utils/request';
-import {GETAUDIENCEID, GETAUDIENCELIST, GETFBUSER, ISPAID, SAVEFBUSER, SEARCHAUID, SEARCHKW} from '@/api';
+import {get, post, update} from '@/utils/request';
+import {
+  ABANDONFBUSER,
+  GETAUDIENCEID,
+  GETAUDIENCELIST,
+  GETFBUSER,
+  ISPAID,
+  SAVEFBUSER,
+  SEARCHAUID,
+  SEARCHKW,
+} from '@/api';
 import {Link, useHistory} from 'react-router-dom';
 import store from '@/store';
 
@@ -61,12 +70,20 @@ const AudienceGenerator2 = ({userInfo}) => {
   const [lookalikeForm] = Form.useForm();
   const [searchData, setSearchData] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
-  const [isFBLogin, setIsFBLogin] = useState('');
-  const [FBAStatus, setFBAStatus] = useState(false);
+  const [isFBLogin, setIsFBLogin] = useState({});
+  // const [f, setFBAStatus] = useState(false);
   const getFBName = () => {
     get(GETFBUSER, userInfo.token).then((res) => {
-      setIsFBLogin(res.data.name);
-      setFBAStatus(res.data.authorizationStatus);
+      setIsFBLogin(res.data);
+    }).catch((error) => {
+    });
+  };
+  const abandonFB = () => {
+    update(ABANDONFBUSER, '', {
+      'token': userInfo.token,
+    }).then((res) => {
+      message.success(res.msg);
+      setIsFBLogin({});
     }).catch((error) => {
       message.error({
         content: error.toString(), key: 'netError', duration: 2,
@@ -75,11 +92,11 @@ const AudienceGenerator2 = ({userInfo}) => {
   };
   const responseFacebook = (response) => {
     if (response.name) {
-      setIsFBLogin(response.name);
+      setIsFBLogin({name: response.name});
       post(SAVEFBUSER, response, {
         'Content-Type': 'application/x-www-form-urlencoded',
         'token': userInfo.token,
-      }).then(()=>{
+      }).then(() => {
         message.success('Permission granted success!');
       }).catch((error) => {
         Modal.error({
@@ -432,7 +449,7 @@ const AudienceGenerator2 = ({userInfo}) => {
                     />
                   </Form.Item>
                   <div>
-                    {!isFBLogin?(<h4 className="required-title">
+                    {!isFBLogin.name ? (<h4 className="required-title">
                       <span className="text-mark">*</span>Grant Facebook Permission:
                       <span className="marginR32"/>
                       <FacebookLogin
@@ -441,25 +458,60 @@ const AudienceGenerator2 = ({userInfo}) => {
                         onlogin="checkLoginState();"
                         callback={responseFacebook}
                       />
-                    </h4>):(<h4 className="required-title">
+                    </h4>) : (<h4 className="required-title">
                       <span className="text-mark">*</span>
-                      Permission Granted by: <span className="marginL8">{isFBLogin}</span>
-                      <span className="marginL8">{FBAStatus?
-                        <Badge status="success" />:
-                        <CloseOutlined className="text-red"/>}</span>
-                      <FacebookLoginP
-                        appId="294011789405420"
-                        scope="public_profile,email,ads_read"
-                        onlogin="checkLoginState();"
-                        callback={responseFacebook}
-                        render={(renderProps) => (
+                      {!isFBLogin.expire ? (<>
+                        {isFBLogin.authorizationStatus === 1 ?
+                          'Permission Granted by: ' : 'Permission grant is required: '}
+                        {isFBLogin.authorizationStatus === 1 && (<span className="marginL8">{isFBLogin.name}</span>)}
+                        {isFBLogin.authorizationStatus === 1 && (<span className="marginL8">
+                          <Badge status="success"/>
+                        </span>)}
+                        <br/>
+                        {isFBLogin.authorizationStatus === 1 ? (<Space className="marginT16">
                           <Button
                             type="primary"
-                            className="marginL16"
+                            className="marginL16 btn-lg"
                             ghost
-                            onClick={renderProps.onClick}> Re Login with Facebook</Button>
+                            onClick={abandonFB}
+                          >Disconnect</Button>
+
+                          <FacebookLoginP
+                            appId="294011789405420"
+                            scope="public_profile,email,ads_read"
+                            onlogin="checkLoginState();"
+                            callback={responseFacebook}
+                            render={(renderProps) => (
+                              <Button
+                                type="primary"
+                                className="marginL16  btn-lg"
+                                ghost
+                                onClick={renderProps.onClick}>
+                                {isFBLogin.authorizationStatus === 1 ?
+                                  'Switch Account' : 'Re Login with Facebook'}
+                              </Button>
+                            )}
+                          />
+                        </Space>) : (
+                          <FacebookLogin
+                            className="btn-lg"
+                            appId={FBLoginData.myAppId}
+                            scope="public_profile,email,ads_read"
+                            onlogin="checkLoginState();"
+                            callback={responseFacebook}
+                          />
                         )}
-                      />
+                      </>) : (<>
+                        Your Facebook login session has expired<Badge className="marginL8" status="error"/>
+                        <br/>
+                        <FacebookLogin
+                          className="btn-lg"
+                          appId={FBLoginData.myAppId}
+                          scope="public_profile,email,ads_read"
+                          onlogin="checkLoginState();"
+                          callback={responseFacebook}
+                        />
+                      </>)}
                     </h4>)}
                   </div>
                   <Form.Item

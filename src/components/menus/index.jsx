@@ -1,8 +1,8 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {Link, withRouter} from 'react-router-dom';
-import {Menu, Tooltip} from 'antd';
+import {Menu} from 'antd';
 import './style.css';
 import store from '../../store';
 import {getMangerCounts} from '@/store/actions';
@@ -10,7 +10,7 @@ import {get, update} from '@/utils/request';
 import {setMenusData} from '../../store/actions';
 import dashboard from '../../assets/Dashboard.png';
 import plans from '../../assets/Dollar.png';
-import {GETNEWMESSAGECOUNT, READJOBMANGER, GETNOREADAUDIENCE} from '@/api/index';
+import {GETNEWMESSAGECOUNT, GETNOREADAUDIENCE, READJOBMANGER} from '@/api/index';
 import {storage} from '@/utils/storage';
 // const {SubMenu} = Menu;
 
@@ -97,10 +97,8 @@ const Menus = ({userInfo, history, activeKey, openKeys, managerCounts}) => {
               Audience Manager
           </Link>
         </Menu.Item>):(
-          <Menu.Item key="audienceManager" disabled={true} className="menus_subTitle">
-            <Tooltip placement="top" title="Coming soon">
-              Audience Manager
-            </Tooltip>
+          <Menu.Item disabled={true} className="menus_subTitle come-soon">
+            Audience Manager
           </Menu.Item>
         )}
         {/* </SubMenu> */}

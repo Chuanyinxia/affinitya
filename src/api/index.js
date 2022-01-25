@@ -63,3 +63,4 @@ export const GETTIPSLIST='/api/getTipsList';
 // FB info
 export const SAVEFBUSER='/api/saveFBUser';
 export const GETFBUSER='/api/getFBUser';
+export const ABANDONFBUSER='/api/abandonFBUser';
