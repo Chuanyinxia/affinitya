@@ -143,6 +143,7 @@ const JobManger2 = ({userInfo, httpLoading, setHttpLoading}) => {
     });
   };
   const getJobDetails=(id)=> {
+    setLoading(true);
     get(GETJOBDETAIL + id, userInfo.token).then((res) => {
       setSearchConfig({
         ...res.data.baseSearchRequest,
@@ -158,6 +159,8 @@ const JobManger2 = ({userInfo, httpLoading, setHttpLoading}) => {
       message.error({
         content: error.toString(), key: 'netError', duration: 2,
       });
+    }).finally(()=>{
+      setLoading(false);
     });
   };
   const restartJob=(id)=>{

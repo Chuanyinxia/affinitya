@@ -31,12 +31,13 @@ import {get, post, update} from '@/utils/request';
 import {
   ABANDONFBUSER,
   GETAUDIENCEID,
-  GETAUDIENCELIST,
   GETFBUSER,
   ISPAID,
   SAVEFBUSER,
   SEARCHAUID,
   SEARCHKW,
+  GETUSERMESSAGE,
+  GETAUDIENCELIST,
 } from '@/api';
 import {Link, useHistory} from 'react-router-dom';
 import store from '@/store';
@@ -52,8 +53,6 @@ const FBLoginData = {
 const AudienceGenerator2 = ({userInfo}) => {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
-  // const [audienceID, setAudienceID] = useState('');
-  // const [audienceIdItem, setAudienceIdItem] = useState([]);
   const [userAudienceIdItem, setUserAudienceIdItem] = useState([]);
   const [isPayUser, setIsPayUser] = useState(false);
   const [searchType, setSearchType] = useState(1);
@@ -335,53 +334,43 @@ const AudienceGenerator2 = ({userInfo}) => {
     });
   };
 
-  // const getInitMessage = () => {
-  //   setLoading(true);
-  //   const token = userInfo.token ?? storage.getData('userInfo').token;
-  //   get(GETAUDIENCEIDLIST, token).then((res) => {
-  //     setAudienceIdItem(res.data);
-  //   }).catch((error) => {}).finally(() => {
-  //     setLoading(false);
-  //   });
-  //   get(GETUSERMESSAGE, token).then((res) => {
-  //     // console.log(res);
-  //     if (res.data.adAccountId && res.data.accessToken && res.data.myAppId && res.data.myAppSecret) {
-  //       const sdata = {
-  //         adAccountId: res.data.adAccountId,
-  //         ...FBLoginData,
-  //       };
-  //       setLoading(true);
-  //       post(GETAUDIENCEID, sdata, {
-  //         'token': token,
-  //         'Content-Type': 'application/x-www-form-urlencoded',
-  //       }).then((res) => {
-  //         setUserAudienceIdItem(res.data);
-  //       }).catch((error) => {
-  //         setErrorMsg(error.toString());
-  //       }).finally(() => {
-  //         setLoading(false);
-  //       });
-  //     }
-  //
-  //     startForm.setFieldsValue({
-  //       adAccountId: res.data?.adAccountId,
-  //       ...FBLoginData,
-  //     });
-  //     lookalikeForm.setFieldsValue({
-  //       audienceId: res.data.audienceId,
-  //     });
-  //   }).catch((error) => {
-  //
-  //     // message.error({
-  //     //   content: error.toString(), key: 'netError', duration: 2,
-  //     // });
-  //   });
-  // };
+  const getInitMessage = () => {
+    setLoading(true);
+    const token = userInfo.token;
+    get(GETUSERMESSAGE, token).then((res) => {
+      // console.log(res);
+      if (res.data.adAccountId && res.data.accessToken && res.data.myAppId && res.data.myAppSecret) {
+        const sdata = {
+          adAccountId: res.data.adAccountId,
+          ...FBLoginData,
+        };
+        setLoading(true);
+        post(GETAUDIENCEID, sdata, {
+          'token': token,
+          'Content-Type': 'application/x-www-form-urlencoded',
+        }).then((res) => {
+          setUserAudienceIdItem(res.data);
+        }).catch((error) => {
+          setErrorMsg(error.toString());
+        }).finally(() => {
+          setLoading(false);
+        });
+      }
+      lookalikeForm.setFieldsValue({
+        audienceId: res.data.audienceId,
+      });
+    }).catch((error) => {
+
+      // message.error({
+      //   content: error.toString(), key: 'netError', duration: 2,
+      // });
+    });
+  };
 
   useEffect(() => {
     isPay();
     getFBName();
-    // getInitMessage();
+    getInitMessage();
     getAudienceList();
     setTimeout(() => {
       setRead(false);
