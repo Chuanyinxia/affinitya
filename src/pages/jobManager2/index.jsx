@@ -253,19 +253,9 @@ const JobManger2 = ({userInfo, httpLoading, setHttpLoading}) => {
     ...getColumnSearchProps('job name', 'title', searchName),
     width: 220,
     // eslint-disable-next-line react/display-name
-    render: (title, record)=> parseInt(record.id)===parseInt(newID)?
-      (<span style={{wordBreak: 'break-all'}}>
-        <span className="text-red">*</span>
-        <Typography.Paragraph
-          editable={{
-            icon: <img src={EditSvg} width={18}/>,
-            tooltip: 'Edit',
-            onChange: (e) => onJobTitleChange(e, record.id),
-          }}
-        >
-          {title}
-        </Typography.Paragraph>
-      </span>):(<Typography.Paragraph
+    render: (title, record) => (<span style={{wordBreak: 'break-all'}}>
+      {parseInt(record.id) === parseInt(newID) && (<span className="text-red">*</span>)}
+      <Typography.Paragraph
         editable={{
           icon: <img src={EditSvg} width={18}/>,
           tooltip: 'Edit',
@@ -273,7 +263,8 @@ const JobManger2 = ({userInfo, httpLoading, setHttpLoading}) => {
         }}
       >
         {title}
-      </Typography.Paragraph>),
+      </Typography.Paragraph>
+    </span>),
   }, {
     title: 'Type',
     dataIndex: 'type',
@@ -340,7 +331,8 @@ const JobManger2 = ({userInfo, httpLoading, setHttpLoading}) => {
     render: (record)=><Space size="small">
       <Popconfirm
         title="Are you sure to delete this job?"
-        onConfirm={()=>deleteJob(record.id)}
+        onConfirm={() => deleteJob(record.id)}
+        placement="topRight"
         okText="Yes"
         cancelText="No"
       >
@@ -350,8 +342,9 @@ const JobManger2 = ({userInfo, httpLoading, setHttpLoading}) => {
       </Popconfirm>
       {(record.jobStatus === 1 || record.jobStatus === 5) ? (
         <Popconfirm
+          placement="topRight"
           title="Are you sure to stop this job?"
-          onConfirm={()=> killJob(record.id)}
+          onConfirm={() => killJob(record.id)}
           okText="Yes"
           cancelText="No"
         >
@@ -363,16 +356,18 @@ const JobManger2 = ({userInfo, httpLoading, setHttpLoading}) => {
         </Popconfirm>
       ) : (record.jobStatus === 2) ?
         (
-          <Button
-            onClick={() => {
-              getJobDetails(record.id);
-              setJobName(record.title);
-              setSearchType(record.type);
-            }}
-            type="text" size="small"
-            className="btn-theme-link">
-            <img src={ViewSvg} width={18}/>
-          </Button>
+          <Tooltip title="View">
+            <Button
+              onClick={() => {
+                getJobDetails(record.id);
+                setJobName(record.title);
+                setSearchType(record.type);
+              }}
+              type="text" size="small"
+              className="btn-theme-link">
+              <img src={ViewSvg} width={18}/>
+            </Button>
+          </Tooltip>
         ) :
         (
           <Popconfirm

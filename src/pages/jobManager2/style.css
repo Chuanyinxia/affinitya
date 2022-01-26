@@ -88,7 +88,9 @@
 .btn-theme-link:hover{
   color:#5f5aa7;
 }
-
+.ant-typography {
+  display: inline-block;
+}
 
 .btn-blue-link{
   color:#1CC8EE;

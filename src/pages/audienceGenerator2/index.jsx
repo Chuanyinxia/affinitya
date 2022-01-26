@@ -356,6 +356,10 @@ const AudienceGenerator2 = ({userInfo}) => {
           setLoading(false);
         });
       }
+      startForm.setFieldsValue({
+        adAccountId: res.data?.adAccountId,
+        ...FBLoginData,
+      });
       lookalikeForm.setFieldsValue({
         audienceId: res.data.audienceId,
       });
