@@ -88,14 +88,15 @@ const Headers=({logged, setLogged, setUserInfo})=>{
       <Drawer
         placement="right"
         className="menusDrawer"
-        drawerStyle={{backgroundColor: '#120043', color: '#ffffff', width: 250}}
+        width={250}
+        drawerStyle={{backgroundColor: '#120043', color: '#ffffff'}}
         onClose={()=>setMenusShow(false)} visible={menusShow}>
         <div className="smMenus">
           <div className="smMenus-top">
             <Space size="large" wrap>
               <Link to='/' className="navs">Home</Link>
               <Link to={logged?'/plansAndPrices':'/plansPricing'}
-                className={key.includes('plans')?'navs activeNav':'navs'}
+                className={'navs'}
               >Plans & Pricing</Link>
               <Link to='/ublogs' className="navs">News & Updates</Link>
               <Link to='/contactUs' className="navs">Contact Sales</Link>

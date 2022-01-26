@@ -399,7 +399,7 @@ const AudienceGenerator2 = ({userInfo}) => {
       <div className="padding32">
         <Spin spinning={loading}>
           <Row gutter={40}>
-            <Col xl={17} lg={17} md={24} xs={24}>
+            <Col xl={17} xs={24}>
               <h1>Audience Generator</h1>
               <h4 className="marginB32">
                 Affinity Analyst extends high correlation audiences from your custom
@@ -629,7 +629,7 @@ const AudienceGenerator2 = ({userInfo}) => {
                   name="segmentsRadioInfo"
                   labelAlign="left"
                   labelCol={{
-                    span: 6,
+                    span: 8,
                   }}
                   wrapperCol={{
                     span: 16,
@@ -679,11 +679,10 @@ const AudienceGenerator2 = ({userInfo}) => {
                   Fill in the corresponding Facebook Lookalike Audience information.
                 </h4>)}
                 <Radio.Group onChange={onSearchTypeChange} value={searchType} className="marginB32">
-                  <Radio value={1} style={{width: 200}}>Keyword Search</Radio>
+                  <Radio value={1} style={{width: 260}} className="paddingR32">Keyword Search</Radio>
                   <Radio
                     value={2}
                     style={{width: 400}}
-                    className="paddingL32"
                     disabled={!isPayUser}
                   >Lookalike Audience Search</Radio>
                 </Radio.Group>
@@ -797,7 +796,7 @@ const AudienceGenerator2 = ({userInfo}) => {
                 </Form>
               </Card>
             </Col>
-            <Col xl={6} lg={7} md={24} xs={24}>
+            <Col xl={6} xs={24}>
               {/* <div className="TOP"> */}
               {audienceWords.length !== 0 ? <><h3 style={{fontWeight: 600}}>TRENDING AUDIENCE&nbsp;
                 <Tooltip
@@ -815,13 +814,13 @@ const AudienceGenerator2 = ({userInfo}) => {
                 ))}
               </Space>
               <Divider/></> : null}
-              <h3 style={{fontWeight: 600}}>TIPS</h3>
+              {/* <h3 style={{fontWeight: 600}}>TIPS</h3>*/}
               {/* eslint-disable-next-line react/jsx-no-target-blank */}
-              <a
-                href='/Guide'
-                target="_blank">
-                Full guide to retrieve token
-              </a>
+              {/* <a*/}
+              {/*  href='/Guide'*/}
+              {/*  target="_blank">*/}
+              {/*  Full guide to retrieve token*/}
+              {/* </a>*/}
               {/* </div> */}
 
             </Col>
