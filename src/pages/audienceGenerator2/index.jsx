@@ -368,6 +368,8 @@ const AudienceGenerator2 = ({userInfo}) => {
       // message.error({
       //   content: error.toString(), key: 'netError', duration: 2,
       // });
+    }).finally(()=>{
+      setLoading(false);
     });
   };
 
@@ -379,7 +381,7 @@ const AudienceGenerator2 = ({userInfo}) => {
     setTimeout(() => {
       setRead(false);
       getInitMessage();
-    }, 200);
+    }, 500);
   },
   []);
   useEffect(() => {
