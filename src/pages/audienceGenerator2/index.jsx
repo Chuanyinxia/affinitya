@@ -374,11 +374,12 @@ const AudienceGenerator2 = ({userInfo}) => {
   useEffect(() => {
     isPay();
     getFBName();
-    getInitMessage();
+
     getAudienceList();
     setTimeout(() => {
       setRead(false);
-    }, 500);
+      getInitMessage();
+    }, 200);
   },
   []);
   useEffect(() => {
