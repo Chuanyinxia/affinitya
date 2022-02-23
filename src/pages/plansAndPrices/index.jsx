@@ -114,7 +114,7 @@ const PlansAndPrices = ({userInfo, httpLoading, setHttpLoading}) => {
                       <Col span={24} className="paymentPrice">
                         <div className="price-box">
                           <div className="price-title">
-                            {idx===0?'Free':idx===1?<span>US${payment.price}</span>:'Custom'}
+                            {idx===0?'Free':idx===1?<span>USD{payment.price}</span>:'Custom'}
                           </div>
                           {idx===1?<div className="month-tag">/month</div>:null}
                         </div>
@@ -195,11 +195,11 @@ const PlansAndPrices = ({userInfo, httpLoading, setHttpLoading}) => {
           fontWeight: 600,
           paddingLeft: 44,
           marginTop: 36,
-        }}>Upgrade To <span style={{color: '#7B42C3'}}>Growing Stage</span> Plan</p>
+        }}>Upgrade to <span style={{color: '#7B42C3'}}>{current.name}</span></p>
         <p style={{
           paddingLeft: 44,
         }}
-        >Up to 300 Affinity Tags + monthly market digest </p>
+        >{current.functionList&&current.functionList.join(' + ')}</p>
         <div style={{
           marginTop: 36,
           marginLeft: 80,
@@ -207,16 +207,16 @@ const PlansAndPrices = ({userInfo, httpLoading, setHttpLoading}) => {
           // padding: '20px 0',
         }}>
           <div style={{paddingLeft: 24, height: 24, lineHeight: '24px', marginBottom: 24}}>
-            Monthly subscription: US$799</div>
+            Monthly Subscription : USD{current.price}</div>
           <div style={{paddingLeft: 24, height: 24, lineHeight: '24px',
             marginBottom: 24, display: 'flex', flexDirection: 'row'}}>
-            <div>Payment Method:</div>
+            <div>Payment Method :</div>
             <div className='pay-method pay-method1'></div>
             <div className='pay-method pay-method2'></div>
             <div className='pay-method pay-method3'></div>
           </div>
           <div style={{paddingLeft: 24, height: 24, lineHeight: '24px', fontWeight: 'bold', color: '#4e4b66'}}>
-          Billed now: US$799
+          Billed Now : USD{current.price}
           </div>
         </div>
         {/* <div style={{
