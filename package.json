@@ -2,7 +2,7 @@
   "name": "fbad",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://1.14.16.201:8882/",
+  "proxy": "http://43.134.62.7:8881/",
   "dependencies": {
     "@ant-design/charts": "^1.0.21",
     "@ant-design/icons": "^4.7.0",

@@ -197,3 +197,25 @@
   float: left;
   margin-left: 24px;
 }
+.pay-method{
+  background-image: url(../../assets/payMethod1.png);
+  width: 38px;
+  height: 24px;
+  background-size: cover;
+  margin-right: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.030);
+  border-radius: 4px;
+}
+.pay-method1{
+  margin-left: 16px;
+  background-image: url(../../assets/payMethod1.png);
+
+}
+.pay-method2{
+  background-image: url(../../assets/payMethod2.png);
+
+}
+.pay-method3{
+  background-image: url(../../assets/payMethod3.png);
+
+}
