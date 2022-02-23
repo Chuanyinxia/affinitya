@@ -114,7 +114,7 @@ const PlansAndPrices = ({userInfo, httpLoading, setHttpLoading}) => {
                       <Col span={24} className="paymentPrice">
                         <div className="price-box">
                           <div className="price-title">
-                            {idx===0?'Free':idx===1?<span>USD${payment.price}</span>:'Custom'}
+                            {idx===0?'Free':idx===1?<span>US${payment.price}</span>:'Custom'}
                           </div>
                           {idx===1?<div className="month-tag">/month</div>:null}
                         </div>
@@ -195,12 +195,31 @@ const PlansAndPrices = ({userInfo, httpLoading, setHttpLoading}) => {
           fontWeight: 600,
           paddingLeft: 44,
           marginTop: 36,
-        }}>Subscribe to Affinity Analyst Paid</p>
+        }}>Upgrade To <span style={{color: '#7B42C3'}}>Growing Stage</span> Plan</p>
         <p style={{
           paddingLeft: 44,
         }}
-        >Up to 300 Affinity Tags + Monthly industry newsletter </p>
+        >Up to 300 Affinity Tags + monthly market digest </p>
         <div style={{
+          marginTop: 36,
+          marginLeft: 80,
+          borderLeft: '4px solid #D9D5EC',
+          // padding: '20px 0',
+        }}>
+          <div style={{paddingLeft: 24, height: 24, lineHeight: '24px', marginBottom: 24}}>
+            Monthly subscription: US$799</div>
+          <div style={{paddingLeft: 24, height: 24, lineHeight: '24px',
+            marginBottom: 24, display: 'flex', flexDirection: 'row'}}>
+            <div>Payment Method:</div>
+            <div className='pay-method pay-method1'></div>
+            <div className='pay-method pay-method2'></div>
+            <div className='pay-method pay-method3'></div>
+          </div>
+          <div style={{paddingLeft: 24, height: 24, lineHeight: '24px', fontWeight: 'bold', color: '#4e4b66'}}>
+          Billed now: US$799
+          </div>
+        </div>
+        {/* <div style={{
           height: 40,
           lineHeight: '40px',
           paddingLeft: 44,
@@ -214,7 +233,7 @@ const PlansAndPrices = ({userInfo, httpLoading, setHttpLoading}) => {
           lineHeight: '40px',
           marginTop: 24,
           paddingLeft: 44,
-        }}>Payment Amount: <span style={{fontSize: 24, paddingLeft: 16}}>${current.price}</span></div>
+        }}>Payment Amount: <span style={{fontSize: 24, paddingLeft: 16}}>${current.price}</span></div> */}
         <div style={{marginTop: 48, paddingLeft: 44}}>
           <Checkbox checked={payRadio} onChange={()=>{
             setpayRadio(!payRadio);
@@ -231,7 +250,7 @@ const PlansAndPrices = ({userInfo, httpLoading, setHttpLoading}) => {
             style={{width: 164, height: 48, marginLeft: 14}}
             type="primary"
             onClick={()=>pay(current.id)}
-            disabled={!payRadio}>Pay Now</Button>
+            disabled={!payRadio}>Proceed to Pay</Button>
         </div>
       </Modal>
       <Modal visible={statusModalVisible} footer={null} width={740} onCancel={()=>setstatusModalVisible(false)}>

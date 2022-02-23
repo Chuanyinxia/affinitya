@@ -69,7 +69,7 @@ const PlansPricing = ({userInfo, httpLoading, setHttpLoading}) => {
                     <Col span={24} className="paymentPrice">
                       <div className="price-box">
                         <div className="price-title">
-                          {idx===0?'Free':idx===1?<span>USD${payment.price}</span>:'Custom'}
+                          {idx===0?'Free':idx===1?<span>US${payment.price}</span>:'Custom'}
                         </div>
                         {idx===1?<div className="month-tag">/month</div>:null}
                       </div>

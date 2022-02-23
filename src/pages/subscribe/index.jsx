@@ -25,7 +25,10 @@ const Subscribe = ({userInfo, httpLoading, setHttpLoading}) => {
       setMemberSubscribeMsg(res.data);
     }).catch((error) => {
       get('/api/isPaidSubscribe', userInfo.token).then((res)=>{
-        setValidPeriod(timeFormat(res.data.validPeriod));
+        setValidPeriod({
+          name: res.data.packageName,
+          time: timeFormat(res.data.validPeriod),
+        });
       }).catch((error)=>{
         message.error({
           content: error.toString(), key: 'netError', duration: 2,
@@ -85,8 +88,8 @@ const Subscribe = ({userInfo, httpLoading, setHttpLoading}) => {
           <Col>
             {validPeriod?(
               <div>
-                <h3>Enterprise plan</h3>
-                <p>Valid until: {validPeriod}</p>
+                <h3>{validPeriod.name}</h3>
+                <p>Valid until: {validPeriod.time}</p>
                 <Link
                   className="marginT16"
                   onClick={()=>{
