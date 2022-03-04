@@ -314,12 +314,22 @@ const JobManger2 = ({userInfo, httpLoading, setHttpLoading}) => {
       {text: 'Waiting', value: 5},
     ],
     filterMultiple: false,
+
     // eslint-disable-next-line react/display-name
-    render: (jobStatus, record) => <Space>
+    render: (jobStatus, record) => <Space className="jobStatus">
       {(jobStatus === 1) ? (<Tag color="gold" className="no-border lg-tag">Running</Tag>) :
         (jobStatus === 2) ? (<Tag color="green" className="no-border lg-tag">Completed</Tag>) :
           (jobStatus === 3) ? (<Tag color="purple" className="no-border lg-tag">Canceled</Tag>) :
-            (jobStatus === 4) ? (<Tooltip title={record.failReason}>
+            (jobStatus === 4) ? (<Tooltip
+              title={<p>{record.failReason}.{record.url && <span> Please click <a
+                href={record.url}
+                target="_blank"
+                rel="noreferrer"
+                className="links"
+              >here</a> to check your account.
+              </span>}</p>}
+              className="jobStatus"
+              placement="topRight">
               <Tag color="red" className="no-border lg-tag">Failed</Tag>
             </Tooltip>) :
               (<Tag color="lime" className="no-border lg-tag">Waiting</Tag>)}

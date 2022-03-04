@@ -27,6 +27,8 @@ axios.interceptors.response.use((response) => {
       return response.data;
     case 371:
       return Promise.reject(response.data);
+    case 362:
+      return Promise.reject(response.data);
     // check token
     case 401:
       return false;

@@ -25,5 +25,6 @@ module.exports = {
   'rules': {
     'linebreak-style': ['off', 'windows'],
     'max-len': ['error', {'code': 120}],
+    'react/jsx-no-target-blank': 'error',
   },
 };

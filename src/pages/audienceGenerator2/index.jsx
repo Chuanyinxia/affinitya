@@ -31,13 +31,13 @@ import {get, post, update} from '@/utils/request';
 import {
   ABANDONFBUSER,
   GETAUDIENCEID,
+  GETAUDIENCELIST,
   GETFBUSER,
+  GETUSERMESSAGE,
   ISPAID,
   SAVEFBUSER,
   SEARCHAUID,
   SEARCHKW,
-  GETUSERMESSAGE,
-  GETAUDIENCELIST,
 } from '@/api';
 import {Link, useHistory} from 'react-router-dom';
 import store from '@/store';
@@ -58,6 +58,7 @@ const AudienceGenerator2 = ({userInfo}) => {
   const [searchType, setSearchType] = useState(1);
   const [read, setRead] = useState(true);
   const [modalShow, setModalShow] = useState(false);
+  const [link, setLink] = useState('');
   // const [addItemLoading, setAddItemLoading] = useState(false);
   const [audienceWords, setAudienceWords] = useState([]);
   // new
@@ -351,7 +352,13 @@ const AudienceGenerator2 = ({userInfo}) => {
         }).then((res) => {
           setUserAudienceIdItem(res.data);
         }).catch((error) => {
-          setErrorMsg(error.toString());
+          if (error.code) {
+            setLink(error.data);
+            setErrorMsg(error.msg.toString());
+          } else {
+            setLink('');
+            setErrorMsg(error.toString());
+          }
         }).finally(() => {
           setLoading(false);
         });
@@ -399,7 +406,14 @@ const AudienceGenerator2 = ({userInfo}) => {
           }}
           className="alertFixed"
           message={<p className="text-white text-center margin0">
-            Audience ID cannot be retrieved from Facebook or empty. “{errorMsg}“
+            Audience ID cannot be retrieved from Facebook or empty. “{errorMsg}“.
+            {link && <span> Please click <a
+              href={link}
+              rel="noreferrer"
+              target="_blank"
+              className="links"
+            >here</a> to check your account.
+            </span>}
           </p>}
           banner type="error"
           closable/>)}
